@@ -9,16 +9,12 @@ interface AdaptiveResponseControllerInterface
 {
     /**
      * See into AdaptiveResponseControllerTrait for implementation.
-     *
-     * @param \Symfony\Component\HttpFoundation\Response|null $response
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function adaptiveRender(
         string $view,
         array $parameters = [],
         Response $response = null
-    );
+    ): ?Response;
 
     public function getEnvironment(): Environment;
 }

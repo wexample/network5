@@ -11,14 +11,13 @@ trait AdaptiveResponseControllerTrait
      * As adaptive response plays with controller rendering,
      * we should create a way to execute render from outside
      * using this public method.
-     *
-     * @param Response|null $response
      */
     public function adaptiveRender(
-        string $view,
-        array $parameters = [],
+        string   $view,
+        array    $parameters = [],
         Response $response = null
-    ): Response {
+    ): ?Response
+    {
         return parent::render($view, $parameters, $response);
     }
 
