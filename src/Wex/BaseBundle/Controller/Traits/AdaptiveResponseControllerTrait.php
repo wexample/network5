@@ -13,11 +13,10 @@ trait AdaptiveResponseControllerTrait
      * using this public method.
      */
     public function adaptiveRender(
-        string   $view,
-        array    $parameters = [],
+        string $view,
+        array $parameters = [],
         Response $response = null
-    ): ?Response
-    {
+    ): ?Response {
         return parent::render($view, $parameters, $response);
     }
 

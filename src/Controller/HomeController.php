@@ -16,7 +16,6 @@ class HomeController extends BaseController
         return $this->renderPage(
             'home/index',
             [
-
             ]
         );
     }
