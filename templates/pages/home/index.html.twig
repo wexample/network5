@@ -3,15 +3,8 @@
 {%- set template_name = _self -%}
 
 {%- block page_body -%}
-    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"
-          rel="stylesheet">
-    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-    <body>
     <button class="mdc-button foo-button">
         <div class="mdc-button__ripple"></div>
         <span class="mdc-button__label">Button</span>
     </button>
-    <script>
-      mdc.ripple.MDCRipple.attachTo(document.querySelector('.foo-button'));
-    </script>
 {%- endblock -%}
