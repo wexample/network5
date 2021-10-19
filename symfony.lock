@@ -376,6 +376,18 @@
     "symfony/intl": {
         "version": "v5.3.7"
     },
+    "symfony/lock": {
+        "version": "5.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.2",
+            "ref": "a1c8800e40ae735206bb14586fdd6c4630a51b8d"
+        },
+        "files": [
+            "config/packages/lock.yaml"
+        ]
+    },
     "symfony/mailer": {
         "version": "4.3",
         "recipe": {
@@ -387,6 +399,15 @@
         "files": [
             "config/packages/mailer.yaml"
         ]
+    },
+    "symfony/mailgun-mailer": {
+        "version": "4.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.4",
+            "ref": "addcb559b32d9dbb4843826b063565e1b15a2a57"
+        }
     },
     "symfony/maker-bundle": {
         "version": "1.0",
@@ -485,6 +506,9 @@
         "version": "v5.3.7"
     },
     "symfony/proxy-manager-bridge": {
+        "version": "v5.3.4"
+    },
+    "symfony/rate-limiter": {
         "version": "v5.3.4"
     },
     "symfony/routing": {
