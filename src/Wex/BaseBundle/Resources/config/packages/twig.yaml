@@ -1,0 +1,4 @@
+paths:
+  '%kernel.project_dir%/src/Wex/BaseBundle': WexBaseBundle
+form_themes:
+  - '@WexBaseBundle/Resources/templates/forms_themes/form.html.twig'
