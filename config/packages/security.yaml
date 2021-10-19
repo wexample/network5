@@ -29,6 +29,7 @@ security:
                 login_path: login
                 check_path: login
                 enable_csrf: true
+                check_path: api_login
 
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
