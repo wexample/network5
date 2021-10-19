@@ -8,10 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends BaseController
 {
-    /**
-     * @Route("", name="home")
-     */
-    public function home(): Response
+    #[Route(path: '', name: 'home')]
+    public function home() : Response
     {
         return $this->renderPage(
             'home/index',

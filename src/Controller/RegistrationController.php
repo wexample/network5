@@ -17,14 +17,18 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
-    private $emailVerifier;
+    /**
+     * @var string
+     */
+    public const ROUTE_APP_REGISTER = 'app_register';
 
-    public function __construct(EmailVerifier $emailVerifier)
+    public function __construct(
+        private EmailVerifier $emailVerifier
+    )
     {
-        $this->emailVerifier = $emailVerifier;
     }
 
-    #[Route('/register', name: 'app_register')]
+    #[Route('/register', name: self::ROUTE_APP_REGISTER)]
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $user = new User();
@@ -68,27 +72,27 @@ class RegistrationController extends AbstractController
         $id = $request->get('id');
 
         if (null === $id) {
-            return $this->redirectToRoute('app_register');
+            return $this->redirectToRoute(self::ROUTE_APP_REGISTER);
         }
 
         $user = $userRepository->find($id);
 
         if (null === $user) {
-            return $this->redirectToRoute('app_register');
+            return $this->redirectToRoute(self::ROUTE_APP_REGISTER);
         }
 
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $user);
-        } catch (VerifyEmailExceptionInterface $exception) {
-            $this->addFlash('verify_email_error', $exception->getReason());
+        } catch (VerifyEmailExceptionInterface $verifyEmailExceptionInterface) {
+            $this->addFlash('verify_email_error', $verifyEmailExceptionInterface->getReason());
 
-            return $this->redirectToRoute('app_register');
+            return $this->redirectToRoute(self::ROUTE_APP_REGISTER);
         }
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Your email address has been verified.');
 
-        return $this->redirectToRoute('app_register');
+        return $this->redirectToRoute(self::ROUTE_APP_REGISTER);
     }
 }
