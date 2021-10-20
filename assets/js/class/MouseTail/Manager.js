@@ -1,9 +1,17 @@
+window.log = (m) => {
+  // Temp
+  console.log(m);
+}
+
 export default class {
   constructor() {
     Object.assign(this, {
       mouseCircleRadius: 0,
+      mouseX: 0,
       mouseXPrevious: 0,
+      mouseY: 0,
       mouseYPrevious: 0,
+      frameRate: 20,
     });
 
     this.elMouseCircle = document.createElement('div');
@@ -15,27 +23,34 @@ export default class {
     document.body.appendChild(this.elMouseCircle);
 
     document.addEventListener('mousemove', this.onMouseMove.bind(this));
+
+    this.start();
   }
 
-  onMouseMove(event) {
+  start() {
+    this.mouseTailInterval = setInterval(this.onFrame.bind(this), 1000 / this.frameRate);
+  }
+
+  stop() {
+    clearInterval(this.mouseTailInterval);
+  }
+
+  onFrame() {
+    this.refreshMouseTail();
+  }
+
+  refreshMouseTail() {
     this.mouseCircleRadius =
       Math.sqrt(
-        Math.pow(event.clientX - this.mouseXPrevious, 2)
-        + Math.pow(event.clientY - this.mouseYPrevious, 2)
+        Math.pow(this.mouseX - this.mouseXPrevious, 2)
+        + Math.pow(this.mouseY - this.mouseYPrevious, 2)
       );
     let style = this.elMouseCircle.style;
     let maxLimit = 80;
 
-    // Min size limit.
-    if (this.mouseCircleRadius < 30) {
-      this.mouseCircleRadius = 0;
-      style.display = 'none';
-    } else {
-      style.display = '';
-      // Max size limit.
-      if (this.mouseCircleRadius > maxLimit) {
-        this.mouseCircleRadius = maxLimit;
-      }
+    // Max size limit.
+    if (this.mouseCircleRadius > maxLimit) {
+      this.mouseCircleRadius = maxLimit;
     }
 
     let mouseCircleRadiusHalf = this.mouseCircleRadius / 2;
@@ -43,11 +58,16 @@ export default class {
     Object.assign(style, {
       width: this.mouseCircleRadius + 'px',
       height: this.mouseCircleRadius + 'px',
-      left: (event.clientX - mouseCircleRadiusHalf) + 'px',
-      top: (event.clientY - mouseCircleRadiusHalf) + 'px',
+      left: (this.mouseX - mouseCircleRadiusHalf) + 'px',
+      top: (this.mouseY - mouseCircleRadiusHalf) + 'px',
     });
 
-    this.mouseXPrevious = event.clientX;
-    this.mouseYPrevious = event.clientY;
+    this.mouseXPrevious = this.mouseX;
+    this.mouseYPrevious = this.mouseY;
+  }
+
+  onMouseMove(event) {
+    this.mouseX = event.clientX;
+    this.mouseY = event.clientY;
   }
 }
