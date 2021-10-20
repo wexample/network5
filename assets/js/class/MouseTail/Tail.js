@@ -3,12 +3,12 @@ import FrontElement from "../FrontElement/FrontElement";
 export default class extends FrontElement {
   constructor(manager) {
     super();
-
     this.manager = manager;
 
     Object.assign(this, {
       timeTotal: 1000,
       timePercentageSecondPoint: .3,
+      secondPointRendered: false,
       points: {
         start: {
           x: 0,
@@ -20,32 +20,46 @@ export default class extends FrontElement {
         }
       }
     });
+  }
 
+  render() {
     this.setPoint(
       'start',
-      manager.mouseX,
-      manager.mouseY
+      this.manager.mouseX,
+      this.manager.mouseY
     );
 
-    setTimeout(() => {
-      this.setPoint(
-        'end',
-        manager.mouseX,
-        manager.mouseY
-      );
+    setTimeout(
+      this.renderSecondPoint.bind(this),
+      this.timeTotal * this.timePercentageSecondPoint
+    );
 
-      this.elSvg = document.createElement('svg');
-      this.elSvg.setAttribute('id', 'mouse-tail-svg');
+    setTimeout(
+      this.renderEnd.bind(this),
+      this.timeTotal
+    );
+  }
 
-      this.setSvgPosition('x');
-      this.setSvgPosition('y');
+  renderSecondPoint() {
+    this.setPoint(
+      'end',
+      this.manager.mouseX,
+      this.manager.mouseY
+    );
 
-      document.body.appendChild(this.elSvg);
-    }, this.timeTotal * this.timePercentageSecondPoint);
+    this.elSvg = document.createElement('svg');
+    this.elSvg.setAttribute('id', 'mouse-tail-svg');
 
-    setTimeout(() => {
-      this.elSvg.parentNode.removeChild(this.elSvg);
-    }, this.timeTotal);
+    this.setSvgPosition('x');
+    this.setSvgPosition('y');
+
+    document.body.appendChild(this.elSvg);
+
+    this.secondPointRendered = true;
+  }
+
+  renderEnd() {
+    this.elSvg.parentNode.removeChild(this.elSvg);
   }
 
   setSvgPosition(direction) {

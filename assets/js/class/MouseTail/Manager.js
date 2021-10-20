@@ -11,6 +11,8 @@ export default class extends FrontElement {
     super();
 
     Object.assign(this, {
+      frameRate: 20,
+      tails: [],
       minLimitTail: 150,
       mouseCircleRadius: 0,
       mouseCircleRadiusPrevious: 0,
@@ -18,7 +20,6 @@ export default class extends FrontElement {
       mouseXPrevious: 0,
       mouseY: 0,
       mouseYPrevious: 0,
-      frameRate: 20,
     });
 
     this.elMouseCircle = document.createElement('div');
@@ -59,7 +60,13 @@ export default class extends FrontElement {
 
   refreshMouseTails() {
     if (this.mouseDistance > this.minLimitTail) {
-      let tail = new Tail(this);
+      // Create e new tail only for certain conditions.
+      if (!this.tailCurrent || this.tailCurrent.secondPointRendered) {
+        this.tailCurrent = new Tail(this);
+        this.tails.push(this.tailCurrent);
+
+        this.tailCurrent.render();
+      }
     }
   }
 
