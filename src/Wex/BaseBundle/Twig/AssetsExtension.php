@@ -8,6 +8,7 @@ use Exception;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
+use function pathinfo;
 
 class AssetsExtension extends AbstractExtension
 {
@@ -60,8 +61,8 @@ class AssetsExtension extends AbstractExtension
         $this->pathProject = $kernel->getProjectDir().'/';
         $this->pathPublic = $this->pathProject.self::DIR_PUBLIC;
         $this->pathBuild = $this->pathPublic.self::DIR_BUILD;
-        $this->manifest = json_decode(
-            file_get_contents(
+        $this->manifest = \json_decode(
+            \file_get_contents(
                 $this->pathBuild.self::FILE_MANIFEST
             ),
             JSON_OBJECT_AS_ARRAY
@@ -102,9 +103,6 @@ class AssetsExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * @throws Exception
-     */
     public function assetsInitLayout(
         ?string $layoutName = null
     )
@@ -121,12 +119,12 @@ class AssetsExtension extends AbstractExtension
             $this->assetsDetectForType('layouts/default/layout', AssetsExtension::EXTENSION_JS);
         }
 
-        $this->assets[AssetsExtension::EXTENSION_JS] = array_merge_recursive(
+        $this->assets[AssetsExtension::EXTENSION_JS] = \array_merge_recursive(
             $this->assets[AssetsExtension::EXTENSION_JS],
             $backEndAssets[AssetsExtension::EXTENSION_JS]
         );
 
-        $this->assets[AssetsExtension::EXTENSION_CSS] = array_merge_recursive(
+        $this->assets[AssetsExtension::EXTENSION_CSS] = \array_merge_recursive(
             $this->assets[AssetsExtension::EXTENSION_CSS],
             $backEndAssets[AssetsExtension::EXTENSION_CSS]
         );
@@ -170,7 +168,6 @@ class AssetsExtension extends AbstractExtension
 
     /**
      * Return all assets for a given type, including suffixes like -s, -l, etc.
-     * @throws Exception
      */
     public function assetsDetectForType(
         string $templateName,
@@ -180,11 +177,11 @@ class AssetsExtension extends AbstractExtension
         $assetPath = $ext.'/'.$templateName.'.'.$ext;
         $output = [];
 
-        if ($asset = $this->addAsset($assetPath, self::GROUP_PAGES)) {
+        if ($asset = $this->addAsset($assetPath)) {
             $output[] = $asset;
         }
 
-        $breakpointsReverted = array_reverse(
+        $breakpointsReverted = \array_reverse(
             self::DISPLAY_BREAKPOINTS
         );
         $maxWidth = null;
@@ -193,7 +190,7 @@ class AssetsExtension extends AbstractExtension
         foreach ($breakpointsReverted as $name => $minWidth) {
             $assetPath = $ext.'/'.$templateName.'-'.$name.'.'.$ext;
 
-            if ($asset = $this->addAsset($assetPath, self::GROUP_PAGES)) {
+            if ($asset = $this->addAsset($assetPath)) {
                 $asset->media = 'screen and (min-width:'.$minWidth.'px)'.
                     ($maxWidth ? ' and (max-width:'.$maxWidth.'px)' : '');
 
@@ -208,9 +205,6 @@ class AssetsExtension extends AbstractExtension
 
     protected array $assetsLoaded = [];
 
-    /**
-     * @throws Exception
-     */
     public function addAsset(string $pathRelative): ?Asset
     {
         $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
@@ -237,9 +231,9 @@ class AssetsExtension extends AbstractExtension
     public function debugAssets()
     {
         echo '<hr><code>';
-        echo nl2br(
-            str_replace(' ', '&nbsp;',
-                print_r(
+        echo \nl2br(
+            \str_replace(' ', '&nbsp;',
+                \print_r(
                     $this->assets
                     , true
                 )

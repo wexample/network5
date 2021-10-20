@@ -4,6 +4,9 @@ namespace App\Wex\BaseBundle\Twig;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
+use function str_ends_with;
+use function strlen;
+use function substr;
 
 class TemplateExtension extends AbstractExtension
 {
