@@ -47,12 +47,24 @@ export default class extends FrontElement {
       this.manager.mouseY
     );
 
-    this.elSvg = document.createElement('svg');
-    this.elSvg.setAttribute('id', 'mouse-tail-svg');
+    this.elSvg = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'svg'
+    );
+    this.elSvg.classList.add('mouse-tail-svg');
 
-    this.setSvgPosition('x');
-    this.setSvgPosition('y');
+    let width = this.setSvgPosition('x');
+    let height = this.setSvgPosition('y');
 
+    this.elPath = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'path'
+    );
+    this.elPath.setAttribute('d',
+      `M${width < 0 ? -width : 0} ${height < 0 ? -height : 0}, ${width > 0 ? width : 0} ${height > 0 ? height : 0}`
+    );
+
+    this.elSvg.appendChild(this.elPath);
     document.body.appendChild(this.elSvg);
 
     this.secondPointRendered = true;
@@ -67,6 +79,8 @@ export default class extends FrontElement {
     let pointName = length > 0 ? 'start' : 'end';
     this.elSvg.style[this.direction[direction].position] = this.points[pointName][direction] + 'px';
     this.elSvg.style[this.direction[direction].size] = Math.abs(length) + 'px';
+
+    return length;
   }
 
   setPoint(name, x, y) {

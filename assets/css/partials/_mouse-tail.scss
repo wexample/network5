@@ -4,8 +4,11 @@
   position: fixed;
 }
 
-#mouse-tail-svg {
+.mouse-tail-svg {
   position: fixed;
-  // TODO Temp
-  border: 2px solid rgba(255, 255, 255, .2);
+
+  path {
+    stroke: white;
+    stroke-width: 10;
+  }
 }
