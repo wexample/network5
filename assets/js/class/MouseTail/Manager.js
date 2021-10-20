@@ -1,12 +1,15 @@
 import Tail from "./Tail";
+import FrontElement from "../FrontElement/FrontElement";
 
 window.log = (m) => {
   // Temp
   console.log(m);
 }
 
-export default class {
+export default class extends FrontElement {
   constructor() {
+    super();
+
     Object.assign(this, {
       minLimitTail: 150,
       mouseCircleRadius: 0,
@@ -46,9 +49,11 @@ export default class {
   }
 
   refreshMouseDistance() {
-    this.mouseDistance = Math.sqrt(
-      Math.pow(this.mouseX - this.mouseXPrevious, 2)
-      + Math.pow(this.mouseY - this.mouseYPrevious, 2)
+    this.mouseDistance = this.calcDistance(
+      this.mouseX,
+      this.mouseY,
+      this.mouseXPrevious,
+      this.mouseYPrevious
     );
   }
 

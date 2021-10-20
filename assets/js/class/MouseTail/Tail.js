@@ -1,9 +1,14 @@
-export default class {
+import FrontElement from "../FrontElement/FrontElement";
+
+export default class extends FrontElement {
   constructor(manager) {
+    super();
+
     this.manager = manager;
 
     Object.assign(this, {
-      lifetime: 300,
+      timeTotal: 1000,
+      timePercentageSecondPoint: .3,
       points: {
         start: {
           x: 0,
@@ -22,16 +27,32 @@ export default class {
       manager.mouseY
     );
 
-    this.elSvg = document.createElement('svg');
-    this.elSvg.setAttribute('id', 'mouse-tail-svg');
-    document.body.appendChild(this.elSvg);
+    setTimeout(() => {
+      this.setPoint(
+        'end',
+        manager.mouseX,
+        manager.mouseY
+      );
 
-    this.elSvg.style.left = this.points.start.x + 'px';
-    this.elSvg.style.top = this.points.start.y + 'px';
+      this.elSvg = document.createElement('svg');
+      this.elSvg.setAttribute('id', 'mouse-tail-svg');
+
+      this.setSvgPosition('x');
+      this.setSvgPosition('y');
+
+      document.body.appendChild(this.elSvg);
+    }, this.timeTotal * this.timePercentageSecondPoint);
 
     setTimeout(() => {
       this.elSvg.parentNode.removeChild(this.elSvg);
-    }, this.lifetime);
+    }, this.timeTotal);
+  }
+
+  setSvgPosition(direction) {
+    let length = this.manager[this.direction[direction].mouse] - this.points.start[direction];
+    let pointName = length > 0 ? 'start' : 'end';
+    this.elSvg.style[this.direction[direction].position] = this.points[pointName][direction] + 'px';
+    this.elSvg.style[this.direction[direction].size] = Math.abs(length) + 'px';
   }
 
   setPoint(name, x, y) {
