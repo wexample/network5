@@ -2,12 +2,11 @@
 
 namespace App\Wex\BaseBundle\Twig;
 
-use App\Wex\BaseBundle\Helper\PathHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
-use Exception;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
+use function array_merge_recursive;
 use function pathinfo;
 
 class AssetsExtension extends AbstractExtension
@@ -92,14 +91,7 @@ class AssetsExtension extends AbstractExtension
                     $this,
                     'assetsInitTemplate',
                 ]
-            ),
-            new TwigFunction(
-                'debug_assets',
-                [
-                    $this,
-                    'debugAssets',
-                ]
-            ),
+            )
         ];
     }
 
@@ -119,12 +111,12 @@ class AssetsExtension extends AbstractExtension
             $this->assetsDetectForType('layouts/default/layout', AssetsExtension::EXTENSION_JS);
         }
 
-        $this->assets[AssetsExtension::EXTENSION_JS] = \array_merge_recursive(
+        $this->assets[AssetsExtension::EXTENSION_JS] = array_merge_recursive(
             $this->assets[AssetsExtension::EXTENSION_JS],
             $backEndAssets[AssetsExtension::EXTENSION_JS]
         );
 
-        $this->assets[AssetsExtension::EXTENSION_CSS] = \array_merge_recursive(
+        $this->assets[AssetsExtension::EXTENSION_CSS] = array_merge_recursive(
             $this->assets[AssetsExtension::EXTENSION_CSS],
             $backEndAssets[AssetsExtension::EXTENSION_CSS]
         );
@@ -227,18 +219,5 @@ class AssetsExtension extends AbstractExtension
 
         return $this->assetsLoaded[$pathRelative];
     }
-
-    public function debugAssets()
-    {
-        echo '<hr><code>';
-        echo \nl2br(
-            \str_replace(' ', '&nbsp;',
-                \print_r(
-                    $this->assets
-                    , true
-                )
-            )
-        );
-        echo '</code>';
-    }
 }
+

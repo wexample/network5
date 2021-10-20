@@ -6,6 +6,8 @@ class VariableHelper
 {
     public const ASSETS = 'assets';
 
+    public const DEMO = 'demo';
+
     public const DEFAULT = 'default';
 
     public const EMAIL = 'email';
