@@ -1,3 +1,5 @@
+import Tail from "./Tail";
+
 window.log = (m) => {
   // Temp
   console.log(m);
@@ -6,6 +8,7 @@ window.log = (m) => {
 export default class {
   constructor() {
     Object.assign(this, {
+      minLimitTail: 150,
       mouseCircleRadius: 0,
       mouseCircleRadiusPrevious: 0,
       mouseX: 0,
@@ -37,32 +40,42 @@ export default class {
   }
 
   onFrame() {
-    this.refreshMouseTail();
+    this.refreshMouseDistance();
+    this.refreshMouseCircle();
+    this.refreshMouseTails();
   }
 
-  refreshMouseTail() {
+  refreshMouseDistance() {
+    this.mouseDistance = Math.sqrt(
+      Math.pow(this.mouseX - this.mouseXPrevious, 2)
+      + Math.pow(this.mouseY - this.mouseYPrevious, 2)
+    );
+  }
+
+  refreshMouseTails() {
+    if (this.mouseDistance > this.minLimitTail) {
+      let tail = new Tail(this);
+    }
+  }
+
+  refreshMouseCircle() {
     let style = this.elMouseCircle.style;
-    let minLimit = 15;
-    let maxLimit = 50;
+    let minLimitCircle = 15;
+    let maxLimitCircle = 50;
     let persistence = 0.8;
     let multiplier = 10;
 
-    this.mouseCircleRadius =
-      Math.sqrt(
-        Math.pow(this.mouseX - this.mouseXPrevious, 2)
-        + Math.pow(this.mouseY - this.mouseYPrevious, 2)
-      )
-      * multiplier;
+    this.mouseCircleRadius = this.mouseDistance * multiplier;
 
     // Max size limit.
-    if (this.mouseCircleRadius > maxLimit) {
-      this.mouseCircleRadius = maxLimit;
+    if (this.mouseCircleRadius > maxLimitCircle) {
+      this.mouseCircleRadius = maxLimitCircle;
     }
 
     this.mouseCircleRadius = (this.mouseCircleRadius * (1 - persistence))
       + (this.mouseCircleRadiusPrevious * persistence);
 
-    if (this.mouseCircleRadius < minLimit) {
+    if (this.mouseCircleRadius < minLimitCircle) {
       style.display = 'none';
     } else {
       style.display = '';
