@@ -7,6 +7,7 @@ export default class {
   constructor() {
     Object.assign(this, {
       mouseCircleRadius: 0,
+      mouseCircleRadiusPrevious: 0,
       mouseX: 0,
       mouseXPrevious: 0,
       mouseY: 0,
@@ -40,17 +41,31 @@ export default class {
   }
 
   refreshMouseTail() {
+    let style = this.elMouseCircle.style;
+    let minLimit = 15;
+    let maxLimit = 50;
+    let persistence = 0.8;
+    let multiplier = 10;
+
     this.mouseCircleRadius =
       Math.sqrt(
         Math.pow(this.mouseX - this.mouseXPrevious, 2)
         + Math.pow(this.mouseY - this.mouseYPrevious, 2)
-      );
-    let style = this.elMouseCircle.style;
-    let maxLimit = 80;
+      )
+      * multiplier;
 
     // Max size limit.
     if (this.mouseCircleRadius > maxLimit) {
       this.mouseCircleRadius = maxLimit;
+    }
+
+    this.mouseCircleRadius = (this.mouseCircleRadius * (1 - persistence))
+      + (this.mouseCircleRadiusPrevious * persistence);
+
+    if (this.mouseCircleRadius < minLimit) {
+      style.display = 'none';
+    } else {
+      style.display = '';
     }
 
     let mouseCircleRadiusHalf = this.mouseCircleRadius / 2;
@@ -64,6 +79,7 @@ export default class {
 
     this.mouseXPrevious = this.mouseX;
     this.mouseYPrevious = this.mouseY;
+    this.mouseCircleRadiusPrevious = this.mouseCircleRadius;
   }
 
   onMouseMove(event) {
