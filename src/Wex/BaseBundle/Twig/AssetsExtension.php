@@ -17,7 +17,9 @@ class AssetsExtension extends AbstractExtension
 
     public const DIR_PUBLIC = 'public/';
 
-    public const DIR_BUILD = self::DIR_PUBLIC.'build/';
+    public const DIR_BUILD = 'build/';
+
+    public const FILE_MANIFEST = 'manifest.json';
 
     public const GROUP_PAGES = 'pages';
 
@@ -42,6 +44,12 @@ class AssetsExtension extends AbstractExtension
 
     private string $pathProject;
 
+    private string $pathBuild;
+
+    private string $pathPublic;
+
+    private array $manifest;
+
     /**
      * CommonExtension constructor.
      */
@@ -50,6 +58,14 @@ class AssetsExtension extends AbstractExtension
     )
     {
         $this->pathProject = $kernel->getProjectDir().'/';
+        $this->pathPublic = $this->pathProject.self::DIR_PUBLIC;
+        $this->pathBuild = $this->pathPublic.self::DIR_BUILD;
+        $this->manifest = json_decode(
+            file_get_contents(
+                $this->pathBuild.self::FILE_MANIFEST
+            ),
+            JSON_OBJECT_AS_ARRAY
+        );
     }
 
     public function getFunctions(): array
@@ -161,11 +177,11 @@ class AssetsExtension extends AbstractExtension
         string $ext
     ): array
     {
-        $assetPath = $this->pathProject.self::DIR_BUILD.$ext.'/'.$templateName.'.'.$ext;
+        $assetPath = $ext.'/'.$templateName.'.'.$ext;
         $output = [];
 
-        if (is_file($assetPath)) {
-            $output[] = $this->addAsset($assetPath, self::GROUP_PAGES);
+        if ($asset = $this->addAsset($assetPath, self::GROUP_PAGES)) {
+            $output[] = $asset;
         }
 
         $breakpointsReverted = array_reverse(
@@ -175,14 +191,13 @@ class AssetsExtension extends AbstractExtension
 
         // Used for CSS, TODO this behavior may be tested with javascript, or moved.
         foreach ($breakpointsReverted as $name => $minWidth) {
-            $assetPath = $this->pathProject.self::DIR_BUILD.$ext.'/'.$templateName.'-'.$name.'.'.$ext;
+            $assetPath = $ext.'/'.$templateName.'-'.$name.'.'.$ext;
 
-            if (is_file($assetPath)) {
-                $entry = $this->addAsset($assetPath, self::GROUP_PAGES);
-                $entry->media = 'screen and (min-width:'.$minWidth.'px)'.
+            if ($asset = $this->addAsset($assetPath, self::GROUP_PAGES)) {
+                $asset->media = 'screen and (min-width:'.$minWidth.'px)'.
                     ($maxWidth ? ' and (max-width:'.$maxWidth.'px)' : '');
 
-                $output[] = $entry;
+                $output[] = $asset;
             }
 
             $maxWidth = $minWidth;
@@ -196,32 +211,27 @@ class AssetsExtension extends AbstractExtension
     /**
      * @throws Exception
      */
-    public function addAsset(string $path): Asset
+    public function addAsset(string $pathRelative): ?Asset
     {
-        if (!isset($this->assetsLoaded[$path])) {
+        $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
+        if (!isset($this->manifest[$pathRelativeToPublic])) {
+            return null;
+        }
+
+        if (!isset($this->assetsLoaded[$pathRelative])) {
             $entry = new Asset();
-            $path = realpath($path);
-
-            if (!is_file($path)) {
-                throw new Exception('Unable to find asset : '.$path);
-            }
-
-            $entry->path = '/'.PathHelper::relativeTo(
-                    $path,
-                    $this->pathProject.self::DIR_PUBLIC
-                );
-
-            $info = pathinfo($path);
+            $entry->path = $this->manifest[$pathRelativeToPublic];
+            $info = pathinfo($entry->path);
             $entry->type = $info['extension'];
 
-            $this->assetsLoaded[$path] = $entry;
+            $this->assetsLoaded[$pathRelative] = $entry;
         } else {
-            $entry = $this->assetsLoaded[$path];
+            $entry = $this->assetsLoaded[$pathRelative];
         }
 
         $this->assets[$entry->type][] = $entry;
 
-        return $this->assetsLoaded[$path];
+        return $this->assetsLoaded[$pathRelative];
     }
 
     public function debugAssets()
