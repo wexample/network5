@@ -1,7 +1,8 @@
 import {MDCRipple} from '@material/ripple/index';
-const ripple = new MDCRipple(document.querySelector('.foo-button'));
 
-console.log('...ok!!');
+document.addEventListener('DOMContentLoaded', () => {
+  const ripple = new MDCRipple(document.querySelector('.foo-button'));
+})
 
 export default {
   classType: 'pages',

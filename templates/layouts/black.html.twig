@@ -1,1 +1,6 @@
 {%- extends adaptive_response_layout_path() -%}
+
+{%- block template_config -%}
+    {%- set layout_name = layout_name|default('black') -%}
+    {{ parent() }}
+{%- endblock -%}

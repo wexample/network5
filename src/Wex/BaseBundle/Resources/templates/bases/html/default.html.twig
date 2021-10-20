@@ -1,3 +1,61 @@
-{%- block template -%}
+{%- set layout_name = layout_name|default(null) -%}
+{%- set template_name = template_name_from_path(template_path) -%}
+
+{%- block template_base -%}
+    {%- block template_config -%}
+        {{- assets_init_layout(layout_name) -}}
+        {{- assets_init_template(template_name) -}}
+    {%- endblock -%}
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>TODO</title>
+        <script>
+          "use strict";
+
+          // Use old school fashioned javascript notation to improve compatibility.
+          var Registry = function Registry(group) {
+            this.group = group;
+            this.classes = {};
+          };
+
+          Registry.prototype = {
+            add: function add(name, definition) {
+              // Prevent class override.
+              if (!this.classes[name]) {
+                this.classes[name] = definition;
+              }
+
+              // Return to allow export or extending class.
+              return definition;
+            }
+          };
+
+          // We use different registry as they are used in several places to manage loading.
+          window.appClasses = {
+            pages: new Registry('pages'),
+            vue: new Registry('vue'),
+            components: new Registry('components')
+          };
+        </script>
+    </head>
+    <body>
     {{ block('page_body') }}
+
+    {%- block template_assets -%}
+        <script type="text/javascript" src="{{ asset('build/runtime.js') }}"></script>
+        {%- for asset in assets_list('css') -%}
+    <link rel="stylesheet" media="{{ asset.media }}" href="{{ asset(asset.path) }}"/>
+        {# {{ asset_set_loaded(asset) }} #}
+        {%- endfor -%}
+        {%- for asset in assets_list('js') -%}
+        <script type="text/javascript" src="{{ asset(asset.path) }}"></script>
+        {# {{ asset_set_loaded(asset) }} #}
+        {%- endfor -%}
+    {%- endblock -%}
+
+    {{ debug_assets() }}
+    </body>
+    </html>
 {%- endblock -%}
