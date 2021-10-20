@@ -18,13 +18,34 @@ export default class {
   }
 
   onMouseMove(event) {
-    this.mouseCircleRadius = Math.abs(event.clientX - this.mouseXPrevious);
+    this.mouseCircleRadius =
+      Math.sqrt(
+        Math.pow(event.clientX - this.mouseXPrevious, 2)
+        + Math.pow(event.clientY - this.mouseYPrevious, 2)
+      );
+    let style = this.elMouseCircle.style;
+    let maxLimit = 80;
 
-    this.elMouseCircle.style.width = this.mouseCircleRadius + 'px';
-    this.elMouseCircle.style.height = this.mouseCircleRadius + 'px';
+    // Min size limit.
+    if (this.mouseCircleRadius < 30) {
+      this.mouseCircleRadius = 0;
+      style.display = 'none';
+    } else {
+      style.display = '';
+      // Max size limit.
+      if (this.mouseCircleRadius > maxLimit) {
+        this.mouseCircleRadius = maxLimit;
+      }
+    }
 
-    this.elMouseCircle.style.left = event.clientX + 'px';
-    this.elMouseCircle.style.top = event.clientY + 'px';
+    let mouseCircleRadiusHalf = this.mouseCircleRadius / 2;
+
+    Object.assign(style, {
+      width: this.mouseCircleRadius + 'px',
+      height: this.mouseCircleRadius + 'px',
+      left: (event.clientX - mouseCircleRadiusHalf) + 'px',
+      top: (event.clientY - mouseCircleRadiusHalf) + 'px',
+    });
 
     this.mouseXPrevious = event.clientX;
     this.mouseYPrevious = event.clientY;
