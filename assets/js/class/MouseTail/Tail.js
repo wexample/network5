@@ -6,9 +6,10 @@ export default class extends FrontElement {
     this.manager = manager;
 
     Object.assign(this, {
-      timeTotal: 1000,
-      timePercentageSecondPoint: .3,
+      timeTotal: 500,
+      timePercentageSecondPoint: .1,
       secondPointRendered: false,
+      strokeWidth: 10,
       points: {
         start: {
           x: 0,
@@ -20,6 +21,8 @@ export default class extends FrontElement {
         }
       }
     });
+
+    this.strokeWidthHalf = this.strokeWidth / 2;
   }
 
   render() {
@@ -60,8 +63,9 @@ export default class extends FrontElement {
       'http://www.w3.org/2000/svg',
       'path'
     );
+    this.elPath.style.strokeWidth = this.strokeWidth;
     this.elPath.setAttribute('d',
-      `M${width < 0 ? -width : 0} ${height < 0 ? -height : 0}, ${width > 0 ? width : 0} ${height > 0 ? height : 0}`
+      `M${width < 0 ? -width - this.strokeWidthHalf : this.strokeWidthHalf} ${height < 0 ? -height - this.strokeWidthHalf : this.strokeWidthHalf}, ${width > 0 ? width - this.strokeWidthHalf : this.strokeWidthHalf} ${height > 0 ? height - this.strokeWidthHalf : this.strokeWidthHalf}`
     );
 
     this.elSvg.appendChild(this.elPath);
@@ -71,7 +75,7 @@ export default class extends FrontElement {
   }
 
   renderEnd() {
-    this.elSvg.parentNode.removeChild(this.elSvg);
+    // this.elSvg.parentNode.removeChild(this.elSvg);
   }
 
   setSvgPosition(direction) {
