@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Wex\BaseBundle\Controller\BaseController;
+use App\Wex\BaseBundle\Controller\AbstractController;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DemoController extends BaseController
+class DemoController extends AbstractController
 {
     #[Route(path: VariableHelper::DEMO, name: VariableHelper::DEMO)]
     public function demo(): Response

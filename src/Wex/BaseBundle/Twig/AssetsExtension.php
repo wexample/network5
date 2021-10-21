@@ -11,10 +11,6 @@ use function pathinfo;
 
 class AssetsExtension extends AbstractExtension
 {
-    public const EXTENSION_JS = 'js';
-
-    public const EXTENSION_CSS = 'css';
-
     public const DIR_PUBLIC = 'public/';
 
     public const DIR_BUILD = 'build/';
@@ -24,23 +20,22 @@ class AssetsExtension extends AbstractExtension
     public const GROUP_PAGES = 'pages';
 
     public const DISPLAY_BREAKPOINTS = [
-        's' => 0,
-        'm' => 600,
+        'xs' => 0,
+        's' => 576,
+        'm' => 768,
         'l' => 992,
         'xl' => 1200,
-    ];
-
-    public const ASSETS_EXTENSIONS = [
-        self::EXTENSION_CSS,
-        self::EXTENSION_JS,
+        'xxl' => 1400,
     ];
 
     public const ASSETS_DEFAULT_EMPTY = [
-        self::EXTENSION_CSS => [],
-        self::EXTENSION_JS => [],
+        Asset::EXTENSION_CSS => [],
+        Asset::EXTENSION_JS => [],
     ];
 
     public array $assets = self::ASSETS_DEFAULT_EMPTY;
+
+    public array $assetsPreload = self::ASSETS_DEFAULT_EMPTY;
 
     private string $pathProject;
 
@@ -99,6 +94,20 @@ class AssetsExtension extends AbstractExtension
                     'assetsList',
                 ]
             ),
+            new TwigFunction(
+                'assets_preload_list',
+                [
+                    $this,
+                    'assetsPreloadList',
+                ]
+            ),
+            new TwigFunction(
+                'assets_render_responsive_list',
+                [
+                    $this,
+                    'assetsRenderResponsiveList',
+                ]
+            ),
         ];
     }
 
@@ -110,22 +119,30 @@ class AssetsExtension extends AbstractExtension
         $backEndAssets = $this->assets;
         $this->assets = self::ASSETS_DEFAULT_EMPTY;
 
-        $assets = $this->assetsDetect('layouts/'.$layoutName.'/layout');
-
-        // No main js found.
-        if (empty($assets[AssetsExtension::EXTENSION_JS])) {
-            // Try to load default js file.
-            $this->assetsDetectForType('layouts/default/layout', AssetsExtension::EXTENSION_JS);
-        }
-
-        $this->assets[AssetsExtension::EXTENSION_JS] = array_merge_recursive(
-            $this->assets[AssetsExtension::EXTENSION_JS],
-            $backEndAssets[AssetsExtension::EXTENSION_JS]
+        $assets = $this->assetsDetect(
+            'layouts/'.$layoutName.'/layout',
+            true
         );
 
-        $this->assets[AssetsExtension::EXTENSION_CSS] = array_merge_recursive(
-            $this->assets[AssetsExtension::EXTENSION_CSS],
-            $backEndAssets[AssetsExtension::EXTENSION_CSS]
+        // No main js found.
+        if (empty($assets[Asset::EXTENSION_JS])) {
+            // Try to load default js file.
+            // Do not preload JS as it is configured
+            // to wait for dom content loaded anyway.
+            $this->assetsDetectForType(
+                'layouts/default/layout',
+                Asset::EXTENSION_JS
+            );
+        }
+
+        $this->assets[Asset::EXTENSION_JS] = array_merge_recursive(
+            $this->assets[Asset::EXTENSION_JS],
+            $backEndAssets[Asset::EXTENSION_JS]
+        );
+
+        $this->assets[Asset::EXTENSION_CSS] = array_merge_recursive(
+            $this->assets[Asset::EXTENSION_CSS],
+            $backEndAssets[Asset::EXTENSION_CSS]
         );
     }
 
@@ -151,14 +168,23 @@ class AssetsExtension extends AbstractExtension
         return $notLoaded;
     }
 
-    public function assetsDetect(string $templateName): array
+    public function assetsPreloadList(string $ext): array
+    {
+        return $this->assetsPreload[$ext];
+    }
+
+    public function assetsDetect(
+        string $templateName,
+        bool $preload = false
+    ): array
     {
         $output = [];
 
-        foreach (self::ASSETS_EXTENSIONS as $ext) {
+        foreach (Asset::ASSETS_EXTENSIONS as $ext) {
             $output[$ext] = $this->assetsDetectForType(
                 $templateName,
-                $ext
+                $ext,
+                $preload
             );
         }
 
@@ -170,13 +196,14 @@ class AssetsExtension extends AbstractExtension
      */
     public function assetsDetectForType(
         string $templateName,
-        string $ext
+        string $ext,
+        bool $preload = false
     ): array
     {
         $assetPath = $ext.'/'.$templateName.'.'.$ext;
         $output = [];
 
-        if ($asset = $this->addAsset($assetPath)) {
+        if ($asset = $this->addAsset($assetPath, $preload)) {
             $output[] = $asset;
         }
 
@@ -185,11 +212,11 @@ class AssetsExtension extends AbstractExtension
         );
         $maxWidth = null;
 
-        // Used for CSS, TODO this behavior may be tested with javascript, or moved.
         foreach ($breakpointsReverted as $name => $minWidth) {
             $assetPath = $ext.'/'.$templateName.'-'.$name.'.'.$ext;
 
             if ($asset = $this->addAsset($assetPath)) {
+                $asset->responsive = true;
                 $asset->media = 'screen and (min-width:'.$minWidth.'px)'.
                     ($maxWidth ? ' and (max-width:'.$maxWidth.'px)' : '');
 
@@ -204,7 +231,7 @@ class AssetsExtension extends AbstractExtension
 
     protected array $assetsLoaded = [];
 
-    public function addAsset(string $pathRelative): ?Asset
+    public function addAsset(string $pathRelative, bool $preload = false): ?Asset
     {
         $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
         if (!isset($this->manifest[$pathRelativeToPublic])) {
@@ -212,17 +239,25 @@ class AssetsExtension extends AbstractExtension
         }
 
         if (!isset($this->assetsLoaded[$pathRelative])) {
-            $entry = new Asset();
-            $entry->path = $this->manifest[$pathRelativeToPublic];
-            $info = pathinfo($entry->path);
-            $entry->type = $info['extension'];
+            $asset = new Asset(
+                $this->manifest[$pathRelativeToPublic]
+            );
 
-            $this->assetsLoaded[$pathRelative] = $entry;
+            $asset->preload = $preload;
+
+            $info = pathinfo($asset->path);
+            $asset->type = $info['extension'];
+
+            $this->assetsLoaded[$pathRelative] = $asset;
         } else {
-            $entry = $this->assetsLoaded[$pathRelative];
+            $asset = $this->assetsLoaded[$pathRelative];
         }
 
-        $this->assets[$entry->type][] = $entry;
+        $this->assets[$asset->type][] = $asset;
+
+        if ($preload) {
+            $this->assetsPreload[$asset->type][] = $asset;
+        }
 
         return $this->assetsLoaded[$pathRelative];
     }
@@ -230,6 +265,10 @@ class AssetsExtension extends AbstractExtension
     public function assetSetLoaded(Asset $asset, $loaded = true)
     {
         $asset->loaded = $loaded;
+    }
+
+    public function assetsRenderResponsiveList():array {
+        return [];
     }
 }
 

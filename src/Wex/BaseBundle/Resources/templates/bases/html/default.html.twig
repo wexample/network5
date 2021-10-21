@@ -3,6 +3,7 @@
 {%- set template_head_title_args = template_head_title_args|default({}) -%}
 {%- set template_head_title = template_head_title|default(page_title) -%}
 {%- set layout_name = layout_name|default(null) -%}
+{%- set layout_no_js = layout_no_js|default(false) -%}
 {%- set template_name = template_name_from_path(template_path) -%}
 
 {%- block template_base -%}
@@ -14,42 +15,58 @@
     <!DOCTYPE html>
     <html>
     <head>
-        <meta charset="utf-8">
+        <meta charset="utf-8"/>
         <title>{{ template_head_title ? (template_head_title | trans(template_head_title_args)) ~ ' | ' : '' }}{{ 'company.name' | trans }}</title>
-        {%- block styles -%}
-            {%- for asset in assets_list('css') -%}
-                <link rel="stylesheet" media="{{ asset.media }}" href="{{ asset(asset.path) }}"/>
-                {{ asset_set_loaded(asset) }}
-            {%- endfor -%}
-        {%- endblock -%}
-        <script>
-          "use strict";
+        {% block preloads -%}
+            {% for asset in assets_preload_list('css') %}
+                <link rel="preload" href="{{ asset.path }}" as="{{ asset.preloadAs }}">
+            {%- endfor %}
+        {%- endblock %}
 
-          // Use old school fashioned javascript notation to improve compatibility.
-          var Registry = function Registry(group) {
-            this.group = group;
-            this.classes = {};
-          };
+        {% block styles -%}
+            {% for asset in assets_list('css') %}
+                {%- if not asset.responsive or layout_no_js -%}
+                    <link id="{{ asset.name }}" rel="stylesheet" media="{{ asset.media }}"
+                          href="{{ asset(asset.path) }}"/>
+                {%- endif -%}
 
-          Registry.prototype = {
-            add: function add(name, definition) {
-              // Prevent class override.
-              if (!this.classes[name]) {
-                this.classes[name] = definition;
-              }
+                {{- asset_set_loaded(asset) }}
+            {% endfor %}
+        {%- endblock %}
+        {% if not layout_no_js %}
+            <script>
+              "use strict";
 
-              // Return to allow export or extending class.
-              return definition;
-            }
-          };
+              // Use old school fashioned javascript notation to improve compatibility.
+              var Registry = function Registry(group) {
+                this.group = group;
+                this.classes = {};
+              };
 
-          // We use different registry as they are used in several places to manage loading.
-          window.appClasses = {
-            pages: new Registry('pages'),
-            vue: new Registry('vue'),
-            components: new Registry('components')
-          };
-        </script>
+              Registry.prototype = {
+                add: function add(name, definition) {
+                  // Prevent class override.
+                  if (!this.classes[name]) {
+                    this.classes[name] = definition;
+                  }
+
+                  // Return to allow export or extending class.
+                  return definition;
+                }
+              };
+
+              // We use different registry as they are used in several places to manage loading.
+              window.appRegistry = {
+                components: new Registry('components'),
+                pages: new Registry('pages'),
+                vue: new Registry('vue'),
+                assets: {
+                  responsive:{{ assets_render_responsive_list()|json_encode }}
+                }
+              };
+            </script>
+        {% endif %}
+
     </head>
     <body>
     {{ block('page_body') }}
