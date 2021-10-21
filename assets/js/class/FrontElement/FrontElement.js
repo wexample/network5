@@ -31,6 +31,10 @@ export default class {
     );
   }
 
+  convertPosition(number) {
+    return number + 'px';
+  }
+
   animatePath(path, animation, animationDelay = 0) {
     let length = path.getTotalLength();
     path.style.strokeDasharray = length;

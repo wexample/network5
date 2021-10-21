@@ -12,14 +12,14 @@ export default class extends FrontElement {
 
     Object.assign(this, {
       frameRate: 20,
-      tails: [],
-      minLimitTail: 10,
+      minLimitTail: 100,
       mouseCircleRadius: 0,
       mouseCircleRadiusPrevious: 0,
       mouseX: 0,
       mouseXPrevious: 0,
       mouseY: 0,
       mouseYPrevious: 0,
+      tailTimeSecondPoint: 200
     });
 
     // Create circle el.
@@ -35,25 +35,19 @@ export default class extends FrontElement {
 
     document.addEventListener('mousemove', this.onMouseMove.bind(this));
 
-    this.start();
+    this.requestNextFrame();
   }
 
-  start() {
-    this.mouseTailInterval = setInterval(this.onInterval.bind(this), 1000 / this.frameRate);
-  }
-
-  stop() {
-    clearInterval(this.mouseTailInterval);
-  }
-
-  onInterval() {
-    window.requestAnimationFrame(this.onFrame.bind(this));
+  requestNextFrame(time, callback) {
+    setTimeout(() => {
+      window.requestAnimationFrame(this.onFrame.bind(this));
+      callback && callback();
+    }, time);
   }
 
   onFrame() {
     this.refreshMouseDistance();
-    this.refreshMouseCircle();
-    this.refreshMouseTails();
+    this.refreshMouseTails(this.refreshMouseCircle.bind(this));
   }
 
   refreshMouseDistance() {
@@ -65,24 +59,26 @@ export default class extends FrontElement {
     );
   }
 
-  refreshMouseTails() {
+  refreshMouseTails(onNewTail) {
     if (this.mouseDistance > this.minLimitTail) {
       // Create e new tail only for certain conditions.
-      if (!this.tailCurrent || this.tailCurrent.secondPointRendered) {
-        this.tailCurrent = new Tail(this);
-        this.tails.push(this.tailCurrent);
-
-        this.tailCurrent.render();
-      }
+      let tail = new Tail(this);
+      tail.render();
+      // Wait at least the time of the second point creation,
+      // it let the time to avoid two lines overlaps.
+      this.requestNextFrame(this.tailTimeSecondPoint, onNewTail);
+      return true;
+    } else {
+      this.requestNextFrame();
+      return false;
     }
   }
 
   refreshMouseCircle() {
     let style = this.elMouseCircle.style;
-    let minLimitCircle = 15;
-    let maxLimitCircle = 50;
-    let persistence = 0.8;
-    let multiplier = 10;
+    let maxLimitCircle = 200;
+    let persistence = 0.4;
+    let multiplier = .3;
 
     this.mouseCircleRadius = this.mouseDistance * multiplier;
 
@@ -94,27 +90,27 @@ export default class extends FrontElement {
     this.mouseCircleRadius = (this.mouseCircleRadius * (1 - persistence))
       + (this.mouseCircleRadiusPrevious * persistence);
 
-    if (this.mouseCircleRadius < minLimitCircle) {
-      style.display = 'none';
-    } else {
-      style.display = '';
-    }
+    style.display = 'block';
 
     let mouseCircleRadiusHalf = this.mouseCircleRadius / 2;
 
     Object.assign(style, {
-      width: this.mouseCircleRadius + 'px',
-      height: this.mouseCircleRadius + 'px',
-      left: (this.mouseX - mouseCircleRadiusHalf) + 'px',
-      top: (this.mouseY - mouseCircleRadiusHalf) + 'px',
+      width: this.convertPosition(this.mouseCircleRadius),
+      height: this.convertPosition(this.mouseCircleRadius),
+      left: this.convertPosition(this.mouseX - mouseCircleRadiusHalf),
+      top: this.convertPosition(this.mouseY - mouseCircleRadiusHalf),
     });
 
-    this.mouseXPrevious = this.mouseX;
-    this.mouseYPrevious = this.mouseY;
     this.mouseCircleRadiusPrevious = this.mouseCircleRadius;
+
+    setTimeout(() => {
+      style.display = 'none';
+    }, 200);
   }
 
   onMouseMove(event) {
+    this.mouseXPrevious = this.mouseX;
+    this.mouseYPrevious = this.mouseY;
     this.mouseX = event.clientX;
     this.mouseY = event.clientY;
   }

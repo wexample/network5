@@ -2,16 +2,11 @@
   background: white;
   border-radius: 1000px;
   position: fixed;
-}
-
-.mouse-tail-point {
-  border: 1px solid red;
-  position: fixed;
+  display: none;
 }
 
 .mouse-tail-svg {
   position: fixed;
-  //background: rgba(255, 255, 255, 0.2);
 
   path {
     stroke: white;
