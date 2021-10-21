@@ -47,7 +47,9 @@ export default class extends FrontElement {
 
   onFrame() {
     this.refreshMouseDistance();
-    this.refreshMouseTails(this.refreshMouseCircle.bind(this));
+    this.refreshMouseTails(
+        // this.refreshMouseCircle.bind(this)
+    );
   }
 
   refreshMouseDistance() {

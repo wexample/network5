@@ -16,6 +16,8 @@ class VariableHelper
 
     public const ERROR = 'error';
 
+    public const ENV = 'env';
+
     public const EVENTS = 'events';
 
     public const FORM = 'form';

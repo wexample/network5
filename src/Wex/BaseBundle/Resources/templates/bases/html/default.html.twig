@@ -35,41 +35,56 @@
         {%- endblock %}
         {% if not layout_no_js %}
             <script>
-              "use strict";
+                "use strict";
 
-              // Use old school fashioned javascript notation to improve compatibility.
-              var Registry = function Registry(group) {
-                this.group = group;
-                this.classes = {};
-              };
+                // Use old school fashioned javascript notation to improve compatibility.
+                var Registry = function Registry(group) {
+                    this.group = group;
+                    this.classes = {};
+                };
 
-              Registry.prototype = {
-                add: function add(name, definition) {
-                  // Prevent class override.
-                  if (!this.classes[name]) {
-                    this.classes[name] = definition;
-                  }
+                Registry.prototype = {
+                    add: function add(name, definition) {
+                        // Prevent class override.
+                        if (!this.classes[name]) {
+                            this.classes[name] = definition;
+                        }
 
-                  // Return to allow export or extending class.
-                  return definition;
-                }
-              };
+                        // Return to allow export or extending class.
+                        return definition;
+                    }
+                };
 
-              // We use different registry as they are used in several places to manage loading.
-              window.appRegistry = {
-                components: new Registry('components'),
-                pages: new Registry('pages'),
-                vue: new Registry('vue'),
-                assets: {
-                  responsive:{{ assets_render_responsive_list()|json_encode }}
-                }
-              };
+                // We use different registry as they are used in several places to manage loading.
+                window.appRegistry = {
+                    components: new Registry('components'),
+                    pages: new Registry('pages'),
+                    vue: new Registry('vue'),
+                    assets: {
+                        responsive:{{ assets_render_responsive_list()|json_encode }}
+                    }
+                };
             </script>
+            <style>
+                .layout-loading {
+                    display: none;
+                }
+            </style>
         {% endif %}
-
     </head>
     <body>
-    {{ block('page_body') }}
+    <div id="layout" class="layout-loading {{ layout_class|default('') }}">
+        {#- If javascript fails to complete, force removing loading state after 2 seconds.  -#}
+        <script>
+            var elLayout = document.getElementById('layout');
+            elLayout.classList.add('layout-loading');
+
+            setTimeout(function () {
+                elLayout.classList.remove('loading');
+            }, 2000);
+        </script>
+        {{ block('page_body') }}
+    </div>
 
     {%- block template_assets -%}
         <script type="text/javascript" src="{{ asset('build/runtime.js') }}"></script>
@@ -81,6 +96,9 @@
         <script type="text/javascript" src="{{ asset(asset.path) }}"></script>
         {{ asset_set_loaded(asset) }}
         {%- endfor -%}
+        <script type="text/javascript">
+            window.appRegistry.layoutData = {{ template_build_layout_data(template_name) | json_encode(constant('JSON_PRETTY_PRINT')) | raw }};
+        </script>
     {%- endblock -%}
     </body>
     </html>
