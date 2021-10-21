@@ -50,19 +50,13 @@ export default class extends FrontElement {
       this.manager.mouseY
     );
 
-    this.elSvg = document.createElementNS(
-      'http://www.w3.org/2000/svg',
-      'svg'
-    );
+    this.elSvg = this.createSvgElement('svg');
     this.elSvg.classList.add('mouse-tail-svg');
 
     let width = this.setSvgPosition('x');
     let height = this.setSvgPosition('y');
 
-    this.elPath = document.createElementNS(
-      'http://www.w3.org/2000/svg',
-      'path'
-    );
+    this.elPath = this.createSvgElement('path');
     this.elPath.style.strokeWidth = this.strokeWidth;
     this.elPath.setAttribute('d',
       `M${width < 0 ? -width - this.strokeWidthHalf : this.strokeWidthHalf} ${height < 0 ? -height - this.strokeWidthHalf : this.strokeWidthHalf}, ${width > 0 ? width - this.strokeWidthHalf : this.strokeWidthHalf} ${height > 0 ? height - this.strokeWidthHalf : this.strokeWidthHalf}`

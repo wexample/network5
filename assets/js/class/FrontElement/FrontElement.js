@@ -22,4 +22,11 @@ export default class {
       + Math.pow(y1 - y2, 2)
     );
   }
+
+  createSvgElement(tagName) {
+    return document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      tagName
+    );
+  }
 }
