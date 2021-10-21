@@ -1,3 +1,7 @@
+{%- set page_title_default = '@page::page_title' -%}
+{%- set page_title = page_title|default(page_title_default) -%}
+{%- set template_head_title_args = template_head_title_args|default({}) -%}
+{%- set template_head_title = template_head_title|default(page_title) -%}
 {%- set layout_name = layout_name|default(null) -%}
 {%- set template_name = template_name_from_path(template_path) -%}
 
@@ -10,7 +14,14 @@
     <!DOCTYPE html>
     <html>
     <head>
-        <title>TODO</title>
+        <meta charset="utf-8">
+        <title>{{ template_head_title ? (template_head_title | trans(template_head_title_args)) ~ ' | ' : '' }}{{ 'company.name' | trans }}</title>
+        {%- block styles -%}
+            {%- for asset in assets_list('css') -%}
+                <link rel="stylesheet" media="{{ asset.media }}" href="{{ asset(asset.path) }}"/>
+                {{ asset_set_loaded(asset) }}
+            {%- endfor -%}
+        {%- endblock -%}
         <script>
           "use strict";
 
@@ -47,11 +58,11 @@
         <script type="text/javascript" src="{{ asset('build/runtime.js') }}"></script>
         {%- for asset in assets_list('css') -%}
     <link rel="stylesheet" media="{{ asset.media }}" href="{{ asset(asset.path) }}"/>
-        {# {{ asset_set_loaded(asset) }} #}
+        {{ asset_set_loaded(asset) }}
         {%- endfor -%}
         {%- for asset in assets_list('js') -%}
         <script type="text/javascript" src="{{ asset(asset.path) }}"></script>
-        {# {{ asset_set_loaded(asset) }} #}
+        {{ asset_set_loaded(asset) }}
         {%- endfor -%}
     {%- endblock -%}
     </body>

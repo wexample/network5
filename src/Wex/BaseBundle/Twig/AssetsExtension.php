@@ -72,10 +72,10 @@ class AssetsExtension extends AbstractExtension
     {
         return [
             new TwigFunction(
-                'assets_list',
+                'asset_set_loaded',
                 [
                     $this,
-                    'assetsList',
+                    'assetSetLoaded',
                 ]
             ),
             new TwigFunction(
@@ -91,7 +91,14 @@ class AssetsExtension extends AbstractExtension
                     $this,
                     'assetsInitTemplate',
                 ]
-            )
+            ),
+            new TwigFunction(
+                'assets_list',
+                [
+                    $this,
+                    'assetsList',
+                ]
+            ),
         ];
     }
 
@@ -218,6 +225,11 @@ class AssetsExtension extends AbstractExtension
         $this->assets[$entry->type][] = $entry;
 
         return $this->assetsLoaded[$pathRelative];
+    }
+
+    public function assetSetLoaded(Asset $asset, $loaded = true)
+    {
+        $asset->loaded = $loaded;
     }
 }
 
