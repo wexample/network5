@@ -4,9 +4,14 @@
   position: fixed;
 }
 
+.mouse-tail-point {
+  border: 1px solid red;
+  position: fixed;
+}
+
 .mouse-tail-svg {
   position: fixed;
-  background: rgba(255, 255, 255, 0.2);
+  //background: rgba(255, 255, 255, 0.2);
 
   path {
     stroke: white;

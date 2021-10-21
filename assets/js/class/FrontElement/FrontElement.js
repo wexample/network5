@@ -1,7 +1,7 @@
 export default class {
   constructor() {
     Object.assign(this, {
-      direction: {
+      directionsMap: {
         x: {
           position: 'left',
           size: 'width',

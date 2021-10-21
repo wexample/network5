@@ -43,6 +43,19 @@ export default class extends FrontElement {
     );
   }
 
+  renderPoint(name) {
+    let point = this.points[name];
+    let elPoint = document.createElement('div');
+    elPoint.classList.add('mouse-tail-point');
+    document.body.appendChild(elPoint);
+    elPoint.style.left = this.convertPosition(point.x);
+    elPoint.style.top = this.convertPosition(point.y);
+  }
+
+  convertPosition(number) {
+    return number + 'px';
+  }
+
   renderSecondPoint() {
     this.setPoint(
       'end',
@@ -59,7 +72,11 @@ export default class extends FrontElement {
     this.elPath = this.createSvgElement('path');
     this.elPath.style.strokeWidth = this.strokeWidth;
     this.elPath.setAttribute('d',
-      `M${width < 0 ? -width - this.strokeWidthHalf : this.strokeWidthHalf} ${height < 0 ? -height - this.strokeWidthHalf : this.strokeWidthHalf}, ${width > 0 ? width - this.strokeWidthHalf : this.strokeWidthHalf} ${height > 0 ? height - this.strokeWidthHalf : this.strokeWidthHalf}`
+      `M`
+      + `${width < 0 ? -width + this.strokeWidthHalf : this.strokeWidthHalf} `
+      + `${height < 0 ? -height + this.strokeWidthHalf : this.strokeWidthHalf}, `
+      + `${width > 0 ? width + this.strokeWidthHalf : this.strokeWidthHalf} `
+      + `${height > 0 ? height + this.strokeWidthHalf : this.strokeWidthHalf} `
     );
 
     this.elSvg.appendChild(this.elPath);
@@ -69,14 +86,16 @@ export default class extends FrontElement {
   }
 
   renderEnd() {
-    // this.elSvg.parentNode.removeChild(this.elSvg);
+    this.elSvg.parentNode.removeChild(this.elSvg);
   }
 
   setSvgPosition(direction) {
-    let length = this.manager[this.direction[direction].mouse] - this.points.start[direction];
+    let directionsMap = this.directionsMap;
+    let length = this.manager[directionsMap[direction].mouse] - this.points.start[direction];
     let pointName = length > 0 ? 'start' : 'end';
-    this.elSvg.style[this.direction[direction].position] = this.points[pointName][direction] + 'px';
-    this.elSvg.style[this.direction[direction].size] = Math.abs(length) + 'px';
+    let position = this.points[pointName][direction] - this.strokeWidthHalf;
+    this.elSvg.style[directionsMap[direction].position] = position + 'px';
+    this.elSvg.style[directionsMap[direction].size] = (Math.abs(length) + this.strokeWidth) + 'px';
 
     return length;
   }
