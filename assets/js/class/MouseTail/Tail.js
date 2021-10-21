@@ -43,15 +43,6 @@ export default class extends FrontElement {
     );
   }
 
-  renderPoint(name) {
-    let point = this.points[name];
-    let elPoint = document.createElement('div');
-    elPoint.classList.add('mouse-tail-point');
-    document.body.appendChild(elPoint);
-    elPoint.style.left = this.convertPosition(point.x);
-    elPoint.style.top = this.convertPosition(point.y);
-  }
-
   convertPosition(number) {
     return number + 'px';
   }
@@ -78,6 +69,8 @@ export default class extends FrontElement {
       + `${width > 0 ? width + this.strokeWidthHalf : this.strokeWidthHalf} `
       + `${height > 0 ? height + this.strokeWidthHalf : this.strokeWidthHalf} `
     );
+
+    this.animatePath(this.elPath, this.animatePathShadowItem.bind(this.manager), 0.05);
 
     this.elSvg.appendChild(this.elPath);
     document.body.appendChild(this.elSvg);

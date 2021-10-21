@@ -13,7 +13,7 @@ export default class extends FrontElement {
     Object.assign(this, {
       frameRate: 20,
       tails: [],
-      minLimitTail: 150,
+      minLimitTail: 10,
       mouseCircleRadius: 0,
       mouseCircleRadiusPrevious: 0,
       mouseX: 0,
@@ -22,13 +22,16 @@ export default class extends FrontElement {
       mouseYPrevious: 0,
     });
 
+    // Create circle el.
     this.elMouseCircle = document.createElement('div');
     this.elMouseCircle.classList.add('mouse-circle');
-
     this.elMouseCircle.style.width = '100px';
     this.elMouseCircle.style.height = '100px';
-
     document.body.appendChild(this.elMouseCircle);
+
+    // Create style sheet.
+    this.elStyleSheet = document.createElement('style');
+    document.head.appendChild(this.elStyleSheet);
 
     document.addEventListener('mousemove', this.onMouseMove.bind(this));
 
@@ -36,11 +39,15 @@ export default class extends FrontElement {
   }
 
   start() {
-    this.mouseTailInterval = setInterval(this.onFrame.bind(this), 1000 / this.frameRate);
+    this.mouseTailInterval = setInterval(this.onInterval.bind(this), 1000 / this.frameRate);
   }
 
   stop() {
     clearInterval(this.mouseTailInterval);
+  }
+
+  onInterval() {
+    window.requestAnimationFrame(this.onFrame.bind(this));
   }
 
   onFrame() {
