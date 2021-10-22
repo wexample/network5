@@ -4,6 +4,8 @@ namespace App\Wex\BaseBundle\Helper;
 
 class VariableHelper
 {
+    public const ALL = 'all';
+
     public const ASSETS = 'assets';
 
     public const DEMO = 'demo';
@@ -41,6 +43,8 @@ class VariableHelper
     public const MAIL = 'mail';
 
     public const PAGE = 'page';
+
+    public const RESPONSIVE = 'responsive';
 
     public const TO = 'to';
 

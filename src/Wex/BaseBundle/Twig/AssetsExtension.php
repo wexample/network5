@@ -2,7 +2,10 @@
 
 namespace App\Wex\BaseBundle\Twig;
 
+use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
+use Doctrine\DBAL\Types\Types;
+use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -28,11 +31,13 @@ class AssetsExtension extends AbstractExtension
         'xxl' => 1400,
     ];
 
+    /**
+     * @var array|Asset[][]
+     */
     public const ASSETS_DEFAULT_EMPTY = [
         Asset::EXTENSION_CSS => [],
         Asset::EXTENSION_JS => [],
     ];
-
     public array $assets = self::ASSETS_DEFAULT_EMPTY;
 
     public array $assetsPreload = self::ASSETS_DEFAULT_EMPTY;
@@ -101,13 +106,29 @@ class AssetsExtension extends AbstractExtension
                     'assetsPreloadList',
                 ]
             ),
-            new TwigFunction(
-                'assets_render_responsive_list',
-                [
-                    $this,
-                    'assetsRenderResponsiveList',
-                ]
-            ),
+        ];
+    }
+
+    #[ArrayShape([
+        VariableHelper::ALL => Asset::class."[]",
+        VariableHelper::RESPONSIVE => Types::ARRAY
+    ])]
+    public function buildRenderData(): array
+    {
+        $assets = $this->assets;
+        $responsive = [];
+
+        foreach ($assets as $type => $group) {
+            foreach ($group as $asset) {
+                if ($asset->responsive) {
+                    $responsive[$type][] = $asset;
+                }
+            }
+        }
+
+        return [
+            VariableHelper::ALL => $assets,
+            VariableHelper::RESPONSIVE => $responsive,
         ];
     }
 
@@ -121,7 +142,7 @@ class AssetsExtension extends AbstractExtension
 
         $assets = $this->assetsDetect(
             'layouts/'.$layoutName.'/layout',
-            true
+            Asset::EXTENSION_CSS
         );
 
         // No main js found.
@@ -175,7 +196,7 @@ class AssetsExtension extends AbstractExtension
 
     public function assetsDetect(
         string $templateName,
-        bool $preload = false
+        string|bool $preload = false
     ): array
     {
         $output = [];
@@ -184,7 +205,7 @@ class AssetsExtension extends AbstractExtension
             $output[$ext] = $this->assetsDetectForType(
                 $templateName,
                 $ext,
-                $preload
+                $preload === true || $preload === $ext
             );
         }
 
@@ -265,10 +286,6 @@ class AssetsExtension extends AbstractExtension
     public function assetSetLoaded(Asset $asset, $loaded = true)
     {
         $asset->loaded = $loaded;
-    }
-
-    public function assetsRenderResponsiveList():array {
-        return [];
     }
 }
 

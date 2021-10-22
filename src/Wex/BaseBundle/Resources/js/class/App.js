@@ -1,8 +1,10 @@
 import Page from '../class/Page';
 
+import MixinAssets from '../mixins/Assets';
 import MixinDebug from '../mixins/Debug';
 import MixinMixin from '../mixins/Mixin';
 import MixinPage from '../mixins/Page';
+import MixinResponsive from '../mixins/Responsive';
 
 export default class {
     constructor(readyCallback, globalName = 'app') {
@@ -111,9 +113,11 @@ export default class {
     getMixins() {
         let mixins = {
             ...{
+                MixinAssets,
                 // MixinLazy,
                 MixinMixin,
                 MixinPage,
+                MixinResponsive,
             },
             // Append page specific mixins.
             ...(window.pageCurrent || this.getClassPage()).getPageLevelMixins(),

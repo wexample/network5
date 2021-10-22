@@ -55,6 +55,7 @@ class TemplateExtension extends AbstractExtension
         return array_merge_recursive(
             $output,
             [
+                'displayBreakpoints' => AssetsExtension::DISPLAY_BREAKPOINTS,
                 'env' => $this->kernel->getEnvironment(),
             ]
         );
@@ -81,7 +82,13 @@ class TemplateExtension extends AbstractExtension
         Environment $env
     ): array
     {
+        /** @var AssetsExtension $assetsExtension */
+        $assetsExtension = $env->getExtension(
+            AssetsExtension::class
+        );
+
         $output = [
+            VariableHelper::ASSETS => $assetsExtension->buildRenderData(),
             VariableHelper::ENV => $this->kernel->getEnvironment(),
         ];
 

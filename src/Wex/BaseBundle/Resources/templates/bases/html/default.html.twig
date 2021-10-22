@@ -59,10 +59,7 @@
                 window.appRegistry = {
                     components: new Registry('components'),
                     pages: new Registry('pages'),
-                    vue: new Registry('vue'),
-                    assets: {
-                        responsive:{{ assets_render_responsive_list()|json_encode }}
-                    }
+                    vue: new Registry('vue')
                 };
             </script>
             <style>
