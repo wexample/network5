@@ -15,9 +15,36 @@ class AssetsTest extends NetworkTestCase
 
         $this->goToRoute(VariableHelper::DEMO.'_'.VariableHelper::ASSETS);
 
-        $layoutData = $this->getPageLayoutData();
+        $layoutRenderData = $this->getPageLayoutData();
 
-        $this->assertNotEmpty($layoutData);
+        $this->assertNotEmpty(
+            $layoutRenderData,
+            'Html contains layout data.'
+        );
+
+        $this->assertRenderData($layoutRenderData);
+
+        $this->assertTrue(
+            isset($layoutRenderData['page']),
+            'Layout data contains page data'
+        );
+
+        $this->assertRenderData($layoutRenderData['page']);
+
+        $pageRenderData = $layoutRenderData['page'];
+
+        $this->assertTrue(
+            isset($pageRenderData['assets']['all']['css']),
+            'Demo page contains a default css page.'
+        );
+    }
+
+    protected function assertRenderData(array $renderData)
+    {
+        $this->assertTrue(
+            isset($renderData['assets']),
+            'Render data contains assets entry'
+        );
     }
 
     protected function getPageLayoutData(?string $content = null): array
