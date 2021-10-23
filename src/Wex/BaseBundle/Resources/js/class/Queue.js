@@ -9,13 +9,8 @@ export default class {
         });
     }
 
-    add(command, start = true) {
+    add(command) {
         this.commands.push(command);
-
-        if (start) {
-            this.start();
-        }
-
         return this;
     }
 

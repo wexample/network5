@@ -53,7 +53,7 @@ export default {
                     queue.then(callback);
                 }
 
-                return queue;
+                return queue.start();
             },
 
             forEachAssetInCollection(assetsCollection, callback) {
