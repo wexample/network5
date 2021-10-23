@@ -12,7 +12,7 @@ class DemoController extends AbstractController
 {
     protected string $viewPathPrefix = VariableHelper::DEMO.'/';
 
-    #[Route(path: VariableHelper::DEMO.'/buttons', name: VariableHelper::DEMO)]
+    #[Route(path: VariableHelper::DEMO.'/buttons', name: VariableHelper::DEMO.'_buttons')]
     public function buttons(): Response
     {
         return $this->renderPage(
@@ -22,11 +22,11 @@ class DemoController extends AbstractController
         );
     }
 
-    #[Route(path: VariableHelper::DEMO.'/assets', name: VariableHelper::DEMO)]
+    #[Route(path: VariableHelper::DEMO.'/'.VariableHelper::ASSETS, name: VariableHelper::DEMO.'_'.VariableHelper::ASSETS)]
     public function assets(): Response
     {
         return $this->renderPage(
-            'assets',
+            VariableHelper::ASSETS,
             [
                 'displayBreakpoints' => AssetsExtension::DISPLAY_BREAKPOINTS
             ]
