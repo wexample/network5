@@ -11,6 +11,7 @@ An administration interface using on Symfony / VueJS and Material Design.
 - Doctrine
 - Google Material Components
 - Font Awesome Free Edition for the Web
+- TypeScript
 - VueJs
 - A bunch of wex customisations
 
