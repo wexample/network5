@@ -24,7 +24,11 @@ export default class {
 
     next() {
         if (this.commands.length) {
-            (this.commands.shift())();
+            let response = (this.commands.shift())(this);
+
+            if (response !== false) {
+                this.next();
+            }
         } else {
             this.complete();
         }
@@ -46,12 +50,6 @@ export default class {
 
     then(callback) {
         this.callbacks.push(callback);
-
-        // No more command to execute.
-        if (this.commands.length) {
-            // Execute now.
-            this.complete();
-        }
     }
 
     complete() {

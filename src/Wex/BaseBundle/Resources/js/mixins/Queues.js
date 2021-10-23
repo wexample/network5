@@ -25,15 +25,24 @@ export default {
 
             afterAllQueues(queues, complete) {
                 let originalList = this.arrays.shallowCopy(queues);
+                let hasReunningQueue = false;
 
                 queues.forEach((queue) => {
-                    queue.then(() => {
-                        this.arrays.deleteItem(queues, queue);
-                        if (!queues.length) {
-                            complete(originalList);
-                        }
-                    });
+                    if (queue.started) {
+                        hasReunningQueue = true;
+
+                        queue.then(() => {
+                            this.arrays.deleteItem(queues, queue);
+                            if (!queues.length) {
+                                complete(originalList);
+                            }
+                        });
+                    }
                 });
+
+                if (!hasReunningQueue) {
+                    complete(originalList);
+                }
             },
 
             create(queueName) {
