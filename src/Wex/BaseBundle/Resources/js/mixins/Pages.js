@@ -1,7 +1,7 @@
 import MixinLocale from '../mixins/Locale';
 
 export default {
-    name: 'page',
+    name: 'pages',
 
     dependencies: {
         MixinLocale,
@@ -9,9 +9,9 @@ export default {
 
     hooks: {
         app: {
-            loadAppData(data, registry) {
+            loadRenderData(data, registry) {
                 if (registry.MixinLocale === 'complete') {
-                    this.page.create(data.page);
+                    this.pages.create(data.page);
                     return 'complete';
                 }
                 return 'wait';
@@ -25,7 +25,7 @@ export default {
 
             create(data) {
                 let classDefinition = this.getClassDefinition(
-                    'pages',
+                    'page',
                     this.getClassPage(),
                     data.name
                 );

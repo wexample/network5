@@ -8,6 +8,8 @@ class VariableHelper
 
     public const ASSETS = 'assets';
 
+    public const BODY = 'body';
+
     public const DEMO = 'demo';
 
     public const DEFAULT = 'default';
@@ -41,6 +43,8 @@ class VariableHelper
     public const MODAL = 'modal';
 
     public const MAIL = 'mail';
+    
+    public const NAME = 'name';
 
     public const PAGE = 'page';
 
@@ -61,6 +65,8 @@ class VariableHelper
     public const VARIABLE_TYPE_STRING = 'string';
 
     public const VARIABLE_TYPE_STRING_LENGTH_DEFAULT = 255;
+
+    public const VUE = 'vue';
 
     public const PATH_ENTITY = 'Entity';
 }

@@ -2,32 +2,18 @@
 
 namespace App\Wex\BaseBundle\Rendering;
 
+use App\Wex\BaseBundle\Helper\PathHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
+use App\Wex\BaseBundle\Twig\AssetsExtension;
 use JetBrains\PhpStorm\NoReturn;
 
 class Asset
 {
-    public bool $defer = false;
-
-    public bool $loaded = false;
-
-    public string $media = 'screen';
-
-    public string $path;
-
-    public string $name;
-
-    public ?string $type = null;
-
-    public bool $responsive = false;
-
-    public bool $preload = false;
-
-    public string $preloadType;
+    public const EXTENSION_CSS = 'css';
 
     public const EXTENSION_JS = 'js';
 
-    public const EXTENSION_CSS = 'css';
+    public const EXTENSION_VUE = 'vue';
 
     public const ASSETS_EXTENSIONS = [
         Asset::EXTENSION_CSS,
@@ -38,6 +24,10 @@ class Asset
         self::EXTENSION_CSS => self::PRELOAD_AS_STYLE,
         self::EXTENSION_JS => self::PRELOAD_AS_SCRIPT,
     ];
+
+    public const CONTEXT_LAYOUT = VariableHelper::LAYOUT;
+    public const CONTEXT_PAGE = VariableHelper::PAGE;
+    public const CONTEXT_VUE = VariableHelper::VUE;
 
     public const PRELOAD_AS_AUDIO = 'audio';
     public const PRELOAD_AS_DOCUMENT = 'document';
@@ -53,11 +43,44 @@ class Asset
     public const PRELOAD_AS_VIDEO = 'video';
     public const PRELOAD_NONE = 'none';
 
+    public string $context;
+
+    public string $id;
+
+    public string $media = 'screen';
+
+    public string $name;
+
+    public string $path;
+
+    public bool $preload = false;
+
+    public string $preloadType;
+
+    public bool $rendered = false;
+
+    public ?string $responsive = null;
+
+    public ?string $type = null;
+
     #[NoReturn]
-    public function __construct(string $path)
+    public function __construct(string $path, string $context)
     {
+        $this->context = $context;
         $this->path = $path;
         $this->name = $this->createName($path);
+
+        $info = pathinfo($this->path);
+        $this->type = $info['extension'];
+
+        // Remove the base part before build/{type}/ folder.
+        $pathWithoutExt = dirname($this->path).'/'.$info['filename'];
+
+        $this->id = $context.'.'.PathHelper::relativeTo(
+                $pathWithoutExt,
+                '/'.AssetsExtension::DIR_BUILD.
+                $this->type.'/'
+            );
     }
 
     /**

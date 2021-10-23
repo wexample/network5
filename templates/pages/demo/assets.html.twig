@@ -1,0 +1,17 @@
+{%- extends 'layouts/black.html.twig' -%}
+
+{%- set template_path = _self -%}
+
+{%- block page_body -%}
+    <div class="temp-container">
+        <div class="board-line">
+            {{ template_name }}
+        </div>
+        {% for name,breakPoint in displayBreakpoints %}
+            <div class="board-line display-breakpoint display-breakpoint-{{ breakPoint }}">
+                <div>{{ name }}</div>
+                <div>{{ breakPoint }}</div>
+            </div>
+        {% endfor %}
+    </div>
+{%- endblock -%}

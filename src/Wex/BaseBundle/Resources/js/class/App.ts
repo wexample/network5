@@ -3,27 +3,31 @@ import Page from '../class/Page';
 import MixinAssets from '../mixins/Assets';
 import MixinDebug from '../mixins/Debug';
 import MixinMixin from '../mixins/Mixin';
-import MixinPage from '../mixins/Page';
+import MixinPage from '../mixins/Pages';
 import MixinResponsive from '../mixins/Responsive';
 
 export default class {
+    private bootJsBuffer: string[] = [];
+    private classesDefinitions: any = {};
+    private hasCoreLoaded: boolean = false;
+    private layoutPage: Page = null;
+    private mixins: object;
+    private readyCallbacks: Function[] = [];
+    private elLayout: HTMLElement;
+    private lib: object = {};
+    private registry: any;
+    private isReady: boolean = false;
+
     constructor(readyCallback, globalName = 'app') {
         window[globalName] = this;
 
-        Object.assign(this, {
-            classesDefinitions: {},
-            isReady: false,
-            lib: {},
-            mixins: null,
-            readyCallbacks: [],
-            registry: window.appRegistry,
-        });
+        this.registry = window['appRegistry'];
 
         // Allow callback as object definition.
         if (typeof readyCallback === 'object') {
             Object.assign(this, readyCallback);
             // Allow object.readyCallback property.
-            readyCallback = this.readyCallback || readyCallback;
+            readyCallback = readyCallback.readyCallback || readyCallback;
         }
 
         let doc = window.document;
@@ -34,17 +38,20 @@ export default class {
             this.mix(this, 'app', true);
 
             // Init mixins.
-            this.mixin.invokeUntilComplete('init', 'app', [], () => {
+            this.getMixin('mixin').invokeUntilComplete('init', 'app', [], () => {
                 this.elLayout = doc.getElementById('layout');
 
                 this.addLibraries(this.lib);
 
+                // The main functionalities are ready.
+                this.hasCoreLoaded = true;
+
                 // Load template data.
-                this.loadAppData(this.registry.layoutData, () => {
+                this.loadRenderData(this.registry.layoutData, () => {
                     // Execute ready callbacks.
                     this.readyComplete();
                     // Display page content.
-                    this.elLayout.classList.remove('loading');
+                    this.elLayout.classList.remove('layout-loading');
                     // Launch constructor argument callback.
                     readyCallback && readyCallback.apply(this);
                 });
@@ -55,11 +62,7 @@ export default class {
 
         // Document has been parsed.
         // Allows running after loaded event.
-        if (readyState === 'complete' ||
-            readyState === 'loaded' ||
-            // But all resources have not been loaded.
-            readyState === 'interactive'
-        ) {
+        if (['complete', 'loaded', 'interactive'].indexOf(readyState) !== -1) {
             setTimeout(run);
         } else {
             doc.addEventListener('DOMContentLoaded', run);
@@ -83,25 +86,26 @@ export default class {
     /**
      * Execute an array of callbacks functions.
      */
-    callbacks(callbacksArray, args, thisArg) {
-        // Only use apply function in case of existing args,
-        // call function if faster than apply, even with argument check.
-        for (
-            let method = args ? 'apply' : 'call', item, i = 0;
-            (item = callbacksArray[i++]);
-        ) {
-            item[method](thisArg || this, args);
-        }
+    callbacks(callbacksArray, args = [], thisArg = null) {
+        let method = args ? 'apply' : 'call';
+
+        callbacksArray.forEach((item) => {
+            if (!item) {
+                throw "Trying to execute undefined callback.";
+            }
+
+            item[method](thisArg || this, args)
+        });
     }
 
-    loadAppData(data, complete) {
+    loadRenderData(data, complete) {
         if (data.redirect) {
             document.location.replace(data.redirect.url);
             return;
         }
 
         // Use mixins hooks.
-        this.mixin.invokeUntilComplete('loadAppData', 'app', [data], () => {
+        this.getMixin('mixin').invokeUntilComplete('loadRenderData', 'app', [data], () => {
             complete && complete(data);
         });
     }
@@ -110,17 +114,20 @@ export default class {
         return Page;
     }
 
+    getMixin(name) {
+        // TODO For TypeScript compatibility.
+        //  Mixins may be converted to services.
+        return this[name];
+    }
+
     getMixins() {
         let mixins = {
             ...{
                 MixinAssets,
-                // MixinLazy,
                 MixinMixin,
                 MixinPage,
                 MixinResponsive,
-            },
-            // Append page specific mixins.
-            ...(window.pageCurrent || this.getClassPage()).getPageLevelMixins(),
+            }
         };
 
         if (this.registry.layoutData.env === 'local') {
@@ -136,16 +143,16 @@ export default class {
     }
 
     getMixinAndDependencies(mixins) {
-        for (let mixin of Object.values(mixins)) {
+        Object.values(mixins).forEach((mixin: any) => {
             if (mixin.dependencies) {
                 let dependencies = mixin.dependencies;
-                this.getMixinAndDependencies(dependencies);
+
                 mixins = {
                     ...mixins,
-                    ...dependencies,
+                    ...this.getMixinAndDependencies(dependencies),
                 };
             }
-        }
+        })
 
         return mixins;
     }

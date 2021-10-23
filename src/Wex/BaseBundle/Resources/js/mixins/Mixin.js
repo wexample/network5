@@ -20,11 +20,22 @@ export default {
                 let registry = {};
                 let mixins = this.mixins;
                 let mixinsValues = Object.entries(mixins);
+                let loops = 0;
+                let loopsLimit = 100;
+                let errorTrace = [];
 
                 let step = () => {
                     let data = mixinsValues.shift();
 
                     if (data) {
+                        if (loops++ > loopsLimit) {
+                            console.error(errorTrace);
+                            throw `Stopping more than ${loops} recursions during mixins invocation `
+                            + `on method "${method}", stopping at ${data[0]}, see trace below.`;
+                        } else if (loops > loopsLimit - 10) {
+                            errorTrace.push(data);
+                        }
+
                         let name = data[0];
                         let hooks = data[1].hooks;
 

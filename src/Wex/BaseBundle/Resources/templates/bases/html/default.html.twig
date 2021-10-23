@@ -1,3 +1,5 @@
+{% import '@WexBaseBundle/Resources/templates/macros/assets.html.twig' as macro_assets %}
+
 {%- set page_title_default = '@page::page_title' -%}
 {%- set page_title = page_title|default(page_title_default) -%}
 {%- set template_head_title_args = template_head_title_args|default({}) -%}
@@ -24,30 +26,34 @@
         {%- endblock %}
 
         {% block styles -%}
-            {% for asset in assets_list('css') %}
-                {%- if not asset.responsive or layout_no_js -%}
-                    <link id="{{ asset.name }}" rel="stylesheet" media="{{ asset.media }}"
-                          href="{{ asset(asset.path) }}"/>
-                {%- endif -%}
-
-                {{- asset_set_loaded(asset) }}
-            {% endfor %}
+            {{ macro_assets.render_available_css(layout_no_js) }}
         {%- endblock %}
         {% if not layout_no_js %}
             <script>
                 "use strict";
 
                 // Use old school fashioned javascript notation to improve compatibility.
-                var Registry = function Registry(group) {
-                    this.group = group;
+                var AppRegistryPart = function AppRegistryPart(context) {
+                    this.context = context;
                     this.classes = {};
                 };
 
-                Registry.prototype = {
+                AppRegistryPart.prototype = {
                     add: function add(name, definition) {
                         // Prevent class override.
                         if (!this.classes[name]) {
                             this.classes[name] = definition;
+                        }
+
+                        var app = window.app;
+                        var id = this.context + '.' + name;
+
+                        if (!app.hasCoreLoaded) {
+                            // Wait app launch to play with assets methods.
+                            app.bootJsBuffer.push(id);
+                        } else {
+                            // Mark now that class is loaded.
+                            app.assets.jsPendingLoaded(id);
                         }
 
                         // Return to allow export or extending class.
@@ -55,12 +61,16 @@
                     }
                 };
 
-                // We use different registry as they are used in several places to manage loading.
-                window.appRegistry = {
-                    components: new Registry('components'),
-                    pages: new Registry('pages'),
-                    vue: new Registry('vue')
-                };
+                window.appRegistry = {};
+
+                [
+                    'component',
+                    'page',
+                    'vue'
+                ].forEach(function (item) {
+                    window.appRegistry[item] = new AppRegistryPart(item);
+                });
+
             </script>
             <style>
                 .layout-loading {
@@ -71,31 +81,28 @@
     </head>
     <body>
     <div id="layout" class="layout-loading {{ layout_class|default('') }}">
-        {#- If javascript fails to complete, force removing loading state after 2 seconds.  -#}
+        {#- If javascript fails to complete, force removing loading state after 2 seconds.      -#}
         <script>
             var elLayout = document.getElementById('layout');
             elLayout.classList.add('layout-loading');
 
             setTimeout(function () {
-                elLayout.classList.remove('loading');
+                elLayout.classList.remove('layout-loading');
             }, 2000);
         </script>
         {{ block('page_body') }}
     </div>
 
     {%- block template_assets -%}
-        <script type="text/javascript" src="{{ asset('build/runtime.js') }}"></script>
-        {%- for asset in assets_list('css') -%}
-    <link rel="stylesheet" media="{{ asset.media }}" href="{{ asset(asset.path) }}"/>
-        {{ asset_set_loaded(asset) }}
-        {%- endfor -%}
-        {%- for asset in assets_list('js') -%}
-        <script type="text/javascript" src="{{ asset(asset.path) }}"></script>
-        {{ asset_set_loaded(asset) }}
-        {%- endfor -%}
-        <script type="text/javascript">
-            window.appRegistry.layoutData = {{ template_build_layout_data(template_name) | json_encode(constant('JSON_PRETTY_PRINT')) | raw }};
-        </script>
+        {{ macro_assets.render_available_css() }}
+
+        {% if not layout_no_js %}
+            <script type="text/javascript" src="{{ asset('build/runtime.js') }}"></script>
+            {{ macro_assets.render_available_js() }}
+            <script type="text/javascript">
+                window.appRegistry.layoutData = {{ template_build_layout_data(template_name) | json_encode(constant('JSON_PRETTY_PRINT')) | raw }};
+            </script>
+        {%- endif -%}
     {%- endblock -%}
     </body>
     </html>

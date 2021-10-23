@@ -18,6 +18,8 @@ abstract class AbstractController extends
 
     protected string $requestUri;
 
+    protected string $viewPathPrefix = '';
+
     public function __construct(
         protected RequestStack $requestStack
     )
@@ -39,7 +41,7 @@ abstract class AbstractController extends
         $parameters['request_uri'] = $parameters['request_uri'] ?? $this->requestUri;
 
         return parent::render(
-            'pages/'.$view
+            'pages/'.$this->viewPathPrefix.$view
             .TemplateExtension::TEMPLATE_FILE_EXTENSION,
             $parameters,
             $response

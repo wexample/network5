@@ -11,14 +11,12 @@ class PathHelper
     public static function relativeTo(
         string $path,
         string $basePath
-    ): string {
-        return substr(
-            $path,
-            strlen(
-                realpath(
-                    $basePath
-                ).'/'
-            )
+    ): string
+    {
+        return preg_replace(
+            '/^'.str_replace('/', '\/', $basePath).'/',
+            '',
+            $path
         );
     }
 }

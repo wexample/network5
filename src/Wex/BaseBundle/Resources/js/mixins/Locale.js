@@ -3,7 +3,7 @@ export default {
 
   hooks: {
     app: {
-      loadAppData() {
+      loadRenderData() {
         return 'complete';
       },
     },

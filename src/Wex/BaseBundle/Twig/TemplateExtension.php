@@ -3,6 +3,7 @@
 namespace App\Wex\BaseBundle\Twig;
 
 use App\Wex\BaseBundle\Helper\VariableHelper;
+use App\Wex\BaseBundle\Rendering\Asset;
 use Symfony\Component\HttpKernel\KernelInterface;
 use function str_ends_with;
 use function strlen;
@@ -45,20 +46,28 @@ class TemplateExtension extends AbstractExtension
         ];
     }
 
-    public function templateBuildLayoutData(Environment $env, string $templateName): array
+    public function templateBuildLayoutData(
+        Environment $env,
+        string $pageTemplateName
+    ): array
     {
-        $output = $this->templateBuildPageData(
-            $env,
-            $templateName
+        /** @var AssetsExtension $assetsExtension */
+        $assetsExtension = $env->getExtension(
+            AssetsExtension::class
         );
 
-        return array_merge_recursive(
-            $output,
+        $output = array_merge_recursive(
+            $this->templateBuildRenderData($env, $pageTemplateName),
             [
+                VariableHelper::ASSETS => $assetsExtension->buildRenderData(Asset::CONTEXT_LAYOUT),
                 'displayBreakpoints' => AssetsExtension::DISPLAY_BREAKPOINTS,
-                'env' => $this->kernel->getEnvironment(),
+                VariableHelper::ENV => $this->kernel->getEnvironment()
             ]
         );
+
+        $output[VariableHelper::PAGE]['isLayoutPage'] = true;
+
+        return $output;
     }
 
     public function templateBuildPageData(
@@ -67,29 +76,29 @@ class TemplateExtension extends AbstractExtension
         ?string $body = null
     ): array
     {
-        $output = $this->templateBuildRenderData(
-            $env
-        );
-
-        $output['page'] = [
-            'name' => $pageName,
-        ];
-
-        return $output;
-    }
-
-    public function templateBuildRenderData(
-        Environment $env
-    ): array
-    {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
         );
 
+        return [
+            VariableHelper::ASSETS => $assetsExtension->buildRenderData(Asset::CONTEXT_PAGE),
+            VariableHelper::BODY => $body,
+            VariableHelper::NAME => $pageName,
+        ];
+    }
+
+    public function templateBuildRenderData(
+        Environment $env,
+        string $pageTemplateName = null
+    ): array
+    {
         $output = [
-            VariableHelper::ASSETS => $assetsExtension->buildRenderData(),
-            VariableHelper::ENV => $this->kernel->getEnvironment(),
+            VariableHelper::PAGE => $pageTemplateName
+                ? $this->templateBuildPageData(
+                    $env,
+                    $pageTemplateName
+                ) : null
         ];
 
         return $output;

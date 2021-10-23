@@ -20,8 +20,6 @@ class AssetsExtension extends AbstractExtension
 
     public const FILE_MANIFEST = 'manifest.json';
 
-    public const GROUP_PAGES = 'pages';
-
     public const DISPLAY_BREAKPOINTS = [
         'xs' => 0,
         's' => 576,
@@ -72,10 +70,10 @@ class AssetsExtension extends AbstractExtension
     {
         return [
             new TwigFunction(
-                'asset_set_loaded',
+                'asset_set_rendered',
                 [
                     $this,
-                    'assetSetLoaded',
+                    'assetSetRendered',
                 ]
             ),
             new TwigFunction(
@@ -113,21 +111,25 @@ class AssetsExtension extends AbstractExtension
         VariableHelper::ALL => Asset::class."[]",
         VariableHelper::RESPONSIVE => Types::ARRAY
     ])]
-    public function buildRenderData(): array
+    public function buildRenderData(string $context): array
     {
-        $assets = $this->assets;
+        $all = [];
         $responsive = [];
 
-        foreach ($assets as $type => $group) {
+        foreach ($this->assets as $type => $group) {
             foreach ($group as $asset) {
-                if ($asset->responsive) {
-                    $responsive[$type][] = $asset;
+                if ($asset->context === $context) {
+                    $all[$type][] = $asset;
+
+                    if ($asset->responsive) {
+                        $responsive[$type][] = $asset;
+                    }
                 }
             }
         }
 
         return [
-            VariableHelper::ALL => $assets,
+            VariableHelper::ALL => $all,
             VariableHelper::RESPONSIVE => $responsive,
         ];
     }
@@ -142,6 +144,7 @@ class AssetsExtension extends AbstractExtension
 
         $assets = $this->assetsDetect(
             'layouts/'.$layoutName.'/layout',
+            Asset::CONTEXT_LAYOUT,
             Asset::EXTENSION_CSS
         );
 
@@ -152,7 +155,8 @@ class AssetsExtension extends AbstractExtension
             // to wait for dom content loaded anyway.
             $this->assetsDetectForType(
                 'layouts/default/layout',
-                Asset::EXTENSION_JS
+                Asset::EXTENSION_JS,
+                Asset::CONTEXT_LAYOUT
             );
         }
 
@@ -172,7 +176,8 @@ class AssetsExtension extends AbstractExtension
     )
     {
         $this->assetsDetect(
-            $templateName
+            $templateName,
+            Asset::CONTEXT_PAGE
         );
     }
 
@@ -181,7 +186,7 @@ class AssetsExtension extends AbstractExtension
         $notLoaded = [];
 
         foreach ($this->assets[$ext] as $asset) {
-            if (!$asset->loaded) {
+            if (!$asset->rendered) {
                 $notLoaded[] = $asset;
             }
         }
@@ -196,6 +201,7 @@ class AssetsExtension extends AbstractExtension
 
     public function assetsDetect(
         string $templateName,
+        string $context,
         string|bool $preload = false
     ): array
     {
@@ -205,6 +211,7 @@ class AssetsExtension extends AbstractExtension
             $output[$ext] = $this->assetsDetectForType(
                 $templateName,
                 $ext,
+                $context,
                 $preload === true || $preload === $ext
             );
         }
@@ -218,13 +225,18 @@ class AssetsExtension extends AbstractExtension
     public function assetsDetectForType(
         string $templateName,
         string $ext,
+        string $context,
         bool $preload = false
     ): array
     {
         $assetPath = $ext.'/'.$templateName.'.'.$ext;
         $output = [];
 
-        if ($asset = $this->addAsset($assetPath, $preload)) {
+        if ($asset = $this->addAsset(
+            $assetPath,
+            $context,
+            $preload
+        )) {
             $output[] = $asset;
         }
 
@@ -233,11 +245,11 @@ class AssetsExtension extends AbstractExtension
         );
         $maxWidth = null;
 
-        foreach ($breakpointsReverted as $name => $minWidth) {
-            $assetPath = $ext.'/'.$templateName.'-'.$name.'.'.$ext;
+        foreach ($breakpointsReverted as $breakpointName => $minWidth) {
+            $assetPath = $ext.'/'.$templateName.'-'.$breakpointName.'.'.$ext;
 
-            if ($asset = $this->addAsset($assetPath)) {
-                $asset->responsive = true;
+            if ($asset = $this->addAsset($assetPath, $context)) {
+                $asset->responsive = $breakpointName;
                 $asset->media = 'screen and (min-width:'.$minWidth.'px)'.
                     ($maxWidth ? ' and (max-width:'.$maxWidth.'px)' : '');
 
@@ -252,7 +264,11 @@ class AssetsExtension extends AbstractExtension
 
     protected array $assetsLoaded = [];
 
-    public function addAsset(string $pathRelative, bool $preload = false): ?Asset
+    public function addAsset(
+        string $pathRelative,
+        string $context,
+        bool $preload = false
+    ): ?Asset
     {
         $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
         if (!isset($this->manifest[$pathRelativeToPublic])) {
@@ -261,13 +277,11 @@ class AssetsExtension extends AbstractExtension
 
         if (!isset($this->assetsLoaded[$pathRelative])) {
             $asset = new Asset(
-                $this->manifest[$pathRelativeToPublic]
+                $this->manifest[$pathRelativeToPublic],
+                $context
             );
 
             $asset->preload = $preload;
-
-            $info = pathinfo($asset->path);
-            $asset->type = $info['extension'];
 
             $this->assetsLoaded[$pathRelative] = $asset;
         } else {
@@ -283,9 +297,9 @@ class AssetsExtension extends AbstractExtension
         return $this->assetsLoaded[$pathRelative];
     }
 
-    public function assetSetLoaded(Asset $asset, $loaded = true)
+    public function assetSetRendered(Asset $asset, $rendered = true)
     {
-        $asset->loaded = $loaded;
+        $asset->rendered = $rendered;
     }
 }
 

@@ -1,7 +1,7 @@
 import {MDCRipple} from '@material/ripple/index';
 
 export default {
-    classType: 'pages',
+    classContext: 'page',
 
     init() {
         // TODO cleanup

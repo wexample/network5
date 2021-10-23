@@ -1,28 +1,8 @@
-
 export default class {
-    static getPageLevelMixins() {
-        return {};
-    }
-
-    constructor(app, data) {
+    constructor(app, pageData) {
         this.app = app;
 
-        if (data.main) {
-            this.app.pageMain = this;
-        }
-
-
-
-        this.init(data);
-    }
-
-    loadData(data) {
-        // No action for now.
-    }
-
-    init(data) {
-        this.loadData(data);
-
-        this.app.mixin.invokeUntilComplete('init', 'page', [data]);
+        this.isLayoutPage = pageData.isLayoutPage;
+        this.app.layoutPage = this;
     }
 }

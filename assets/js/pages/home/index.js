@@ -1,7 +1,7 @@
 import Manager from "../../class/MouseTail/Manager";
 
 export default {
-    classType: 'pages',
+    classContext: 'page',
 
     init() {
         new Manager();
