@@ -13,6 +13,20 @@ class AssetsTest extends NetworkTestCase
 
         $this->goToRoute(VariableHelper::DEMO.'_'.VariableHelper::ASSETS);
 
-        $this->assertTrue(true);
+        $layoutData = $this->getPageLayoutData();
+
+        $this->assertNotEmpty($layoutData);
+    }
+
+    protected function getPageLayoutData(?string $content = null): array
+    {
+        $matches = [];
+        preg_match(
+            '/layoutData = ([.\S\s\n]*);(\s*)<\/script>/',
+            $content ?? $this->getContent(),
+            $matches,
+        );
+
+        return json_decode($matches[1], JSON_OBJECT_AS_ARRAY);
     }
 }
