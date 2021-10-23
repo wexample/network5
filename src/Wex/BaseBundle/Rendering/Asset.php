@@ -6,6 +6,10 @@ use App\Wex\BaseBundle\Helper\PathHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Twig\AssetsExtension;
 use JetBrains\PhpStorm\NoReturn;
+use function dirname;
+use function ltrim;
+use function pathinfo;
+use function str_replace;
 
 class Asset
 {
@@ -26,32 +30,42 @@ class Asset
     ];
 
     public const CONTEXT_LAYOUT = VariableHelper::LAYOUT;
+
     public const CONTEXT_PAGE = VariableHelper::PAGE;
+
     public const CONTEXT_VUE = VariableHelper::VUE;
 
     public const PRELOAD_AS_AUDIO = 'audio';
-    public const PRELOAD_AS_DOCUMENT = 'document';
-    public const PRELOAD_AS_EMBED = 'embed';
-    public const PRELOAD_AS_FETCH = 'fetch';
-    public const PRELOAD_AS_FONT = 'font';
-    public const PRELOAD_AS_IMAGE = 'image';
-    public const PRELOAD_AS_OBJECT = 'object';
-    public const PRELOAD_AS_SCRIPT = 'script';
-    public const PRELOAD_AS_STYLE = 'style';
-    public const PRELOAD_AS_TRACK = 'track';
-    public const PRELOAD_AS_WORKER = 'worker';
-    public const PRELOAD_AS_VIDEO = 'video';
-    public const PRELOAD_NONE = 'none';
 
-    public string $context;
+    public const PRELOAD_AS_DOCUMENT = 'document';
+
+    public const PRELOAD_AS_EMBED = 'embed';
+
+    public const PRELOAD_AS_FETCH = 'fetch';
+
+    public const PRELOAD_AS_FONT = 'font';
+
+    public const PRELOAD_AS_IMAGE = 'image';
+
+    public const PRELOAD_AS_OBJECT = 'object';
+
+    public const PRELOAD_AS_SCRIPT = 'script';
+
+    public const PRELOAD_AS_STYLE = 'style';
+
+    public const PRELOAD_AS_TRACK = 'track';
+
+    public const PRELOAD_AS_WORKER = 'worker';
+
+    public const PRELOAD_AS_VIDEO = 'video';
+
+    public const PRELOAD_NONE = 'none';
 
     public string $id;
 
     public string $media = 'screen';
 
     public string $name;
-
-    public string $path;
 
     public bool $preload = false;
 
@@ -64,10 +78,8 @@ class Asset
     public ?string $type = null;
 
     #[NoReturn]
-    public function __construct(string $path, string $context)
+    public function __construct(public string $path, public string $context)
     {
-        $this->context = $context;
-        $this->path = $path;
         $this->name = $this->createName($path);
 
         $info = pathinfo($this->path);
@@ -85,8 +97,6 @@ class Asset
 
     /**
      * Create a name which can be used as a dom id.
-     * @param string $path
-     * @return string
      */
     protected function createName(string $path): string
     {

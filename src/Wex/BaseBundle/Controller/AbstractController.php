@@ -7,6 +7,7 @@ use App\Wex\BaseBundle\Controller\Traits\AdaptiveResponseControllerTrait;
 use App\Wex\BaseBundle\Twig\TemplateExtension;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use function is_null;
 
 abstract class AbstractController extends
     \Symfony\Bundle\FrameworkBundle\Controller\AbstractController implements AdaptiveResponseControllerInterface
@@ -37,8 +38,8 @@ abstract class AbstractController extends
     ): Response
     {
         // Add global variables for rendering.
-        $parameters['layout_no_js'] = $parameters['layout_no_js'] ?? $this->templateNoJs;
-        $parameters['request_uri'] = $parameters['request_uri'] ?? $this->requestUri;
+        $parameters['layout_no_js'] ??= $this->templateNoJs;
+        $parameters['request_uri'] ??= $this->requestUri;
 
         return parent::render(
             'pages/'.$this->viewPathPrefix.$view

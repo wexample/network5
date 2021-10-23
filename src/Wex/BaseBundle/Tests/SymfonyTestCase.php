@@ -9,9 +9,12 @@ use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use function preg_match_all;
 
 abstract class SymfonyTestCase extends WebTestCase
 {
+    public string $pathPrevious;
+
     protected ?Request $requestCurrent = null;
 
     public function getStorageDir($name = null): string

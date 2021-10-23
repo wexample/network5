@@ -56,7 +56,7 @@ class TemplateExtension extends AbstractExtension
             AssetsExtension::class
         );
 
-        $output = array_merge_recursive(
+        $output = \array_merge_recursive(
             $this->templateBuildRenderData($env, $pageTemplateName),
             [
                 VariableHelper::ASSETS => $assetsExtension->buildRenderData(Asset::CONTEXT_LAYOUT),
@@ -93,15 +93,13 @@ class TemplateExtension extends AbstractExtension
         string $pageTemplateName = null
     ): array
     {
-        $output = [
+        return [
             VariableHelper::PAGE => $pageTemplateName
                 ? $this->templateBuildPageData(
                     $env,
                     $pageTemplateName
                 ) : null
         ];
-
-        return $output;
     }
 
     public function templateNameFromPath(string $templatePath): string

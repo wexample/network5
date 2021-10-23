@@ -36,6 +36,7 @@ class AssetsExtension extends AbstractExtension
         Asset::EXTENSION_CSS => [],
         Asset::EXTENSION_JS => [],
     ];
+
     public array $assets = self::ASSETS_DEFAULT_EMPTY;
 
     public array $assetsPreload = self::ASSETS_DEFAULT_EMPTY;
@@ -297,7 +298,7 @@ class AssetsExtension extends AbstractExtension
         return $this->assetsLoaded[$pathRelative];
     }
 
-    public function assetSetRendered(Asset $asset, $rendered = true)
+    public function assetSetRendered(Asset $asset, bool $rendered = true)
     {
         $asset->rendered = $rendered;
     }
