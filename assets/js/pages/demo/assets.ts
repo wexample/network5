@@ -75,6 +75,6 @@ export default {
     classContext: 'page',
 
     init() {
-
+        console.log('PAGE INIT');
     }
 };
