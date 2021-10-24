@@ -1,5 +1,5 @@
 export default class Component {
-    constructor() {
+    constructor(options) {
         this.init(options);
     }
 

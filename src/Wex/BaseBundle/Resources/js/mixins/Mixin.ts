@@ -1,4 +1,6 @@
-export default {
+import MixinInterface from "../interface/MixinInterface";
+
+const mixin:MixinInterface = {
     name: 'mixin',
 
     methods: {
@@ -19,7 +21,7 @@ export default {
             invokeUntilComplete(method, group = 'app', args = [], callback) {
                 let registry = {};
                 let mixins = this.mixins;
-                let mixinsValues = Object.entries(mixins);
+                let mixinsValues: [string, MixinInterface][] = Object.entries(mixins);
                 let loops = 0;
                 let loopsLimit = 100;
                 let errorTrace = [];
@@ -75,3 +77,5 @@ export default {
         },
     },
 };
+
+export default mixin;

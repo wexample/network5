@@ -1,15 +1,19 @@
+import App from "./App";
+
 export default class {
-    constructor(app, name) {
-        Object.assign(this, {
-            app: app,
-            callbacks: [],
-            commands: [],
-            name: name,
-            started: false,
-        });
+    private readonly app: App;
+    private callbacks: Function[] = [];
+    private commands: Function[] = [];
+    private readonly name: string;
+    private started: boolean;
+
+    constructor(app: App, name: string) {
+        this.app = app;
+        this.name = name;
     }
 
-    add(command) {
+
+    add(command: Function) {
         this.commands.push(command);
         return this;
     }
@@ -48,13 +52,13 @@ export default class {
         return this;
     }
 
-    then(callback) {
+    then(callback: Function) {
         this.callbacks.push(callback);
     }
 
     complete() {
         if (this.started) {
-            delete this.app.queues.queues[this.name];
+            delete this.app.getMixin('queues').queues[this.name];
 
             this.app.callbacks(this.callbacks);
         }

@@ -1,5 +1,6 @@
 import MixinAssets from "./Assets";
 import MixinQueues from "./Queues";
+import RenderDataInterface from "../interface/RenderDataInterface";
 
 export default {
     name: 'responsive',
@@ -60,7 +61,7 @@ export default {
                 );
             },
 
-            updateResponsiveAssets(renderData, complete) {
+            updateResponsiveAssets(renderData:RenderDataInterface, complete) {
                 let responsiveSize = this.responsive.detectSize();
                 let toLoad = {};
                 let toUnload = {};

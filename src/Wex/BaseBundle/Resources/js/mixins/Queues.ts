@@ -24,12 +24,12 @@ export default {
             queues: {},
 
             afterAllQueues(queues, complete) {
-                let originalList = this.arrays.shallowCopy(queues);
-                let hasReunningQueue = false;
+                let originalList = this.getMixin('arrays').shallowCopy(queues);
+                let hasRunningQueue = false;
 
                 queues.forEach((queue) => {
                     if (queue.started) {
-                        hasReunningQueue = true;
+                        hasRunningQueue = true;
 
                         queue.then(() => {
                             this.arrays.deleteItem(queues, queue);
@@ -40,7 +40,7 @@ export default {
                     }
                 });
 
-                if (!hasReunningQueue) {
+                if (!hasRunningQueue) {
                     complete(originalList);
                 }
             },

@@ -1,22 +1,21 @@
-import Page from '../class/Page';
+import Page from './Page';
 
 import MixinAssets from '../mixins/Assets';
-import MixinDebug from '../mixins/Debug';
 import MixinMixin from '../mixins/Mixin';
 import MixinPage from '../mixins/Pages';
 import MixinResponsive from '../mixins/Responsive';
 
 export default class {
-    private bootJsBuffer: string[] = [];
-    private classesDefinitions: any = {};
-    private hasCoreLoaded: boolean = false;
-    private layoutPage: Page = null;
-    private mixins: object;
-    private readyCallbacks: Function[] = [];
-    private elLayout: HTMLElement;
-    private lib: object = {};
-    private registry: any;
-    private isReady: boolean = false;
+    public bootJsBuffer: string[] = [];
+    public classesDefinitions: any = {};
+    public hasCoreLoaded: boolean = false;
+    public layoutPage: Page = null;
+    public mixins: object;
+    public readyCallbacks: Function[] = [];
+    public elLayout: HTMLElement;
+    public lib: object = {};
+    public registry: any;
+    public isReady: boolean = false;
 
     constructor(readyCallback, globalName = 'app') {
         window[globalName] = this;
@@ -121,7 +120,7 @@ export default class {
     }
 
     getMixins() {
-        let mixins = {
+        return {
             ...{
                 MixinAssets,
                 MixinMixin,
@@ -129,17 +128,6 @@ export default class {
                 MixinResponsive,
             }
         };
-
-        if (this.registry.layoutData.env === 'local') {
-            mixins = {
-                ...mixins,
-                ...{
-                    MixinDebug,
-                },
-            };
-        }
-
-        return mixins;
     }
 
     getMixinAndDependencies(mixins) {

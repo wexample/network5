@@ -1,9 +1,13 @@
-export default {
+import RenderDataInterface from "../interface/RenderDataInterface";
+import MixinInvocationRegistryInterface from "../interface/MixinInvocationRegistryInterface";
+import MixinInterface from "../interface/MixinInterface";
+
+const mixin:MixinInterface = {
     name: 'arrays',
 
     hooks: {
         app: {
-            loadRenderData(data, registry) {
+            loadRenderData(data: RenderDataInterface, registry: MixinInvocationRegistryInterface) {
                 return 'complete';
             },
         },
@@ -13,30 +17,29 @@ export default {
         app: {
             /**
              * Functions "arguments" object may be transformed to real array for extra manipulations.
-             *
-             * @param args
-             * @returns {unknown[]}
              */
-            fromArguments(args) {
+            fromArguments(args: unknown[]) {
                 return Array.prototype.slice.call(args);
             },
 
-            deleteItem(haystack, needle) {
+            deleteItem(haystack: unknown[], needle: unknown) {
                 return this
                     .getMixin('arrays')
                     .deleteByIndex(haystack, haystack.indexOf(needle));
             },
 
-            deleteByIndex(haystack, needle) {
+            deleteByIndex(haystack: unknown[], needle: number) {
                 if (needle !== -1) {
                     haystack.splice(needle, 1);
                 }
                 return haystack;
             },
 
-            shallowCopy(array) {
+            shallowCopy(array: unknown[]) {
                 return array.slice(0);
             }
         },
     },
 };
+
+export default mixin;

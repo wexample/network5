@@ -1,6 +1,7 @@
-import MixinLocale from '../mixins/Locale';
+import MixinLocale from './Locale';
+import MixinInterface from "../interface/MixinInterface";
 
-export default {
+const mixin:MixinInterface = {
     name: 'pages',
 
     dependencies: {
@@ -35,3 +36,5 @@ export default {
         },
     },
 };
+
+export default mixin;

@@ -1,6 +1,8 @@
 import MixinQueues from "./Queues";
+import AssetsCollectionInterface from "../interface/AssetsCollectionInterface";
+import MixinInterface from "../interface/MixinInterface";
 
-export default {
+const mixin:MixinInterface = {
     name: 'assets',
 
     dependencies: {
@@ -56,7 +58,7 @@ export default {
                 return queue.start();
             },
 
-            forEachAssetInCollection(assetsCollection, callback) {
+            forEachAssetInCollection(assetsCollection: AssetsCollectionInterface, callback) {
                 Object.entries(assetsCollection)
                     .forEach((data) => {
                         data[1].forEach((asset) => {
@@ -118,6 +120,7 @@ export default {
             addScript(src) {
                 let el = document.createElement('script');
                 el.src = src;
+
                 document.head.appendChild(el);
                 return el;
             },
@@ -138,3 +141,5 @@ export default {
         },
     },
 };
+
+export default mixin;
