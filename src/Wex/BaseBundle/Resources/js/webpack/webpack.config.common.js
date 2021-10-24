@@ -10,7 +10,9 @@ tools.title('Common JS');
 
 let disallowed = ['components', 'forms', 'pages', 'vue'];
 
-tools.addAssetsJs('./assets/', 'js/', 'js', (srcFile) => {
-  // First dir under js should not be a part of disallowed dirs.
-  return disallowed.indexOf(srcFile.file.split('/')[3]) === -1 && srcFile;
+['js', 'ts'].forEach((srcExt) => {
+    tools.addAssetsJs('./assets/', 'js/', srcExt, (srcFile) => {
+        // First dir under js should not be a part of disallowed dirs.
+        return disallowed.indexOf(srcFile.file.split('/')[3]) === -1 && srcFile;
+    });
 });

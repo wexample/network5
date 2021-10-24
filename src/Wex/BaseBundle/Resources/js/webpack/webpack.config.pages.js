@@ -2,4 +2,7 @@ const tools = require('./webpack.tools');
 
 tools.title('Pages JS');
 
-tools.addAssetsJsWrapped('./assets/', 'js/pages/', 'js', 'pages');
+['js', 'ts'].forEach((srcExt) => {
+    tools.addAssetsJsWrapped('./assets/', 'js/pages/', srcExt, 'pages');
+});
+

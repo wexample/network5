@@ -17,7 +17,7 @@ export default class {
     public registry: any;
     public isReady: boolean = false;
 
-    constructor(readyCallback, globalName = 'app') {
+    constructor(readyCallback?: any | Function, globalName = 'app') {
         window[globalName] = this;
 
         this.registry = window['appRegistry'];
