@@ -1,5 +1,5 @@
 export default class {
-    assertEquals(value, equals, message) {
+    assertEquals(value, equals, message?: string) {
         let styleDefault = 'border-radius:10rem;'
         if (value !== equals) {
             console.log(
@@ -14,11 +14,11 @@ export default class {
         }
     }
 
-    assertTrue(value, message) {
+    assertTrue(value, message?: string) {
         this.assertEquals(value, true, message);
     }
 
-    assertNoTrue(value, message) {
+    assertNoTrue(value, message?: string) {
         this.assertEquals(value, false, message);
     }
 }

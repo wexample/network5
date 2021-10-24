@@ -5,7 +5,7 @@ import UnitTest from "../../../../src/Wex/BaseBundle/Resources/js/class/Tests/Un
     setTimeout(() => {
         function testQueue1() {
             let test = new UnitTest();
-            let queuesMixin = app.queues;
+            let queuesMixin = window['app'].queues;
             let queue = queuesMixin.create('test-queue');
             let counter = 0;
 
