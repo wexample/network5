@@ -2,8 +2,27 @@
   max-width: 10rem;
 }
 
+.pill {
+  border-radius: 10000rem;
+}
+
 .board-line {
   display: flex;
   background: white;
+  border-radius: 10rem;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
 
+  &.current {
+    .size-name {
+
+    }
+  }
+}
+
+.display-breakpoint {
+  .size-name {
+
+  }
 }
