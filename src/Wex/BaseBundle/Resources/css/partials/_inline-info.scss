@@ -1,0 +1,28 @@
+@import '../partials/mixins';
+
+.inline-infos {
+  align-items: center;
+  display: flex;
+  padding: 1rem 2rem;
+  background: $light-gray;
+  border-radius: 100px;
+  margin-bottom: 1rem;
+
+  & > div.info {
+    padding: 0 0 0 1rem;
+
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
+
+    &:not(:last-child)::after {
+      content: '·';
+      color: $dark-gray;
+      margin-left: 1rem;
+    }
+  }
+}

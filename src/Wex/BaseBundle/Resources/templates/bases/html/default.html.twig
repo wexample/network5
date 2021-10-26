@@ -78,6 +78,9 @@
                 }
             </style>
         {% endif %}
+        {%- block meta -%}
+            <meta name="viewport" content="width=device-width, user-scalable=no">
+        {%- endblock -%}
     </head>
     <body>
     <div id="layout" class="layout-loading {{ layout_class|default('') }}">

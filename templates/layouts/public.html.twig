@@ -1,0 +1,11 @@
+{%- extends 'layouts/black.html.twig' -%}
+
+{%- set layout_name = layout_name|default('public') -%}
+
+{%- block page_body -%}
+    <div class="container-medium">
+        <div class="page-content-body">
+            {{ block('page_content_body') }}
+        </div>
+    </div>
+{%- endblock -%}

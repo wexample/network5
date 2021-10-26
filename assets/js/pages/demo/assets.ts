@@ -10,6 +10,15 @@ export default {
 
     onChangeResponsiveSize(current: string, previous?: string) {
         this.unitTest.assertTrue(typeof current === 'string', 'Responsive size is valid');
+
+        document
+            .querySelectorAll('.display-breakpoint')
+            .forEach((el) => el.classList.remove('display-breakpoint-current'));
+
+        document
+            .querySelector(`.display-breakpoint-${current}`)
+            .classList
+            .add('display-breakpoint-current')
     },
 
     test() {
@@ -95,6 +104,6 @@ export default {
                 7,
                 'All callbacks are executed after 1 second'
             );
-        },1000);
+        }, 1000);
     }
 };

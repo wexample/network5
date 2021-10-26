@@ -1,17 +1,23 @@
-{%- extends 'layouts/black.html.twig' -%}
+{%- extends 'layouts/public.html.twig' -%}
 
 {%- set template_path = _self -%}
 
-{%- block page_body -%}
-    <div class="temp-container">
-        <div class="board-line">
-            {{ template_name }}
+{%- block page_content_body -%}
+    <h1>Assets</h1>
+    <div class="inline-infos">
+        <div class="info">
+            Template name : <b>{{ template_name }}</b>
         </div>
-        {% for breakPoint,name in displayBreakpoints %}
-            <div class="board-line display-breakpoint display-breakpoint-{{ breakPoint }}">
-                <div class="pill size-name">{{ breakPoint }}</div>
-                <div class="size-min">{{ name }}</div>
-            </div>
-        {% endfor %}
+        <div class="info">
+            Layout name : <b>{{ layout_name }}</b>
+        </div>
     </div>
+    <h2>Taille de la page</h2>
+    {% for name,sizeMin in displayBreakpoints %}
+        <div class="inline-infos display-breakpoint display-breakpoint-{{ name }}">
+            <div class="pill size-name">{{ name }}</div>
+            <div class="size-min">{{ sizeMin }}px</div>
+        </div>
+    {% endfor %}
+    <h2>Ressources téléchargés</h2>
 {%- endblock -%}

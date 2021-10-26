@@ -1,3 +1,7 @@
+$dark-gray: #2f2f36;
+$medium-gray: lighten($dark-gray, 50);
+$light-gray: lighten($medium-gray, 25);
+
 @mixin text-ellipsis {
   white-space: nowrap;
   overflow: hidden;

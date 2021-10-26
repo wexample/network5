@@ -1,3 +1,5 @@
+@import "../../partials/mixins";
+
 .temp-container {
   max-width: 50rem;
   margin: 0 auto;
@@ -7,22 +9,10 @@
   border-radius: 10000rem;
 }
 
-.board-line {
-  display: flex;
-  background: white;
-  border-radius: 10rem;
-  padding: 0.5rem 1rem;
-  margin-bottom: 0.5rem;
-  width: 100%;
-
-  &.current {
-    .size-name {
-
-    }
-  }
-}
-
 .display-breakpoint {
+  background: white;
+  color: $globalFontColor;
+
   .size-name {
     width: 5rem;
     text-align: center;
@@ -31,5 +21,12 @@
     margin: -.1rem;
     margin-right: 1rem;
     color: #666;
+  }
+
+  &.display-breakpoint-current {
+    font-size: 2rem;
+    .size-name {
+      color: white;
+    }
   }
 }
