@@ -15,7 +15,7 @@
     {%- endblock -%}
 
     <!DOCTYPE html>
-    <html>
+    <html lang="{{ app.request.locale }}">
     <head>
         <meta charset="utf-8"/>
         <title>{{ template_head_title ? (template_head_title | trans(template_head_title_args)) ~ ' | ' : '' }}{{ 'company.name' | trans }}</title>
@@ -80,12 +80,13 @@
         {% endif %}
         {%- block meta -%}
             <meta name="viewport" content="width=device-width, user-scalable=no">
+            <meta name="description" content="{{ (meta_description|default('@layout::meta.description')) | trans }}">
         {%- endblock -%}
     </head>
     <body>
     <div id="layout" class="layout-loading {{ layout_class|default('') }}">
         {% if not layout_no_js %}
-            {#- If javascript fails to complete, force removing loading state after 2 seconds.       -#}
+            {#- If javascript fails to complete, force removing loading state after 2 seconds.        -#}
             <script>
                 var elLayout = document.getElementById('layout');
                 elLayout.classList.add('layout-loading');

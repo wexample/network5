@@ -18,7 +18,7 @@ export default {
         document
             .querySelector(`.display-breakpoint-${current}`)
             .classList
-            .add('display-breakpoint-current')
+            .add('display-breakpoint-current');
     },
 
     test() {

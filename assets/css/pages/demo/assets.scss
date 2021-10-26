@@ -12,6 +12,8 @@
 .display-breakpoint {
   background: white;
   color: $globalFontColor;
+  transition-property: font-size;
+  transition-duration: .8s;
 
   .size-name {
     width: 5rem;
@@ -20,7 +22,6 @@
     padding: .2rem;
     margin: -.1rem;
     margin-right: 1rem;
-    color: #666;
   }
 
   &.display-breakpoint-current {
