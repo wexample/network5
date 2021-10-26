@@ -1,6 +1,7 @@
 import App from "./App";
 
 export default class {
+    public classContext: 'page'
     private readonly isLayoutPage: boolean;
     private readonly app: App;
 
