@@ -41,12 +41,14 @@ trait LoggingTestCaseTrait
     {
         $output = '';
 
-        if ($color) {
+        if ($color)
+        {
             $output .= "\033[1;".$color.'m';
         }
 
         $output .= $message;
-        if ($color) {
+        if ($color)
+        {
             $output .= "\033[0m";
         }
 
@@ -78,11 +80,13 @@ trait LoggingTestCaseTrait
 
     public function debugContent(Crawler $crawler = null)
     {
-        if (!$crawler) {
+        if (!$crawler)
+        {
             $crawler = $this->getCurrentCrawler();
         }
 
-        if (!$crawler) {
+        if (!$crawler)
+        {
             $this->error('No crawler found in debug method !');
         }
 
@@ -97,7 +101,8 @@ trait LoggingTestCaseTrait
 
         $exceptionMessagePosition = strpos($output, 'exception_message');
         $outputSuite = substr($output, $exceptionMessagePosition);
-        if (false !== $exceptionMessagePosition) {
+        if (false !== $exceptionMessagePosition)
+        {
             preg_match(
                 '/(?:exception_message">)([^<]*)(?:<\/span>)/',
                 $outputSuite,
@@ -111,7 +116,9 @@ trait LoggingTestCaseTrait
             );
 
             echo PHP_EOL, ' Stack trace : ', PHP_EOL, $matches[0];
-        } else {
+        }
+        else
+        {
             echo $output;
         }
 
@@ -124,7 +131,8 @@ trait LoggingTestCaseTrait
             $message,
             31
         );
-        if ($fatal) {
+        if ($fatal)
+        {
             $this->fail($message);
         }
     }
@@ -133,13 +141,13 @@ trait LoggingTestCaseTrait
         $body = null,
         $fileName = 'phpunit.debug.html',
         $quiet = false
-    )
-    {
+    ) {
         $tmpDir = $this->initTempDir();
 
         $logFile = $tmpDir.$fileName;
 
-        if (is_file($logFile)) {
+        if (is_file($logFile))
+        {
             unlink($logFile);
         }
 
@@ -147,7 +155,8 @@ trait LoggingTestCaseTrait
             // Error pages contains svg which breaks readability.
             .'<style> svg { display:none} </style>';
 
-        if (!$quiet) {
+        if (!$quiet)
+        {
             $this->info('See : '.$logFile);
         }
 
@@ -164,7 +173,8 @@ trait LoggingTestCaseTrait
     {
         $tmpDir = $this->getStorageDir('tmp');
 
-        if (!is_dir($tmpDir)) {
+        if (!is_dir($tmpDir))
+        {
             mkdir($tmpDir, 0777, true);
         }
 

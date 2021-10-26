@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\User;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class ApiLoginController extends AbstractController
@@ -13,17 +13,18 @@ class ApiLoginController extends AbstractController
     #[Route('/api/login', name: 'api_login')]
     public function index(#[CurrentUser] ?User $user): Response
     {
-        if (null === $user) {
+        if (null === $user)
+        {
             return $this->json([
                 'message' => 'missing credentials',
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        # TODO customize.
-        $token = '123ABC' . $user->getId();
+        // TODO customize.
+        $token = '123ABC'.$user->getId();
 
         return $this->json([
-            'user'  => $user->getUserIdentifier(),
+            'user' => $user->getUserIdentifier(),
             'token' => $token,
         ]);
     }

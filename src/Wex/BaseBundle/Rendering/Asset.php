@@ -5,8 +5,8 @@ namespace App\Wex\BaseBundle\Rendering;
 use App\Wex\BaseBundle\Helper\PathHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Twig\AssetsExtension;
-use JetBrains\PhpStorm\NoReturn;
 use function dirname;
+use JetBrains\PhpStorm\NoReturn;
 use function ltrim;
 use function pathinfo;
 use function str_replace;
@@ -89,10 +89,10 @@ class Asset
         $pathWithoutExt = dirname($this->path).'/'.$info['filename'];
 
         $this->id = $context.'.'.PathHelper::relativeTo(
-                $pathWithoutExt,
-                '/'.AssetsExtension::DIR_BUILD.
+            $pathWithoutExt,
+            '/'.AssetsExtension::DIR_BUILD.
                 $this->type.'/'
-            );
+        );
     }
 
     /**
@@ -104,14 +104,17 @@ class Asset
             .'-'.str_replace(
                 ['/', '.'],
                 '-',
-                ltrim($path, '/'
+                ltrim(
+                    $path,
+                    '/'
                 )
             );
     }
 
     public function getPreloadAs(): ?string
     {
-        if ($this->preload) {
+        if ($this->preload)
+        {
             return self::PRELOAD_BY_ASSET_TYPE[$this->type];
         }
 

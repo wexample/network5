@@ -6,5 +6,4 @@ use App\Wex\BaseBundle\Tests\SymfonyTestCase;
 
 abstract class NetworkTestCase extends SymfonyTestCase
 {
-
 }

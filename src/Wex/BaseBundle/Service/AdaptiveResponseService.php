@@ -10,7 +10,8 @@ class AdaptiveResponseService
 
     public function getCurrentResponse(): AdaptiveResponse
     {
-        if (!$this->currentResponse) {
+        if (!$this->currentResponse)
+        {
             $this->createResponse();
         }
 

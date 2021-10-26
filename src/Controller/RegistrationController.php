@@ -24,8 +24,7 @@ class RegistrationController extends AbstractController
 
     public function __construct(
         private EmailVerifier $emailVerifier
-    )
-    {
+    ) {
     }
 
     #[Route('/register', name: self::ROUTE_APP_REGISTER)]
@@ -35,7 +34,8 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid())
+        {
             // encode the plain password
             $user->setPassword(
                 $passwordEncoder->encodePassword(
@@ -49,7 +49,9 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            $this->emailVerifier->sendEmailConfirmation(
+                'app_verify_email',
+                $user,
                 (new TemplatedEmail())
                     ->from(new Address('noreply@wexample.com', 'wex[noreply]'))
                     ->to($user->getEmail())
@@ -71,20 +73,25 @@ class RegistrationController extends AbstractController
     {
         $id = $request->get('id');
 
-        if (null === $id) {
+        if (null === $id)
+        {
             return $this->redirectToRoute(self::ROUTE_APP_REGISTER);
         }
 
         $user = $userRepository->find($id);
 
-        if (null === $user) {
+        if (null === $user)
+        {
             return $this->redirectToRoute(self::ROUTE_APP_REGISTER);
         }
 
         // validate email confirmation link, sets User::isVerified=true and persists
-        try {
+        try
+        {
             $this->emailVerifier->handleEmailConfirmation($request, $user);
-        } catch (VerifyEmailExceptionInterface $verifyEmailExceptionInterface) {
+        }
+        catch (VerifyEmailExceptionInterface $verifyEmailExceptionInterface)
+        {
             $this->addFlash('verify_email_error', $verifyEmailExceptionInterface->getReason());
 
             return $this->redirectToRoute(self::ROUTE_APP_REGISTER);

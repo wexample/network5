@@ -2,6 +2,7 @@
 
 namespace App\Wex\BaseBundle\Tests;
 
+use function preg_match_all;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
@@ -9,7 +10,6 @@ use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use function preg_match_all;
 
 abstract class SymfonyTestCase extends WebTestCase
 {
@@ -41,12 +41,14 @@ abstract class SymfonyTestCase extends WebTestCase
      */
     public function go(string $path, array $parameters = [], bool $quiet = false): Crawler
     {
-        if (!$quiet) {
+        if (!$quiet)
+        {
             $this->log('Go to '.$path);
         }
 
         // Store previous request for further usage.
-        if ($this->requestCurrent) {
+        if ($this->requestCurrent)
+        {
             $this->pathPrevious = $this->requestCurrent->getUri();
         }
 
@@ -74,15 +76,15 @@ abstract class SymfonyTestCase extends WebTestCase
     public function assertPageBodyHasNotOrphanTranslationKey(
         string $body = null,
         Crawler $crawler = null
-    )
-    {
+    ) {
         preg_match_all(
             '/(.+)>([a-zA-Z0-9\.\n\t\s]+::[a-zA-Z0-9\.\n\t\s]+)<(.+)/',
             $body ?? $this->getBody($crawler),
             $output
         );
 
-        if (!empty($output[2])) {
+        if (!empty($output[2]))
+        {
             $this->logArray($output);
         }
 

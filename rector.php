@@ -1535,7 +1535,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             $configurator->call('configure', [[
                 AddInterfaceByTraitRector::INTERFACE_BY_TRAIT => [
                     LinkedToAnyEntity::class => LinkedToAnyEntityInterface::class,
-                ],]]);
+                ], ]]);
         },
         // ArgumentFuncCallToMethodCallRector
         // Move help facade-like function calls to constructor injection
@@ -1747,7 +1747,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $debugRules = [
     ];
 
-    if (!empty($debugRules)) {
+    if (!empty($debugRules))
+    {
         $allRules = $debugRules;
     }
 
@@ -1768,10 +1769,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
 
-    foreach ($allRules as $index => $rule) {
+    foreach ($allRules as $index => $rule)
+    {
         $configuration = null;
 
-        if (!is_string($rule)) {
+        if (!is_string($rule))
+        {
             $configuration = $rule;
             $rule = $index;
         }
@@ -1781,12 +1784,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             $rule
         );
 
-        if ($configuration) {
+        if ($configuration)
+        {
             $configuration($configurator);
         }
     }
 
-    if (!empty($debugRules)) {
+    if (!empty($debugRules))
+    {
         return;
     }
 

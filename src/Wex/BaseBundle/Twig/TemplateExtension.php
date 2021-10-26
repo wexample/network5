@@ -4,10 +4,10 @@ namespace App\Wex\BaseBundle\Twig;
 
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
-use Symfony\Component\HttpKernel\KernelInterface;
 use function str_ends_with;
 use function strlen;
 use function substr;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\Environment;
 use Twig\TwigFunction;
 
@@ -19,8 +19,7 @@ class TemplateExtension extends AbstractExtension
 
     public function __construct(
         private KernelInterface $kernel
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array
@@ -49,8 +48,7 @@ class TemplateExtension extends AbstractExtension
     public function templateBuildLayoutData(
         Environment $env,
         string $pageTemplateName
-    ): array
-    {
+    ): array {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -61,7 +59,7 @@ class TemplateExtension extends AbstractExtension
             [
                 VariableHelper::ASSETS => $assetsExtension->buildRenderData(Asset::CONTEXT_LAYOUT),
                 'displayBreakpoints' => AssetsExtension::DISPLAY_BREAKPOINTS,
-                VariableHelper::ENV => $this->kernel->getEnvironment()
+                VariableHelper::ENV => $this->kernel->getEnvironment(),
             ]
         );
 
@@ -74,8 +72,7 @@ class TemplateExtension extends AbstractExtension
         Environment $env,
         string $pageName,
         ?string $body = null
-    ): array
-    {
+    ): array {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -91,14 +88,13 @@ class TemplateExtension extends AbstractExtension
     public function templateBuildRenderData(
         Environment $env,
         string $pageTemplateName = null
-    ): array
-    {
+    ): array {
         return [
             VariableHelper::PAGE => $pageTemplateName
                 ? $this->templateBuildPageData(
                     $env,
                     $pageTemplateName
-                ) : null
+                ) : null,
         ];
     }
 
@@ -108,7 +104,8 @@ class TemplateExtension extends AbstractExtension
         $ext = TemplateExtension::TEMPLATE_FILE_EXTENSION;
 
         // Path have extension.
-        if (str_ends_with($templatePath, $ext)) {
+        if (str_ends_with($templatePath, $ext))
+        {
             return substr(
                 $templatePath,
                 0,

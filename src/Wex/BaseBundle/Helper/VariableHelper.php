@@ -43,7 +43,7 @@ class VariableHelper
     public const MODAL = 'modal';
 
     public const MAIL = 'mail';
-    
+
     public const NAME = 'name';
 
     public const PAGE = 'page';

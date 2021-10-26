@@ -4,6 +4,7 @@ namespace App\Wex\BaseBundle\Tests;
 
 use App\Wex\BaseBundle\Tests\Traits\LoggingTestCaseTrait;
 use App\Wex\BaseBundle\Tests\Traits\WebTestCaseTrait;
+use function json_encode;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelBrowser;
@@ -13,7 +14,6 @@ use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use function json_encode;
 
 abstract class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 {
@@ -39,8 +39,7 @@ abstract class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestC
         string $route,
         array $args = [],
         array $parameters = []
-    ): Crawler
-    {
+    ): Crawler {
         $path = $this->url($route, $args);
 
         $this->log(
@@ -70,7 +69,8 @@ abstract class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestC
      */
     public function handleResponseError(Response|ResponseInterface $response, string $path)
     {
-        if (self::STATUS_CODE_SERVER_ERROR === $response->getStatusCode()) {
+        if (self::STATUS_CODE_SERVER_ERROR === $response->getStatusCode())
+        {
             $this->debugWrite($response->getContent());
             $this->error(
                 self::STATUS_CODE_SERVER_ERROR.' error for path : '.$path
@@ -88,7 +88,8 @@ abstract class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestC
         $crawler ??= $this->getCurrentCrawler();
         $body = $crawler->filter('body');
 
-        if ($body->count()) {
+        if ($body->count())
+        {
             return $body->html();
         }
 
@@ -100,8 +101,7 @@ abstract class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestC
     public function newClient(
         array $options = [],
         array $server = []
-    ): ?HttpKernelBrowser
-    {
+    ): ?HttpKernelBrowser {
         // Needed to be able to log user.
         $this->client = static::createClient($options, $server);
         $this->app->boot();

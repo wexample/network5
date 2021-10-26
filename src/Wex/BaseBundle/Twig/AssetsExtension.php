@@ -4,13 +4,12 @@ namespace App\Wex\BaseBundle\Twig;
 
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
+use function array_merge_recursive;
 use Doctrine\DBAL\Types\Types;
 use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use function array_merge_recursive;
-use function pathinfo;
 
 class AssetsExtension extends AbstractExtension
 {
@@ -54,8 +53,7 @@ class AssetsExtension extends AbstractExtension
      */
     public function __construct(
         KernelInterface $kernel
-    )
-    {
+    ) {
         $this->pathProject = $kernel->getProjectDir().'/';
         $this->pathPublic = $this->pathProject.self::DIR_PUBLIC;
         $this->pathBuild = $this->pathPublic.self::DIR_BUILD;
@@ -109,20 +107,24 @@ class AssetsExtension extends AbstractExtension
     }
 
     #[ArrayShape([
-        VariableHelper::ALL => Asset::class."[]",
-        VariableHelper::RESPONSIVE => Types::ARRAY
+        VariableHelper::ALL => Asset::class.'[]',
+        VariableHelper::RESPONSIVE => Types::ARRAY,
     ])]
     public function buildRenderData(string $context): array
     {
         $all = [];
         $responsive = [];
 
-        foreach ($this->assets as $type => $group) {
-            foreach ($group as $asset) {
-                if ($asset->context === $context) {
+        foreach ($this->assets as $type => $group)
+        {
+            foreach ($group as $asset)
+            {
+                if ($asset->context === $context)
+                {
                     $all[$type][] = $asset;
 
-                    if ($asset->responsive) {
+                    if ($asset->responsive)
+                    {
                         $responsive[$type][] = $asset;
                     }
                 }
@@ -137,8 +139,7 @@ class AssetsExtension extends AbstractExtension
 
     public function assetsInitLayout(
         ?string $layoutName = null
-    )
-    {
+    ) {
         $layoutName = $layoutName ?: TemplateExtension::LAYOUT_NAME_DEFAULT;
         $backEndAssets = $this->assets;
         $this->assets = self::ASSETS_DEFAULT_EMPTY;
@@ -150,7 +151,8 @@ class AssetsExtension extends AbstractExtension
         );
 
         // No main js found.
-        if (empty($assets[Asset::EXTENSION_JS])) {
+        if (empty($assets[Asset::EXTENSION_JS]))
+        {
             // Try to load default js file.
             // Do not preload JS as it is configured
             // to wait for dom content loaded anyway.
@@ -174,8 +176,7 @@ class AssetsExtension extends AbstractExtension
 
     public function assetsInitTemplate(
         string $templateName
-    )
-    {
+    ) {
         $this->assetsDetect(
             $templateName,
             Asset::CONTEXT_PAGE
@@ -186,8 +187,10 @@ class AssetsExtension extends AbstractExtension
     {
         $notLoaded = [];
 
-        foreach ($this->assets[$ext] as $asset) {
-            if (!$asset->rendered) {
+        foreach ($this->assets[$ext] as $asset)
+        {
+            if (!$asset->rendered)
+            {
                 $notLoaded[] = $asset;
             }
         }
@@ -204,11 +207,11 @@ class AssetsExtension extends AbstractExtension
         string $templateName,
         string $context,
         string|bool $preload = false
-    ): array
-    {
+    ): array {
         $output = [];
 
-        foreach (Asset::ASSETS_EXTENSIONS as $ext) {
+        foreach (Asset::ASSETS_EXTENSIONS as $ext)
+        {
             $output[$ext] = $this->assetsDetectForType(
                 $templateName,
                 $ext,
@@ -228,8 +231,7 @@ class AssetsExtension extends AbstractExtension
         string $ext,
         string $context,
         bool $preload = false
-    ): array
-    {
+    ): array {
         $assetPath = $ext.'/'.$templateName.'.'.$ext;
         $output = [];
 
@@ -237,7 +239,8 @@ class AssetsExtension extends AbstractExtension
             $assetPath,
             $context,
             $preload
-        )) {
+        ))
+        {
             $output[] = $asset;
         }
 
@@ -246,10 +249,12 @@ class AssetsExtension extends AbstractExtension
         );
         $maxWidth = null;
 
-        foreach ($breakpointsReverted as $breakpointName => $minWidth) {
+        foreach ($breakpointsReverted as $breakpointName => $minWidth)
+        {
             $assetPath = $ext.'/'.$templateName.'-'.$breakpointName.'.'.$ext;
 
-            if ($asset = $this->addAsset($assetPath, $context)) {
+            if ($asset = $this->addAsset($assetPath, $context))
+            {
                 $asset->responsive = $breakpointName;
                 $asset->media = 'screen and (min-width:'.$minWidth.'px)'.
                     ($maxWidth ? ' and (max-width:'.$maxWidth.'px)' : '');
@@ -269,14 +274,15 @@ class AssetsExtension extends AbstractExtension
         string $pathRelative,
         string $context,
         bool $preload = false
-    ): ?Asset
-    {
+    ): ?Asset {
         $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
-        if (!isset($this->manifest[$pathRelativeToPublic])) {
+        if (!isset($this->manifest[$pathRelativeToPublic]))
+        {
             return null;
         }
 
-        if (!isset($this->assetsLoaded[$pathRelative])) {
+        if (!isset($this->assetsLoaded[$pathRelative]))
+        {
             $asset = new Asset(
                 $this->manifest[$pathRelativeToPublic],
                 $context
@@ -285,13 +291,16 @@ class AssetsExtension extends AbstractExtension
             $asset->preload = $preload;
 
             $this->assetsLoaded[$pathRelative] = $asset;
-        } else {
+        }
+        else
+        {
             $asset = $this->assetsLoaded[$pathRelative];
         }
 
         $this->assets[$asset->type][] = $asset;
 
-        if ($preload) {
+        if ($preload)
+        {
             $this->assetsPreload[$asset->type][] = $asset;
         }
 
@@ -303,4 +312,3 @@ class AssetsExtension extends AbstractExtension
         $asset->rendered = $rendered;
     }
 }
-

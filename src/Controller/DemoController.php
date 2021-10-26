@@ -28,7 +28,7 @@ class DemoController extends AbstractController
         return $this->renderPage(
             VariableHelper::ASSETS,
             [
-                'displayBreakpoints' => AssetsExtension::DISPLAY_BREAKPOINTS
+                'displayBreakpoints' => AssetsExtension::DISPLAY_BREAKPOINTS,
             ]
         );
     }
