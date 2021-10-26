@@ -44,6 +44,9 @@ const mixin:MixinInterface = {
                         if (asset.type === 'js') {
                             this.assets.jsAssetsPending[asset.id] = asset;
                             asset.el = this.assets.addScript(asset.path);
+
+                            // Stops queue.
+                            return false;
                         } else {
                             asset.el = this.assets.addStyle(asset.path);
                             this.assets.setAssetLoaded(asset);
@@ -98,7 +101,7 @@ const mixin:MixinInterface = {
                 }
 
                 if (asset.queue) {
-                    asset.queue.then(remove);
+                    asset.queue.add(remove);
                 } else {
                     remove();
                 }

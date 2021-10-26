@@ -1,7 +1,8 @@
 import MixinLocale from './Locale';
 import MixinInterface from "../interface/MixinInterface";
+import Page from "../class/Page";
 
-const mixin:MixinInterface = {
+const mixin: MixinInterface = {
     name: 'pages',
 
     dependencies: {
@@ -24,7 +25,7 @@ const mixin:MixinInterface = {
         app: {
             pages: {},
 
-            create(data) {
+            create(data: any): Page {
                 let classDefinition = this.getClassDefinition(
                     'page',
                     this.getClassPage(),

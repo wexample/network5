@@ -1,0 +1,7 @@
+@import "../../partials/mixins";
+
+.display-breakpoint-xs {
+  .size-name {
+    background: $wexSubColorPurple;
+  }
+}

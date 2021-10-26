@@ -1,0 +1,7 @@
+@import "../../partials/mixins";
+
+.display-breakpoint-l {
+  .size-name {
+    background: $wexSubColorYellow;
+  }
+}

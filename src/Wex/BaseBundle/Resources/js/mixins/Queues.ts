@@ -30,11 +30,12 @@ export default {
                 queues.forEach((queue) => {
                     if (queue.started) {
                         hasRunningQueue = true;
-
                         queue.then(() => {
                             this.arrays.deleteItem(queues, queue);
                             if (!queues.length) {
-                                complete(originalList);
+                                queue.then(() => {
+                                    complete(originalList);
+                                });
                             }
                         });
                     }

@@ -87,14 +87,15 @@ export default class {
      */
     callbacks(callbacksArray, args = [], thisArg = null) {
         let method = args ? 'apply' : 'call';
+        let callback = null;
 
-        callbacksArray.forEach((item) => {
-            if (!item) {
+        while(callback = callbacksArray.shift()) {
+            if (!callback) {
                 throw "Trying to execute undefined callback.";
             }
 
-            item[method](thisArg || this, args)
-        });
+            callback[method](thisArg || this, args)
+        }
     }
 
     loadRenderData(data, complete) {

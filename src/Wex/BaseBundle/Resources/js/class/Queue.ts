@@ -12,9 +12,9 @@ export default class {
         this.name = name;
     }
 
-
     add(command: Function) {
         this.commands.push(command);
+
         return this;
     }
 
@@ -29,7 +29,6 @@ export default class {
     next() {
         if (this.commands.length) {
             let response = (this.commands.shift())(this);
-
             if (response !== false) {
                 this.next();
             }
@@ -43,20 +42,23 @@ export default class {
     start() {
         if (!this.started) {
             this.started = true;
-
-            setTimeout(() => {
-                this.next();
-            })
+            setTimeout(() => this.next());
         }
 
         return this;
     }
 
     then(callback: Function) {
-        this.callbacks.push(callback);
+        if (!this.commands.length
+            && !this.callbacks.length
+        ) {
+            setTimeout(() => callback());
+        } else {
+            this.callbacks.push(callback);
+        }
     }
 
-    complete() {
+    private complete(after?: Function) {
         if (this.started) {
             delete this.app.getMixin('queues').queues[this.name];
 
@@ -64,6 +66,8 @@ export default class {
         }
 
         this.die();
+
+        after && after();
 
         return this;
     }

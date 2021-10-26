@@ -30,13 +30,17 @@ export default {
     },
 
     methods: {
+        responsiveSizeCurrent: null,
+
         app: {
-            updateResponsive(complete) {
+            updateResponsive(complete?: Function) {
                 this.responsive.updateResponsiveLayoutClass();
 
+                // Update layout level assets.
                 this.responsive.updateResponsiveAssets(
                     this.registry.layoutData,
                     () => {
+                        // Update page level assets.
                         this.responsive.updateResponsiveAssets(
                             this.registry.layoutData.page,
                             complete
@@ -46,25 +50,36 @@ export default {
             },
 
             updateResponsiveLayoutClass() {
+                let current = this.responsive.responsiveSizeCurrent;
                 let responsiveSize = this.responsive.detectSize();
 
-                // Remove all responsive class names.
-                let classList = document.body.classList;
-                classList.forEach((className) => {
-                    if (className.indexOf('responsive-') === 0) {
-                        classList.remove(className);
-                    }
-                });
+                if (current !== responsiveSize) {
+                    // Remove all responsive class names.
+                    let classList = document.body.classList;
 
-                classList.add(
-                    `responsive-${responsiveSize}`
-                );
+                    classList.remove(
+                        `responsive-${current}`
+                    );
+                    classList.add(
+                        `responsive-${responsiveSize}`
+                    );
+
+                    this.responsive.responsiveSizeCurrent = responsiveSize;
+
+                    if (this.layoutPage) {
+                        this.layoutPage.onChangeResponsiveSize(
+                            this.responsive.responsiveSizeCurrent,
+                            current
+                        );
+                    }
+                }
             },
 
-            updateResponsiveAssets(renderData:RenderDataInterface, complete) {
+            updateResponsiveAssets(renderData: RenderDataInterface, complete) {
                 let responsiveSize = this.responsive.detectSize();
                 let toLoad = {};
                 let toUnload = {};
+                let hasChange = false;
 
                 Object.entries(renderData.assets.responsive)
                     .forEach((data) => {
@@ -77,10 +92,12 @@ export default {
                             // Adding and removing assets is async.
                             if (asset.responsive === responsiveSize) {
                                 if (!asset.active) {
+                                    hasChange = true;
                                     toLoad[type].push(asset);
                                 }
                             } else {
                                 if (asset.active) {
+                                    hasChange = true;
                                     toUnload[type].push(asset);
                                 }
                             }
@@ -90,13 +107,17 @@ export default {
                 // Load new assets.
                 let queueLoad = this.assets.appendAssets(toLoad);
                 // Remove old ones.
-                let queueUnLoad = this.assets.removeAssets(toUnload)
+                let queueUnLoad = this.assets.removeAssets(toUnload);
 
                 if (complete) {
-                    this.queues.afterAllQueues(
-                        [queueLoad, queueUnLoad],
-                        complete
-                    );
+                    if (hasChange) {
+                        this.queues.afterAllQueues(
+                            [queueLoad, queueUnLoad],
+                            complete
+                        );
+                    } else {
+                        complete();
+                    }
                 }
             },
 

@@ -7,7 +7,7 @@
         <div class="board-line">
             {{ template_name }}
         </div>
-        {% for name,breakPoint in displayBreakpoints %}
+        {% for breakPoint,name in displayBreakpoints %}
             <div class="board-line display-breakpoint display-breakpoint-{{ breakPoint }}">
                 <div class="pill size-name">{{ name }}</div>
                 <div class="size-min">{{ breakPoint }}</div>
