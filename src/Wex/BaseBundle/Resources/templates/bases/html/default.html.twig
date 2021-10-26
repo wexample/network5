@@ -84,15 +84,17 @@
     </head>
     <body>
     <div id="layout" class="layout-loading {{ layout_class|default('') }}">
-        {#- If javascript fails to complete, force removing loading state after 2 seconds.      -#}
-        <script>
-            var elLayout = document.getElementById('layout');
-            elLayout.classList.add('layout-loading');
+        {% if not layout_no_js %}
+            {#- If javascript fails to complete, force removing loading state after 2 seconds.       -#}
+            <script>
+                var elLayout = document.getElementById('layout');
+                elLayout.classList.add('layout-loading');
 
-            setTimeout(function () {
-                elLayout.classList.remove('layout-loading');
-            }, 2000);
-        </script>
+                setTimeout(function () {
+                    elLayout.classList.remove('layout-loading');
+                }, 2000);
+            </script>
+        {% endif %}
         {{ block('page_body') }}
     </div>
 

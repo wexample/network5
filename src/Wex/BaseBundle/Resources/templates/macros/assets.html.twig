@@ -1,9 +1,9 @@
 {% macro render_available_css(layout_no_js) %}
     {% for asset in assets_list('css') %}
         {%- if not asset.responsive or layout_no_js -%}
-            <link id="{{ asset.name }}" rel="stylesheet" media="{{ asset.media }}"
+            <link rel="stylesheet" media="{{ asset.media }}"
                   href="{{ asset(asset.path) }}"/>
-            {{- asset_set_rendered(asset) }}
+            {{ asset_set_rendered(asset) }}
         {%- endif -%}
     {% endfor %}
 {% endmacro %}
