@@ -12,6 +12,7 @@
     {%- block template_config -%}
         {{- assets_init_layout(layout_name) -}}
         {{- assets_init_template(template_name) -}}
+        {{- translation_set_domain_from_path('page', template_path) -}}
     {%- endblock -%}
 
     <!DOCTYPE html>

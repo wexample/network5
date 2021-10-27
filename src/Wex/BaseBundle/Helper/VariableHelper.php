@@ -10,6 +10,8 @@ class VariableHelper
 
     public const BODY = 'body';
 
+    public const COMPONENT = 'component';
+
     public const DEMO = 'demo';
 
     public const DEFAULT = 'default';
@@ -57,6 +59,8 @@ class VariableHelper
     public const USER_NAME = 'user_name';
 
     public const VARS = 'vars';
+
+    public const EMPTY_STRING = '';
 
     public const VARIABLE_TYPE_ARRAY = 'array';
 

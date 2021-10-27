@@ -12,7 +12,7 @@
             Layout name : <b>{{ layout_name }}</b>
         </div>
     </div>
-    <h2>Taille de la page</h2>
+    <h2>{{ '@page::breakpoints.title' | trans }}</h2>
     <div class="blocks blocks-no-stretch blocks-side-column-left">
         <div class="blocks-col">
             {% for name,sizeMin in displayBreakpoints %}
@@ -23,7 +23,7 @@
             {% endfor %}
         </div>
         <div class="block">
-            Blah
+            {{ '@page::breakpoints.body' | trans }}
         </div>
     </div>
     <h2>Ressources téléchargés</h2>
