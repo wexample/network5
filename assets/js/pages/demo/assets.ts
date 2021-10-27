@@ -5,7 +5,9 @@ export default {
 
     init() {
         this.unitTest = new UnitTest();
+        
         this.test();
+        this.refreshLoadedAssetsList();
     },
 
     onChangeResponsiveSize(current: string, previous?: string) {
@@ -19,6 +21,45 @@ export default {
             .querySelector(`.display-breakpoint-${current}`)
             .classList
             .add('display-breakpoint-current');
+
+        this.refreshLoadedAssetsList();
+    },
+
+    refreshLoadedAssetsList() {
+        let list;
+        list = [];
+
+        // Base loaded assets
+        document
+            .querySelectorAll('link[rel=stylesheet]')
+            .forEach((el) => {
+                list.push(el.getAttribute('href'));
+            });
+
+        this.refreshLoadedAssetsTypeList('css', list);
+
+        list = [];
+        // Base loaded assets
+        document
+            .querySelectorAll('script')
+            .forEach((el) => {
+                let src = el.getAttribute('src');
+                if (src !== null) {
+                    list.push(src);
+                }
+            });
+        this.refreshLoadedAssetsTypeList('js', list);
+    },
+
+    refreshLoadedAssetsTypeList(type: string, list: string[]) {
+        let el = document.getElementById(`loaded-assets-list-${type}`);
+        let output = '';
+
+        list.forEach((item) => {
+            output += `<li>${item}</li>`;
+        });
+
+        el.innerHTML = output;
     },
 
     test() {

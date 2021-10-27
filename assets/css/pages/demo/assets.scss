@@ -1,4 +1,6 @@
-@import "../../partials/mixins";
+@import "../../mixins/global";
+
+@import '../../../../src/Wex/BaseBundle/Resources/css/partials/blocks';
 
 .temp-container {
   max-width: 50rem;
@@ -11,12 +13,15 @@
 
 .display-breakpoint {
   background: white;
-  color: $globalFontColor;
-  transition-property: font-size;
-  transition-duration: .8s;
+  color: $global-text-color;
+
+  .size-name, .size-min {
+    transition-property: font-size;
+    transition-duration: .8s;
+  }
 
   .size-name {
-    width: 5rem;
+    width: 3rem;
     text-align: center;
     background: #DDD;
     padding: .2rem;
@@ -25,7 +30,10 @@
   }
 
   &.display-breakpoint-current {
-    font-size: 2rem;
+    .size-name, .size-min {
+      font-size: 1.6rem;
+    }
+
     .size-name {
       color: white;
     }

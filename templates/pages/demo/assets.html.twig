@@ -13,11 +13,26 @@
         </div>
     </div>
     <h2>Taille de la page</h2>
-    {% for name,sizeMin in displayBreakpoints %}
-        <div class="inline-infos display-breakpoint display-breakpoint-{{ name }}">
-            <div class="pill size-name">{{ name }}</div>
-            <div class="size-min">{{ sizeMin }}px</div>
+    <div class="blocks blocks-no-stretch blocks-side-column-left">
+        <div class="blocks-col">
+            {% for name,sizeMin in displayBreakpoints %}
+                <div class="inline-infos display-breakpoint display-breakpoint-{{ name }}">
+                    <div class="pill size-name">{{ name }}</div>
+                    <div class="size-min">{{ sizeMin }}px</div>
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
+        <div class="block">
+            Blah
+        </div>
+    </div>
     <h2>Ressources téléchargés</h2>
+    <div class="blocks">
+        <div class="block">
+            <ul id="loaded-assets-list-css"></ul>
+        </div>
+        <div class="block">
+            <ul id="loaded-assets-list-js"></ul>
+        </div>
+    </div>
 {%- endblock -%}

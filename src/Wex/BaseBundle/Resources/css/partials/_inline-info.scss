@@ -1,9 +1,12 @@
-@import '../partials/mixins';
+@import '../mixins/global';
+@import 'blocks';
 
 .inline-infos {
+  @extend .block;
+
   align-items: center;
   display: flex;
-  padding: 1rem 2rem;
+  padding: .5rem 1rem;
   background: $light-gray;
   border-radius: 100px;
   margin-bottom: 1rem;

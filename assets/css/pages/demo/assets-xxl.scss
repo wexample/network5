@@ -1,7 +1,7 @@
-@import "../../partials/mixins";
+@import "../../mixins/wex";
 
 .display-breakpoint-xxl {
   .size-name {
-    background: $wexSubColorBlue;
+    background: $wex-sub-color-blue;
   }
 }
