@@ -4,7 +4,7 @@
 
 {%- block page_content_body -%}
     <h1>{{ page_title | trans }}</h1>
-    <div class="inline-infos">
+    <div class="inline-infos theme-dark">
         <div class="info">
             {{ '@page::infos.template_name' | trans }} : <b>{{ template_name }}</b>
         </div>
@@ -22,7 +22,7 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="block">
+        <div class="block theme-dark">
             {{ '@page::breakpoints.body' | trans | raw }}
             <br>
             <br>
@@ -30,7 +30,7 @@
         </div>
     </div>
     <h2>{{ '@page::resources.title' | trans }}</h2>
-    <div class="block">
+    <div class="block theme-dark">
         {{ ('@page::resources.body_' ~ (layout_no_js ? 'no_' : '') ~ 'js') | trans | raw }}
     </div>
     {% if not layout_no_js %}

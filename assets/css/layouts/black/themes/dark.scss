@@ -1,0 +1,12 @@
+
+.theme-dark {
+  &.block, .block {
+    background: rgba(255, 255, 255, .03);
+    border: 1px solid rgba(255, 255, 255, .2);
+    color: rgba(255, 255, 255, .6);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+
+}
