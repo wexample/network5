@@ -12,6 +12,7 @@
 
 .blocks {
   display: flex;
+  width: 100%;
 
   &.blocks-no-stretch {
     align-items: flex-start;

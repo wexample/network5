@@ -1,24 +1,13 @@
 import UnitTest from "../../../../src/Wex/BaseBundle/Resources/js/class/Tests/UnitTest";
+import {MDCRipple} from '@material/ripple/index';
 
 export default {
     classContext: 'page',
 
     init() {
         this.unitTest = new UnitTest();
-        
-        this.testLoading();
+        // TODO cleanup
+        document.querySelectorAll('.button')
+            .forEach(el => new MDCRipple(el));
     },
-
-    testLoading() {
-        let test = this.unitTest;
-        let queuesMixin = this.app.queues;
-        let queue = queuesMixin.create('test-loading');
-        let counter = 0;
-
-        queue.add(() => {
-            // TODO
-            test.assertTrue(true, 'TODO...');
-            counter++;
-        });
-    }
 };

@@ -3,7 +3,15 @@
 {%- set template_path = _self -%}
 
 {%- block page_content_body -%}
-    <div class="inline-infos theme-dark">
-        ...
+    <div class="blocks blocks-no-stretch blocks-side-column-right">
+        <div class="block">
+            {{ '@page::layout_overlay.body' | trans }}
+        </div>
+        <div class="block blocks-col">
+            <button class="mdc-button mdc-button--raised button button-full-width">
+                <div class="mdc-button__ripple"></div>
+                <span class="mdc-button__label">Test</span>
+            </button>
+        </div>
     </div>
 {%- endblock -%}

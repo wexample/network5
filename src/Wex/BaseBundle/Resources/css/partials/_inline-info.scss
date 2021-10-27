@@ -1,4 +1,6 @@
 @import '../mixins/global';
+@import '../mixins/pills';
+
 @import 'blocks';
 
 .inline-infos {
@@ -8,7 +10,7 @@
   display: flex;
   padding: .5rem 1rem;
   background: $light-gray;
-  border-radius: 100px;
+  border-radius: $pill-border-radius;
   margin-bottom: 1rem;
 
   & > div.info {

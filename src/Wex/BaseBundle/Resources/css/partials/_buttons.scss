@@ -1,0 +1,22 @@
+@use 'sass:math';
+
+@use '@material/button/mdc-button';
+@use '@material/button';
+
+@import '../mixins/pills';
+@import '../mixins/blocks';
+
+.button {
+  border-radius: $pill-border-radius;
+
+  &.button-full-width {
+    width: 100%;
+  }
+}
+
+.block {
+  .button {
+    width: calc(100% - #{$block-padding-x});
+    margin-left: math.div($block-padding-x, 2);
+  }
+}

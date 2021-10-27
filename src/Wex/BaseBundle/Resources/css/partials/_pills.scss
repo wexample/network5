@@ -1,0 +1,7 @@
+@import '../mixins/pills';
+
+.pill {
+  border-radius: $pill-border-radius;
+  padding: 0 0.4rem;
+  float: left;
+}

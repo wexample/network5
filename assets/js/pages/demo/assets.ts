@@ -6,7 +6,7 @@ export default {
     init() {
         this.unitTest = new UnitTest();
         
-        this.test();
+        this.testQueue();
         this.refreshLoadedAssetsList();
     },
 
@@ -62,7 +62,7 @@ export default {
         el.innerHTML = output;
     },
 
-    testLoading() {
+    testQueue() {
         let test = this.unitTest;
         let queuesMixin = this.app.queues;
         let queue = queuesMixin.create('test-queue');
