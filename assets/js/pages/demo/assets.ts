@@ -62,9 +62,9 @@ export default {
         el.innerHTML = output;
     },
 
-    test() {
+    testLoading() {
         let test = this.unitTest;
-        let queuesMixin = window['app'].queues;
+        let queuesMixin = this.app.queues;
         let queue = queuesMixin.create('test-queue');
         let counter = 0;
 

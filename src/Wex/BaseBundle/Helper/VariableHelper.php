@@ -42,6 +42,8 @@ class VariableHelper
 
     public const LAYOUT = 'layout';
 
+    public const LOADING = 'loading';
+
     public const MODAL = 'modal';
 
     public const MAIL = 'mail';

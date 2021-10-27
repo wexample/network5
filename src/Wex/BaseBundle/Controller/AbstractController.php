@@ -22,7 +22,8 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
 
     public function __construct(
         protected RequestStack $requestStack
-    ) {
+    )
+    {
         $mainRequest = $this->requestStack->getMainRequest();
 
         $this->templateNoJs = !is_null($mainRequest->get('no_js'));
@@ -33,14 +34,17 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         string $view,
         array $parameters = [],
         Response $response = null
-    ): Response {
+    ): Response
+    {
+        $templatePath = 'pages/'.$this->viewPathPrefix.$view.TemplateExtension::TEMPLATE_FILE_EXTENSION;
+
         // Add global variables for rendering.
         $parameters['layout_no_js'] ??= $this->templateNoJs;
+        $parameters['template_path'] = $templatePath;
         $parameters['request_uri'] ??= $this->requestUri;
 
         return parent::render(
-            'pages/'.$this->viewPathPrefix.$view
-            .TemplateExtension::TEMPLATE_FILE_EXTENSION,
+            $templatePath,
             $parameters,
             $response
         );
