@@ -3,13 +3,13 @@
 {%- set template_path = _self -%}
 
 {%- block page_content_body -%}
-    <h1>Assets</h1>
+    <h1>{{ page_title | trans }}</h1>
     <div class="inline-infos">
         <div class="info">
-            Template name : <b>{{ template_name }}</b>
+            {{ '@page::infos.template_name' | trans }} : <b>{{ template_name }}</b>
         </div>
         <div class="info">
-            Layout name : <b>{{ layout_name }}</b>
+            {{ '@page::infos.layout_name' | trans }} : <b>{{ layout_name }}</b>
         </div>
     </div>
     <h2>{{ '@page::breakpoints.title' | trans }}</h2>
@@ -23,16 +23,24 @@
             {% endfor %}
         </div>
         <div class="block">
-            {{ '@page::breakpoints.body' | trans }}
+            {{ '@page::breakpoints.body' | trans | raw }}
+            <br>
+            <br>
+            {{ ('@page::breakpoints.body_' ~ (layout_no_js ? 'no_' : '') ~ 'js') | trans | raw }}
         </div>
     </div>
-    <h2>Ressources téléchargés</h2>
-    <div class="blocks">
-        <div class="block">
-            <ul id="loaded-assets-list-css"></ul>
-        </div>
-        <div class="block">
-            <ul id="loaded-assets-list-js"></ul>
-        </div>
+    <h2>{{ '@page::resources.title' | trans }}</h2>
+    <div class="block">
+        {{ ('@page::resources.body_' ~ (layout_no_js ? 'no_' : '') ~ 'js') | trans | raw }}
     </div>
+    {% if not layout_no_js %}
+        <div class="blocks">
+            <div class="block">
+                <ul id="loaded-assets-list-css"></ul>
+            </div>
+            <div class="block">
+                <ul id="loaded-assets-list-js"></ul>
+            </div>
+        </div>
+    {% endif %}
 {%- endblock -%}
