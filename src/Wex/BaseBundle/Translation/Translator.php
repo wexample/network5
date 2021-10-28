@@ -43,6 +43,8 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
 
     public const DOMAIN_PREFIX = '@';
 
+    public const DOMAIN_SAME_KEY_WILDCARD = '%';
+
     public const DOMAIN_TYPE_COMPONENT = VariableHelper::COMPONENT;
 
     public const DOMAIN_TYPE_FORM = VariableHelper::FORM;
@@ -245,10 +247,10 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         $all = $catalogue->all();
         $output = [];
 
-        if ('@' === $value[0]) {
+        if (self::DOMAIN_PREFIX === $value[0]) {
             $refDomain = $this->trimDomain($this->splitDomain($value));
             $refKey = $this->splitId($value);
-            $shortNotation = '%' === $refKey;
+            $shortNotation = self::DOMAIN_SAME_KEY_WILDCARD === $refKey;
 
             if ($shortNotation) {
                 $refKey = $key;
@@ -364,7 +366,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         $parameters = $this->updateParameters($parameters);
         $default = $id;
 
-        if (!$domain && $domain = $this->splitDomain($id)) {
+        if (is_null($domain) && $domain = $this->splitDomain($id)) {
             $id = $this->splitId($id);
             $domain = $this->resolveDomain($domain);
 

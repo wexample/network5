@@ -3,15 +3,13 @@
 namespace App\Wex\BaseBundle\Twig;
 
 use App\Wex\BaseBundle\Translation\Translator;
-use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class TranslationExtension extends AbstractExtension
 {
     public function __construct(
-        public Translator $translator,
-        private Environment $twig
+        public Translator $translator
     )
     {
     }
