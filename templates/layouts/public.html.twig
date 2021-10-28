@@ -5,6 +5,7 @@
 {%- set layout_name = layout_name|default('public') -%}
 
 {%- block page_body -%}
+    {{ parent() }}
     <header>
         <div class="layout-header">
                 <a class="logo" href="{{ url('home_index') }}">

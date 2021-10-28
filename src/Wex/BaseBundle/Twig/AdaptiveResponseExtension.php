@@ -27,10 +27,10 @@ class AdaptiveResponseExtension extends AbstractExtension
     {
         return [
             new TwigFunction(
-                'adaptive_response_layout_path',
+                'adaptive_response_rendering_base_path',
                 [
                     $this,
-                    'adaptiveResponseLayoutPath',
+                    'adaptiveResponseRenderingBasePath',
                 ],
                 [
                     'needs_context' => true,
@@ -43,7 +43,7 @@ class AdaptiveResponseExtension extends AbstractExtension
      * Return base layout path regarding request type
      * and template configuration.
      */
-    public function adaptiveResponseLayoutPath(array $context): string
+    public function adaptiveResponseRenderingBasePath(array $context): string
     {
         return $this
             ->getCurrentResponse()
