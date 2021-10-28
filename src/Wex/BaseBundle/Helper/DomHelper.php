@@ -4,7 +4,7 @@ namespace App\Wex\BaseBundle\Helper;
 
 class DomHelper
 {
-    public static function buildTagAttributes(?array $attributes = []): string
+    public static function buildTagAttributes(array $attributes): string
     {
         $output = [];
         $attributes = $attributes ?: [];

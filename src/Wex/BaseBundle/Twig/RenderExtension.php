@@ -17,7 +17,15 @@ class RenderExtension extends AbstractExtension
                     'renderTag',
                 ],
                 [self::FUNCTION_OPTION_IS_SAFE => [self::FUNCTION_OPTION_HTML]]
-            )
+            ),
+            new TwigFunction(
+                'render_tag_attributes',
+                [
+                    $this,
+                    'renderTagAttributes',
+                ],
+                [self::FUNCTION_OPTION_IS_SAFE => [self::FUNCTION_OPTION_HTML]]
+            ),
         ];
     }
 
@@ -33,6 +41,15 @@ class RenderExtension extends AbstractExtension
             $attributes,
             $body,
             $allowSingleTag
+        );
+    }
+
+    public function renderTagAttributes(
+        array $attributes
+    ): string
+    {
+        return DomHelper::buildTagAttributes(
+            $attributes
         );
     }
 }

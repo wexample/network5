@@ -8,6 +8,7 @@
 @import '../../../../src/Wex/BaseBundle/Resources/css/partials/tabs';
 // Local partials.
 @import 'partials/default';
+@import 'partials/header';
 
 #nav-secondary {
   @extend .pill;

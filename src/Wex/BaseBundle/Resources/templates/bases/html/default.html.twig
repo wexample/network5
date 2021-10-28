@@ -20,7 +20,7 @@
     <html lang="{{ app.request.locale }}">
     <head>
         <meta charset="utf-8"/>
-        <title>{{ template_head_title ? (template_head_title | trans(template_head_title_args)) ~ ' | ' : '' }}{{ 'company.name' | trans }}</title>
+        <title>{{ template_head_title ? (template_head_title | trans(template_head_title_args)) ~ ' | ' : '' }}{{ 'common.app::name' | trans }}</title>
         {% block preloads -%}
             {% for asset in assets_preload_list('css') %}
                 <link rel="preload" href="{{ asset.path }}" as="{{ asset.preloadAs }}">
