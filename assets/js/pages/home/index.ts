@@ -7,7 +7,7 @@ const bundle: AssetBundleInterface = {
 
     definition: class extends Page {
         init() {
-            new Manager();
+            // TODO Rewrite new Manager();
         }
     }
 };
