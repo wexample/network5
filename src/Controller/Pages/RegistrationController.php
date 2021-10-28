@@ -1,21 +1,22 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Pages;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
+use App\Wex\BaseBundle\Controller\AbstractPagesController;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
-class RegistrationController extends AbstractController
+class RegistrationController extends AbstractPagesController
 {
     /**
      * @var string
@@ -23,8 +24,13 @@ class RegistrationController extends AbstractController
     public const ROUTE_APP_REGISTER = 'app_register';
 
     public function __construct(
-        private EmailVerifier $emailVerifier
-    ) {
+        private EmailVerifier $emailVerifier,
+        RequestStack $requestStack
+    )
+    {
+        parent::__construct(
+            $requestStack
+        );
     }
 
     #[Route('/register', name: self::ROUTE_APP_REGISTER)]
@@ -34,8 +40,7 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
                 $passwordEncoder->encodePassword(
@@ -73,25 +78,20 @@ class RegistrationController extends AbstractController
     {
         $id = $request->get('id');
 
-        if (null === $id)
-        {
+        if (null === $id) {
             return $this->redirectToRoute(self::ROUTE_APP_REGISTER);
         }
 
         $user = $userRepository->find($id);
 
-        if (null === $user)
-        {
+        if (null === $user) {
             return $this->redirectToRoute(self::ROUTE_APP_REGISTER);
         }
 
         // validate email confirmation link, sets User::isVerified=true and persists
-        try
-        {
+        try {
             $this->emailVerifier->handleEmailConfirmation($request, $user);
-        }
-        catch (VerifyEmailExceptionInterface $verifyEmailExceptionInterface)
-        {
+        } catch (VerifyEmailExceptionInterface $verifyEmailExceptionInterface) {
             $this->addFlash('verify_email_error', $verifyEmailExceptionInterface->getReason());
 
             return $this->redirectToRoute(self::ROUTE_APP_REGISTER);

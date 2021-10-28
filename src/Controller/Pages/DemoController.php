@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Pages;
 
-use App\Wex\BaseBundle\Controller\AbstractController;
+use App\Wex\BaseBundle\Controller\AbstractPagesController;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Twig\AssetsExtension;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DemoController extends AbstractController
+class DemoController extends AbstractPagesController
 {
     protected string $viewPathPrefix = VariableHelper::DEMO.'/';
 

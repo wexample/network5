@@ -1,0 +1,45 @@
+@import '../mixins/global';
+@import '../mixins/reset';
+
+.tabs {
+  @extend .reset;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  a.tab {
+    @include text-ellipsis;
+    padding: 0.9rem 1.7rem;
+    transition-duration: 0.5s;
+
+    &:hover {
+      background: #f0f0f0;
+    }
+
+    &.active {
+      background: rgba(255, 255, 255, 0.4);
+      border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+      padding-bottom: calc(0.9rem - 3px);
+    }
+  }
+
+  &.tabs-vertical {
+    a {
+      width: 100%;
+    }
+
+    a.tab.active {
+      border: 0;
+      padding-bottom: 0.9rem;
+    }
+  }
+}
+
+.tab-content {
+  display: none;
+
+  &.tab-content-active {
+    display: initial;
+  }
+}
+

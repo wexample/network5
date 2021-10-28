@@ -1,9 +1,18 @@
-
 // Layout.
 @import '../black/layout';
 // Project partials.
 @import '../black/partials/inline-info';
 // Base partials.
 @import '../../../../src/Wex/BaseBundle/Resources/css/partials/container';
+@import '../../../../src/Wex/BaseBundle/Resources/css/partials/pills';
+@import '../../../../src/Wex/BaseBundle/Resources/css/partials/tabs';
 // Local partials.
 @import 'partials/default';
+
+#nav-secondary {
+  @extend .pill;
+
+  ul {
+    display: flex;
+  }
+}

@@ -1,9 +1,18 @@
 {%- extends 'layouts/black.html.twig' -%}
 
+{% import '@WexBaseBundle/Resources/templates/macros/tabs.html.twig' as macro_tabs %}
+
 {%- set layout_name = layout_name|default('public') -%}
 
 {%- block page_body -%}
     <div class="container-medium">
+        <nav id="nav-secondary" class="theme-dark">
+            {{ macro_tabs.start() }}
+            {{ macro_tabs.tab_to_page('home_index') }}
+            {{ macro_tabs.tab_to_page('demo_assets') }}
+            {{ macro_tabs.tab_to_page('demo_loading') }}
+            {{ macro_tabs.end() }}
+        </nav>
         {% if page_title %}
             <h1>{{ page_title | trans }}</h1>
         {% endif %}

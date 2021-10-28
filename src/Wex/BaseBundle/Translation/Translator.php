@@ -8,6 +8,7 @@
 
 namespace App\Wex\BaseBundle\Translation;
 
+use App\Wex\BaseBundle\Helper\ClassHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\TextHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
@@ -39,7 +40,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface
 {
-    public const DOMAIN_SEPARATOR = '::';
+    public const DOMAIN_SEPARATOR = ClassHelper::METHOD_SEPARATOR;
 
     public const DOMAIN_PREFIX = '@';
 
@@ -109,7 +110,9 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
                     ];
 
                     foreach ($pathTranslationsAll as $pathTranslations) {
-                        $this->addTranslationDirectory($pathTranslations);
+                        if (file_exists($pathTranslations)) {
+                            $this->addTranslationDirectory($pathTranslations);
+                        }
                     }
 
                     $this->resolveCatalog();

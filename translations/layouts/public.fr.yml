@@ -1,2 +1,4 @@
-nav:
-  home: Home
+tabs:
+  public:
+    home:
+      title: Accueil

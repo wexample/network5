@@ -18,6 +18,13 @@ class TranslationExtension extends AbstractExtension
     {
         return [
             new TwigFunction(
+                'translation_build_domain_from_path',
+                [
+                    $this,
+                    'translationBuildDomainFromPath',
+                ]
+            ),
+            new TwigFunction(
                 'translation_set_domain_from_path',
                 [
                     $this,
@@ -25,6 +32,13 @@ class TranslationExtension extends AbstractExtension
                 ]
             )
         ];
+    }
+
+    public function translationBuildDomainFromPath(string $path): string
+    {
+        return $this->translator->buildDomainFromPath(
+            $path
+        );
     }
 
     public function translationSetDomainFromPath(string $domainName, string $path): void

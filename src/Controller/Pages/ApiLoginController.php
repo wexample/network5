@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Pages;
 
 use App\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Wex\BaseBundle\Controller\AbstractPagesController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
-class ApiLoginController extends AbstractController
+class ApiLoginController extends AbstractPagesController
 {
     #[Route('/api/login', name: 'api_login')]
     public function index(#[CurrentUser] ?User $user): Response

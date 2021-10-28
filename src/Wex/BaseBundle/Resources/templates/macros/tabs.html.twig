@@ -1,0 +1,11 @@
+{% macro start(group = 'default') %}
+<ul class="tabs tabs-{{ group }}">
+    {% endmacro %}
+
+    {% macro end() %}
+</ul>
+{% endmacro %}
+
+{% macro tab_to_page(route, routeParameters = {}) %}
+    <a href="{{ url(route, routeParameters) }}" class="tab">{{ (translation_build_domain_from_path(template_build_path_from_route(route)) ~ '::page_title') | trans }}</a>
+{% endmacro %}

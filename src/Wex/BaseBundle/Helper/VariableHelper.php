@@ -52,6 +52,10 @@ class VariableHelper
 
     public const PAGE = 'page';
 
+    public const PLURAL_PAGE = self::PAGE.'s';
+
+    public const PATH_ENTITY = 'Entity';
+
     public const RESPONSIVE = 'responsive';
 
     public const TO = 'to';
@@ -73,6 +77,4 @@ class VariableHelper
     public const VARIABLE_TYPE_STRING_LENGTH_DEFAULT = 255;
 
     public const VUE = 'vue';
-
-    public const PATH_ENTITY = 'Entity';
 }

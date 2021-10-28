@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Pages;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Wex\BaseBundle\Controller\AbstractPagesController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-class LoginController extends AbstractController
+class LoginController extends AbstractPagesController
 {
     #[Route('/login', name: 'login')]
     public function index(AuthenticationUtils $authenticationUtils): Response

@@ -5,6 +5,8 @@ namespace App\Wex\BaseBundle\Helper;
 class FileHelper
 {
     public const EXTENSION_SEPARATOR = '.';
+    
+    public const FOLDER_SEPARATOR = '/';
 
     public const FILE_EXTENSION_PDF = 'pdf';
 
