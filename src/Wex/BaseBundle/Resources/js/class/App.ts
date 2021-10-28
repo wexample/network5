@@ -7,7 +7,6 @@ import MixinResponsive from '../mixins/Responsive';
 
 export default class {
     public bootJsBuffer: string[] = [];
-    public classesDefinitions: any = {};
     public hasCoreLoaded: boolean = false;
     public layoutPage: Page = null;
     public mixins: object;
@@ -188,30 +187,13 @@ export default class {
 
     /**
      * @param registryGroup
-     * @param baseClassDefinition
      * @param classRegistryName
      */
-    getClassDefinition(registryGroup, baseClassDefinition, classRegistryName) {
-        let key = `${registryGroup}.${classRegistryName}`;
-
-        if (!this.classesDefinitions[key]) {
-            let classDefinition = baseClassDefinition;
-            let extraDefinition =
-                this.registry[registryGroup]
-                    .classes[classRegistryName];
-
-            if (extraDefinition) {
-                classDefinition = class extends baseClassDefinition {
-                };
-
-                Object.assign(classDefinition.prototype, extraDefinition);
-                Object.assign(classDefinition, extraDefinition.static);
-            }
-
-            this.classesDefinitions[key] = classDefinition;
-        }
-
-        return this.classesDefinitions[key];
+    getClassDefinition(registryGroup:string, classRegistryName:string) {
+        return this
+            .registry[registryGroup]
+            .classes[classRegistryName]
+            .definition;
     }
 
     addLib(name, object) {

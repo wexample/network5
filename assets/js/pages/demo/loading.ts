@@ -1,13 +1,22 @@
-import UnitTest from "../../../../src/Wex/BaseBundle/Resources/js/class/Tests/UnitTest";
 import {MDCRipple} from '@material/ripple/index';
+import Page from "../../../../src/Wex/BaseBundle/Resources/js/class/Page";
+import UnitTest from "../../../../src/Wex/BaseBundle/Resources/js/class/Tests/UnitTest";
+import AssetBundleInterface from "../../../../src/Wex/BaseBundle/Resources/js/interface/AssetBundleInterface";
 
-export default {
+const bundle: AssetBundleInterface = {
     classContext: 'page',
 
-    init() {
-        this.unitTest = new UnitTest();
-        // TODO cleanup
-        document.querySelectorAll('.button')
-            .forEach(el => new MDCRipple(el));
-    },
+    definition: class extends Page {
+        unitTest: UnitTest
+
+        init() {
+            this.unitTest = new UnitTest();
+            // TODO cleanup
+            document.querySelectorAll('.button')
+                .forEach(el => new MDCRipple(el));
+        }
+    }
 };
+
+export default bundle;
+

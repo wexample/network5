@@ -1,9 +1,15 @@
 import Manager from "../../class/MouseTail/Manager";
+import Page from "../../../../src/Wex/BaseBundle/Resources/js/class/Page";
+import AssetBundleInterface from "../../../../src/Wex/BaseBundle/Resources/js/interface/AssetBundleInterface";
 
-export default {
+const bundle: AssetBundleInterface = {
     classContext: 'page',
 
-    init() {
-        new Manager();
+    definition: class extends Page {
+        init() {
+            new Manager();
+        }
     }
 };
+
+export default bundle;

@@ -1,4 +1,6 @@
-export default {
+import MixinInterface from "../interface/MixinInterface";
+
+const mixin:MixinInterface = {
     name: 'locale',
 
     hooks: {
@@ -15,3 +17,5 @@ export default {
         },
     },
 };
+
+export default mixin;

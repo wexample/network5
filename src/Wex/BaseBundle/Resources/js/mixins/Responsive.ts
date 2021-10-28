@@ -1,8 +1,9 @@
 import MixinAssets from "./Assets";
 import MixinQueues from "./Queues";
 import RenderDataInterface from "../interface/RenderDataInterface";
+import MixinInterface from "../interface/MixinInterface";
 
-export default {
+const mixin:MixinInterface = {
     name: 'responsive',
 
     dependencies: {
@@ -147,3 +148,5 @@ export default {
         },
     },
 };
+
+export default mixin;

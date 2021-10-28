@@ -1,9 +1,9 @@
 import App from "./App";
 
 export default class {
-    public classContext: 'page'
-    private readonly isLayoutPage: boolean;
-    private readonly app: App;
+    public static classContext: 'page'
+    protected readonly isLayoutPage: boolean;
+    protected readonly app: App;
 
     constructor(app, pageRenderData) {
         this.app = app;

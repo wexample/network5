@@ -28,7 +28,6 @@ const mixin: MixinInterface = {
             create(data: any): Page {
                 let classDefinition = this.getClassDefinition(
                     'page',
-                    this.getClassPage(),
                     data.name
                 );
 

@@ -1,7 +1,8 @@
 import MixinArrays from "./Arrays";
 import Queue from "../class/Queue";
+import MixinInterface from "../interface/MixinInterface";
 
-export default {
+const mixin:MixinInterface = {
     name: 'queues',
 
     dependencies: {
@@ -64,3 +65,5 @@ export default {
         },
     },
 };
+
+export default mixin;
