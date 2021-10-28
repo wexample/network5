@@ -3,7 +3,6 @@
 namespace App\Wex\BaseBundle\Twig;
 
 use App\Wex\BaseBundle\Translation\Translator;
-use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class TranslationExtension extends AbstractExtension

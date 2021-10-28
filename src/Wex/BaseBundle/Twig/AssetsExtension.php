@@ -8,7 +8,6 @@ use function array_merge_recursive;
 use Doctrine\DBAL\Types\Types;
 use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class AssetsExtension extends AbstractExtension

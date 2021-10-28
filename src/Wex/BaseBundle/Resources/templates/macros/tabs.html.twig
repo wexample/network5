@@ -7,5 +7,8 @@
 {% endmacro %}
 
 {% macro tab_to_page(route, routeParameters = {}) %}
-    <a href="{{ url(route, routeParameters) }}" class="tab">{{ (translation_build_domain_from_path(template_build_path_from_route(route)) ~ '::page_title') | trans }}</a>
+    {{ render_tag('a', {
+        class: 'tab tab-internal ' ~ (route_is_current(route, routeParameters) ? 'active' : ''),
+        href: url(route, routeParameters),
+    }, ((translation_build_domain_from_path(template_build_path_from_route(route)) ~ '::page_title') | trans)) }}
 {% endmacro %}

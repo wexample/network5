@@ -5,7 +5,6 @@ namespace App\Wex\BaseBundle\Twig;
 use App\Wex\BaseBundle\Rendering\AdaptiveResponse;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class AdaptiveResponseExtension extends AbstractExtension
