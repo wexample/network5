@@ -64,9 +64,7 @@ const bundle: AssetBundleInterface = {
             let list = [];
 
             layoutData.assets.all[type].map((asset) => list.push(asset.path));
-            layoutData.assets.responsive[type].map((asset) => list.push(asset.path));
             layoutData.page.assets.all[type].map((asset) => list.push(asset.path));
-            layoutData.page.assets.responsive[type].map((asset) => list.push(asset.path));
 
             this.refreshLoadedAssetsTypeList(`${type}-available`, list);
         }
