@@ -1,6 +1,9 @@
-# Network5
+# Responsite
 
-An administration interface using on Symfony / VueJS and Material Design.
+A Symfony based system to generate lightweight web pages.
+
+- Live demo / Contact page : https://respon.site
+- Online documentation : https://responsite.wexample.com
 
 ## What is in this package ?
 
