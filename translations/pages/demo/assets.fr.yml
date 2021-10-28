@@ -18,5 +18,6 @@ breakpoints:
 
 resources:
    title: Ressources
-   body_js: Ci-dessous se trouve la liste des assets actuellement utilisés par la page.
+   body_js: Voici la liste des assets actuellement utilisés par la page.
    body_no_js: La liste des ressources ne se met dynamiquement à jour que lorsque JavaScript est activé. Vous pouvez retrouver la liste directement dans le code source de la page.
+   body_available: Voici la liste complète de tous les assets disponibles. Il seront chargés si besoin en fonction du contexte.

@@ -111,8 +111,8 @@ class AssetsExtension extends AbstractExtension
     ])]
     public function buildRenderData(string $context): array
     {
-        $all = [];
-        $responsive = [];
+        $all = self::ASSETS_DEFAULT_EMPTY;
+        $responsive = self::ASSETS_DEFAULT_EMPTY;
 
         foreach ($this->assets as $type => $group)
         {

@@ -63,11 +63,9 @@ const mixin:MixinInterface = {
 
             forEachAssetInCollection(assetsCollection: AssetsCollectionInterface, callback) {
                 Object.entries(assetsCollection)
-                    .forEach((data) => {
-                        data[1].forEach((asset) => {
-                            callback(asset, data[0]);
-                        });
-                    });
+                    .forEach((data) =>
+                        data[1].map((asset) => callback(asset, data[0]))
+                    );
             },
 
             appendAssets(assetsCollection) {

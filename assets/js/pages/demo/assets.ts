@@ -32,8 +32,8 @@ const bundle: AssetBundleInterface = {
 
         refreshLoadedAssetsList() {
             let list;
-            list = [];
 
+            list = [];
             // Base loaded assets
             document
                 .querySelectorAll('link[rel=stylesheet]')
@@ -54,6 +54,21 @@ const bundle: AssetBundleInterface = {
                     }
                 });
             this.refreshLoadedAssetsTypeList('js', list);
+
+            this.refreshAvailableAssets('css');
+            this.refreshAvailableAssets('js');
+        }
+
+        protected refreshAvailableAssets(type) {
+            let layoutData = this.app.registry.layoutData;
+            let list = [];
+
+            layoutData.assets.all[type].map((asset) => list.push(asset.path));
+            layoutData.assets.responsive[type].map((asset) => list.push(asset.path));
+            layoutData.page.assets.all[type].map((asset) => list.push(asset.path));
+            layoutData.page.assets.responsive[type].map((asset) => list.push(asset.path));
+
+            this.refreshLoadedAssetsTypeList(`${type}-available`, list);
         }
 
         refreshLoadedAssetsTypeList(type: string, list: string[]) {
@@ -144,7 +159,6 @@ const bundle: AssetBundleInterface = {
                 });
 
             setTimeout(() => {
-
                 test.assertEquals(
                     counter,
                     7,

@@ -41,5 +41,16 @@
                 <ul id="loaded-assets-list-js"></ul>
             </div>
         </div>
+        <div class="block theme-dark">
+            {{ '@page::resources.body_available' | trans | raw }}
+        </div>
+        <div class="blocks">
+            <div class="block">
+                <ul id="loaded-assets-list-css-available"></ul>
+            </div>
+            <div class="block">
+                <ul id="loaded-assets-list-js-available"></ul>
+            </div>
+        </div>
     {% endif %}
 {%- endblock -%}
