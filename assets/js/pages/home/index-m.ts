@@ -1,10 +1,10 @@
-import PageResponsiveBreakpoint from "../../../../src/Wex/BaseBundle/Resources/js/class/PageResponsiveBreakpoint";
+import PageResponsiveDisplay from "../../../../src/Wex/BaseBundle/Resources/js/class/PageResponsiveDisplay";
 import AssetBundleInterface from "../../../../src/Wex/BaseBundle/Resources/js/interface/AssetBundleInterface";
 
 const bundle: AssetBundleInterface = {
     classContext: 'page',
 
-    definition: class extends PageResponsiveBreakpoint {
+    definition: class extends PageResponsiveDisplay {
         onResponsiveEnter() {
             console.log('index m init');
         }
