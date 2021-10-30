@@ -1,13 +1,16 @@
 import MixinAssets from "./Assets";
+import MixinEvents from "./Events";
 import MixinQueues from "./Queues";
-import RenderDataInterface from "../interface/RenderDataInterface";
 import MixinInterface from "../interface/MixinInterface";
+import AssetsCollectionInterface from "../interface/AssetsCollectionInterface";
+import Queue from "../class/Queue";
 
 const mixin: MixinInterface = {
     name: 'responsive',
 
     dependencies: {
         MixinAssets,
+        MixinEvents,
         MixinQueues,
     },
 
@@ -15,12 +18,16 @@ const mixin: MixinInterface = {
         app: {
             loadRenderData(data, registry, next) {
                 if (registry.MixinAssets === 'complete' && registry.MixinQueues === 'complete') {
-                    window.addEventListener(
-                        'resize',
-                        () => this.responsive.updateResponsive()
-                    );
+                    let responsiveMixin = this.getMixin('responsive');
 
-                    this.responsive.updateResponsive(next);
+                    responsiveMixin.updateResponsive(() => {
+                        window.addEventListener(
+                            'resize',
+                            () => responsiveMixin.updateResponsive()
+                        );
+
+                        next();
+                    });
 
                     return 'stop';
                 }
@@ -32,48 +39,60 @@ const mixin: MixinInterface = {
 
     methods: {
         responsiveSizeCurrent: null,
+        responsiveSizePrevious: null,
 
         app: {
             updateResponsive(complete?: Function) {
-                this.responsive.updateResponsiveLayoutClass();
+                let responsiveMixin = this.getMixin('responsive');
+                let current = responsiveMixin.detectSize();
 
-                // Update layout level assets.
-                this.responsive.updateResponsiveAssets(
-                    this.registry.layoutData,
-                    () => {
-                        // Update page level assets.
-                        this.responsive.updateResponsiveAssets(
-                            this.registry.layoutData.page,
-                            complete
-                        );
-                    }
-                );
+                responsiveMixin.responsiveSizePrevious = responsiveMixin.responsiveSizeCurrent;
+
+                if (current !== responsiveMixin.responsiveSizePrevious) {
+                    responsiveMixin.responsiveSizeCurrent = current;
+
+                    let assetsMixin = this.getMixin('assets');
+                    assetsMixin.queue.reset()
+
+                    // Update layout level assets.
+                    responsiveMixin.updateResponsiveAssets(
+                        this.registry.layoutData.assets.responsive,
+                        () => {
+                            // Update page level assets.
+                            responsiveMixin.updateResponsiveAssets(
+                                this.registry.layoutData.page.assets.responsive,
+                                () => {
+                                    // Now change page class.
+                                    responsiveMixin.updateResponsiveLayoutClass();
+
+                                    this.getMixin('events')
+                                        .trigger('responsive-change-size', {
+                                            current: current,
+                                            previous: responsiveMixin.responsiveSizePrevious,
+                                        });
+
+                                    complete && complete();
+                                }
+                            );
+
+                            return Queue.EXEC_STOP;
+                        }
+                    );
+                } else {
+                    complete && complete();
+                }
             },
 
             updateResponsiveLayoutClass() {
-                let current = this.responsive.responsiveSizeCurrent;
-                let responsiveSize = this.responsive.detectSize();
+                // Remove all responsive class names.
+                let classList = document.body.classList;
 
-                if (current !== responsiveSize) {
-                    // Remove all responsive class names.
-                    let classList = document.body.classList;
-
-                    classList.remove(
-                        `responsive-${current}`
-                    );
-                    classList.add(
-                        `responsive-${responsiveSize}`
-                    );
-
-                    this.responsive.responsiveSizeCurrent = responsiveSize;
-
-                    if (this.layoutPage) {
-                        this.layoutPage.onChangeResponsiveSize(
-                            this.responsive.responsiveSizeCurrent,
-                            current
-                        );
-                    }
-                }
+                classList.remove(
+                    `responsive-${this.getMixin('responsive').responsiveSizePrevious}`
+                );
+                classList.add(
+                    `responsive-${this.getMixin('responsive').responsiveSizeCurrent}`
+                );
             },
 
             updateResponsiveAssets(assetsCollection: AssetsCollectionInterface, complete) {
@@ -105,13 +124,13 @@ const mixin: MixinInterface = {
                         });
                     });
 
-                // Load new assets.
-                let queueLoad = this.assets.appendAssets(toLoad);
-                // Remove old ones.
-                let queueUnLoad = this.assets.removeAssets(toUnload);
-
                 if (complete) {
                     if (hasChange) {
+                        // Load new assets.
+                        let queueLoad = this.assets.appendAssets(toLoad);
+                        // Remove old ones.
+                        let queueUnLoad = this.assets.removeAssets(toUnload);
+
                         this.queues.afterAllQueues(
                             [queueLoad, queueUnLoad],
                             complete

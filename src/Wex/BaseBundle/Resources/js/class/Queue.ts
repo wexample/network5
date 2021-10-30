@@ -1,11 +1,12 @@
 import App from "./App";
 
-export default class {
+export default class Queue {
     private readonly app: App;
     private callbacks: Function[] = [];
     private commands: Function[] = [];
     private readonly name: string;
     public started: boolean = false;
+    public static readonly EXEC_STOP = 'exec_stop';
 
     constructor(app: App, name: string) {
         this.app = app;
@@ -33,7 +34,7 @@ export default class {
                     let command = this.commands.shift();
                     let response = command(this);
 
-                    if (response !== false) {
+                    if (response !== Queue.EXEC_STOP) {
                         this.next();
                     }
                 } else {

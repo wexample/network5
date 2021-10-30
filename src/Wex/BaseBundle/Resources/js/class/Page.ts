@@ -1,26 +1,84 @@
 import App from "./App";
+import PageResponsiveDisplay from "./PageResponsiveDisplay";
 
 export default class {
-    public static classContext: 'page'
+    public readonly app: App;
+    protected responsiveDisplayCurrent: PageResponsiveDisplay;
+    protected readonly responsiveDisplays: any = [];
     protected readonly isLayoutPage: boolean;
-    protected readonly app: App;
+    protected readonly name: string;
+    private readonly onChangeResponsiveSizeProxy: Function;
 
-    constructor(app, pageRenderData) {
+    constructor(app, renderData) {
         this.app = app;
-        this.isLayoutPage = pageRenderData.isLayoutPage;
+        this.isLayoutPage = renderData.isLayoutPage;
+        this.name = renderData.name;
 
         if (this.isLayoutPage) {
             this.app.layoutPage = this;
         }
 
-        this.init(pageRenderData);
+        this.onChangeResponsiveSizeProxy = this.onChangeResponsiveSize.bind(this);
+
+        this.app
+            .getMixin('events')
+            .listen(
+                'responsive-change-size',
+                this.onChangeResponsiveSizeProxy
+            );
+
+        this.updateCurrentResponsiveDisplay();
+
+        this.init(renderData);
     }
 
     init(pageRenderData: any) {
         // To override...
     }
 
-    onChangeResponsiveSize(current: string, previous?: string) {
+    exit() {
         // To override...
+    }
+
+    destroy() {
+        this.app
+            .getMixin('events')
+            .forget(
+                'responsive-change-size',
+                this.onChangeResponsiveSizeProxy
+            );
+
+        this.exit();
+    }
+
+    updateCurrentResponsiveDisplay() {
+        let responsiveMixin = this.app.getMixin('responsive');
+        let previous = responsiveMixin.responsiveSizePrevious;
+        let current = responsiveMixin.responsiveSizeCurrent;
+
+        if (previous !== current) {
+            if (this.responsiveDisplays[current] === undefined) {
+                let display = this.app.getClassDefinition(
+                    'page',
+                    `${this.name}-${current}`
+                );
+
+                this.responsiveDisplays[current] = display ? (new display(this)) : null;
+            }
+
+            if (this.responsiveDisplays[previous]) {
+                this.responsiveDisplays[previous].onResponsiveExit();
+            }
+
+            if (this.responsiveDisplays[current]) {
+                this.responsiveDisplays[current].onResponsiveEnter();
+            }
+
+            this.responsiveDisplayCurrent = this.responsiveDisplays[current];
+        }
+    }
+
+    onChangeResponsiveSize() {
+        this.updateCurrentResponsiveDisplay();
     }
 }

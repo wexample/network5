@@ -12,7 +12,7 @@ const mixin: MixinInterface = {
     hooks: {
         app: {
             loadRenderData(data, registry) {
-                if (registry.MixinLocale === 'complete') {
+                if (registry.MixinResponsive === 'complete' && registry.MixinLocale === 'complete') {
                     this.pages.create(data.page);
                     return 'complete';
                 }

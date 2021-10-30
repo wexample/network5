@@ -43,7 +43,7 @@ const mixin:MixinInterface = {
                 });
 
                 if (!hasRunningQueue) {
-                    complete(originalList);
+                    this.async(() => complete(originalList));
                 }
             },
 

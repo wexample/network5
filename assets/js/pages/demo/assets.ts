@@ -15,8 +15,11 @@ const bundle: AssetBundleInterface = {
             this.refreshLoadedAssetsList();
         }
 
-        onChangeResponsiveSize(current: string, previous?: string) {
-            this.unitTest.assertTrue(typeof current === 'string', 'Responsive size is valid');
+        onChangeResponsiveSize() {
+            super.onChangeResponsiveSize();
+
+            let responsiveMixin = this.app.getMixin('responsive');
+            let current = responsiveMixin.responsiveSizeCurrent;
 
             document
                 .querySelectorAll('.display-breakpoint')
@@ -84,18 +87,18 @@ const bundle: AssetBundleInterface = {
             let test = this.unitTest;
             let queuesMixin = this.app.getMixin('queues');
             let queue = queuesMixin.create('test-queue');
-            let counter = 0;
+            let counterOne = 0;
 
             queue.add(() => {
                 test.assertTrue(queue.started, 'Queue status is started');
 
                 test.assertTrue(true);
-                counter++;
+                counterOne++;
             });
 
             queue.add(() => {
                 test.assertTrue(true);
-                counter++;
+                counterOne++;
             });
 
             queue.then(() => {
@@ -103,27 +106,28 @@ const bundle: AssetBundleInterface = {
                 test.assertTrue(queue.started, 'Queue status is started');
 
                 test.assertEquals(
-                    counter,
+                    counterOne,
                     2,
                     'All queue commands has been executed'
                 );
 
-                queue.die();
+                queue.reset();
 
                 test.assertNoTrue(queue.started, 'Queue status is stopped');
                 test.assertTrue(queue.commands.length === 0, 'Queue commands list is empty');
                 test.assertTrue(queue.callbacks.length === 0, 'Queue callbacks is empty');
 
-                counter++;
+                counterOne++;
             });
 
             queue.start();
 
             let queue2 = queuesMixin.create('test-queue');
+            let counterTwo = 0;
 
             queue2.add(() => {
                 test.assertTrue(true, 'Queue 2 is running...');
-                counter++;
+                counterTwo++;
             });
 
             queue2.start();
@@ -135,7 +139,7 @@ const bundle: AssetBundleInterface = {
                         !queue.started && !queue.started,
                         'All queues are complete'
                     );
-                    counter++;
+                    counterTwo++;
 
                     queuesMixin.afterAllQueues(
                         [queue, queue2],
@@ -144,21 +148,21 @@ const bundle: AssetBundleInterface = {
                                 !queue.started && !queue.started,
                                 'If already complete, callback is executed immediately.'
                             );
-                            counter++;
+                            counterTwo++;
 
                             queue.then(() => {
                                 test.assertTrue(
                                     !queue.started && !queue.started,
                                     'All new callbacks are executed'
                                 );
-                                counter++;
+                                counterTwo++;
                             })
                         });
                 });
 
             setTimeout(() => {
                 test.assertEquals(
-                    counter,
+                    counterOne + counterTwo,
                     7,
                     'All callbacks are executed after 1 second'
                 );

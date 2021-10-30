@@ -1,8 +1,9 @@
 import MixinQueues from "./Queues";
 import AssetsCollectionInterface from "../interface/AssetsCollectionInterface";
 import MixinInterface from "../interface/MixinInterface";
+import Queue from "../class/Queue";
 
-const mixin:MixinInterface = {
+const mixin: MixinInterface = {
     name: 'assets',
 
     dependencies: {
@@ -31,7 +32,7 @@ const mixin:MixinInterface = {
             jsAssetsPending: {},
 
             appendAsset(asset, callback) {
-                let queue = this.assets.queue;
+                let queue: Queue = this.assets.queue;
 
                 // Avoid currently and already loaded.
                 if (!asset.active) {
@@ -42,11 +43,14 @@ const mixin:MixinInterface = {
 
                     queue.add(() => {
                         if (asset.type === 'js') {
-                            this.assets.jsAssetsPending[asset.id] = asset;
                             asset.el = this.assets.addScript(asset.path);
 
-                            // Stops queue.
-                            return false;
+                            // Browsers does not load twice the JS file content.
+                            if (!asset.loadedJs) {
+                                this.assets.jsAssetsPending[asset.id] = asset;
+                                // Stops queue unit class has been loaded.
+                                return Queue.EXEC_STOP;
+                            }
                         } else {
                             asset.el = this.assets.addStyle(asset.path);
                             this.assets.setAssetLoaded(asset);
@@ -107,6 +111,7 @@ const mixin:MixinInterface = {
 
             setAssetLoaded(asset) {
                 asset.loaded = true;
+                asset.loadedJs = true;
                 asset.queue = null;
             },
 
