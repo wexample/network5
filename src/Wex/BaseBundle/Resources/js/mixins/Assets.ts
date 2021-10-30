@@ -106,15 +106,17 @@ const mixin:MixinInterface = {
             },
 
             setAssetLoaded(asset) {
-                let queue = asset.queue;
-
                 asset.loaded = true;
                 asset.queue = null;
-                queue.next();
             },
 
             jsPendingLoaded(id) {
-                this.assets.setAssetLoaded(this.assets.jsAssetsPending[id]);
+                let asset = this.assets.jsAssetsPending[id];
+                let queue = asset.queue;
+
+                this.assets.setAssetLoaded(asset);
+
+                queue.next();
                 delete this.assets.jsAssetsPending[id];
             },
 
