@@ -4,12 +4,39 @@
 
 {%- block page_content_body -%}
     <h2>{{ '@page::domains.title' | trans }}</h2>
-    <div class="block">
+    <div class="block theme-dark">
         <code>
             // {{ '@page::domains.context.layout' | trans }}<br>
             {{ '{{ \'@layout::meta.description\' | trans }}' }}<br>
             // {{ '@page::domains.context.page' | trans }}<br>
             {{ '{{ \'@page::page_title\' | trans }}' }}<br>
+        </code>
+    </div>
+    <h2>{{ '@page::includes.title' | trans }}</h2>
+    <div class="block">
+        {{ '@page::includes.body' | trans | raw }}
+    </div>
+    <div class="block theme-dark">
+        <code>
+            // translation-file-one.en.yml<br>
+            example_key:<br>
+            &nbsp;&nbsp;example_sub_key: Tranlsation string<br>
+            <br>---<br><br>
+            // translation-file-two.en.yml<br>
+            example_key:<br>
+            &nbsp;&nbsp;// Using this key resolves to the first file<br>
+            &nbsp;&nbsp;// using the same key "example_key.example_sub_key"<br>
+            &nbsp;&nbsp;example_sub_key: '@translation-file-one::%' // <----------- Inclusion here <br>
+        </code>
+    </div>
+    <h2>{{ '@page::extends.title' | trans }}</h2>
+    <div class="block">
+        {{ '@page::extends.body' | trans | raw }}
+    </div>
+    <div class="block theme-dark">
+        <code>
+            // translation-file-two.en.yml<br>
+            ~extends: '@translation-file-one'<br>
         </code>
     </div>
     <h2>{{ '@page::cache.title' | trans }}</h2>
