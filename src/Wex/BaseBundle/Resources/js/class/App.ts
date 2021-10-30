@@ -61,10 +61,14 @@ export default class {
         // Document has been parsed.
         // Allows running after loaded event.
         if (['complete', 'loaded', 'interactive'].indexOf(readyState) !== -1) {
-            setTimeout(run);
+            this.async(run);
         } else {
             doc.addEventListener('DOMContentLoaded', run);
         }
+    }
+
+    async(callback) {
+        setTimeout(callback);
     }
 
     ready(callback) {
@@ -88,7 +92,7 @@ export default class {
         let method = args ? 'apply' : 'call';
         let callback = null;
 
-        while(callback = callbacksArray.shift()) {
+        while (callback = callbacksArray.shift()) {
             if (!callback) {
                 throw "Trying to execute undefined callback.";
             }
@@ -189,11 +193,12 @@ export default class {
      * @param registryGroup
      * @param classRegistryName
      */
-    getClassDefinition(registryGroup:string, classRegistryName:string) {
-        return this
+    getClassDefinition(registryGroup: string, classRegistryName: string) {
+        let bundle = this
             .registry[registryGroup]
-            .classes[classRegistryName]
-            .definition;
+            .classes[classRegistryName];
+
+        return bundle ? bundle.definition : null;
     }
 
     addLib(name, object) {
