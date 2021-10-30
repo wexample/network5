@@ -2,6 +2,8 @@
 
 namespace App\Wex\BaseBundle\Helper;
 
+use function preg_quote;
+use function preg_replace;
 use function Symfony\Component\String\u;
 
 class TextHelper
@@ -13,6 +15,7 @@ class TextHelper
             '', $string
         );
     }
+
     public static function removeSuffix(string $string, string $suffix): string
     {
         return preg_replace(

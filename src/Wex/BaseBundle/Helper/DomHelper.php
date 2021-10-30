@@ -2,6 +2,8 @@
 
 namespace App\Wex\BaseBundle\Helper;
 
+use function implode;
+
 class DomHelper
 {
     public static function buildTagAttributes(array $attributes): string

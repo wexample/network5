@@ -7,6 +7,9 @@ use App\Wex\BaseBundle\Helper\ClassHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\TextHelper;
 use Symfony\Component\Routing\RouterInterface;
+use function array_map;
+use function explode;
+use function implode;
 
 class TemplateService
 {
