@@ -1,1 +1,12 @@
 page_title: Traductions
+
+cache:
+  title: Mise en cache
+  body: Les fichiers de traductions sont résolus et mis en cache pour préserver la performance.
+
+domains:
+  body: Des raccourcis permettent d'accéder aux traduction relatives à certains contextes
+  context:
+    layout: Relatif au layout (baslises meta HTML et cadre principal de la page HTML)
+    page: Relatif a la page (corps de page / ou modale par exemple)
+  title: Domaines de traduction

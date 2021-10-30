@@ -3,5 +3,17 @@
 {%- set template_path = _self -%}
 
 {%- block page_content_body -%}
-
+    <h2>{{ '@page::domains.title' | trans }}</h2>
+    <div class="block">
+        <code>
+            // {{ '@page::domains.context.layout' | trans }}<br>
+            {{ '{{ \'@layout::meta.description\' | trans }}' }}<br>
+            // {{ '@page::domains.context.page' | trans }}<br>
+            {{ '{{ \'@page::page_title\' | trans }}' }}<br>
+        </code>
+    </div>
+    <h2>{{ '@page::cache.title' | trans }}</h2>
+    <div class="block">
+        {{ '@page::cache.body' | trans }}
+    </div>
 {%- endblock -%}
