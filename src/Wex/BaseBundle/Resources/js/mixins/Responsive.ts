@@ -3,7 +3,7 @@ import MixinQueues from "./Queues";
 import RenderDataInterface from "../interface/RenderDataInterface";
 import MixinInterface from "../interface/MixinInterface";
 
-const mixin:MixinInterface = {
+const mixin: MixinInterface = {
     name: 'responsive',
 
     dependencies: {
@@ -76,13 +76,13 @@ const mixin:MixinInterface = {
                 }
             },
 
-            updateResponsiveAssets(renderData: RenderDataInterface, complete) {
-                let responsiveSize = this.responsive.detectSize();
+            updateResponsiveAssets(assetsCollection: AssetsCollectionInterface, complete) {
+                let responsiveSize = this.getMixin('responsive').detectSize();
                 let toLoad = {};
                 let toUnload = {};
                 let hasChange = false;
 
-                Object.entries(renderData.assets.responsive)
+                Object.entries(assetsCollection)
                     .forEach((data) => {
                         let assets = data[1];
                         let type = data[0];
@@ -117,13 +117,13 @@ const mixin:MixinInterface = {
                             complete
                         );
                     } else {
-                        complete();
+                        this.async(complete);
                     }
                 }
             },
 
             breakpointSupports(letter) {
-                return this.responsive.detectSupported().hasOwnProperty(letter);
+                return this.getMixin('responsive').detectSupported().hasOwnProperty(letter);
             },
 
             detectSupported() {
@@ -138,7 +138,7 @@ const mixin:MixinInterface = {
             },
 
             detectSize() {
-                return Object.entries(this.responsive.detectSupported()).reduce(
+                return Object.entries(this.getMixin('responsive').detectSupported()).reduce(
                     (prev, current) => {
                         // Return item that is the greater one.
                         return current[1] > prev[1] ? current : prev;
