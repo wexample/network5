@@ -67,8 +67,8 @@ export default class {
         }
     }
 
-    async(callback) {
-        setTimeout(callback);
+    async async(callback) {
+        callback();
     }
 
     ready(callback) {
