@@ -86,18 +86,21 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         private array $parameters,
         KernelInterface $kernel,
         CacheInterface $cache
-    )
-    {
-        if ($cache->hasItem(self::CACHE_KEY_TRANSLATIONS_RESOLVED)) {
+    ) {
+        if ($cache->hasItem(self::CACHE_KEY_TRANSLATIONS_RESOLVED))
+        {
             $catalogue = $this->getCatalogue();
             /** @var CacheItem $item */
             $item = $cache->getItem(self::CACHE_KEY_TRANSLATIONS_RESOLVED);
             $all = $item->get();
 
-            foreach ($all as $domain => $value) {
+            foreach ($all as $domain => $value)
+            {
                 $catalogue->add($value, $domain);
             }
-        } else {
+        }
+        else
+        {
             $pathProject = $kernel->getProjectDir();
 
             $cache->get(
@@ -111,8 +114,10 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
                         $pathProject.'/src/Wex/BaseBundle/Resources/translations/',
                     ];
 
-                    foreach ($pathTranslationsAll as $pathTranslations) {
-                        if (file_exists($pathTranslations)) {
+                    foreach ($pathTranslationsAll as $pathTranslations)
+                    {
+                        if (file_exists($pathTranslations))
+                        {
                             $this->addTranslationDirectory($pathTranslations);
                         }
                     }
@@ -139,10 +144,12 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
             $pathTranslations
         );
 
-        foreach (new RecursiveIteratorIterator($it) as $file) {
+        foreach (new RecursiveIteratorIterator($it) as $file)
+        {
             $info = (object) pathinfo($file);
 
-            if (FileHelper::FILE_EXTENSION_YML === $info->extension) {
+            if (FileHelper::FILE_EXTENSION_YML === $info->extension)
+            {
                 $exp = explode(FileHelper::EXTENSION_SEPARATOR, $info->filename);
                 $subDir = substr(
                     $info->dirname,
@@ -152,7 +159,8 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
                 $domain = [];
                 // There is a subdirectory
                 // (allow translation files at dir root)
-                if (VariableHelper::EMPTY_STRING !== $subDir) {
+                if (VariableHelper::EMPTY_STRING !== $subDir)
+                {
                     $domain = explode(
                         '/',
                         $subDir
@@ -185,7 +193,8 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         $catalogue = $this->translator->getCatalogue();
         $all = $catalogue->all();
 
-        foreach ($all as $domain => $translations) {
+        foreach ($all as $domain => $translations)
+        {
             $this->resolveCatalogTranslations($translations, $domain);
         }
     }
@@ -196,12 +205,12 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
     public function resolveCatalogTranslations(
         array $translations,
         string $domain
-    ): array
-    {
+    ): array {
         $translations = $this->resolveExtend($translations);
         $resolved = [];
 
-        foreach ($translations as $key => $value) {
+        foreach ($translations as $key => $value)
+        {
             $resolved += $this->resolveCatalogItem(
                 $key,
                 $value,
@@ -220,11 +229,13 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         $catalogue = $this->translator->getCatalogue();
         $all = $catalogue->all();
 
-        if (isset($translations[static::FILE_EXTENDS])) {
+        if (isset($translations[static::FILE_EXTENDS]))
+        {
             $extendsDomain = $this->trimDomain($translations[static::FILE_EXTENDS]);
             unset($translations[static::FILE_EXTENDS]);
 
-            if (isset($all[$extendsDomain])) {
+            if (isset($all[$extendsDomain]))
+            {
                 return $translations + $this->resolveExtend($all[$extendsDomain]);
             }
 
@@ -246,31 +257,35 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         string $key,
         string $value,
         string $domain
-    ): array
-    {
+    ): array {
         $catalogue = $this->translator->getCatalogue();
         $all = $catalogue->all();
         $output = [];
 
-        if (self::DOMAIN_PREFIX === $value[0]) {
+        if (self::DOMAIN_PREFIX === $value[0])
+        {
             $refDomain = $this->trimDomain($this->splitDomain($value));
             $refKey = $this->splitId($value);
             $shortNotation = self::DOMAIN_SAME_KEY_WILDCARD === $refKey;
 
-            if ($shortNotation) {
+            if ($shortNotation)
+            {
                 $refKey = $key;
             }
 
             $items = [];
 
             // Found the exact referenced key.
-            if (isset($all[$refDomain][$refKey])) {
+            if (isset($all[$refDomain][$refKey]))
+            {
                 $items = $this->resolveCatalogItem(
                     $refKey,
                     $all[$refDomain][$refKey],
                     $refDomain
                 );
-            } else {
+            }
+            else
+            {
                 $subTranslations = array_filter(
                     $all[$refDomain],
                     function ($key) use ($refKey): bool {
@@ -285,11 +300,13 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
                 );
             }
 
-            foreach ($items as $outputKey => $outputValue) {
+            foreach ($items as $outputKey => $outputValue)
+            {
                 $keyDiff = $key;
                 $prefix = $refKey.FileHelper::EXTENSION_SEPARATOR;
 
-                if (str_starts_with($outputKey, $prefix)) {
+                if (str_starts_with($outputKey, $prefix))
+                {
                     $keyDiff = $key.FileHelper::EXTENSION_SEPARATOR
                         .substr(
                             $outputKey,
@@ -300,11 +317,14 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
                 $output[$keyDiff]
                     = $outputValue;
             }
-        } else {
+        }
+        else
+        {
             $output[$key] = $value;
         }
 
-        foreach ($output as $outputKey => $outputValue) {
+        foreach ($output as $outputKey => $outputValue)
+        {
             $catalogue->set(
                 $outputKey,
                 $outputValue,
@@ -317,7 +337,8 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
 
     public function splitDomain(?string $id): ?string
     {
-        if (strpos($id, self::DOMAIN_SEPARATOR)) {
+        if (strpos($id, self::DOMAIN_SEPARATOR))
+        {
             return current(explode(self::DOMAIN_SEPARATOR, $id));
         }
 
@@ -326,7 +347,8 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
 
     public function splitId(string $id): ?string
     {
-        if (strpos($id, self::DOMAIN_SEPARATOR)) {
+        if (strpos($id, self::DOMAIN_SEPARATOR))
+        {
             $exp = explode(self::DOMAIN_SEPARATOR, $id);
 
             return end($exp);
@@ -341,12 +363,13 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         string $separator = '',
         ?string $domain = null,
         ?string $locale = null
-    ): string
-    {
-        if (is_array($id)) {
+    ): string {
+        if (is_array($id))
+        {
             $output = [];
 
-            foreach ($id as $idPart) {
+            foreach ($id as $idPart)
+            {
                 $output[] = $this->trans(
                     $idPart,
                     $parameters,
@@ -366,16 +389,17 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         array $parameters = [],
         ?string $domain = null,
         ?string $locale = null
-    ): string
-    {
+    ): string {
         $parameters = $this->updateParameters($parameters);
         $default = $id;
 
-        if (is_null($domain) && $domain = $this->splitDomain($id)) {
+        if (is_null($domain) && $domain = $this->splitDomain($id))
+        {
             $id = $this->splitId($id);
             $domain = $this->resolveDomain($domain);
 
-            if ($domain) {
+            if ($domain)
+            {
                 $default = $domain.static::DOMAIN_SEPARATOR.$id;
             }
         }
@@ -404,9 +428,11 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
 
     public function resolveDomain(string $domain): ?string
     {
-        if (str_starts_with($domain, self::DOMAIN_PREFIX)) {
+        if (str_starts_with($domain, self::DOMAIN_PREFIX))
+        {
             $domainPart = $this->trimDomain($domain);
-            if (isset($this->domainsStack[$domainPart])) {
+            if (isset($this->domainsStack[$domainPart]))
+            {
                 return $this->getDomain($domainPart);
             }
         }
@@ -436,10 +462,10 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         $info = (object) pathinfo($path);
 
         return str_replace(
-                '/',
-                FileHelper::EXTENSION_SEPARATOR,
-                $info->dirname
-            ).FileHelper::EXTENSION_SEPARATOR.
+            '/',
+            FileHelper::EXTENSION_SEPARATOR,
+            $info->dirname
+        ).FileHelper::EXTENSION_SEPARATOR.
             current(explode(FileHelper::EXTENSION_SEPARATOR, $info->basename));
     }
 
@@ -452,8 +478,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         string $name,
         $object,
         $removePrefix = ''
-    ): string
-    {
+    ): string {
         $exp = explode(
             '\\',
             substr($object::class, strlen($removePrefix))
@@ -461,7 +486,8 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
 
         $convertedParts = [];
 
-        foreach ($exp as $part) {
+        foreach ($exp as $part)
+        {
             $convertedParts[] = TextHelper::toSnake($part);
         }
 

@@ -6,5 +6,4 @@ use App\Wex\BaseBundle\Twig\AbstractExtension;
 
 class TabExtension extends AbstractExtension
 {
-
 }

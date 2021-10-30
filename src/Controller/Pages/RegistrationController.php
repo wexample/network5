@@ -26,8 +26,7 @@ class RegistrationController extends AbstractPagesController
     public function __construct(
         private EmailVerifier $emailVerifier,
         RequestStack $requestStack
-    )
-    {
+    ) {
         parent::__construct(
             $requestStack
         );
@@ -40,7 +39,8 @@ class RegistrationController extends AbstractPagesController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid())
+        {
             // encode the plain password
             $user->setPassword(
                 $passwordEncoder->encodePassword(
@@ -78,20 +78,25 @@ class RegistrationController extends AbstractPagesController
     {
         $id = $request->get('id');
 
-        if (null === $id) {
+        if (null === $id)
+        {
             return $this->redirectToRoute(self::ROUTE_APP_REGISTER);
         }
 
         $user = $userRepository->find($id);
 
-        if (null === $user) {
+        if (null === $user)
+        {
             return $this->redirectToRoute(self::ROUTE_APP_REGISTER);
         }
 
         // validate email confirmation link, sets User::isVerified=true and persists
-        try {
+        try
+        {
             $this->emailVerifier->handleEmailConfirmation($request, $user);
-        } catch (VerifyEmailExceptionInterface $verifyEmailExceptionInterface) {
+        }
+        catch (VerifyEmailExceptionInterface $verifyEmailExceptionInterface)
+        {
             $this->addFlash('verify_email_error', $verifyEmailExceptionInterface->getReason());
 
             return $this->redirectToRoute(self::ROUTE_APP_REGISTER);

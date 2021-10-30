@@ -12,7 +12,8 @@ class TextHelper
     {
         return preg_replace(
             '/^'.preg_quote($prefix, '/').'/',
-            '', $string
+            '',
+            $string
         );
     }
 
@@ -20,7 +21,8 @@ class TextHelper
     {
         return preg_replace(
             '/'.preg_quote($suffix, '/').'$/',
-            '', $string
+            '',
+            $string
         );
     }
 

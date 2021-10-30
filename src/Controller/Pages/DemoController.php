@@ -14,7 +14,8 @@ class DemoController extends AbstractPagesController
 
     #[Route(
         path: VariableHelper::DEMO.'/'.VariableHelper::ASSETS,
-        name: VariableHelper::DEMO.'_'.VariableHelper::ASSETS)
+        name: VariableHelper::DEMO.'_'.VariableHelper::ASSETS
+    )
     ]
     public function assets(): Response
     {
@@ -28,7 +29,8 @@ class DemoController extends AbstractPagesController
 
     #[Route(
         path: VariableHelper::DEMO.'/buttons',
-        name: VariableHelper::DEMO.'_buttons')
+        name: VariableHelper::DEMO.'_buttons'
+    )
     ]
     public function buttons(): Response
     {
@@ -39,7 +41,8 @@ class DemoController extends AbstractPagesController
 
     #[Route(
         path: VariableHelper::DEMO.'/'.VariableHelper::LOADING,
-        name: VariableHelper::DEMO.'_'.VariableHelper::LOADING)
+        name: VariableHelper::DEMO.'_'.VariableHelper::LOADING
+    )
     ]
     public function loading(): Response
     {

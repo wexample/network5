@@ -6,17 +6,16 @@ use App\Wex\BaseBundle\Controller\AbstractPagesController;
 use App\Wex\BaseBundle\Helper\ClassHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\TextHelper;
-use Symfony\Component\Routing\RouterInterface;
 use function array_map;
 use function explode;
 use function implode;
+use Symfony\Component\Routing\RouterInterface;
 
 class TemplateService
 {
     public function __construct(
         protected RouterInterface $router
-    )
-    {
+    ) {
     }
 
     public function getMethodClassPathFromRouteName(string $routeName): string
@@ -53,8 +52,8 @@ class TemplateService
 
         // Return joined string.
         return AbstractPagesController::RESOURCES_DIR.implode(
-                FileHelper::FOLDER_SEPARATOR,
-                $explodeController
-            );
+            FileHelper::FOLDER_SEPARATOR,
+            $explodeController
+        );
     }
 }

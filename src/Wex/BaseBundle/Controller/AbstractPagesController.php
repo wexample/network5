@@ -25,8 +25,7 @@ abstract class AbstractPagesController extends AbstractController
 
     public function __construct(
         protected RequestStack $requestStack
-    )
-    {
+    ) {
         $mainRequest = $this->requestStack->getMainRequest();
 
         $this->templateNoJs = !is_null($mainRequest->get('no_js'));
@@ -37,8 +36,7 @@ abstract class AbstractPagesController extends AbstractController
         string $view,
         array $parameters = [],
         Response $response = null
-    ): Response
-    {
+    ): Response {
         $templatePath = self::RESOURCES_DIR.$this->viewPathPrefix.$view.TemplateExtension::TEMPLATE_FILE_EXTENSION;
 
         // Add global variables for rendering.

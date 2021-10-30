@@ -34,8 +34,7 @@ class RenderExtension extends AbstractExtension
         array $attributes,
         string $body = '',
         bool $allowSingleTag = true
-    ): string
-    {
+    ): string {
         return DomHelper::buildTag(
             $tagName,
             $attributes,
@@ -46,8 +45,7 @@ class RenderExtension extends AbstractExtension
 
     public function renderTagAttributes(
         array $attributes
-    ): string
-    {
+    ): string {
         return DomHelper::buildTagAttributes(
             $attributes
         );

@@ -21,8 +21,7 @@ class TemplateExtension extends AbstractExtension
     public function __construct(
         private KernelInterface $kernel,
         private TemplateService $templateService
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array
@@ -55,8 +54,7 @@ class TemplateExtension extends AbstractExtension
     public function templateBuildLayoutData(
         Environment $env,
         string $pageTemplateName
-    ): array
-    {
+    ): array {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -80,8 +78,7 @@ class TemplateExtension extends AbstractExtension
         Environment $env,
         string $pageName,
         ?string $body = null
-    ): array
-    {
+    ): array {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -106,8 +103,7 @@ class TemplateExtension extends AbstractExtension
     public function templateBuildRenderData(
         Environment $env,
         string $pageTemplateName = null
-    ): array
-    {
+    ): array {
         return [
             VariableHelper::PAGE => $pageTemplateName
                 ? $this->templateBuildPageData(
@@ -123,7 +119,8 @@ class TemplateExtension extends AbstractExtension
         $ext = TemplateExtension::TEMPLATE_FILE_EXTENSION;
 
         // Path have extension.
-        if (str_ends_with($templatePath, $ext)) {
+        if (str_ends_with($templatePath, $ext))
+        {
             return substr(
                 $templatePath,
                 0,

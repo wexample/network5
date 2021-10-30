@@ -9,8 +9,7 @@ class TranslationExtension extends AbstractExtension
 {
     public function __construct(
         public Translator $translator
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array
@@ -29,7 +28,7 @@ class TranslationExtension extends AbstractExtension
                     $this,
                     'translationSetDomainFromPath',
                 ]
-            )
+            ),
         ];
     }
 

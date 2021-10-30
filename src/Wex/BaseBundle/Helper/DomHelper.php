@@ -11,7 +11,8 @@ class DomHelper
         $output = [];
         $attributes = $attributes ?: [];
 
-        foreach ($attributes as $key => $value) {
+        foreach ($attributes as $key => $value)
+        {
             $output[] = $key.'="'.$value.'"';
         }
 
@@ -23,16 +24,18 @@ class DomHelper
         array $attributes,
         string $body = '',
         bool $allowSingleTag = true
-    ): string
-    {
+    ): string {
         $output = '<'.$tagName.' '.static::buildTagAttributes($attributes);
 
         $outputAttributes = static::buildTagAttributes($attributes);
-        $output .= $outputAttributes ? ' ' . $outputAttributes : '';
+        $output .= $outputAttributes ? ' '.$outputAttributes : '';
 
-        if ($allowSingleTag && !$body) {
+        if ($allowSingleTag && !$body)
+        {
             $output .= '/>';
-        } else {
+        }
+        else
+        {
             $output .= '>'.$body.'</'.$tagName.'>';
         }
 

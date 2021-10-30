@@ -13,11 +13,11 @@ class NavigationExtension extends AbstractExtension
     public function __construct(
         RequestStack $requestStack,
         public UrlGeneratorInterface $urlGenerator
-    )
-    {
+    ) {
         $request = $requestStack->getCurrentRequest();
 
-        if ($request) {
+        if ($request)
+        {
             $this->currentPath = $request->getPathInfo();
         }
     }
@@ -35,8 +35,8 @@ class NavigationExtension extends AbstractExtension
     public function routeIsCurrent(string $route, array $params): bool
     {
         return $this->urlGenerator->generate(
-                $route,
-                $params
-            ) === $this->currentPath;
+            $route,
+            $params
+        ) === $this->currentPath;
     }
 }
