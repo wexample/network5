@@ -28,18 +28,6 @@ class DemoController extends AbstractPagesController
     }
 
     #[Route(
-        path: VariableHelper::DEMO.'/buttons',
-        name: VariableHelper::DEMO.'_buttons'
-    )
-    ]
-    public function buttons(): Response
-    {
-        return $this->renderPage(
-            'buttons'
-        );
-    }
-
-    #[Route(
         path: VariableHelper::DEMO.'/'.VariableHelper::LOADING,
         name: VariableHelper::DEMO.'_'.VariableHelper::LOADING
     )
@@ -48,6 +36,18 @@ class DemoController extends AbstractPagesController
     {
         return $this->renderPage(
             VariableHelper::LOADING
+        );
+    }
+
+    #[Route(
+        path: VariableHelper::DEMO.'/'.VariableHelper::TRANSLATIONS,
+        name: VariableHelper::DEMO.'_'.VariableHelper::TRANSLATIONS
+    )
+    ]
+    public function translations(): Response
+    {
+        return $this->renderPage(
+            VariableHelper::TRANSLATIONS
         );
     }
 }

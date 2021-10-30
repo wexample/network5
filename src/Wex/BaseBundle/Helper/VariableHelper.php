@@ -59,6 +59,8 @@ class VariableHelper
     public const RESPONSIVE = 'responsive';
 
     public const TO = 'to';
+    
+    public const TRANSLATIONS = 'translations';
 
     public const USER = 'user';
 

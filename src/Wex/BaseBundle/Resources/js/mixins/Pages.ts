@@ -31,6 +31,10 @@ const mixin: MixinInterface = {
                     data.name
                 );
 
+                if (!classDefinition) {
+                    classDefinition = Page;
+                }
+
                 return new classDefinition(this, data);
             },
         },
