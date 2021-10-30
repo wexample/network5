@@ -1,11 +1,6 @@
 import Tail from "./Tail";
 import FrontElement from "../FrontElement/FrontElement";
 
-window.log = (m) => {
-  // Temp
-  console.log(m);
-}
-
 export default class extends FrontElement {
   constructor() {
     super();
