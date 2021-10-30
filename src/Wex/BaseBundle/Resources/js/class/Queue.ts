@@ -5,7 +5,7 @@ export default class {
     private callbacks: Function[] = [];
     private commands: Function[] = [];
     private readonly name: string;
-    private started: boolean;
+    public started: boolean = false;
 
     constructor(app: App, name: string) {
         this.app = app;
@@ -18,7 +18,7 @@ export default class {
         return this;
     }
 
-    die() {
+    reset() {
         this.callbacks = [];
         this.commands = [];
         this.started = false;
@@ -27,13 +27,19 @@ export default class {
     }
 
     next() {
-        if (this.commands.length) {
-            let response = (this.commands.shift())(this);
-            if (response !== false) {
-                this.next();
-            }
-        } else {
-            this.complete();
+        if (this.started) {
+            this.app.async(() => {
+                if (this.commands.length) {
+                    let command = this.commands.shift();
+                    let response = command(this);
+
+                    if (response !== false) {
+                        this.next();
+                    }
+                } else {
+                    this.complete();
+                }
+            });
         }
 
         return this;
@@ -42,7 +48,8 @@ export default class {
     start() {
         if (!this.started) {
             this.started = true;
-            setTimeout(() => this.next());
+
+            this.app.async(() => this.next());
         }
 
         return this;
@@ -52,22 +59,27 @@ export default class {
         if (!this.commands.length
             && !this.callbacks.length
         ) {
-            setTimeout(() => callback());
+            this.app.async(callback);
         } else {
             this.callbacks.push(callback);
         }
     }
 
     private complete(after?: Function) {
-        if (this.started) {
-            delete this.app.getMixin('queues').queues[this.name];
+        if (this.started && !this.commands.length) {
+            this.then(() => {
+                delete this.app.getMixin('queues').queues[this.name];
+
+                this.reset();
+
+                after && after();
+            });
 
             this.app.callbacks(this.callbacks);
+
+        } else if (after) {
+            this.then(after);
         }
-
-        this.die();
-
-        after && after();
 
         return this;
     }
