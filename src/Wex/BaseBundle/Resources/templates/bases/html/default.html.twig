@@ -31,7 +31,7 @@
             {{ macro_assets.render_available_css(layout_no_js) }}
         {%- endblock %}
         {% if not layout_no_js %}
-            <script>
+            <script nonce="layout-init">
                 "use strict";
 
                 // Use old school fashioned javascript notation to improve compatibility.
@@ -81,7 +81,7 @@
             </style>
         {% endif %}
         {%- block meta -%}
-            <meta name="viewport" content="width=device-width, user-scalable=no">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
             <meta name="description" content="{{ (meta_description|default('@layout::meta.description')) | trans }}">
         {%- endblock -%}
     </head>
@@ -89,7 +89,7 @@
     <div id="layout" class="layout-loading {{ layout_class|default('') }}">
         {% if not layout_no_js %}
             {#- If javascript fails to complete, force removing loading state after 2 seconds.        -#}
-            <script>
+            <script nonce="layout-loading">
                 var elLayout = document.getElementById('layout');
                 elLayout.classList.add('layout-loading');
 
@@ -107,7 +107,7 @@
         {% if not layout_no_js %}
             <script type="text/javascript" src="{{ asset('build/runtime.js') }}"></script>
             {{ macro_assets.render_available_js() }}
-            <script type="text/javascript">
+            <script type="text/javascript" nonce="layout-data">
                 window.appRegistry.layoutData = {{ template_build_layout_data(template_name) | json_encode(constant('JSON_PRETTY_PRINT')) | raw }};
             </script>
         {%- endif -%}

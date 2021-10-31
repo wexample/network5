@@ -7,7 +7,7 @@ infos:
 breakpoints:
   title: Breakpoints / Points d'arrêt
   body:
-    Nous nous basons sur les points d'arrêts définis par le framework <a href="https://getbootstrap.com/docs/5.0/layout/breakpoints/#available-breakpoints" target="_blank">Bootstrap</a>, définissant une liste précise de dimensions d'écrans.
+    Nous nous basons sur les points d'arrêts définis par le framework <a href="https://getbootstrap.com/docs/5.0/layout/breakpoints/#available-breakpoints" rel="noopener" target="_blank">Bootstrap</a>, définissant une liste précise de dimensions d'écrans.
     Chaque type d'écran déclenche le chargement des fichiers CSS / JS spécifiques correspondants.
     <br><br>L'exemple ci-contre montre un changement de couleur suite au chargement de la feuille de style correspondant a la taille d'écran actuelle. Vous pouvez faire varier la sélection en redimensionnant votre écran.
   body_js:

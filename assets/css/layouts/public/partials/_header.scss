@@ -4,7 +4,11 @@
   padding: 1.6rem 2rem;
 
   .logo {
-    max-width: 6rem;
-    margin: 0 auto;
+    margin: 0 auto 2rem;
+
+    svg {
+      width: 100%;
+      max-width: 6rem;
+    }
   }
 }

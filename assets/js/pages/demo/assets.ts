@@ -15,8 +15,8 @@ const bundle: AssetBundleInterface = {
             this.refreshLoadedAssetsList();
         }
 
-        onChangeResponsiveSize() {
-            super.onChangeResponsiveSize();
+        updateCurrentResponsiveDisplay() {
+            super.updateCurrentResponsiveDisplay();
 
             let responsiveMixin = this.app.getService('responsive');
             let current = responsiveMixin.responsiveSizeCurrent;
