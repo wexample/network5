@@ -5,6 +5,7 @@ namespace App\Wex\BaseBundle\Twig;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Service\TemplateService;
+use App\Wex\BaseBundle\Translation\Translator;
 use JetBrains\PhpStorm\ArrayShape;
 use function array_merge_recursive;
 use function str_ends_with;
@@ -117,19 +118,30 @@ class TemplateExtension extends AbstractExtension
     }
 
     #[ArrayShape([
-        VariableHelper::PAGE => "array|null"
+        VariableHelper::PAGE => "array|null",
+        VariableHelper::TRANSLATIONS => "array"
     ])]
     public function templateBuildRenderData(
         Environment $env,
         string $pageTemplateName = null
     ): array
     {
+        /** @var TranslationExtension $translationExtension */
+        $translationExtension = $env->getExtension(
+            TranslationExtension::class
+        );
+
         return [
             VariableHelper::PAGE => $pageTemplateName
                 ? $this->templateBuildPageData(
                     $env,
                     $pageTemplateName
                 ) : null,
+            // TODO Layout data only
+            VariableHelper::TRANSLATIONS => $translationExtension->buildRenderData(),
+            VariableHelper::TRANSLATIONS
+            .ucfirst(VariableHelper::DOMAIN)
+            .ucfirst(VariableHelper::SEPARATOR) => Translator::DOMAIN_SEPARATOR,
         ];
     }
 

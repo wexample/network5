@@ -44,7 +44,6 @@ class TranslationExtension extends AbstractExtension
     {
         return [
             VariableHelper::DOMAIN => $this->translator->getDomain(Translator::DOMAIN_TYPE_PAGE),
-            VariableHelper::DOMAIN.ucfirst(VariableHelper::SEPARATOR) => Translator::DOMAIN_SEPARATOR,
             VariableHelper::CATALOG => $this->buildCatalog($this->transJsKeys),
         ];
     }

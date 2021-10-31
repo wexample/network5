@@ -1,9 +1,9 @@
-import {ServiceMethodsInterface} from "../class/ServiceMethodsInterface";
+import {MixinMethodsInterface} from "../class/MixinMethodsInterface";
 
 export default interface MixinInterface {
     name: string
     dependencies?: object
-    methods?: ServiceMethodsInterface
+    methods?: MixinMethodsInterface
     service?: any
     hooks?: object
 }
