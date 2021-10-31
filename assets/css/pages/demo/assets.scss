@@ -1,6 +1,6 @@
-@import "../../mixins/global";
+@use '../../../../src/Wex/BaseBundle/Resources/css/partials/blocks';
 
-@import '../../../../src/Wex/BaseBundle/Resources/css/partials/blocks';
+@import "../../mixins/global";
 
 .temp-container {
   max-width: 50rem;

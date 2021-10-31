@@ -1,9 +1,9 @@
 // Base extension.
-@import '../../../../src/Wex/BaseBundle/Resources/css/mains/default/layout';
+@use '../../../../src/Wex/BaseBundle/Resources/css/mains/default/layout';
 // Layout partials.
-@import '../../partials/fonts';
+@use '../../partials/fonts';
 
-@import "themes/dark";
+@use "themes/dark";
 
 body {
   background: black;

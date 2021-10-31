@@ -1,14 +1,14 @@
 // Layout.
-@import '../black/layout';
+@use '../black/layout';
 // Project partials.
-@import '../black/partials/inline-info';
+@use '../black/partials/inline-info';
 // Base partials.
-@import '../../../../src/Wex/BaseBundle/Resources/css/partials/container';
-@import '../../../../src/Wex/BaseBundle/Resources/css/partials/pills';
-@import '../../../../src/Wex/BaseBundle/Resources/css/partials/tabs';
+@use '../../../../src/Wex/BaseBundle/Resources/css/partials/container';
+@use '../../../../src/Wex/BaseBundle/Resources/css/partials/pills';
+@use '../../../../src/Wex/BaseBundle/Resources/css/partials/tabs';
 // Local partials.
-@import 'partials/default';
-@import 'partials/header';
+@use 'partials/default';
+@use 'partials/header';
 
 #nav-secondary {
   @extend .pill;

@@ -1,7 +1,7 @@
+@use 'blocks';
+
 @import '../mixins/global';
 @import '../mixins/pills';
-
-@import 'blocks';
 
 .inline-infos {
   @extend .block;
