@@ -5,6 +5,8 @@ namespace App\Wex\BaseBundle\Twig;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Service\TemplateService;
+use JetBrains\PhpStorm\ArrayShape;
+use function array_merge_recursive;
 use function str_ends_with;
 use function strlen;
 use function substr;
@@ -21,7 +23,8 @@ class TemplateExtension extends AbstractExtension
     public function __construct(
         private KernelInterface $kernel,
         private TemplateService $templateService
-    ) {
+    )
+    {
     }
 
     public function getFunctions(): array
@@ -54,13 +57,14 @@ class TemplateExtension extends AbstractExtension
     public function templateBuildLayoutData(
         Environment $env,
         string $pageTemplateName
-    ): array {
+    ): array
+    {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
         );
 
-        $output = \array_merge_recursive(
+        $output = array_merge_recursive(
             $this->templateBuildRenderData($env, $pageTemplateName),
             [
                 VariableHelper::ASSETS => $assetsExtension->buildRenderData(Asset::CONTEXT_LAYOUT),
@@ -74,11 +78,18 @@ class TemplateExtension extends AbstractExtension
         return $output;
     }
 
+    #[ArrayShape([
+            VariableHelper::ASSETS => "\App\Wex\BaseBundle\Rendering\Asset[][][]|array[]|\array[][]",
+            VariableHelper::BODY => "null|string",
+            VariableHelper::NAME => "string",
+            VariableHelper::TRANSLATIONS => "array"]
+    )]
     public function templateBuildPageData(
         Environment $env,
         string $pageName,
         ?string $body = null
-    ): array {
+    ): array
+    {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -105,10 +116,14 @@ class TemplateExtension extends AbstractExtension
         );
     }
 
+    #[ArrayShape([
+        VariableHelper::PAGE => "array|null"
+    ])]
     public function templateBuildRenderData(
         Environment $env,
         string $pageTemplateName = null
-    ): array {
+    ): array
+    {
         return [
             VariableHelper::PAGE => $pageTemplateName
                 ? $this->templateBuildPageData(
@@ -124,8 +139,7 @@ class TemplateExtension extends AbstractExtension
         $ext = TemplateExtension::TEMPLATE_FILE_EXTENSION;
 
         // Path have extension.
-        if (str_ends_with($templatePath, $ext))
-        {
+        if (str_ends_with($templatePath, $ext)) {
             return substr(
                 $templatePath,
                 0,

@@ -5,6 +5,8 @@ namespace App\Wex\BaseBundle\Rendering;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Twig\TemplateExtension;
 use Symfony\Component\HttpFoundation\Request;
+use function in_array;
+use function is_null;
 
 class AdaptiveResponse
 {
@@ -46,13 +48,13 @@ class AdaptiveResponse
         $layout = $request->get(VariableHelper::LAYOUT);
 
         // Layout not specified in query string.
-        if (\is_null($layout) && $request->isXmlHttpRequest())
+        if (is_null($layout) && $request->isXmlHttpRequest())
         {
             // Use modal as default ajax layout, but might be configurable.
             $layout = self::JSON_LAYOUT_MODAL;
         }
 
-        if (\in_array($layout, $this->allowedLayouts))
+        if (in_array($layout, $this->allowedLayouts))
         {
             return $layout;
         }

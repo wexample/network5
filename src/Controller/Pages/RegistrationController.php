@@ -11,6 +11,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -32,6 +33,9 @@ class RegistrationController extends AbstractPagesController
         );
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     */
     #[Route('/register', name: self::ROUTE_APP_REGISTER)]
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {

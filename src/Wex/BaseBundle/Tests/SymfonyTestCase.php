@@ -78,7 +78,7 @@ abstract class SymfonyTestCase extends WebTestCase
         Crawler $crawler = null
     ) {
         preg_match_all(
-            '/(.+)>([a-zA-Z0-9\.\n\t\s]+::[a-zA-Z0-9\.\n\t\s]+)<(.+)/',
+            '/(.+)>([a-zA-Z0-9.\n\t\s]+::[a-zA-Z0-9.\n\t\s]+)<(.+)/',
             $body ?? $this->getBody($crawler),
             $output
         );

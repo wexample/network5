@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: weeger
- * Date: 27/11/19
- * Time: 13:18.
- */
 
 namespace App\Wex\BaseBundle\Translation;
 

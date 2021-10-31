@@ -9,6 +9,9 @@ use Doctrine\DBAL\Types\Types;
 use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\TwigFunction;
+use function array_reverse;
+use function file_get_contents;
+use function json_decode;
 
 class AssetsExtension extends AbstractExtension
 {
@@ -56,8 +59,8 @@ class AssetsExtension extends AbstractExtension
         $this->pathProject = $kernel->getProjectDir().'/';
         $this->pathPublic = $this->pathProject.self::DIR_PUBLIC;
         $this->pathBuild = $this->pathPublic.self::DIR_BUILD;
-        $this->manifest = \json_decode(
-            \file_get_contents(
+        $this->manifest = json_decode(
+            file_get_contents(
                 $this->pathBuild.self::FILE_MANIFEST
             ),
             JSON_OBJECT_AS_ARRAY
@@ -243,7 +246,7 @@ class AssetsExtension extends AbstractExtension
             $output[] = $asset;
         }
 
-        $breakpointsReverted = \array_reverse(
+        $breakpointsReverted = array_reverse(
             self::DISPLAY_BREAKPOINTS
         );
         $maxWidth = null;
