@@ -1,5 +1,6 @@
 import MixinInterface from "../interface/MixinInterface";
 import AppService from "../class/AppService";
+import MixinsAppService from "../class/MixinsAppService";
 
 const mixin: MixinInterface = {
     name: 'locale',
@@ -7,7 +8,7 @@ const mixin: MixinInterface = {
     hooks: {
         app: {
             loadRenderData() {
-                return 'complete';
+                return MixinsAppService.LOAD_STATUS_COMPLETE;
             },
         },
     },

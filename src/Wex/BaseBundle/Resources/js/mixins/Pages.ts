@@ -2,6 +2,7 @@ import MixinLocale from './Locale';
 import MixinInterface from "../interface/MixinInterface";
 import Page from "../class/Page";
 import AppService from "../class/AppService";
+import MixinsAppService from "../class/MixinsAppService";
 
 const mixin: MixinInterface = {
     name: 'pages',
@@ -13,11 +14,13 @@ const mixin: MixinInterface = {
     hooks: {
         app: {
             loadRenderData(data, registry) {
-                if (registry.MixinResponsive === 'complete' && registry.MixinLocale === 'complete') {
+                if (registry.MixinResponsive === MixinsAppService.LOAD_STATUS_COMPLETE
+                    && registry.MixinLocale === MixinsAppService.LOAD_STATUS_COMPLETE) {
                     this.app.getService('pages').create(data.page);
-                    return 'complete';
+
+                    return MixinsAppService.LOAD_STATUS_COMPLETE;
                 }
-                return 'wait';
+                return MixinsAppService.LOAD_STATUS_WAIT;
             },
         },
     },

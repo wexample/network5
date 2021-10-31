@@ -1,7 +1,7 @@
 import MixinArrays from "./Arrays";
 import Queue from "../class/Queue";
 import MixinInterface from "../interface/MixinInterface";
-import AppService from "../class/AppService";
+import MixinsAppService from "../class/MixinsAppService";
 
 const mixin: MixinInterface = {
     name: 'queues',
@@ -13,15 +13,15 @@ const mixin: MixinInterface = {
     hooks: {
         app: {
             loadRenderData(data, registry) {
-                if (registry.MixinArrays === 'complete') {
-                    return 'complete';
+                if (registry.MixinArrays === MixinsAppService.LOAD_STATUS_COMPLETE) {
+                    return MixinsAppService.LOAD_STATUS_COMPLETE;
                 }
-                return 'wait';
+                return MixinsAppService.LOAD_STATUS_WAIT;
             },
         },
     },
 
-    service: class extends AppService {
+    service: class extends MixinsAppService {
         queues: object = {}
 
         afterAllQueues(queues, complete) {

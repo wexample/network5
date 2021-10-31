@@ -1,5 +1,6 @@
 import MixinInterface from "../interface/MixinInterface";
 import AppService from "../class/AppService";
+import MixinsAppService from "../class/MixinsAppService";
 
 const service:MixinInterface = {
     name: 'mixins',
@@ -42,7 +43,7 @@ const service:MixinInterface = {
                     let hooks = data[1].hooks;
 
                     let next = () => {
-                        registry[name] = 'complete';
+                        registry[name] = MixinsAppService.LOAD_STATUS_COMPLETE;
                         step();
                     };
 
@@ -56,13 +57,13 @@ const service:MixinInterface = {
                     }
 
                     // "wait" says to retry after processing other services.
-                    if (registry[name] === 'wait') {
+                    if (registry[name] === MixinsAppService.LOAD_STATUS_WAIT) {
                         // Enqueue again.
                         servicesValues.push(data);
                         step();
                     }
                     // "stop" allows to let service to relaunch process itself.
-                    else if (registry[name] !== 'stop') {
+                    else if (registry[name] !== MixinsAppService.LOAD_STATUS_STOP) {
                         next();
                     }
                 }

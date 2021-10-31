@@ -2,6 +2,7 @@ import RenderDataInterface from "../interface/RenderDataInterface";
 import ServiceInvocationRegistryInterface from "../interface/ServiceInvocationRegistryInterface";
 import MixinInterface from "../interface/MixinInterface";
 import AppService from "../class/AppService";
+import MixinsAppService from "../class/MixinsAppService";
 
 const mixin: MixinInterface = {
     name: 'arrays',
@@ -9,7 +10,7 @@ const mixin: MixinInterface = {
     hooks: {
         app: {
             loadRenderData(data: RenderDataInterface, registry: ServiceInvocationRegistryInterface) {
-                return 'complete';
+                return MixinsAppService.LOAD_STATUS_COMPLETE;
             },
         },
     },
