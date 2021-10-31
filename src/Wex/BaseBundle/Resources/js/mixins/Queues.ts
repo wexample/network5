@@ -56,13 +56,6 @@ const mixin: MixinInterface = {
         get(queueName): Queue {
             return this.queues[queueName];
         }
-
-        start(queueName) {
-            let queue = this.get(queueName);
-            queue && queue.start();
-
-            return queue;
-        }
     }
 };
 
