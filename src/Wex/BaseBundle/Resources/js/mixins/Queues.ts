@@ -1,8 +1,9 @@
 import MixinArrays from "./Arrays";
 import Queue from "../class/Queue";
 import MixinInterface from "../interface/MixinInterface";
+import AppService from "../class/AppService";
 
-const mixin:MixinInterface = {
+const mixin: MixinInterface = {
     name: 'queues',
 
     dependencies: {
@@ -20,50 +21,49 @@ const mixin:MixinInterface = {
         },
     },
 
-    methods: {
-        app: {
-            queues: {},
+    service: class extends AppService {
+        queues: object = {}
 
-            afterAllQueues(queues, complete) {
-                let originalList = this.getMixin('arrays').shallowCopy(queues);
-                let hasRunningQueue = false;
+        afterAllQueues(queues, complete) {
+            let arraysService = this.app.getService('arrays');
+            let originalList = arraysService.shallowCopy(queues);
+            let hasRunningQueue = false;
 
-                queues.forEach((queue) => {
-                    if (queue.started) {
-                        hasRunningQueue = true;
-                        queue.then(() => {
-                            this.arrays.deleteItem(queues, queue);
-                            if (!queues.length) {
-                                queue.then(() => {
-                                    complete(originalList);
-                                });
-                            }
-                        });
-                    }
-                });
-
-                if (!hasRunningQueue) {
-                    this.async(() => complete(originalList));
+            queues.forEach((queue) => {
+                if (queue.started) {
+                    hasRunningQueue = true;
+                    queue.then(() => {
+                        arraysService.deleteItem(queues, queue);
+                        if (!queues.length) {
+                            queue.then(() => {
+                                complete(originalList);
+                            });
+                        }
+                    });
                 }
-            },
+            });
 
-            create(queueName) {
-                return this.queues.get(queueName)
-                    || new Queue(this, queueName);
-            },
+            if (!hasRunningQueue) {
+                this.app.async(() => complete(originalList));
+            }
+        }
 
-            get(queueName) {
-                return this.queues.queues[queueName];
-            },
+        create(queueName) {
+            return this.get(queueName)
+                || new Queue(this.app, queueName);
+        }
 
-            start(queueName) {
-                let queue = this.queues.get(queueName);
-                queue && queue.start();
+        get(queueName): Queue {
+            return this.queues[queueName];
+        }
 
-                return queue;
-            },
-        },
-    },
+        start(queueName) {
+            let queue = this.get(queueName);
+            queue && queue.start();
+
+            return queue;
+        }
+    }
 };
 
 export default mixin;

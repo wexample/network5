@@ -18,7 +18,7 @@ const bundle: AssetBundleInterface = {
         onChangeResponsiveSize() {
             super.onChangeResponsiveSize();
 
-            let responsiveMixin = this.app.getMixin('responsive');
+            let responsiveMixin = this.app.getService('responsive');
             let current = responsiveMixin.responsiveSizeCurrent;
 
             document
@@ -85,7 +85,7 @@ const bundle: AssetBundleInterface = {
 
         testQueue() {
             let test = this.unitTest;
-            let queuesMixin = this.app.getMixin('queues');
+            let queuesMixin = this.app.getService('queues');
             let queue = queuesMixin.create('test-queue');
             let counterOne = 0;
 

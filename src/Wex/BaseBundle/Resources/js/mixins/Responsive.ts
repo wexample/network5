@@ -4,6 +4,7 @@ import MixinQueues from "./Queues";
 import MixinInterface from "../interface/MixinInterface";
 import AssetsCollectionInterface from "../interface/AssetsCollectionInterface";
 import Queue from "../class/Queue";
+import AppService from "../class/AppService";
 
 const mixin: MixinInterface = {
     name: 'responsive',
@@ -18,12 +19,12 @@ const mixin: MixinInterface = {
         app: {
             loadRenderData(data, registry, next) {
                 if (registry.MixinAssets === 'complete' && registry.MixinQueues === 'complete') {
-                    let responsiveMixin = this.getMixin('responsive');
+                    let responsiveService = this.app.getService('responsive');
 
-                    responsiveMixin.updateResponsive(() => {
+                    responsiveService.updateResponsive(() => {
                         window.addEventListener(
                             'resize',
-                            () => responsiveMixin.updateResponsive()
+                            () => responsiveService.updateResponsive()
                         );
 
                         next();
@@ -37,134 +38,133 @@ const mixin: MixinInterface = {
         },
     },
 
-    methods: {
-        responsiveSizeCurrent: null,
-        responsiveSizePrevious: null,
+    service: class extends AppService {
+        public responsiveSizeCurrent: string
+        public responsiveSizePrevious: string
 
-        app: {
-            updateResponsive(complete?: Function) {
-                let responsiveMixin = this.getMixin('responsive');
-                let current = responsiveMixin.detectSize();
+        updateResponsive(complete?: Function) {
+            let responsiveService = this.app.getService('responsive');
+            let current = responsiveService.detectSize();
 
-                responsiveMixin.responsiveSizePrevious = responsiveMixin.responsiveSizeCurrent;
+            responsiveService.responsiveSizePrevious = responsiveService.responsiveSizeCurrent;
 
-                if (current !== responsiveMixin.responsiveSizePrevious) {
-                    responsiveMixin.responsiveSizeCurrent = current;
+            if (current !== responsiveService.responsiveSizePrevious) {
+                responsiveService.responsiveSizeCurrent = current;
 
-                    let assetsMixin = this.getMixin('assets');
-                    assetsMixin.queue.reset()
+                let assetsService = this.app.getService('assets');
+                assetsService.queue.reset()
 
-                    // Update layout level assets.
-                    responsiveMixin.updateResponsiveAssets(
-                        this.registry.layoutData.assets.responsive,
-                        () => {
-                            // Update page level assets.
-                            responsiveMixin.updateResponsiveAssets(
-                                this.registry.layoutData.page.assets.responsive,
-                                () => {
-                                    // Now change page class.
-                                    responsiveMixin.updateResponsiveLayoutClass();
+                // Update layout level assets.
+                responsiveService.updateResponsiveAssets(
+                    this.app.registry.layoutData.assets.responsive,
+                    () => {
+                        // Update page level assets.
+                        responsiveService.updateResponsiveAssets(
+                            this.app.registry.layoutData.page.assets.responsive,
+                            () => {
+                                // Now change page class.
+                                responsiveService.updateResponsiveLayoutClass();
 
-                                    this.getMixin('events')
-                                        .trigger('responsive-change-size', {
-                                            current: current,
-                                            previous: responsiveMixin.responsiveSizePrevious,
-                                        });
+                                this.app.getService('events')
+                                    .trigger('responsive-change-size', {
+                                        current: current,
+                                        previous: responsiveService.responsiveSizePrevious,
+                                    });
 
-                                    complete && complete();
-                                }
-                            );
-
-                            return Queue.EXEC_STOP;
-                        }
-                    );
-                } else {
-                    complete && complete();
-                }
-            },
-
-            updateResponsiveLayoutClass() {
-                // Remove all responsive class names.
-                let classList = document.body.classList;
-
-                classList.remove(
-                    `responsive-${this.getMixin('responsive').responsiveSizePrevious}`
-                );
-                classList.add(
-                    `responsive-${this.getMixin('responsive').responsiveSizeCurrent}`
-                );
-            },
-
-            updateResponsiveAssets(assetsCollection: AssetsCollectionInterface, complete) {
-                let responsiveSize = this.getMixin('responsive').detectSize();
-                let toLoad = {};
-                let toUnload = {};
-                let hasChange = false;
-
-                Object.entries(assetsCollection)
-                    .forEach((data) => {
-                        let assets = data[1];
-                        let type = data[0];
-                        toLoad[type] = toLoad[type] || [];
-                        toUnload[type] = toUnload[type] || [];
-
-                        assets.forEach((asset) => {
-                            // Adding and removing assets is async.
-                            if (asset.responsive === responsiveSize) {
-                                if (!asset.active) {
-                                    hasChange = true;
-                                    toLoad[type].push(asset);
-                                }
-                            } else {
-                                if (asset.active) {
-                                    hasChange = true;
-                                    toUnload[type].push(asset);
-                                }
+                                complete && complete();
                             }
-                        });
-                    });
-
-                if (complete) {
-                    if (hasChange) {
-                        // Load new assets.
-                        let queueLoad = this.assets.appendAssets(toLoad);
-                        // Remove old ones.
-                        let queueUnLoad = this.assets.removeAssets(toUnload);
-
-                        this.queues.afterAllQueues(
-                            [queueLoad, queueUnLoad],
-                            complete
                         );
-                    } else {
-                        this.async(complete);
-                    }
-                }
-            },
 
-            breakpointSupports(letter) {
-                return this.getMixin('responsive').detectSupported().hasOwnProperty(letter);
-            },
-
-            detectSupported() {
-                let supported = {};
-                Object.entries(this.registry.layoutData.displayBreakpoints).forEach((entry) => {
-                    if (window.innerWidth > entry[1]) {
-                        supported[entry[0]] = entry[1];
+                        return Queue.EXEC_STOP;
                     }
+                );
+            } else {
+                complete && complete();
+            }
+        }
+
+        updateResponsiveLayoutClass() {
+            // Remove all responsive class names.
+            let classList = document.body.classList;
+
+            classList.remove(
+                `responsive-${this.app.getService('responsive').responsiveSizePrevious}`
+            );
+            classList.add(
+                `responsive-${this.app.getService('responsive').responsiveSizeCurrent}`
+            );
+        }
+
+        updateResponsiveAssets(assetsCollection: AssetsCollectionInterface, complete) {
+            let responsiveSize = this.app.getService('responsive').detectSize();
+            let toLoad = {};
+            let toUnload = {};
+            let hasChange = false;
+
+            Object.entries(assetsCollection)
+                .forEach((data) => {
+                    let assets = data[1];
+                    let type = data[0];
+                    toLoad[type] = toLoad[type] || [];
+                    toUnload[type] = toUnload[type] || [];
+
+                    assets.forEach((asset) => {
+                        // Adding and removing assets is async.
+                        if (asset.responsive === responsiveSize) {
+                            if (!asset.active) {
+                                hasChange = true;
+                                toLoad[type].push(asset);
+                            }
+                        } else {
+                            if (asset.active) {
+                                hasChange = true;
+                                toUnload[type].push(asset);
+                            }
+                        }
+                    });
                 });
 
-                return supported;
-            },
+            if (complete) {
+                if (hasChange) {
+                    let assetsService = this.app.getService('assets');
+                    // Load new assets.
+                    let queueLoad = assetsService.appendAssets(toLoad);
+                    // Remove old ones.
+                    let queueUnLoad = assetsService.removeAssets(toUnload);
 
-            detectSize() {
-                return Object.entries(this.getMixin('responsive').detectSupported()).reduce(
-                    (prev, current) => {
-                        // Return item that is the greater one.
-                        return current[1] > prev[1] ? current : prev;
-                    }
-                )[0];
-            },
-        },
+                    this.app.getService('queues').afterAllQueues(
+                        [queueLoad, queueUnLoad],
+                        complete
+                    );
+                } else {
+                    this.app.async(complete);
+                }
+            }
+        }
+
+        breakpointSupports(letter) {
+            return this.app.getService('responsive').detectSupported().hasOwnProperty(letter);
+        }
+
+        detectSupported() {
+            let supported = {};
+            Object.entries(this.app.registry.layoutData.displayBreakpoints).forEach((entry) => {
+                if (window.innerWidth > entry[1]) {
+                    supported[entry[0]] = entry[1];
+                }
+            });
+
+            return supported;
+        }
+
+        detectSize() {
+            return Object.entries(this.app.getService('responsive').detectSupported()).reduce(
+                (prev, current) => {
+                    // Return item that is the greater one.
+                    return current[1] > prev[1] ? current : prev;
+                }
+            )[0];
+        }
     },
 };
 

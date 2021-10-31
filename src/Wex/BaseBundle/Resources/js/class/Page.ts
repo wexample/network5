@@ -9,7 +9,7 @@ export default class {
     protected readonly name: string;
     private readonly onChangeResponsiveSizeProxy: Function;
 
-    constructor(app, renderData) {
+    constructor(app: App, renderData) {
         this.app = app;
         this.isLayoutPage = renderData.isLayoutPage;
         this.name = renderData.name;
@@ -21,7 +21,7 @@ export default class {
         this.onChangeResponsiveSizeProxy = this.onChangeResponsiveSize.bind(this);
 
         this.app
-            .getMixin('events')
+            .getService('events')
             .listen(
                 'responsive-change-size',
                 this.onChangeResponsiveSizeProxy
@@ -42,7 +42,7 @@ export default class {
 
     destroy() {
         this.app
-            .getMixin('events')
+            .getService('events')
             .forget(
                 'responsive-change-size',
                 this.onChangeResponsiveSizeProxy
@@ -52,7 +52,7 @@ export default class {
     }
 
     updateCurrentResponsiveDisplay() {
-        let responsiveMixin = this.app.getMixin('responsive');
+        let responsiveMixin = this.app.getService('responsive');
         let previous = responsiveMixin.responsiveSizePrevious;
         let current = responsiveMixin.responsiveSizeCurrent;
 

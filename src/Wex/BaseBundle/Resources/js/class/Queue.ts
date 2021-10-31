@@ -69,7 +69,7 @@ export default class Queue {
     private complete(after?: Function) {
         if (this.started && !this.commands.length) {
             this.then(() => {
-                delete this.app.getMixin('queues').queues[this.name];
+                delete this.app.getService('queues').queues[this.name];
 
                 this.reset();
 

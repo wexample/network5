@@ -55,7 +55,7 @@
                             app.bootJsBuffer.push(id);
                         } else {
                             // Mark now that class is loaded.
-                            app.assets.jsPendingLoaded(id);
+                            app.getService('assets').jsPendingLoaded(id);
                         }
 
                         // Return to allow export or extending class.

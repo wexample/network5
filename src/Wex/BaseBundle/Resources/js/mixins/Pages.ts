@@ -1,6 +1,7 @@
 import MixinLocale from './Locale';
 import MixinInterface from "../interface/MixinInterface";
 import Page from "../class/Page";
+import AppService from "../class/AppService";
 
 const mixin: MixinInterface = {
     name: 'pages',
@@ -13,7 +14,7 @@ const mixin: MixinInterface = {
         app: {
             loadRenderData(data, registry) {
                 if (registry.MixinResponsive === 'complete' && registry.MixinLocale === 'complete') {
-                    this.pages.create(data.page);
+                    this.app.getService('pages').create(data.page);
                     return 'complete';
                 }
                 return 'wait';
@@ -21,23 +22,21 @@ const mixin: MixinInterface = {
         },
     },
 
-    methods: {
-        app: {
-            pages: {},
+    service: class extends AppService {
+        pages: {}
 
-            create(data: any): Page {
-                let classDefinition = this.getClassDefinition(
-                    'page',
-                    data.name
-                );
+        create(data: any): Page {
+            let classDefinition = this.app.getClassDefinition(
+                'page',
+                data.name
+            );
 
-                if (!classDefinition) {
-                    classDefinition = Page;
-                }
+            if (!classDefinition) {
+                classDefinition = Page;
+            }
 
-                return new classDefinition(this, data);
-            },
-        },
+            return new classDefinition(this.app, data);
+        }
     },
 };
 

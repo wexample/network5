@@ -1,6 +1,7 @@
 import MixinInterface from "../interface/MixinInterface";
+import AppService from "../class/AppService";
 
-const mixin:MixinInterface = {
+const mixin: MixinInterface = {
     name: 'locale',
 
     hooks: {
@@ -11,10 +12,8 @@ const mixin:MixinInterface = {
         },
     },
 
-    methods: {
-        app: {
-            transDomains: {},
-        },
+    service: class extends AppService {
+        transDomains: object = {}
     },
 };
 

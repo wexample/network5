@@ -1,9 +1,10 @@
 import Page from './Page';
 
 import MixinAssets from '../mixins/Assets';
-import MixinMixin from '../mixins/Mixin';
+import MixinMixin from '../mixins/Mixins';
 import MixinPage from '../mixins/Pages';
 import MixinResponsive from '../mixins/Responsive';
+import MixinInterface from "../interface/MixinInterface";
 
 export default class {
     public bootJsBuffer: string[] = [];
@@ -14,6 +15,7 @@ export default class {
     public elLayout: HTMLElement;
     public lib: object = {};
     public registry: any;
+    public services: object = {};
     public isReady: boolean = false;
 
     constructor(readyCallback?: any | Function, globalName = 'app') {
@@ -31,12 +33,14 @@ export default class {
         let doc = window.document;
 
         let run = () => {
-            this.mixins = this.getMixinAndDependencies(this.getMixins());
+            this.mixins = this.getMixinsAndDependencies(this.getMixins());
 
-            this.mix(this, 'app', true);
+            Object.values(this.mixins).forEach((mixin: MixinInterface) =>
+                this.services[mixin.name] = new mixin.service(this)
+            );
 
             // Init mixins.
-            this.getMixin('mixin').invokeUntilComplete('init', 'app', [], () => {
+            this.getService('mixins').invokeUntilComplete('init', 'app', [], () => {
                 this.elLayout = doc.getElementById('layout');
 
                 this.addLibraries(this.lib);
@@ -108,7 +112,7 @@ export default class {
         }
 
         // Use mixins hooks.
-        this.getMixin('mixin').invokeUntilComplete('loadRenderData', 'app', [data], () => {
+        this.getService('mixins').invokeUntilComplete('loadRenderData', 'app', [data], () => {
             complete && complete(data);
         });
     }
@@ -117,10 +121,8 @@ export default class {
         return Page;
     }
 
-    getMixin(name) {
-        // TODO For TypeScript compatibility.
-        //  Mixins may be converted to services.
-        return this[name];
+    getService(name) {
+        return this.services[name];
     }
 
     getMixins() {
@@ -134,14 +136,14 @@ export default class {
         };
     }
 
-    getMixinAndDependencies(mixins) {
+    getMixinsAndDependencies(mixins) {
         Object.values(mixins).forEach((mixin: any) => {
             if (mixin.dependencies) {
                 let dependencies = mixin.dependencies;
 
                 mixins = {
                     ...mixins,
-                    ...this.getMixinAndDependencies(dependencies),
+                    ...this.getMixinsAndDependencies(dependencies),
                 };
             }
         })
