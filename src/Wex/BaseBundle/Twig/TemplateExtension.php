@@ -83,11 +83,16 @@ class TemplateExtension extends AbstractExtension
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
         );
+        /** @var TranslationExtension $translationExtension */
+        $translationExtension = $env->getExtension(
+            TranslationExtension::class
+        );
 
         return [
             VariableHelper::ASSETS => $assetsExtension->buildRenderData(Asset::CONTEXT_PAGE),
             VariableHelper::BODY => $body,
             VariableHelper::NAME => $pageName,
+            VariableHelper::TRANSLATIONS => $translationExtension->buildRenderData(),
         ];
     }
 

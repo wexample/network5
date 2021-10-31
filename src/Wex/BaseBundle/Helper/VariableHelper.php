@@ -10,11 +10,15 @@ class VariableHelper
 
     public const BODY = 'body';
 
+    public const CATALOG = 'catalog';
+    
     public const COMPONENT = 'component';
 
     public const DEMO = 'demo';
 
     public const DEFAULT = 'default';
+
+    public const DOMAIN = 'domain';
 
     public const EMAIL = 'email';
 
@@ -58,8 +62,10 @@ class VariableHelper
 
     public const RESPONSIVE = 'responsive';
 
+    public const SEPARATOR = 'separator';
+
     public const TO = 'to';
-    
+
     public const TRANSLATIONS = 'translations';
 
     public const USER = 'user';
