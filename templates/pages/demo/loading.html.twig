@@ -14,4 +14,11 @@
             </button>
         </div>
     </div>
+    <h2>{{ '@page::components.title' | trans }}</h2>
+    <h3>{{ '@page::components.init.title' | trans }}</h3>
+    <h4>{{ '@page::components.init.parent.title' | trans }}</h4>
+    <div id="component-demo-parent" class="block">
+        {{ '@page::components.init.parent.body' | trans }}
+        {{ com_init_parent('components/demo-parent') }}
+    </div>
 {%- endblock -%}

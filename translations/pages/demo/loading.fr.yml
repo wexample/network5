@@ -1,4 +1,12 @@
-page_title: Chargements
+components:
+  title: Composants
+  init:
+    title: Initialisation
+    parent:
+      title: Via le parent
+      body: Ce composant considère son élément DOM conteneur comme étant son élément principal.
 
 layout_overlay:
   body: Un overlay global sur l'ensemble de la page permet de faire patienter l'utilisateur durant le chargement.
+
+page_title: Chargements
