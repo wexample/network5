@@ -6,13 +6,17 @@ use function implode;
 
 class DomHelper
 {
+    public const TAG_ALLOWS_AUTO_CLOSING = [
+        'div' => false,
+        'span' => false,
+    ];
+
     public static function buildTagAttributes(array $attributes): string
     {
         $output = [];
         $attributes = $attributes ?: [];
 
-        foreach ($attributes as $key => $value)
-        {
+        foreach ($attributes as $key => $value) {
             $output[] = $key.'="'.$value.'"';
         }
 
@@ -23,19 +27,21 @@ class DomHelper
         string $tagName,
         array $attributes,
         string $body = '',
-        bool $allowSingleTag = true
-    ): string {
+        bool $allowSingleTag = null
+    ): string
+    {
         $output = '<'.$tagName;
 
         $outputAttributes = static::buildTagAttributes($attributes);
         $output .= $outputAttributes ? ' '.$outputAttributes : '';
 
-        if ($allowSingleTag && !$body)
-        {
-            $output .= '/>';
+        if (is_null($allowSingleTag)) {
+            $allowSingleTag = static::TAG_ALLOWS_AUTO_CLOSING[$tagName] ?? false;
         }
-        else
-        {
+
+        if ($allowSingleTag && !$body) {
+            $output .= '/>';
+        } else {
             $output .= '>'.$body.'</'.$tagName.'>';
         }
 

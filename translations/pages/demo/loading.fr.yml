@@ -2,9 +2,15 @@ components:
   title: Composants
   init:
     title: Initialisation
-    parent:
+    class:
       title: Via le parent
+      body: Ce composant considère l'élément DOM qui possède la classe CSS auto-générée comme étant son élément principal.
+    parent:
+      title: Via l'élément précédent
       body: Ce composant considère son élément DOM conteneur comme étant son élément principal.
+    previous:
+      title: Via le parent
+      body: Ce composant considère l'élément DOM qui le précède comme étant son élément principal.
 
 layout_overlay:
   body: Un overlay global sur l'ensemble de la page permet de faire patienter l'utilisateur durant le chargement.

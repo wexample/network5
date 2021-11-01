@@ -8,8 +8,14 @@ use Twig\TwigFunction;
 
 class ComponentsExtension extends AbstractExtension
 {
+    // Component is loaded with a css class.
+    public const INIT_MODE_CLASS = 'class';
+
     // Component is loaded from template into the target tag.
     public const INIT_MODE_PARENT = 'parent';
+
+    // Component is loaded from template, just after target tag.
+    public const INIT_MODE_PREVIOUS = 'previous';
 
     /**
      * Save components options initialized by com_init.
@@ -25,6 +31,13 @@ class ComponentsExtension extends AbstractExtension
     {
         return [
             new TwigFunction(
+                'com_init_class',
+                [
+                    $this,
+                    'comInitClass',
+                ]
+            ),
+            new TwigFunction(
                 'com_init_parent',
                 [
                     $this,
@@ -32,9 +45,33 @@ class ComponentsExtension extends AbstractExtension
                 ],
                 [self::FUNCTION_OPTION_IS_SAFE => [self::FUNCTION_OPTION_HTML]]
             ),
+            new TwigFunction(
+                'com_init_previous',
+                [
+                    $this,
+                    'comInitPrevious',
+                ],
+                [self::FUNCTION_OPTION_IS_SAFE => [self::FUNCTION_OPTION_HTML]]
+            ),
         ];
     }
 
+
+    /**
+     * Add component to the global page requirements.
+     * It adds components assets to page assets.
+     */
+    public function comInitPrevious(string $name, array $options = []): string
+    {
+        $component = $this->saveComponent(
+            $name,
+            self::INIT_MODE_PREVIOUS,
+            $options
+        );
+
+        return $component->renderTag();
+    }
+    
     public function saveComponent(
         string $name,
         string $initMode,
@@ -58,6 +95,22 @@ class ComponentsExtension extends AbstractExtension
                 $name,
                 Asset::CONTEXT_PAGE
             );
+    }
+
+    /**
+     * Init a components and provide a class name to retrieve dom element.
+     */
+    public function comInitClass(
+        string $name,
+        array $options = []
+    ): string {
+        $component = $this->saveComponent(
+            $name,
+            self::INIT_MODE_CLASS,
+            $options
+        );
+
+        return 'com-class-loaded '.$component->id;
     }
 
     /**
