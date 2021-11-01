@@ -4,20 +4,20 @@ body {
   padding: 0;
 }
 
-#page-overlay,
-#page-overlay-full,
+.page-overlay,
+.page-overlay-full,
 {
   @include full-parent-size;
   display: none;
   z-index: 1;
 }
 
-#page-overlay {
+.page-overlay {
   position: absolute;
   background: rgba(white, .5);
 }
 
-#page-overlay-full {
+.page-overlay-full {
   position: fixed;
   background: rgba(black, .5);
 }
