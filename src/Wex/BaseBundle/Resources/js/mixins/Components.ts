@@ -3,23 +3,26 @@ import MixinsAppService from "../class/MixinsAppService";
 import AppService from "../class/AppService";
 import PageRenderDataInterface from "../interfaces/PageRenderDataInterface";
 import Page from "../class/Page";
+import ComponentRenderDataInterface from "../interfaces/ComponentRenderDataInterface";
 
 const mixin: MixinInterface = {
     name: 'components',
 
     hooks: {
         page: {
-            loadPageRenderData(page:Page, data: PageRenderDataInterface, registry: any) {
+            loadPageRenderData(page: Page, data: PageRenderDataInterface, registry: any) {
                 // Wait for page loading.
                 if (registry.MixinPage !== MixinsAppService.LOAD_STATUS_COMPLETE) {
                     return MixinsAppService.LOAD_STATUS_WAIT;
                 }
 
-                this.app.getService('components').initAll(
-                    page.el,
-                    'page',
-                    page.name
-                );
+                let componentsService = this.app.getService('components');
+                data.components.forEach((componentData: ComponentRenderDataInterface) => {
+                    componentsService.create(
+                        page.el,
+                        componentData
+                    );
+                });
 
                 return MixinsAppService.LOAD_STATUS_COMPLETE;
             },
@@ -27,15 +30,18 @@ const mixin: MixinInterface = {
     },
 
     service: class extends AppService {
-        initAll(
+        create(
             elContext: HTMLElement,
-            initContextType: string,
-            initContextName: string
+            renderData: ComponentRenderDataInterface
         ) {
-            // TODO
-            console.log(elContext);
-            console.log(initContextType);
-            console.log(initContextName);
+            let classDefinition =
+                this.app.getBundleClassDefinition(
+                    'component',
+                    renderData.name
+                );
+
+            let component = new classDefinition(elContext, renderData);
+            component.init(renderData);
         }
     }
 };

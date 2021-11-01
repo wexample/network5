@@ -8,7 +8,10 @@ class Component
 {
     public string $id;
 
-    public function __construct(public string $name)
+    public function __construct(
+        public string $name,
+        public string $initMode
+    )
     {
         $this->id = 'com-'.uniqid();
     }

@@ -9,7 +9,7 @@ use Twig\TwigFunction;
 class ComponentsExtension extends AbstractExtension
 {
     // Component is loaded from template into the target tag.
-    public const INIT_TYPE_PARENT = 'parent';
+    public const INIT_MODE_PARENT = 'parent';
 
     /**
      * Save components options initialized by com_init.
@@ -36,11 +36,12 @@ class ComponentsExtension extends AbstractExtension
     }
 
     public function saveComponent(
-        string $name
+        string $name,
+        string $initMode,
     ): Component
     {
         // Using an object allow continuing edit properties after save.
-        $entry = new Component($name);
+        $entry = new Component($name, $initMode);
 
         $this->components[] = $entry;
 
@@ -67,7 +68,7 @@ class ComponentsExtension extends AbstractExtension
     {
         $component = $this->saveComponent(
             $name,
-            self::INIT_TYPE_PARENT,
+            self::INIT_MODE_PARENT,
             $options
         );
 
