@@ -1,7 +1,7 @@
 import MixinInterface from "../interface/MixinInterface";
 import AppService from "../class/AppService";
 import MixinsAppService from "../class/MixinsAppService";
-import {format} from "../helper/String";
+import {format as StringFormat} from "../helper/String";
 
 const mixin: MixinInterface = {
     name: 'locale',
@@ -43,7 +43,7 @@ const mixin: MixinInterface = {
                 stringWithDomain = 'messages' + sep + string;
             }
 
-            return format(catalog[stringWithDomain] || string, args);
+            return StringFormat(catalog[stringWithDomain] || string, args);
         }
     },
 
