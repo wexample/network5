@@ -66,7 +66,7 @@ export default class {
 
         if (previous !== current) {
             if (this.responsiveDisplays[current] === undefined) {
-                let display = this.app.getClassDefinition(
+                let display = this.app.getBundleClassDefinition(
                     'page',
                     `${this.name}-${current}`
                 );

@@ -2,7 +2,7 @@ import AssetBundleInterface from "../../../../src/Wex/BaseBundle/Resources/js/in
 import PageResponsiveDisplay from "../../../../src/Wex/BaseBundle/Resources/js/class/PageResponsiveDisplay";
 
 const bundle: AssetBundleInterface = {
-    classContext: 'page',
+    bundleGroup: 'page',
 
     definition: class extends PageResponsiveDisplay {
         onResponsiveEnter() {

@@ -195,9 +195,10 @@ export default class {
      * @param registryGroup
      * @param classRegistryName
      */
-    getClassDefinition(registryGroup: string, classRegistryName: string) {
+    getBundleClassDefinition(registryGroup: string, classRegistryName: string) {
         let bundle = this
-            .registry[registryGroup]
+            .registry
+            .bundles[registryGroup]
             .classes[classRegistryName];
 
         return bundle ? bundle.definition : null;

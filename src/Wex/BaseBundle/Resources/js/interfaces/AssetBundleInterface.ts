@@ -1,4 +1,4 @@
 export default interface AssetsCollectionInterface {
-    classContext: string,
+    bundleGroup: string,
     definition: object
 }

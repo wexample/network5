@@ -35,12 +35,12 @@
                 "use strict";
 
                 // Use old school fashioned javascript notation to improve compatibility.
-                var AppRegistryPart = function AppRegistryPart(context) {
+                var AppRegistryBundlesManager = function AppRegistryPart(context) {
                     this.context = context;
                     this.classes = {};
                 };
 
-                AppRegistryPart.prototype = {
+                AppRegistryBundlesManager.prototype = {
                     add: function add(name, definition) {
                         // Prevent class override.
                         if (!this.classes[name]) {
@@ -63,14 +63,14 @@
                     }
                 };
 
-                window.appRegistry = {};
+                window.appRegistry = {bundles:{}};
 
                 [
                     'component',
                     'page',
                     'vue'
                 ].forEach(function (item) {
-                    window.appRegistry[item] = new AppRegistryPart(item);
+                    window.appRegistry.bundles[item] = new AppRegistryBundlesManager(item);
                 });
 
             </script>

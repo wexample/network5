@@ -29,7 +29,7 @@ const mixin: MixinInterface = {
         pages: {}
 
         create(data: any): Page {
-            let classDefinition = this.app.getClassDefinition(
+            let classDefinition = this.app.getBundleClassDefinition(
                 'page',
                 data.name
             );
