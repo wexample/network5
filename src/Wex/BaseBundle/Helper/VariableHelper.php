@@ -5,7 +5,7 @@ namespace App\Wex\BaseBundle\Helper;
 class VariableHelper
 {
     public const _SPACE = ' ';
-    
+
     public const ALL = 'all';
 
     public const ASSETS = 'assets';
@@ -58,6 +58,8 @@ class VariableHelper
 
     public const NULL = 'null';
 
+    public const OPTIONS = 'options';
+
     public const PAGE = 'page';
 
     public const PLURAL_PAGE = self::PAGE.'s';
@@ -71,6 +73,8 @@ class VariableHelper
     public const TO = 'to';
 
     public const TRANSLATIONS = 'translations';
+
+    public const TYPE = 'type';
 
     public const USER = 'user';
 

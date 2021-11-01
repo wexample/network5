@@ -40,8 +40,6 @@ class AssetsExtension extends AbstractExtension
 
     public array $assets = self::ASSETS_DEFAULT_EMPTY;
 
-    public array $assetsPreload = self::ASSETS_DEFAULT_EMPTY;
-
     private string $pathProject;
 
     private string $pathBuild;
@@ -148,9 +146,15 @@ class AssetsExtension extends AbstractExtension
 
         $assets = $this->assetsDetect(
             'layouts/'.$layoutName.'/layout',
-            Asset::CONTEXT_LAYOUT,
-            Asset::EXTENSION_CSS
+            Asset::CONTEXT_LAYOUT
         );
+
+        /** @var Asset $asset */
+        foreach ($assets['css'] as $asset) {
+            if ($asset->type === Asset::EXTENSION_CSS) {
+                $asset->preload = true;
+            }
+        }
 
         // No main js found.
         if (empty($assets[Asset::EXTENSION_JS]))
@@ -202,14 +206,24 @@ class AssetsExtension extends AbstractExtension
 
     public function assetsPreloadList(string $ext): array
     {
-        return $this->assetsPreload[$ext];
+        $assets = $this->assets[$ext];
+        $output = [];
+
+        /** @var Asset $asset */
+        foreach ($assets as $asset) {
+            if ($asset->preload) {
+                $output[] = $asset;
+            }
+        }
+
+        return $output;
     }
 
     public function assetsDetect(
         string $templateName,
-        string $context,
-        string|bool $preload = false
-    ): array {
+        string $context
+    ): array
+    {
         $output = [];
 
         foreach (Asset::ASSETS_EXTENSIONS as $ext)
@@ -217,8 +231,7 @@ class AssetsExtension extends AbstractExtension
             $output[$ext] = $this->assetsDetectForType(
                 $templateName,
                 $ext,
-                $context,
-                $preload === true || $preload === $ext
+                $context
             );
         }
 
@@ -231,16 +244,14 @@ class AssetsExtension extends AbstractExtension
     public function assetsDetectForType(
         string $templateName,
         string $ext,
-        string $context,
-        bool $preload = false
+        string $context
     ): array {
         $assetPath = $ext.'/'.$templateName.'.'.$ext;
         $output = [];
 
         if ($asset = $this->addAsset(
             $assetPath,
-            $context,
-            $preload
+            $context
         ))
         {
             $output[] = $asset;
@@ -274,8 +285,7 @@ class AssetsExtension extends AbstractExtension
 
     public function addAsset(
         string $pathRelative,
-        string $context,
-        bool $preload = false
+        string $context
     ): ?Asset {
         $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
         if (!isset($this->manifest[$pathRelativeToPublic]))
@@ -290,8 +300,6 @@ class AssetsExtension extends AbstractExtension
                 $context
             );
 
-            $asset->preload = $preload;
-
             $this->assetsLoaded[$pathRelative] = $asset;
         }
         else
@@ -300,11 +308,6 @@ class AssetsExtension extends AbstractExtension
         }
 
         $this->assets[$asset->type][] = $asset;
-
-        if ($preload)
-        {
-            $this->assetsPreload[$asset->type][] = $asset;
-        }
 
         return $this->assetsLoaded[$pathRelative];
     }
