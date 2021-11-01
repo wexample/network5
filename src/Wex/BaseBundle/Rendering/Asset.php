@@ -113,7 +113,6 @@ class Asset
 
     /**
      * Used in twig rendering like "asset.preloadAs"
-     * @return string|null
      */
     public function getPreloadAs(): ?string
     {

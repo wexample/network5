@@ -3,6 +3,7 @@
 namespace App\Wex\BaseBundle\Helper;
 
 use function implode;
+use function is_null;
 
 class DomHelper
 {

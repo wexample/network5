@@ -3,6 +3,7 @@
 namespace App\Wex\BaseBundle\Rendering;
 
 use App\Wex\BaseBundle\Helper\DomHelper;
+use function uniqid;
 
 class Component
 {
