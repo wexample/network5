@@ -65,6 +65,10 @@ class TemplateExtension extends AbstractExtension
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
         );
+        /** @var JsExtension $jsExtension */
+        $jsExtension = $env->getExtension(
+            JsExtension::class
+        );
 
         $output = array_merge_recursive(
             $this->templateBuildRenderData($env, $pageTemplateName),
@@ -72,6 +76,7 @@ class TemplateExtension extends AbstractExtension
                 VariableHelper::ASSETS => $assetsExtension->buildRenderData(Asset::CONTEXT_LAYOUT),
                 'displayBreakpoints' => AssetsExtension::DISPLAY_BREAKPOINTS,
                 VariableHelper::ENV => $this->kernel->getEnvironment(),
+                VariableHelper::VARS => $jsExtension->jsVarsGet(JsExtension::VARS_GROUP_GLOBAL),
             ]
         );
 
@@ -102,12 +107,17 @@ class TemplateExtension extends AbstractExtension
         $translationExtension = $env->getExtension(
             TranslationExtension::class
         );
+        /** @var JsExtension $jsExtension */
+        $jsExtension = $env->getExtension(
+            JsExtension::class
+        );
 
         return [
             VariableHelper::ASSETS => $assetsExtension->buildRenderData(Asset::CONTEXT_PAGE),
             VariableHelper::BODY => $body,
             VariableHelper::NAME => $pageName,
             VariableHelper::TRANSLATIONS => $translationExtension->buildRenderData(),
+            VariableHelper::VARS => $jsExtension->jsVarsGet(JsExtension::VARS_GROUP_PAGE),
         ];
     }
 

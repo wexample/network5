@@ -8,6 +8,8 @@
     {{ js_var('demoVariableBoolean', true) }}
     {{ js_var('demoVariableInteger', 123) }}
     {{ js_var('demoVariableFloat', 123.456) }}
+    {{ js_var('demoVariableObject', {'key':{'key2':'value'}}) }}
+    {{ parent() }}
 {%- endblock -%}
 
 {%- block page_content_body -%}

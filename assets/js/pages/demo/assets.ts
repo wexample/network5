@@ -11,7 +11,9 @@ const bundle: AssetBundleInterface = {
         init() {
             this.unitTest = new UnitTest();
 
-            this.testQueue();
+            this.testQueues();
+            this.testVariables();
+
             this.refreshLoadedAssetsList();
         }
 
@@ -83,7 +85,7 @@ const bundle: AssetBundleInterface = {
             el.innerHTML = output;
         }
 
-        testQueue() {
+        testQueues() {
             let test = this.unitTest;
             let queuesMixin = this.app.getService('queues');
             let queue = queuesMixin.create('test-queue');
@@ -167,6 +169,36 @@ const bundle: AssetBundleInterface = {
                     'All callbacks are executed after 1 second'
                 );
             }, 1000);
+        }
+
+        testVariables() {
+            let test = this.unitTest;
+
+            test.assertEquals(
+                this.app.layoutPage.vars.demoVariable,
+                'demoVariableValue',
+                'Variable has proper value'
+            );
+
+            test.assertTrue(
+                typeof this.app.layoutPage.vars.demoVariableBoolean === 'boolean',
+                'Variable has proper boolean value'
+            );
+
+            test.assertTrue(
+                typeof this.app.layoutPage.vars.demoVariableInteger === 'number',
+                'Variable int has proper number value'
+            );
+
+            test.assertTrue(
+                typeof this.app.layoutPage.vars.demoVariableFloat === 'number',
+                'Variable float has proper number value'
+            );
+
+            test.assertTrue(
+                typeof this.app.layoutPage.vars.demoVariableObject === 'object',
+                'Variable object has proper number value'
+            );
         }
     }
 };

@@ -1,18 +1,22 @@
 import App from "./App";
 import PageResponsiveDisplay from "./PageResponsiveDisplay";
+import PageRenderDataInterface from "../interfaces/PageRenderDataInterface";
 
 export default class {
     public readonly app: App;
-    protected responsiveDisplayCurrent: PageResponsiveDisplay;
-    protected readonly responsiveDisplays: any = [];
     protected readonly isLayoutPage: boolean;
     protected readonly name: string;
     private readonly onChangeResponsiveSizeProxy: Function;
+    protected readonly responsiveDisplays: any = [];
+    protected responsiveDisplayCurrent: PageResponsiveDisplay;
+    public vars: any;
 
-    constructor(app: App, renderData) {
+    constructor(app: App, renderData: PageRenderDataInterface) {
         this.app = app;
         this.isLayoutPage = renderData.isLayoutPage;
         this.name = renderData.name;
+
+        this.loadRenderData(renderData);
 
         if (this.isLayoutPage) {
             this.app.layoutPage = this;
@@ -49,6 +53,10 @@ export default class {
             );
 
         this.exit();
+    }
+
+    loadRenderData(renderData: PageRenderDataInterface) {
+        this.vars = renderData.vars;
     }
 
     updateCurrentResponsiveDisplay() {
