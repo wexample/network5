@@ -15,6 +15,7 @@ use function substr;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\Environment;
 use Twig\TwigFunction;
+use function ucfirst;
 
 class TemplateExtension extends AbstractExtension
 {

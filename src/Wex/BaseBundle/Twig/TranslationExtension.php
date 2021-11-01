@@ -5,6 +5,7 @@ namespace App\Wex\BaseBundle\Twig;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Translation\Translator;
 use Twig\TwigFunction;
+use function str_starts_with;
 
 class TranslationExtension extends AbstractExtension
 {

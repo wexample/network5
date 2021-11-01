@@ -9,6 +9,10 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Twig\TwigFunction;
 use Twig\Extension\AbstractExtension;
+use function class_exists;
+use function is_array;
+use function is_object;
+use function is_subclass_of;
 
 class JsExtension extends AbstractExtension
 {
@@ -81,7 +85,7 @@ class JsExtension extends AbstractExtension
      */
     public function jsVar(
         string $name,
-        $value,
+        mixed $value,
         string $group = self::VARS_GROUP_PAGE
     ): void
     {
