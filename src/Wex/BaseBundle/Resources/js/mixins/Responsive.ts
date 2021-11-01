@@ -6,6 +6,7 @@ import AssetsCollectionInterface from "../interfaces/AssetsCollectionInterface";
 import Queue from "../class/Queue";
 import AppService from "../class/AppService";
 import MixinsAppService from "../class/MixinsAppService";
+import LayoutRenderDataInterface from "../interfaces/LayoutRenderDataInterface";
 
 const mixin: MixinInterface = {
     name: 'responsive',
@@ -18,7 +19,7 @@ const mixin: MixinInterface = {
 
     hooks: {
         app: {
-            loadRenderData(data, registry, next) {
+            loadLayoutRenderData(data: LayoutRenderDataInterface, registry: any, next: Function) {
                 if (registry.MixinAssets === MixinsAppService.LOAD_STATUS_COMPLETE
                     && registry.MixinQueues === MixinsAppService.LOAD_STATUS_COMPLETE) {
                     let responsiveService = this.app.getService('responsive');

@@ -35,12 +35,16 @@ export default class {
         let run = () => {
             this.mixins = this.getMixinsAndDependencies(this.getMixins());
 
-            Object.values(this.mixins).forEach((mixin: MixinInterface) =>
-                this.services[mixin.name] = new mixin.service(this)
-            );
+            Object.values(this.mixins).forEach((mixin: MixinInterface) => {
+                if (mixin.service) {
+                    this.services[mixin.name] = new mixin.service(this);
+                }
+            });
+
+            let mixinService = this.getService('mixins');
 
             // Init mixins.
-            this.getService('mixins').invokeUntilComplete('init', 'app', [], () => {
+            mixinService.invokeUntilComplete('init', 'app', [], () => {
                 this.elLayout = doc.getElementById('layout');
 
                 this.addLibraries(this.lib);
@@ -48,15 +52,20 @@ export default class {
                 // The main functionalities are ready.
                 this.hasCoreLoaded = true;
 
-                // Load template data.
-                this.loadRenderData(this.registry.layoutData, () => {
-                    // Execute ready callbacks.
-                    this.readyComplete();
-                    // Display page content.
-                    this.elLayout.classList.remove('layout-loading');
-                    // Launch constructor argument callback.
-                    readyCallback && readyCallback.apply(this);
-                });
+                // Load layout data.
+                mixinService
+                    .invokeUntilComplete(
+                        'loadLayoutRenderData',
+                        'app',
+                        [this.registry.layoutData],
+                        () => {
+                            // Execute ready callbacks.
+                            this.readyComplete();
+                            // Display page content.
+                            this.elLayout.classList.remove('layout-loading');
+                            // Launch constructor argument callback.
+                            readyCallback && readyCallback.apply(this);
+                        });
             });
         };
 
@@ -103,18 +112,6 @@ export default class {
 
             callback[method](thisArg || this, args)
         }
-    }
-
-    loadRenderData(data, complete) {
-        if (data.redirect) {
-            document.location.replace(data.redirect.url);
-            return;
-        }
-
-        // Use mixins hooks.
-        this.getService('mixins').invokeUntilComplete('loadRenderData', 'app', [data], () => {
-            complete && complete(data);
-        });
     }
 
     getClassPage() {

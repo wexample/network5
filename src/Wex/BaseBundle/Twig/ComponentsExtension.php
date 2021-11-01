@@ -14,7 +14,7 @@ class ComponentsExtension extends AbstractExtension
     /**
      * Save components options initialized by com_init.
      */
-    protected array $components = [];
+    public array $components = [];
 
     public function __construct(
         protected AssetsExtension $assetsExtension)

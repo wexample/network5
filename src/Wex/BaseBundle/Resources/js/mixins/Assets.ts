@@ -3,7 +3,6 @@ import AssetsCollectionInterface from "../interfaces/AssetsCollectionInterface";
 import MixinInterface from "../interfaces/MixinInterface";
 import Queue from "../class/Queue";
 import AppService from "../class/AppService";
-import MixinsAppService from "../class/MixinsAppService";
 
 const mixin: MixinInterface = {
     name: 'assets',
@@ -18,13 +17,6 @@ const mixin: MixinInterface = {
                 // Only single queue for assets, for now.
                 this.app.getService('assets').queue =
                     this.app.getService('queues').create('assets-loading');
-            },
-
-            loadRenderData(data, registry) {
-                if (registry.MixinQueues === MixinsAppService.LOAD_STATUS_COMPLETE) {
-                    return MixinsAppService.LOAD_STATUS_COMPLETE;
-                }
-                return MixinsAppService.LOAD_STATUS_WAIT;
             },
         },
     },

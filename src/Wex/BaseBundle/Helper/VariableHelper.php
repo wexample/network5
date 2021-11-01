@@ -62,6 +62,8 @@ class VariableHelper
 
     public const PAGE = 'page';
 
+    public const PLURAL_COMPONENTS = self::COMPONENT.'s';
+
     public const PLURAL_PAGE = self::PAGE.'s';
 
     public const PATH_ENTITY = 'Entity';

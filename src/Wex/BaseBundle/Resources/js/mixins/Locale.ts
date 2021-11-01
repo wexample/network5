@@ -6,14 +6,6 @@ import {format as StringFormat} from "../helpers/String";
 const mixin: MixinInterface = {
     name: 'locale',
 
-    hooks: {
-        app: {
-            loadRenderData() {
-                return MixinsAppService.LOAD_STATUS_COMPLETE;
-            },
-        },
-    },
-
     service: class extends AppService {
         transDomains: object = {}
 

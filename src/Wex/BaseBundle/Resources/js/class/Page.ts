@@ -4,11 +4,12 @@ import PageRenderDataInterface from "../interfaces/PageRenderDataInterface";
 import AppChild from "./AppChild";
 
 export default class extends AppChild {
-    protected readonly isLayoutPage: boolean;
-    protected readonly name: string;
-    private readonly onChangeResponsiveSizeProxy: Function;
+    public readonly el: HTMLElement;
+    public readonly isLayoutPage: boolean;
+    public readonly name: string;
+    protected readonly onChangeResponsiveSizeProxy: Function;
     protected readonly responsiveDisplays: any = [];
-    protected responsiveDisplayCurrent: PageResponsiveDisplay;
+    public responsiveDisplayCurrent: PageResponsiveDisplay;
     public vars: any;
 
     constructor(app: App, renderData: PageRenderDataInterface) {
@@ -19,6 +20,7 @@ export default class extends AppChild {
 
         if (this.isLayoutPage) {
             this.app.layoutPage = this;
+            this.el = this.app.elLayout;
         }
 
         this.loadRenderData(renderData);
@@ -55,7 +57,16 @@ export default class extends AppChild {
     }
 
     loadRenderData(renderData: PageRenderDataInterface) {
-        this.vars = renderData.vars;
+        this.vars = {...this.vars, ...renderData.vars};
+
+        this
+            .app
+            .getService('mixins')
+            .invokeUntilComplete(
+                'loadPageRenderData',
+                'page',
+                [this, renderData]
+            );
     }
 
     updateCurrentResponsiveDisplay() {
