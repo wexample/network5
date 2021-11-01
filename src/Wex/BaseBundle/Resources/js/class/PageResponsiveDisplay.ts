@@ -1,18 +1,16 @@
-import App from "./App";
 import Page from "./Page";
+import AppChild from "./AppChild";
+import PageRenderDataInterface from "../interfaces/PageRenderDataInterface";
 
-export default class {
-    protected readonly app: App;
+export default class extends AppChild {
     protected readonly page: Page;
 
-    constructor(page, renderData) {
+    constructor(page) {
+        super(page.app);
         this.page = page;
-        this.app = this.page.app;
-
-        this.init(renderData);
     }
 
-    init(renderData: any) {
+    init(renderData: PageRenderDataInterface) {
         // To override...
     }
 }

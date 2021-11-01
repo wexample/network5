@@ -5,7 +5,9 @@ const bundle: AssetBundleInterface = {
     bundleGroup: 'component',
 
     definition: class extends Component {
+        init() {
 
+        }
     }
 };
 

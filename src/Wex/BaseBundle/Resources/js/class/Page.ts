@@ -1,9 +1,9 @@
 import App from "./App";
 import PageResponsiveDisplay from "./PageResponsiveDisplay";
 import PageRenderDataInterface from "../interfaces/PageRenderDataInterface";
+import AppChild from "./AppChild";
 
-export default class {
-    public readonly app: App;
+export default class extends AppChild {
     protected readonly isLayoutPage: boolean;
     protected readonly name: string;
     private readonly onChangeResponsiveSizeProxy: Function;
@@ -12,15 +12,16 @@ export default class {
     public vars: any;
 
     constructor(app: App, renderData: PageRenderDataInterface) {
-        this.app = app;
+        super(app);
+
         this.isLayoutPage = renderData.isLayoutPage;
         this.name = renderData.name;
-
-        this.loadRenderData(renderData);
 
         if (this.isLayoutPage) {
             this.app.layoutPage = this;
         }
+
+        this.loadRenderData(renderData);
 
         this.onChangeResponsiveSizeProxy = this.onChangeResponsiveSize.bind(this);
 
@@ -32,11 +33,9 @@ export default class {
             );
 
         this.updateCurrentResponsiveDisplay();
-
-        this.init(renderData);
     }
 
-    init(pageRenderData: any) {
+    init(pageRenderData: PageRenderDataInterface) {
         // To override...
     }
 
@@ -63,26 +62,31 @@ export default class {
         let responsiveMixin = this.app.getService('responsive');
         let previous = responsiveMixin.responsiveSizePrevious;
         let current = responsiveMixin.responsiveSizeCurrent;
+        let displays = this.responsiveDisplays;
 
         if (previous !== current) {
-            if (this.responsiveDisplays[current] === undefined) {
+            if (displays[current] === undefined) {
                 let display = this.app.getBundleClassDefinition(
                     'page',
                     `${this.name}-${current}`
                 );
 
-                this.responsiveDisplays[current] = display ? (new display(this)) : null;
+                displays[current] = display ? (new display(this)) : null;
+
+                if (displays[current]) {
+                    displays[current].init();
+                }
             }
 
-            if (this.responsiveDisplays[previous]) {
-                this.responsiveDisplays[previous].onResponsiveExit();
+            if (displays[previous]) {
+                displays[previous].onResponsiveExit();
             }
 
-            if (this.responsiveDisplays[current]) {
-                this.responsiveDisplays[current].onResponsiveEnter();
+            if (displays[current]) {
+                displays[current].onResponsiveEnter();
             }
 
-            this.responsiveDisplayCurrent = this.responsiveDisplays[current];
+            this.responsiveDisplayCurrent = displays[current];
         }
     }
 

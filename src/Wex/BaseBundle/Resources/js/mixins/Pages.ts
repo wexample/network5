@@ -38,7 +38,10 @@ const mixin: MixinInterface = {
                 classDefinition = this.app.getClassPage();
             }
 
-            return new classDefinition(this.app, data);
+            let page = new classDefinition(this.app, data);
+            page.init(data);
+
+            return page;
         }
     },
 };
