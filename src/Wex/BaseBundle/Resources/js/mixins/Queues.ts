@@ -1,39 +1,25 @@
-import MixinArrays from "./Arrays";
 import Queue from "../class/Queue";
 import MixinInterface from "../interface/MixinInterface";
 import MixinsAppService from "../class/MixinsAppService";
 
+import {deleteItem as ArrayDeleteItem} from "../helper/Arrays";
+import {shallowCopy as ArrayShallowCopy} from "../helper/Arrays";
+
 const mixin: MixinInterface = {
     name: 'queues',
-
-    dependencies: {
-        MixinArrays,
-    },
-
-    hooks: {
-        app: {
-            loadRenderData(data, registry) {
-                if (registry.MixinArrays === MixinsAppService.LOAD_STATUS_COMPLETE) {
-                    return MixinsAppService.LOAD_STATUS_COMPLETE;
-                }
-                return MixinsAppService.LOAD_STATUS_WAIT;
-            },
-        },
-    },
 
     service: class extends MixinsAppService {
         queues: object = {}
 
         afterAllQueues(queues, complete) {
-            let arraysService = this.app.getService('arrays');
-            let originalList = arraysService.shallowCopy(queues);
+            let originalList = ArrayShallowCopy(queues);
             let hasRunningQueue = false;
 
             queues.forEach((queue) => {
                 if (queue.started) {
                     hasRunningQueue = true;
                     queue.then(() => {
-                        arraysService.deleteItem(queues, queue);
+                        ArrayDeleteItem(queues, queue);
                         if (!queues.length) {
                             queue.then(() => {
                                 complete(originalList);
