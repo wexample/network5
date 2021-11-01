@@ -16,7 +16,7 @@ class DomHelper
             $output[] = $key.'="'.$value.'"';
         }
 
-        return implode($output);
+        return implode(VariableHelper::_SPACE, $output);
     }
 
     public static function buildTag(
@@ -25,7 +25,7 @@ class DomHelper
         string $body = '',
         bool $allowSingleTag = true
     ): string {
-        $output = '<'.$tagName.' '.static::buildTagAttributes($attributes);
+        $output = '<'.$tagName;
 
         $outputAttributes = static::buildTagAttributes($attributes);
         $output .= $outputAttributes ? ' '.$outputAttributes : '';

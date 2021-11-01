@@ -6,6 +6,7 @@ use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Service\TemplateService;
 use App\Wex\BaseBundle\Translation\Translator;
+use Doctrine\DBAL\Types\Types;
 use JetBrains\PhpStorm\ArrayShape;
 use function array_merge_recursive;
 use function str_ends_with;
@@ -81,9 +82,11 @@ class TemplateExtension extends AbstractExtension
 
     #[ArrayShape([
             VariableHelper::ASSETS => "\App\Wex\BaseBundle\Rendering\Asset[][][]|array[]|\array[][]",
-            VariableHelper::BODY => "null|string",
-            VariableHelper::NAME => "string",
-            VariableHelper::TRANSLATIONS => "array"]
+            VariableHelper::BODY => VariableHelper::NULL."|".Types::STRING,
+            VariableHelper::NAME => Types::STRING,
+            VariableHelper::TRANSLATIONS => Types::ARRAY,
+            VariableHelper::VARS => Types::ARRAY
+        ]
     )]
     public function templateBuildPageData(
         Environment $env,
@@ -118,8 +121,8 @@ class TemplateExtension extends AbstractExtension
     }
 
     #[ArrayShape([
-        VariableHelper::PAGE => "array|null",
-        VariableHelper::TRANSLATIONS => "array"
+        VariableHelper::PAGE => Types::ARRAY."|".VariableHelper::NULL,
+        VariableHelper::TRANSLATIONS => Types::ARRAY
     ])]
     public function templateBuildRenderData(
         Environment $env,

@@ -4,6 +4,8 @@ namespace App\Wex\BaseBundle\Helper;
 
 class VariableHelper
 {
+    public const _SPACE = ' ';
+    
     public const ALL = 'all';
 
     public const ASSETS = 'assets';
@@ -11,7 +13,7 @@ class VariableHelper
     public const BODY = 'body';
 
     public const CATALOG = 'catalog';
-    
+
     public const COMPONENT = 'component';
 
     public const DEMO = 'demo';
@@ -54,6 +56,8 @@ class VariableHelper
 
     public const NAME = 'name';
 
+    public const NULL = 'null';
+
     public const PAGE = 'page';
 
     public const PLURAL_PAGE = self::PAGE.'s';
@@ -75,12 +79,6 @@ class VariableHelper
     public const VARS = 'vars';
 
     public const EMPTY_STRING = '';
-
-    public const VARIABLE_TYPE_ARRAY = 'array';
-
-    public const VARIABLE_TYPE_MIXED = 'mixed';
-
-    public const VARIABLE_TYPE_STRING = 'string';
 
     public const VARIABLE_TYPE_STRING_LENGTH_DEFAULT = 255;
 

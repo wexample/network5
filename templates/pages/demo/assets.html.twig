@@ -2,6 +2,14 @@
 
 {%- set template_path = _self -%}
 
+{%- block template_config -%}
+    {{ js_var('demoVariable', 'demoVariableValueOverridden') }}
+    {{ js_var('demoVariable', 'demoVariableValue') }}
+    {{ js_var('demoVariableBoolean', true) }}
+    {{ js_var('demoVariableInteger', 123) }}
+    {{ js_var('demoVariableFloat', 123.456) }}
+{%- endblock -%}
+
 {%- block page_content_body -%}
     <div class="inline-infos theme-dark">
         <div class="info">
