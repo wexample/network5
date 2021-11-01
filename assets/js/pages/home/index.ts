@@ -1,6 +1,5 @@
-import Manager from "../../class/MouseTail/Manager";
 import Page from "../../../../src/Wex/BaseBundle/Resources/js/class/Page";
-import AssetBundleInterface from "../../../../src/Wex/BaseBundle/Resources/js/interface/AssetBundleInterface";
+import AssetBundleInterface from "../../../../src/Wex/BaseBundle/Resources/js/interfaces/AssetBundleInterface";
 
 const bundle: AssetBundleInterface = {
     classContext: 'page',

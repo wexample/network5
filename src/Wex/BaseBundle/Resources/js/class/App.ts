@@ -4,7 +4,7 @@ import MixinAssets from '../mixins/Assets';
 import MixinMixin from '../mixins/Mixins';
 import MixinPage from '../mixins/Pages';
 import MixinResponsive from '../mixins/Responsive';
-import MixinInterface from "../interface/MixinInterface";
+import MixinInterface from "../interfaces/MixinInterface";
 
 export default class {
     public bootJsBuffer: string[] = [];

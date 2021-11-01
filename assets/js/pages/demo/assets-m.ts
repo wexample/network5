@@ -1,4 +1,4 @@
-import AssetBundleInterface from "../../../../src/Wex/BaseBundle/Resources/js/interface/AssetBundleInterface";
+import AssetBundleInterface from "../../../../src/Wex/BaseBundle/Resources/js/interfaces/AssetBundleInterface";
 import PageResponsiveDisplay from "../../../../src/Wex/BaseBundle/Resources/js/class/PageResponsiveDisplay";
 
 const bundle: AssetBundleInterface = {

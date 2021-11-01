@@ -1,9 +1,9 @@
 import Queue from "../class/Queue";
-import MixinInterface from "../interface/MixinInterface";
+import MixinInterface from "../interfaces/MixinInterface";
 import MixinsAppService from "../class/MixinsAppService";
 
-import {deleteItem as ArrayDeleteItem} from "../helper/Arrays";
-import {shallowCopy as ArrayShallowCopy} from "../helper/Arrays";
+import {deleteItem as ArrayDeleteItem} from "../helpers/Arrays";
+import {shallowCopy as ArrayShallowCopy} from "../helpers/Arrays";
 
 const mixin: MixinInterface = {
     name: 'queues',

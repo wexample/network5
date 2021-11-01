@@ -1,7 +1,7 @@
 import {MDCRipple} from '@material/ripple/index';
 import Page from "../../../../src/Wex/BaseBundle/Resources/js/class/Page";
 import UnitTest from "../../../../src/Wex/BaseBundle/Resources/js/class/UnitTest";
-import AssetBundleInterface from "../../../../src/Wex/BaseBundle/Resources/js/interface/AssetBundleInterface";
+import AssetBundleInterface from "../../../../src/Wex/BaseBundle/Resources/js/interfaces/AssetBundleInterface";
 
 const bundle: AssetBundleInterface = {
     classContext: 'page',
