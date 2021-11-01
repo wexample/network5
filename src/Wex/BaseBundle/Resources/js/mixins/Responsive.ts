@@ -45,32 +45,31 @@ const mixin: MixinInterface = {
         public responsiveSizePrevious: string
 
         updateResponsive(complete?: Function) {
-            let responsiveService = this.app.getService('responsive');
-            let current = responsiveService.detectSize();
+            let current = this.detectSize();
 
-            responsiveService.responsiveSizePrevious = responsiveService.responsiveSizeCurrent;
+            this.responsiveSizePrevious = this.responsiveSizeCurrent;
 
-            if (current !== responsiveService.responsiveSizePrevious) {
-                responsiveService.responsiveSizeCurrent = current;
+            if (current !== this.responsiveSizePrevious) {
+                this.responsiveSizeCurrent = current;
 
                 let assetsService = this.app.getService('assets');
                 assetsService.queue.reset()
 
                 // Update layout level assets.
-                responsiveService.updateResponsiveAssets(
+                this.updateResponsiveAssets(
                     this.app.registry.layoutData.assets.responsive,
                     () => {
                         // Update page level assets.
-                        responsiveService.updateResponsiveAssets(
+                        this.updateResponsiveAssets(
                             this.app.registry.layoutData.page.assets.responsive,
                             () => {
                                 // Now change page class.
-                                responsiveService.updateResponsiveLayoutClass();
+                                this.updateResponsiveLayoutClass();
 
                                 this.app.getService('events')
                                     .trigger('responsive-change-size', {
                                         current: current,
-                                        previous: responsiveService.responsiveSizePrevious,
+                                        previous: this.responsiveSizePrevious,
                                     });
 
                                 complete && complete();

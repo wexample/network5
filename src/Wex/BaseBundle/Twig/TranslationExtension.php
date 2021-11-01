@@ -4,6 +4,8 @@ namespace App\Wex\BaseBundle\Twig;
 
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Translation\Translator;
+use Doctrine\DBAL\Types\Types;
+use JetBrains\PhpStorm\ArrayShape;
 use Twig\TwigFunction;
 use function str_starts_with;
 
@@ -41,7 +43,10 @@ class TranslationExtension extends AbstractExtension
         ];
     }
 
-    public function buildRenderData(): array
+    #[ArrayShape([
+        VariableHelper::DOMAIN => VariableHelper::NULL."|".Types::STRING,
+        VariableHelper::CATALOG => Types::ARRAY
+    ])] public function buildRenderData(): array
     {
         return [
             VariableHelper::DOMAIN => $this->translator->getDomain(Translator::DOMAIN_TYPE_PAGE),

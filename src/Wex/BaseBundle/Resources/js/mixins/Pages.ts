@@ -35,7 +35,7 @@ const mixin: MixinInterface = {
             );
 
             if (!classDefinition) {
-                classDefinition = Page;
+                classDefinition = this.app.getClassPage();
             }
 
             return new classDefinition(this.app, data);
