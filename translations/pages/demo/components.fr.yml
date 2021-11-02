@@ -1,0 +1,14 @@
+components:
+  init:
+    title: Initialisation
+    class:
+      title: Via une classe
+      body: Ce composant considère l'élément DOM qui possède la classe CSS auto-générée comme étant son élément principal.
+    parent:
+      title: Via le parent
+      body: Ce composant considère son élément DOM conteneur comme étant son élément principal.
+    previous:
+      title: Via l'élément précédent
+      body: Ce composant considère l'élément DOM qui le précède comme étant son élément principal.
+
+page_title: Composants
