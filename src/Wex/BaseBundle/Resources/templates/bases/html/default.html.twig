@@ -6,6 +6,7 @@
 {%- set template_head_title = template_head_title|default(page_title) -%}
 {%- set layout_name = layout_name|default(null) -%}
 {%- set layout_no_js = layout_no_js|default(false) -%}
+{%- set layout_theme = layout_theme|default('light') -%}
 {%- set template_name = template_name_from_path(template_path) -%}
 
 {%- block template_base -%}
@@ -85,7 +86,7 @@
             <meta name="description" content="{{ (meta_description|default('@layout::meta.description')) | trans }}">
         {%- endblock -%}
     </head>
-    <body>
+    <body class="theme-{{ layout_theme }}">
     <div id="layout" class="layout-loading {{ layout_class|default('') }}">
         {% if not layout_no_js %}
             {#- If javascript fails to complete, force removing loading state after 2 seconds.        -#}

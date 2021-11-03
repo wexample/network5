@@ -4,7 +4,7 @@
 
 {%- block page_content_body -%}
     <h2>{{ '@page::domains.title' | trans }}</h2>
-    <div class="block theme-dark">
+    <div class="block">
         <code>
             // {{ '@page::domains.context.layout' | trans }}<br>
             {{ '{{ \'@layout::meta.description\' | trans }}' }}<br>
@@ -16,7 +16,7 @@
     <div class="block">
         {{ '@page::includes.body' | trans | raw }}
     </div>
-    <div class="block theme-dark">
+    <div class="block">
         <code>
             // translation-file-one.en.yml<br>
             example_key:<br>
@@ -33,7 +33,7 @@
     <div class="block">
         {{ '@page::extends.body' | trans | raw }}
     </div>
-    <div class="block theme-dark">
+    <div class="block">
         <code>
             // translation-file-two.en.yml<br>
             ~extends: '@translation-file-one'<br>

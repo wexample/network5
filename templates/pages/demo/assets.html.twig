@@ -13,7 +13,7 @@
 {%- endblock -%}
 
 {%- block page_content_body -%}
-    <div class="inline-infos theme-dark">
+    <div class="inline-infos">
         <div class="info">
             {{ '@page::infos.template_name' | trans }} : <b>{{ template_name }}</b>
         </div>
@@ -31,7 +31,7 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="block theme-dark">
+        <div class="block">
             {{ '@page::breakpoints.body' | trans | raw }}
             <br>
             <br>
@@ -39,7 +39,7 @@
         </div>
     </div>
     <h2>{{ '@page::resources.title' | trans }}</h2>
-    <div class="block theme-dark">
+    <div class="block">
         {{ ('@page::resources.body_' ~ (layout_no_js ? 'no_' : '') ~ 'js') | trans | raw }}
     </div>
     {% if not layout_no_js %}
@@ -51,7 +51,7 @@
                 <ul id="loaded-assets-list-js"></ul>
             </div>
         </div>
-        <div class="block theme-dark">
+        <div class="block">
             {{ '@page::resources.body_available' | trans | raw }}
         </div>
         <div class="blocks">
