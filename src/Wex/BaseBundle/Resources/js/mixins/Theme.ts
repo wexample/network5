@@ -90,7 +90,11 @@ const mixin: MixinInterface = {
         }
 
         setTheme(theme: string, updateAssets: boolean, complete?: Function) {
+            document.body.classList.remove(`theme-${this.activeTheme}`);
+
             this.activeTheme = theme;
+
+            document.body.classList.add(`theme-${this.activeTheme}`);
 
             if (this.activeTheme !== ThemeService.THEME_DEFAULT) {
                 if (updateAssets) {

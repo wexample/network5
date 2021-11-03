@@ -1,11 +1,7 @@
 // Base extension.
-@use '../../../../src/Wex/BaseBundle/Resources/css/mains/default/layout';
+@use '../../../../src/Wex/BaseBundle/Resources/css/layouts/default/layout';
+// Base partials.
+@use '../../../../src/Wex/BaseBundle/Resources/css/layouts/wex/partials/default';
 // Layout partials.
 @use '../../partials/fonts';
-// Local partials.
-@use 'partials/default';
 
-
-body {
-  font-family: "Work Sans Regular", sans-serif;
-}

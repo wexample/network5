@@ -1,9 +1,4 @@
 
-body.theme-dark, .theme-dark body {
-  background: black;
-}
-
-a.theme-dark, .theme-dark a {
-  color: white;
-}
+// Base partials.
+@use '../../../../../../src/Wex/BaseBundle/Resources/css/layouts/default/themes/dark/partials/default';
 
