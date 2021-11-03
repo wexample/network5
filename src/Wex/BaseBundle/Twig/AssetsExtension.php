@@ -244,7 +244,7 @@ class AssetsExtension extends AbstractExtension
     {
         // When using JS, we manage responsive
         // and extra theme style outside page rendering flow.
-        if (!$useJs || $asset->responsive || $asset->theme)
+        if ((!$useJs) || $asset->responsive || $asset->theme)
         {
             return false;
         }

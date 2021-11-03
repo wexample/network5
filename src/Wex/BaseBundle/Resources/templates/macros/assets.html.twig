@@ -1,6 +1,6 @@
 {% macro render_available_css(layout_use_js) %}
     {% for asset in assets_list('css') %}
-        {%- if assets_is_available(asset, layout_use_js) -%}
+        {%- if asset.isAvailable(layout_use_js) -%}
             <link rel="stylesheet" media="{{ asset.media }}"
                   href="{{ asset(asset.path) }}"/>
             {{ asset_set_rendered(asset) }}
@@ -10,7 +10,7 @@
 
 {% macro render_available_js() %}
     {%- for asset in assets_list('js') -%}
-        {%- if assets_is_available(asset, true) -%}
+        {%- if asset.isAvailable(true) -%}
             <script type="text/javascript" src="{{ asset(asset.path) }}"></script>
             {{ asset_set_rendered(asset) }}
         {%- endif -%}

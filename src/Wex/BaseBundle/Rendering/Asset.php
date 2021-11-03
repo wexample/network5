@@ -118,10 +118,33 @@ class Asset
      */
     public function getPreloadAs(): ?string
     {
-        if ($this->preload) {
+        if ($this->preload)
+        {
             return self::PRELOAD_BY_ASSET_TYPE[$this->type];
         }
 
         return null;
+    }
+
+    public function getIsAvailable(bool $useJs): bool
+    {
+        if ($this->type === static::EXTENSION_JS)
+        {
+            return $useJs;
+        } else if ($this->type === static::EXTENSION_CSS)
+        {
+            if ($this->responsive)
+            {
+                // Responsive CSS are loaded in page when JS is disabled.
+                return !$useJs;
+            } elseif ($this->theme)
+            {
+                // Theme CSS are loaded using JS.
+                // TODO Preload default theme.
+                return false;
+            }
+        }
+
+        return true;
     }
 }

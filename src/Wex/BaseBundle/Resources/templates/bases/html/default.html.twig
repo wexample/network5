@@ -5,7 +5,7 @@
 {%- set template_head_title_args = template_head_title_args|default({}) -%}
 {%- set template_head_title = template_head_title|default(page_title) -%}
 {%- set layout_name = layout_name|default(null) -%}
-{%- set layout_use_js = layout_use_js|default(true) -%}
+{%- set layout_use_js = (layout_use_js is defined ? layout_use_js : true) -%}
 {%- set layout_theme = layout_theme|default('light') -%}
 {%- set template_name = template_name_from_path(template_path) -%}
 
