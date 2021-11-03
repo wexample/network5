@@ -1,15 +1,12 @@
-@use 'blocks';
-
 @import '../mixins/global';
 @import '../mixins/pills';
 
 .inline-infos {
-  @extend .block;
+  @import 'blocks';
 
   align-items: center;
   display: flex;
   padding: .5rem 1rem;
-  background: $light-gray;
   border-radius: $pill-border-radius;
   margin-bottom: 1rem;
 

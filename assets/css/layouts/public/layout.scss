@@ -1,13 +1,10 @@
 // Layout.
 @use '../black/layout';
-// Project partials.
-@use '../black/partials/inline-info';
 // Base partials.
 @use '../../../../src/Wex/BaseBundle/Resources/css/partials/container';
 @use '../../../../src/Wex/BaseBundle/Resources/css/partials/pills';
 @use '../../../../src/Wex/BaseBundle/Resources/css/partials/tabs';
 // Local partials.
-@use 'partials/default';
 @use 'partials/header';
 
 #nav-secondary {

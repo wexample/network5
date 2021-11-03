@@ -3,11 +3,9 @@
 @import '../mixins/blocks';
 
 .block {
-  background: $block-background-color;
   margin: $block-spacing;
   border-radius: $block-border-radius;
   padding: $block-padding-y $block-padding-x;
-  box-shadow: $block-shadow;
 }
 
 .blocks {

@@ -2,10 +2,10 @@
 @use '../../../../src/Wex/BaseBundle/Resources/css/mains/default/layout';
 // Layout partials.
 @use '../../partials/fonts';
+// Local partials.
+@use 'partials/default';
 
-@use "themes/dark";
 
 body {
-  background: black;
   font-family: "Work Sans Regular", sans-serif;
 }
