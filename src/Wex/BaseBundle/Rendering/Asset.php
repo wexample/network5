@@ -75,6 +75,8 @@ class Asset
 
     public ?string $responsive = null;
 
+    public ?string $theme = null;
+
     public ?string $type = null;
 
     #[NoReturn]
@@ -89,10 +91,10 @@ class Asset
         $pathWithoutExt = dirname($this->path).'/'.$info['filename'];
 
         $this->id = $context.'.'.PathHelper::relativeTo(
-            $pathWithoutExt,
-            '/'.AssetsExtension::DIR_BUILD.
+                $pathWithoutExt,
+                '/'.AssetsExtension::DIR_BUILD.
                 $this->type.'/'
-        );
+            );
     }
 
     /**
@@ -116,8 +118,7 @@ class Asset
      */
     public function getPreloadAs(): ?string
     {
-        if ($this->preload)
-        {
+        if ($this->preload) {
             return self::PRELOAD_BY_ASSET_TYPE[$this->type];
         }
 

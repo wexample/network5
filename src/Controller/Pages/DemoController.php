@@ -28,14 +28,14 @@ class DemoController extends AbstractPagesController
     }
 
     #[Route(
-        path: VariableHelper::DEMO.'/'.VariableHelper::PLURAL_COMPONENTS,
-        name: VariableHelper::DEMO.'_'.VariableHelper::PLURAL_COMPONENTS
+        path: VariableHelper::DEMO.'/'.VariableHelper::PLURAL_COMPONENT,
+        name: VariableHelper::DEMO.'_'.VariableHelper::PLURAL_COMPONENT
     )
     ]
     public function components(): Response
     {
         return $this->renderPage(
-            VariableHelper::PLURAL_COMPONENTS
+            VariableHelper::PLURAL_COMPONENT
         );
     }
 

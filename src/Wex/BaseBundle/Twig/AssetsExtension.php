@@ -2,6 +2,7 @@
 
 namespace App\Wex\BaseBundle\Twig;
 
+use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
 use function array_merge_recursive;
@@ -28,6 +29,18 @@ class AssetsExtension extends AbstractExtension
         'l' => 992,
         'xl' => 1200,
         'xxl' => 1400,
+    ];
+
+    public const THEME_DARK = 'dark';
+
+    public const THEME_LIGHT = 'light';
+
+    public const THEME_PRINT = 'print';
+
+    public const THEMES = [
+        self::THEME_DARK,
+        self::THEME_LIGHT,
+        self::THEME_PRINT,
     ];
 
     /**
@@ -226,8 +239,7 @@ class AssetsExtension extends AbstractExtension
     {
         $output = [];
 
-        foreach (Asset::ASSETS_EXTENSIONS as $ext)
-        {
+        foreach (Asset::ASSETS_EXTENSIONS as $ext) {
             $output[$ext] = $this->assetsDetectForType(
                 $templateName,
                 $ext,
@@ -257,17 +269,23 @@ class AssetsExtension extends AbstractExtension
             $output[] = $asset;
         }
 
+        // Add responsive assets.
+
         $breakpointsReverted = array_reverse(
             self::DISPLAY_BREAKPOINTS
         );
         $maxWidth = null;
 
-        foreach ($breakpointsReverted as $breakpointName => $minWidth)
-        {
-            $assetPath = $ext.'/'.$templateName.'-'.$breakpointName.'.'.$ext;
+        foreach ($breakpointsReverted as $breakpointName => $minWidth) {
+            $assetPath = implode(
+                FileHelper::FOLDER_SEPARATOR,
+                [
+                    $ext,
+                    $templateName.'-'.$breakpointName.'.'.$ext,
+                ]
+            );
 
-            if ($asset = $this->addAsset($assetPath, $context))
-            {
+            if ($asset = $this->addAsset($assetPath, $context)) {
                 $asset->responsive = $breakpointName;
                 $asset->media = 'screen and (min-width:'.$minWidth.'px)'.
                     ($maxWidth ? ' and (max-width:'.$maxWidth.'px)' : '');
@@ -276,6 +294,28 @@ class AssetsExtension extends AbstractExtension
             }
 
             $maxWidth = $minWidth;
+        }
+
+        // Add themes assets.
+        $basename = basename($templateName);
+        $dirname = dirname($templateName);
+        foreach (self::THEMES as $themeName) {
+            $assetPath = implode(
+                FileHelper::FOLDER_SEPARATOR,
+                [
+                    $ext,
+                    $dirname,
+                    VariableHelper::PLURAL_THEME,
+                    $themeName,
+                    $basename.'.'.$ext
+                ]
+            );
+
+            if ($asset = $this->addAsset($assetPath, $context)) {
+                $asset->theme = $themeName;
+
+                $output[] = $asset;
+            }
         }
 
         return $output;

@@ -62,15 +62,19 @@ class VariableHelper
 
     public const PAGE = 'page';
 
-    public const PLURAL_COMPONENTS = self::COMPONENT.'s';
+    public const PLURAL_COMPONENT = self::COMPONENT.'s';
 
     public const PLURAL_PAGE = self::PAGE.'s';
+
+    public const PLURAL_THEME = self::THEME.'s';
 
     public const PATH_ENTITY = 'Entity';
 
     public const RESPONSIVE = 'responsive';
 
     public const SEPARATOR = 'separator';
+
+    public const THEME = 'theme';
 
     public const TO = 'to';
 
