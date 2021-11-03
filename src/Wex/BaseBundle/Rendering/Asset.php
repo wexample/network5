@@ -130,7 +130,7 @@ class Asset
     {
         if ($this->type === static::EXTENSION_JS)
         {
-            return $useJs;
+            return $useJs && !$this->responsive;
         } else if ($this->type === static::EXTENSION_CSS)
         {
             if ($this->responsive)

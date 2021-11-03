@@ -6,7 +6,7 @@
 {%- set template_head_title = template_head_title|default(page_title) -%}
 {%- set layout_name = layout_name|default(null) -%}
 {%- set layout_use_js = (layout_use_js is defined ? layout_use_js : true) -%}
-{%- set layout_theme = layout_theme|default('light') -%}
+{%- set layout_theme = layout_theme|default('default') -%}
 {%- set template_name = template_name_from_path(template_path) -%}
 
 {%- block template_base -%}
@@ -109,7 +109,7 @@
             <script type="text/javascript" src="{{ asset('build/runtime.js') }}"></script>
             {{ macro_assets.render_available_js() }}
             <script type="text/javascript" nonce="layout-data">
-                window.appRegistry.layoutData = {{ template_build_layout_data(template_name) | json_encode(constant('JSON_PRETTY_PRINT')) | raw }};
+                window.appRegistry.layoutData = {{ template_build_layout_data(template_name, layout_theme) | json_encode(constant('JSON_PRETTY_PRINT')) | raw }};
             </script>
         {%- endif -%}
     {%- endblock -%}

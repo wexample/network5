@@ -59,7 +59,8 @@ class TemplateExtension extends AbstractExtension
 
     public function templateBuildLayoutData(
         Environment $env,
-        string $pageTemplateName
+        string $pageTemplateName,
+        string $layoutTheme
     ): array
     {
         /** @var AssetsExtension $assetsExtension */
@@ -78,6 +79,7 @@ class TemplateExtension extends AbstractExtension
                 'displayBreakpoints' => AssetsExtension::DISPLAY_BREAKPOINTS,
                 VariableHelper::ENV => $this->kernel->getEnvironment(),
                 VariableHelper::VARS => $jsExtension->jsVarsGet(JsExtension::VARS_GROUP_GLOBAL),
+                VariableHelper::THEME => $layoutTheme
             ]
         );
 

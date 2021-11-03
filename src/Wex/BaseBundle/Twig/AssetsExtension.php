@@ -36,6 +36,8 @@ class AssetsExtension extends AbstractExtension
     public const THEME_LIGHT = 'light';
 
     public const THEME_PRINT = 'print';
+    
+    public const THEME_DEFAULT = 'default';
 
     public const THEMES = [
         self::THEME_DARK,
@@ -130,13 +132,11 @@ class AssetsExtension extends AbstractExtension
     #[ArrayShape([
         VariableHelper::ALL => Asset::class.'[]',
         VariableHelper::RESPONSIVE => Types::ARRAY,
-        VariableHelper::THEME => Types::ARRAY,
     ])]
     public function buildRenderData(string $context): array
     {
         $all = self::ASSETS_DEFAULT_EMPTY;
         $responsive = self::ASSETS_DEFAULT_EMPTY;
-        $themes = self::ASSETS_DEFAULT_EMPTY;
 
         foreach ($this->assets as $type => $group)
         {
@@ -150,11 +150,6 @@ class AssetsExtension extends AbstractExtension
                     {
                         $responsive[$type][] = $asset;
                     }
-
-                    if ($asset->theme)
-                    {
-                        $themes[$type][] = $asset;
-                    }
                 }
             }
         }
@@ -162,7 +157,6 @@ class AssetsExtension extends AbstractExtension
         return [
             VariableHelper::ALL => $all,
             VariableHelper::RESPONSIVE => $responsive,
-            VariableHelper::THEME => $themes,
         ];
     }
 
