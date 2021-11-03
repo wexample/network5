@@ -3,7 +3,7 @@
         {%- if asset.isAvailable(layout_use_js) -%}
             <link rel="stylesheet" media="{{ asset.media }}"
                   href="{{ asset(asset.path) }}"/>
-            {{ asset_set_rendered(asset) }}
+            {{ asset.setRendered() }}
         {%- endif -%}
     {% endfor %}
 {% endmacro %}
@@ -12,7 +12,7 @@
     {%- for asset in assets_list('js') -%}
         {%- if asset.isAvailable(true) -%}
             <script type="text/javascript" src="{{ asset(asset.path) }}"></script>
-            {{ asset_set_rendered(asset) }}
+            {{ asset.setRendered() }}
         {%- endif -%}
     {%- endfor -%}
 {% endmacro %}

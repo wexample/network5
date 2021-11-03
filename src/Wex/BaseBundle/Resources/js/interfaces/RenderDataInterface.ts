@@ -1,11 +1,7 @@
 import AssetsCollectionInterface from "./AssetsCollectionInterface";
 
 export default interface RenderDataInterface {
-    assets: {
-        all?: AssetsCollectionInterface,
-        responsive?: AssetsCollectionInterface
-        theme?: AssetsCollectionInterface
-    }
+    assets: AssetsCollectionInterface
     translations: {
         catalog: object,
         domain: string,

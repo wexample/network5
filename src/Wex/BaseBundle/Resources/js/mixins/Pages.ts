@@ -44,7 +44,7 @@ const mixin: MixinInterface = {
             }
 
             let page = new classDefinition(this.app, data);
-            page.init(data);
+            page.loadInitialRenderData(data);
 
             return page;
         }

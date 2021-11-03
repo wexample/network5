@@ -147,4 +147,9 @@ class Asset
 
         return true;
     }
+
+    public function setRendered(bool $bool = true)
+    {
+        $this->rendered = $bool;
+    }
 }

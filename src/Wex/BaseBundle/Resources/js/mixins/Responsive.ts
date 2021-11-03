@@ -6,7 +6,7 @@ import AssetsCollectionInterface from "../interfaces/AssetsCollectionInterface";
 import Queue from "../class/Queue";
 import AppService from "../class/AppService";
 import MixinsAppService from "../class/MixinsAppService";
-import LayoutRenderDataInterface from "../interfaces/LayoutRenderDataInterface";
+import AssetsInterface from "../interfaces/AssetInterface";
 
 const mixin: MixinInterface = {
     name: 'responsive',
@@ -19,21 +19,21 @@ const mixin: MixinInterface = {
 
     hooks: {
         app: {
-            loadLayoutRenderData(data: LayoutRenderDataInterface, registry: any, next: Function) {
-                if (registry.MixinAssets === MixinsAppService.LOAD_STATUS_COMPLETE
-                    && registry.MixinQueues === MixinsAppService.LOAD_STATUS_COMPLETE) {
+            init(registry: any) {
+                if (registry.MixinAssets === MixinsAppService.LOAD_STATUS_COMPLETE) {
+                    let assetsService = this.app.getService('assets');
                     let responsiveService = this.app.getService('responsive');
 
-                    responsiveService.updateResponsive(() => {
-                        window.addEventListener(
-                            'resize',
-                            () => responsiveService.updateResponsive()
-                        );
+                    assetsService.updateFilters.push(responsiveService.updateFilters.bind(responsiveService));
 
-                        next();
-                    });
+                    window.addEventListener(
+                        'resize',
+                        () => responsiveService.updateResponsive(true)
+                    );
 
-                    return MixinsAppService.LOAD_STATUS_STOP;
+                    responsiveService.updateResponsive(false);
+
+                    return MixinsAppService.LOAD_STATUS_COMPLETE;
                 }
 
                 return MixinsAppService.LOAD_STATUS_WAIT;
@@ -45,7 +45,7 @@ const mixin: MixinInterface = {
         public responsiveSizeCurrent: string
         public responsiveSizePrevious: string
 
-        updateResponsive(complete?: Function) {
+        updateResponsive(updateAssets: boolean, complete?: Function) {
             let current = this.detectSize();
 
             this.responsiveSizePrevious = this.responsiveSizeCurrent;
@@ -53,33 +53,21 @@ const mixin: MixinInterface = {
             if (current !== this.responsiveSizePrevious) {
                 this.responsiveSizeCurrent = current;
 
-                let assetsService = this.app.getService('assets');
-                assetsService.queue.reset()
+                if (updateAssets) {
+                    let assetsService = this.app.getService('assets');
+                    assetsService.updateAssets(() => {
+                        // Now change page class.
+                        this.updateResponsiveLayoutClass();
 
-                // Update layout level assets.
-                this.updateResponsiveAssets(
-                    this.app.registry.layoutData.assets.responsive,
-                    () => {
-                        // Update page level assets.
-                        this.updateResponsiveAssets(
-                            this.app.registry.layoutData.page.assets.responsive,
-                            () => {
-                                // Now change page class.
-                                this.updateResponsiveLayoutClass();
+                        this.app.getService('events')
+                            .trigger('responsive-change-size', {
+                                current: current,
+                                previous: this.responsiveSizePrevious,
+                            });
 
-                                this.app.getService('events')
-                                    .trigger('responsive-change-size', {
-                                        current: current,
-                                        previous: this.responsiveSizePrevious,
-                                    });
-
-                                complete && complete();
-                            }
-                        );
-
-                        return Queue.EXEC_STOP;
-                    }
-                );
+                        complete && complete();
+                    });
+                }
             } else {
                 complete && complete();
             }
@@ -95,53 +83,6 @@ const mixin: MixinInterface = {
             classList.add(
                 `responsive-${this.app.getService('responsive').responsiveSizeCurrent}`
             );
-        }
-
-        updateResponsiveAssets(assetsCollection: AssetsCollectionInterface, complete) {
-            let responsiveSize = this.app.getService('responsive').detectSize();
-            let toLoad = {};
-            let toUnload = {};
-            let hasChange = false;
-
-            Object.entries(assetsCollection)
-                .forEach((data) => {
-                    let assets = data[1];
-                    let type = data[0];
-                    toLoad[type] = toLoad[type] || [];
-                    toUnload[type] = toUnload[type] || [];
-
-                    assets.forEach((asset) => {
-                        // Adding and removing assets is async.
-                        if (asset.responsive === responsiveSize) {
-                            if (!asset.active) {
-                                hasChange = true;
-                                toLoad[type].push(asset);
-                            }
-                        } else {
-                            if (asset.active) {
-                                hasChange = true;
-                                toUnload[type].push(asset);
-                            }
-                        }
-                    });
-                });
-
-            if (complete) {
-                if (hasChange) {
-                    let assetsService = this.app.getService('assets');
-                    // Load new assets.
-                    let queueLoad = assetsService.appendAssets(toLoad);
-                    // Remove old ones.
-                    let queueUnLoad = assetsService.removeAssets(toUnload);
-
-                    this.app.getService('queues').afterAllQueues(
-                        [queueLoad, queueUnLoad],
-                        complete
-                    );
-                } else {
-                    this.app.async(complete);
-                }
-            }
         }
 
         breakpointSupports(letter) {
@@ -166,6 +107,15 @@ const mixin: MixinInterface = {
                     return current[1] > prev[1] ? current : prev;
                 }
             )[0];
+        }
+
+        updateFilters(asset: AssetsInterface) {
+            if (
+                asset.responsive !== null
+                && asset.responsive !== this.responsiveSizeCurrent
+            ) {
+                return 'reject';
+            }
         }
     },
 };

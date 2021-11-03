@@ -1,10 +1,11 @@
 import Page from './Page';
 
 import MixinAssets from '../mixins/Assets';
+import MixinInterface from "../interfaces/MixinInterface";
 import MixinMixin from '../mixins/Mixins';
 import MixinPage from '../mixins/Pages';
 import MixinResponsive from '../mixins/Responsive';
-import MixinInterface from "../interfaces/MixinInterface";
+import MixinTheme from "../mixins/Theme";
 
 export default class {
     public bootJsBuffer: string[] = [];
@@ -129,6 +130,7 @@ export default class {
                 MixinMixin,
                 MixinPage,
                 MixinResponsive,
+                MixinTheme,
             }
         };
     }

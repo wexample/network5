@@ -14,11 +14,14 @@ const mixin: MixinInterface = {
         afterAllQueues(queues, complete) {
             let originalList = ArrayShallowCopy(queues);
             let hasRunningQueue = false;
+
             queues.forEach((queue:Queue) => {
                 if (queue.started) {
                     hasRunningQueue = true;
+
                     queue.then(() => {
                         ArrayDeleteItem(queues, queue);
+
                         if (!queues.length) {
                             queue.then(() => {
                                 complete(originalList);

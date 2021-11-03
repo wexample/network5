@@ -9,32 +9,22 @@ export default class extends AppChild {
     public readonly name: string;
     protected readonly onChangeResponsiveSizeProxy: Function;
     protected readonly responsiveDisplays: any = [];
+    public renderData: PageRenderDataInterface;
     public responsiveDisplayCurrent: PageResponsiveDisplay;
     public vars: any;
 
     constructor(app: App, renderData: PageRenderDataInterface) {
         super(app);
 
+        // Set readonly variables.
         this.isLayoutPage = renderData.isLayoutPage;
         this.name = renderData.name;
+        this.onChangeResponsiveSizeProxy = this.onChangeResponsiveSize.bind(this);
 
         if (this.isLayoutPage) {
             this.app.layoutPage = this;
             this.el = this.app.elLayout;
         }
-
-        this.loadRenderData(renderData);
-
-        this.onChangeResponsiveSizeProxy = this.onChangeResponsiveSize.bind(this);
-
-        this.app
-            .getService('events')
-            .listen(
-                'responsive-change-size',
-                this.onChangeResponsiveSizeProxy
-            );
-
-        this.updateCurrentResponsiveDisplay();
     }
 
     init(pageRenderData: PageRenderDataInterface) {
@@ -56,8 +46,24 @@ export default class extends AppChild {
         this.exit();
     }
 
-    loadRenderData(renderData: PageRenderDataInterface) {
+    loadInitialRenderData(renderData: PageRenderDataInterface) {
+        this.loadRenderData(renderData, () => {
+            this.app
+                .getService('events')
+                .listen(
+                    'responsive-change-size',
+                    this.onChangeResponsiveSizeProxy
+                );
+
+            this.updateCurrentResponsiveDisplay();
+
+            this.init(renderData);
+        });
+    }
+
+    loadRenderData(renderData: PageRenderDataInterface, complete?: Function) {
         this.vars = {...this.vars, ...renderData.vars};
+        this.renderData = renderData;
 
         this
             .app
@@ -65,7 +71,8 @@ export default class extends AppChild {
             .invokeUntilComplete(
                 'loadPageRenderData',
                 'page',
-                [this, renderData]
+                [this],
+                complete
             );
     }
 

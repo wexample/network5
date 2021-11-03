@@ -2,8 +2,8 @@ import App from "./App";
 
 export default class Queue {
     private readonly app: App;
-    private callbacks: Function[] = [];
-    private commands: Function[] = [];
+    public callbacks: Function[] = [];
+    public commands: Function[] = [];
     private readonly name: string;
     public started: boolean = false;
     public static readonly EXEC_STOP = 'exec_stop';

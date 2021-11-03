@@ -10,14 +10,14 @@ const mixin: MixinInterface = {
 
     hooks: {
         page: {
-            loadPageRenderData(page: Page, data: PageRenderDataInterface, registry: any) {
+            loadPageRenderData(page: Page, registry: any) {
                 // Wait for page loading.
                 if (registry.MixinPage !== MixinsAppService.LOAD_STATUS_COMPLETE) {
                     return MixinsAppService.LOAD_STATUS_WAIT;
                 }
 
                 let componentsService = this.app.getService('components');
-                data.components.forEach((componentData: ComponentRenderDataInterface) => {
+                page.renderData.components.forEach((componentData: ComponentRenderDataInterface) => {
                     componentsService.create(
                         page.el,
                         componentData
