@@ -19,5 +19,10 @@ abstract class AbstractExtension extends \Twig\Extension\AbstractExtension
     /**
      * @var string
      */
+    protected const FUNCTION_OPTION_NEEDS_CONTEXT = 'needs_context';
+
+    /**
+     * @var string
+     */
     protected const FUNCTION_OPTION_NEEDS_ENVIRONMENT = 'needs_environment';
 }

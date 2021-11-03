@@ -66,7 +66,8 @@ class AssetsExtension extends AbstractExtension
      */
     public function __construct(
         KernelInterface $kernel
-    ) {
+    )
+    {
         $this->pathProject = $kernel->getProjectDir().'/';
         $this->pathPublic = $this->pathProject.self::DIR_PUBLIC;
         $this->pathBuild = $this->pathPublic.self::DIR_BUILD;
@@ -103,6 +104,13 @@ class AssetsExtension extends AbstractExtension
                 ]
             ),
             new TwigFunction(
+                'assets_is_available',
+                [
+                    $this,
+                    'assetsIsAvailable',
+                ]
+            ),
+            new TwigFunction(
                 'assets_list',
                 [
                     $this,
@@ -122,11 +130,13 @@ class AssetsExtension extends AbstractExtension
     #[ArrayShape([
         VariableHelper::ALL => Asset::class.'[]',
         VariableHelper::RESPONSIVE => Types::ARRAY,
+        VariableHelper::THEME => Types::ARRAY,
     ])]
     public function buildRenderData(string $context): array
     {
         $all = self::ASSETS_DEFAULT_EMPTY;
         $responsive = self::ASSETS_DEFAULT_EMPTY;
+        $themes = self::ASSETS_DEFAULT_EMPTY;
 
         foreach ($this->assets as $type => $group)
         {
@@ -140,6 +150,11 @@ class AssetsExtension extends AbstractExtension
                     {
                         $responsive[$type][] = $asset;
                     }
+
+                    if ($asset->theme)
+                    {
+                        $themes[$type][] = $asset;
+                    }
                 }
             }
         }
@@ -147,12 +162,27 @@ class AssetsExtension extends AbstractExtension
         return [
             VariableHelper::ALL => $all,
             VariableHelper::RESPONSIVE => $responsive,
+            VariableHelper::THEME => $themes,
         ];
     }
 
+    public function assetsPreload(array $assets, bool $useJs)
+    {
+        /** @var Asset $asset */
+        foreach ($assets as $asset)
+        {
+            if ($this->assetsIsAvailable($asset, $useJs))
+            {
+                $asset->preload = true;
+            }
+        }
+    }
+
     public function assetsInitLayout(
-        ?string $layoutName = null
-    ) {
+        ?string $layoutName,
+        bool $useJs,
+    )
+    {
         $layoutName = $layoutName ?: TemplateExtension::LAYOUT_NAME_DEFAULT;
         $backEndAssets = $this->assets;
         $this->assets = self::ASSETS_DEFAULT_EMPTY;
@@ -162,12 +192,10 @@ class AssetsExtension extends AbstractExtension
             Asset::CONTEXT_LAYOUT
         );
 
-        /** @var Asset $asset */
-        foreach ($assets['css'] as $asset) {
-            if ($asset->type === Asset::EXTENSION_CSS) {
-                $asset->preload = true;
-            }
-        }
+        $this->assetsPreload(
+            $assets['css'],
+            $useJs
+        );
 
         // No main js found.
         if (empty($assets[Asset::EXTENSION_JS]))
@@ -194,12 +222,34 @@ class AssetsExtension extends AbstractExtension
     }
 
     public function assetsInitTemplate(
-        string $templateName
-    ) {
-        $this->assetsDetect(
+        string $templateName,
+        bool $useJs
+    )
+    {
+        $assets = $this->assetsDetect(
             $templateName,
             Asset::CONTEXT_PAGE
         );
+
+        $this->assetsPreload(
+            $assets['css'],
+            $useJs
+        );
+    }
+
+    public function assetsIsAvailable(
+        Asset $asset,
+        bool $useJs
+    ): bool
+    {
+        // When using JS, we manage responsive
+        // and extra theme style outside page rendering flow.
+        if (!$useJs || $asset->responsive || $asset->theme)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public function assetsList(string $ext): array
@@ -223,8 +273,10 @@ class AssetsExtension extends AbstractExtension
         $output = [];
 
         /** @var Asset $asset */
-        foreach ($assets as $asset) {
-            if ($asset->preload) {
+        foreach ($assets as $asset)
+        {
+            if ($asset->preload)
+            {
                 $output[] = $asset;
             }
         }
@@ -239,7 +291,8 @@ class AssetsExtension extends AbstractExtension
     {
         $output = [];
 
-        foreach (Asset::ASSETS_EXTENSIONS as $ext) {
+        foreach (Asset::ASSETS_EXTENSIONS as $ext)
+        {
             $output[$ext] = $this->assetsDetectForType(
                 $templateName,
                 $ext,
@@ -257,7 +310,8 @@ class AssetsExtension extends AbstractExtension
         string $templateName,
         string $ext,
         string $context
-    ): array {
+    ): array
+    {
         $assetPath = $ext.'/'.$templateName.'.'.$ext;
         $output = [];
 
@@ -276,7 +330,8 @@ class AssetsExtension extends AbstractExtension
         );
         $maxWidth = null;
 
-        foreach ($breakpointsReverted as $breakpointName => $minWidth) {
+        foreach ($breakpointsReverted as $breakpointName => $minWidth)
+        {
             $assetPath = implode(
                 FileHelper::FOLDER_SEPARATOR,
                 [
@@ -285,7 +340,8 @@ class AssetsExtension extends AbstractExtension
                 ]
             );
 
-            if ($asset = $this->addAsset($assetPath, $context)) {
+            if ($asset = $this->addAsset($assetPath, $context))
+            {
                 $asset->responsive = $breakpointName;
                 $asset->media = 'screen and (min-width:'.$minWidth.'px)'.
                     ($maxWidth ? ' and (max-width:'.$maxWidth.'px)' : '');
@@ -299,7 +355,8 @@ class AssetsExtension extends AbstractExtension
         // Add themes assets.
         $basename = basename($templateName);
         $dirname = dirname($templateName);
-        foreach (self::THEMES as $themeName) {
+        foreach (self::THEMES as $themeName)
+        {
             $assetPath = implode(
                 FileHelper::FOLDER_SEPARATOR,
                 [
@@ -311,7 +368,8 @@ class AssetsExtension extends AbstractExtension
                 ]
             );
 
-            if ($asset = $this->addAsset($assetPath, $context)) {
+            if ($asset = $this->addAsset($assetPath, $context))
+            {
                 $asset->theme = $themeName;
 
                 $output[] = $asset;
@@ -326,7 +384,8 @@ class AssetsExtension extends AbstractExtension
     public function addAsset(
         string $pathRelative,
         string $context
-    ): ?Asset {
+    ): ?Asset
+    {
         $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
         if (!isset($this->manifest[$pathRelativeToPublic]))
         {
@@ -341,8 +400,7 @@ class AssetsExtension extends AbstractExtension
             );
 
             $this->assetsLoaded[$pathRelative] = $asset;
-        }
-        else
+        } else
         {
             $asset = $this->assetsLoaded[$pathRelative];
         }

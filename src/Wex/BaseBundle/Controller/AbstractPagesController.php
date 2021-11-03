@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractPagesController extends AbstractController
 {
-    protected bool $templateNoJs;
+    protected bool $templateUseJs;
 
     protected string $requestUri;
 
@@ -28,7 +28,7 @@ abstract class AbstractPagesController extends AbstractController
     ) {
         $mainRequest = $this->requestStack->getMainRequest();
 
-        $this->templateNoJs = !is_null($mainRequest->get('no_js'));
+        $this->templateUseJs = is_null($mainRequest->get('no_js'));
         $this->requestUri = $mainRequest->getRequestUri();
     }
 
@@ -40,7 +40,7 @@ abstract class AbstractPagesController extends AbstractController
         $templatePath = self::RESOURCES_DIR.$this->viewPathPrefix.$view.TemplateExtension::TEMPLATE_FILE_EXTENSION;
 
         // Add global variables for rendering.
-        $parameters['layout_no_js'] ??= $this->templateNoJs;
+        $parameters['layout_use_js'] ??= $this->templateUseJs;
         $parameters['template_path'] = $templatePath;
         $parameters['request_uri'] ??= $this->requestUri;
 

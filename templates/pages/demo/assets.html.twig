@@ -35,14 +35,14 @@
             {{ '@page::breakpoints.body' | trans | raw }}
             <br>
             <br>
-            {{ ('@page::breakpoints.body_' ~ (layout_no_js ? 'no_' : '') ~ 'js') | trans | raw }}
+            {{ ('@page::breakpoints.body_' ~ (layout_use_js ? '' : 'no_') ~ 'js') | trans | raw }}
         </div>
     </div>
     <h2>{{ '@page::resources.title' | trans }}</h2>
     <div class="block">
-        {{ ('@page::resources.body_' ~ (layout_no_js ? 'no_' : '') ~ 'js') | trans | raw }}
+        {{ ('@page::resources.body_' ~ (layout_use_js ? '' : 'no_') ~ 'js') | trans | raw }}
     </div>
-    {% if not layout_no_js %}
+    {% if layout_use_js %}
         <div class="blocks">
             <div class="block">
                 <ul id="loaded-assets-list-css"></ul>

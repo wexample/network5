@@ -5,14 +5,14 @@
 {%- set template_head_title_args = template_head_title_args|default({}) -%}
 {%- set template_head_title = template_head_title|default(page_title) -%}
 {%- set layout_name = layout_name|default(null) -%}
-{%- set layout_no_js = layout_no_js|default(false) -%}
+{%- set layout_use_js = layout_use_js|default(true) -%}
 {%- set layout_theme = layout_theme|default('light') -%}
 {%- set template_name = template_name_from_path(template_path) -%}
 
 {%- block template_base -%}
     {%- block template_config -%}
-        {{- assets_init_layout(layout_name) -}}
-        {{- assets_init_template(template_name) -}}
+        {{- assets_init_layout(layout_name, layout_use_js) -}}
+        {{- assets_init_template(template_name, layout_use_js) -}}
         {{- translation_set_domain_from_path('layout', 'layouts/' ~ layout_name) -}}
         {{- translation_set_domain_from_path('page', template_path) -}}
     {%- endblock -%}
@@ -29,9 +29,9 @@
         {%- endblock %}
 
         {% block styles -%}
-            {{ macro_assets.render_available_css(layout_no_js) }}
+            {{ macro_assets.render_available_css(layout_use_js) }}
         {%- endblock %}
-        {% if not layout_no_js %}
+        {% if layout_use_js %}
             <script nonce="layout-init">
                 "use strict";
 
@@ -88,7 +88,7 @@
     </head>
     <body class="theme-{{ layout_theme }}">
     <div id="layout" class="layout-loading {{ layout_class|default('') }}">
-        {% if not layout_no_js %}
+        {% if layout_use_js %}
             {#- If javascript fails to complete, force removing loading state after 2 seconds.        -#}
             <script nonce="layout-loading">
                 var elLayout = document.getElementById('layout');
@@ -103,9 +103,9 @@
     </div>
 
     {%- block template_assets -%}
-        {{ macro_assets.render_available_css() }}
+        {{ macro_assets.render_available_css(layout_use_js) }}
 
-        {% if not layout_no_js %}
+        {% if layout_use_js %}
             <script type="text/javascript" src="{{ asset('build/runtime.js') }}"></script>
             {{ macro_assets.render_available_js() }}
             <script type="text/javascript" nonce="layout-data">

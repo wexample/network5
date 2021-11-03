@@ -33,7 +33,7 @@ class AdaptiveResponseExtension extends AbstractExtension
                     'adaptiveResponseRenderingBasePath',
                 ],
                 [
-                    'needs_context' => true,
+                    self::FUNCTION_OPTION_NEEDS_CONTEXT => true,
                 ]
             ),
         ];
