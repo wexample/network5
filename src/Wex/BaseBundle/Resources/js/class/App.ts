@@ -80,8 +80,8 @@ export default class {
         }
     }
 
-    async async(callback) {
-        callback();
+    async(callback) {
+        setTimeout(callback);
     }
 
     ready(callback) {
