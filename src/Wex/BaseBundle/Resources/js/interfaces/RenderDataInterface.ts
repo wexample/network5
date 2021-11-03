@@ -1,9 +1,19 @@
 import AssetsCollectionInterface from "./AssetsCollectionInterface";
+import PageRenderDataInterface from "./PageRenderDataInterface";
 
 export default interface RenderDataInterface {
-    assets?: {
+    assets: {
         all?: AssetsCollectionInterface,
         responsive?: AssetsCollectionInterface
+        theme?: AssetsCollectionInterface
     },
-    vars?: object
+    displayBreakpoints?: object
+    env: string
+    page?: PageRenderDataInterface
+    translations: {
+        catalog: object,
+        domain: string,
+    },
+    translationsDomainSeparator: string
+    vars: object
 }
