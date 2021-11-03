@@ -12,6 +12,10 @@
   &.button-full-width {
     width: 100%;
   }
+
+  &.mdc-button--raised .mdc-button__ripple {
+    border-radius: $pill-border-radius;
+  }
 }
 
 .block {

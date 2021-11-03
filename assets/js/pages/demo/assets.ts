@@ -15,6 +15,18 @@ const bundle: AssetBundleInterface = {
             this.testVariables();
 
             this.refreshLoadedAssetsList();
+
+            document
+                .querySelectorAll('.demo-button-switch-theme')
+                .forEach((el) => {
+                    el.addEventListener('click', () => {
+                        this.app.getService('theme')
+                            .setTheme(
+                                el.getAttribute('data-theme'),
+                                true
+                            );
+                    });
+                })
         }
 
         updateCurrentResponsiveDisplay() {

@@ -21,6 +21,27 @@
             {{ '@page::infos.layout_name' | trans }} : <b>{{ layout_name }}</b>
         </div>
     </div>
+    <h2>{{ '@page::themes.title' | trans }}</h2>
+    <div class="blocks">
+        <div class="block blocks-col">
+            <button data-theme="dark" class="demo-button-switch-theme mdc-button mdc-button--raised button button-full-width">
+                <div class="mdc-button__ripple"></div>
+                <span class="mdc-button__label">Thème sombre</span>
+            </button>
+        </div>
+        <div class="block blocks-col">
+            <button data-theme="light" class="demo-button-switch-theme mdc-button mdc-button--raised button button-full-width">
+                <div class="mdc-button__ripple"></div>
+                <span class="mdc-button__label">Thème clair</span>
+            </button>
+        </div>
+        <div class="block blocks-col">
+            <button data-theme="default" class="demo-button-switch-theme mdc-button mdc-button--raised button button-full-width">
+                <div class="mdc-button__ripple"></div>
+                <span class="mdc-button__label">Thème par défaut</span>
+            </button>
+        </div>
+    </div>
     <h2>{{ '@page::breakpoints.title' | trans }}</h2>
     <div class="blocks blocks-no-stretch blocks-side-column-left">
         <div class="blocks-col">
