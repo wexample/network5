@@ -1,3 +1,3 @@
-a.theme-light, .theme-light a {
-  color: black;
-}
+
+// Base partials.
+@use '../../../../../../src/Wex/BaseBundle/Resources/css/layouts/default/themes/light/partials/default';

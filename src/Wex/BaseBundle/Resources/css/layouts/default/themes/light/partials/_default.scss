@@ -1,9 +1,12 @@
-body.theme-dark,
-.theme-dark body {
+body.theme-light {
   background: white;
 }
 
-*.theme-dark,
-.theme-dark * {
-  color: black;
+body.theme-light,
+body.theme-default {
+  *.theme-light,
+  .theme-light * {
+    color: black;
+  }
 }
+
