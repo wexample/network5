@@ -15,15 +15,15 @@ const mixin: MixinInterface = {
 
     hooks: {
         app: {
-            loadLayoutRenderData(data: LayoutRenderDataInterface, registry: any) {
+            loadLayoutRenderData(data: LayoutRenderDataInterface, registry: any, next: Function) {
                 if (registry.MixinResponsive === MixinsAppService.LOAD_STATUS_COMPLETE
                     && registry.MixinLocale === MixinsAppService.LOAD_STATUS_COMPLETE) {
 
                     if (data.page) {
-                        this.app.getService('pages').create(data.page);
+                        this.app.getService('pages').create(data.page, next);
                     }
 
-                    return MixinsAppService.LOAD_STATUS_COMPLETE;
+                    return MixinsAppService.LOAD_STATUS_STOP;
                 }
                 return MixinsAppService.LOAD_STATUS_WAIT;
             },
@@ -33,7 +33,7 @@ const mixin: MixinInterface = {
     service: class extends AppService {
         pages: {}
 
-        create(data: PageRenderDataInterface): Page {
+        create(data: PageRenderDataInterface, complete: Function): Page {
             let classDefinition = this.app.getBundleClassDefinition(
                 'page',
                 data.name
@@ -44,7 +44,7 @@ const mixin: MixinInterface = {
             }
 
             let page = new classDefinition(this.app, data);
-            page.loadInitialRenderData(data);
+            page.loadInitialRenderData(data, complete);
 
             return page;
         }

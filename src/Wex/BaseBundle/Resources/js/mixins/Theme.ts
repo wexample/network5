@@ -17,8 +17,6 @@ const mixin: MixinInterface = {
 
                     assetsService.updateFilters.push(themeService.assetUpdateFilter.bind(themeService));
 
-                    themeService.updateTheme(false);
-
                     themeService.activateListeners();
 
                     return MixinsAppService.LOAD_STATUS_COMPLETE;
@@ -96,13 +94,23 @@ const mixin: MixinInterface = {
 
             document.body.classList.add(`theme-${this.activeTheme}`);
 
+            let callback = () => {
+                this.app.getService('events').trigger(
+                    'theme-change',
+                    {
+                        theme: theme
+                    }
+                );
+                complete && complete();
+            }
+
             if (this.activeTheme !== ThemeService.THEME_DEFAULT) {
                 if (updateAssets) {
                     let assetsService = this.app.getService('assets');
-                    assetsService.updateAssets(complete);
+                    assetsService.updateAssets(callback);
                 }
             } else {
-                complete && complete();
+                callback();
             }
         }
 

@@ -8,6 +8,7 @@ export default class extends AppChild {
     public readonly isLayoutPage: boolean;
     public readonly name: string;
     protected readonly onChangeResponsiveSizeProxy: Function;
+    protected readonly onChangeThemeProxy: Function;
     protected readonly responsiveDisplays: any = [];
     public renderData: PageRenderDataInterface;
     public responsiveDisplayCurrent: PageResponsiveDisplay;
@@ -20,6 +21,7 @@ export default class extends AppChild {
         this.isLayoutPage = renderData.isLayoutPage;
         this.name = renderData.name;
         this.onChangeResponsiveSizeProxy = this.onChangeResponsiveSize.bind(this);
+        this.onChangeThemeProxy = this.onChangeTheme.bind(this);
 
         if (this.isLayoutPage) {
             this.app.layoutPage = this;
@@ -36,28 +38,43 @@ export default class extends AppChild {
     }
 
     destroy() {
-        this.app
-            .getService('events')
-            .forget(
-                'responsive-change-size',
-                this.onChangeResponsiveSizeProxy
-            );
+        let eventsService = this.app.getService('events');
+
+        eventsService.forget(
+            'responsive-change-size',
+            this.onChangeResponsiveSizeProxy
+        );
+
+        eventsService.forget(
+            'theme-change',
+            this.onChangeResponsiveSizeProxy
+        );
 
         this.exit();
     }
 
-    loadInitialRenderData(renderData: PageRenderDataInterface) {
+    loadInitialRenderData(renderData: PageRenderDataInterface, complete?: Function) {
         this.loadRenderData(renderData, () => {
-            this.app
-                .getService('events')
-                .listen(
-                    'responsive-change-size',
-                    this.onChangeResponsiveSizeProxy
-                );
+            let eventsService = this.app.getService('events');
+
+            eventsService.listen(
+                'responsive-change-size',
+                this.onChangeResponsiveSizeProxy
+            );
+
+            eventsService.listen(
+                'theme-change',
+                this.onChangeThemeProxy
+            );
 
             this.updateCurrentResponsiveDisplay();
 
+            let themeService = this.app.getService('theme');
+            this.updateLayoutTheme(themeService.activeTheme);
+
             this.init(renderData);
+
+            complete && complete(this);
         });
     }
 
@@ -101,7 +118,7 @@ export default class extends AppChild {
             }
 
             if (displays[current]) {
-                displays[current].onResponsiveEnter();
+                displays[current].onReonChangeThemesponsiveEnter();
             }
 
             this.responsiveDisplayCurrent = displays[current];
@@ -110,5 +127,13 @@ export default class extends AppChild {
 
     onChangeResponsiveSize() {
         this.updateCurrentResponsiveDisplay();
+    }
+
+    onChangeTheme(event) {
+        this.updateLayoutTheme(event.theme);
+    }
+
+    updateLayoutTheme(theme: string) {
+        // To override.
     }
 }

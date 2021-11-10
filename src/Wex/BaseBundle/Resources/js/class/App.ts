@@ -3,7 +3,7 @@ import Page from './Page';
 import MixinAssets from '../mixins/Assets';
 import MixinInterface from "../interfaces/MixinInterface";
 import MixinMixin from '../mixins/Mixins';
-import MixinPage from '../mixins/Pages';
+import MixinPages from '../mixins/Pages';
 import MixinResponsive from '../mixins/Responsive';
 import MixinTheme from "../mixins/Theme";
 
@@ -128,7 +128,7 @@ export default class {
             ...{
                 MixinAssets,
                 MixinMixin,
-                MixinPage,
+                MixinPages,
                 MixinResponsive,
                 MixinTheme,
             }

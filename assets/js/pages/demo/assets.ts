@@ -47,6 +47,12 @@ const bundle: AssetBundleInterface = {
             this.refreshLoadedAssetsList();
         }
 
+        updateLayoutTheme(theme) {
+            super.updateLayoutTheme(theme);
+
+            this.refreshLoadedAssetsList();
+        }
+
         refreshLoadedAssetsList() {
             let list;
 

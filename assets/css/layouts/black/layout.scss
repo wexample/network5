@@ -5,6 +5,6 @@
 // Layout partials.
 @use '../../partials/fonts';
 // Themes.
-@use './themes/dark/layout' as theme-dark-layout;
-@use './themes/light/layout' as theme-light-layout;
+@use './themes/default/layout' as theme-default-layout;
+
 
