@@ -3,6 +3,8 @@
 namespace App\Tests;
 
 use App\Wex\BaseBundle\Tests\SymfonyTestCase;
+use function json_decode;
+use function preg_match;
 
 abstract class NetworkTestCase extends SymfonyTestCase
 {

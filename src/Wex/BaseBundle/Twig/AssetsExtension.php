@@ -7,7 +7,10 @@ use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
 use function array_merge_recursive;
 use function array_reverse;
+use function basename;
+use function dirname;
 use function file_get_contents;
+use function implode;
 use function json_decode;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\TwigFunction;
@@ -207,18 +210,11 @@ class AssetsExtension extends AbstractExtension
         );
     }
 
-    public function assetsIsAvailable(
-        Asset $asset,
-        bool $useJs
-    ): bool {
+    public function assetsIsAvailable(Asset $asset, bool $useJs): bool
+    {
         // When using JS, we manage responsive
         // and extra theme style outside page rendering flow.
-        if ((!$useJs) || $asset->responsive || $asset->theme)
-        {
-            return false;
-        }
-
-        return true;
+        return !((!$useJs) || $asset->responsive || $asset->theme);
     }
 
     public function assetsList(string $ext): array

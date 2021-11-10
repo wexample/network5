@@ -65,8 +65,7 @@ class ComponentsExtension extends AbstractExtension
     {
         $component = $this->saveComponent(
             $name,
-            self::INIT_MODE_PREVIOUS,
-            $options
+            self::INIT_MODE_PREVIOUS
         );
 
         return $component->renderTag();
@@ -105,8 +104,7 @@ class ComponentsExtension extends AbstractExtension
     ): string {
         $component = $this->saveComponent(
             $name,
-            self::INIT_MODE_CLASS,
-            $options
+            self::INIT_MODE_CLASS
         );
 
         return 'com-class-loaded '.$component->id;
@@ -120,8 +118,7 @@ class ComponentsExtension extends AbstractExtension
     {
         $component = $this->saveComponent(
             $name,
-            self::INIT_MODE_PARENT,
-            $options
+            self::INIT_MODE_PARENT
         );
 
         return $component->renderTag();

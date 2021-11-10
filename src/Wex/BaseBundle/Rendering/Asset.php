@@ -128,19 +128,15 @@ class Asset
 
     public function getIsAvailable(bool $useJs): bool
     {
-        if ($this->type === static::EXTENSION_JS)
-        {
+        if ($this->type === static::EXTENSION_JS) {
             return $useJs && !$this->responsive;
         }
-        elseif ($this->type === static::EXTENSION_CSS)
-        {
-            if ($this->responsive)
-            {
+        if ($this->type === static::EXTENSION_CSS) {
+            if ($this->responsive) {
                 // Responsive CSS are loaded in page when JS is disabled.
                 return !$useJs;
             }
-            elseif ($this->theme)
-            {
+            if ($this->theme) {
                 // Theme CSS are loaded using JS.
                 // TODO Preload default theme.
                 return false;
