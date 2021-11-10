@@ -1,10 +1,14 @@
 // Base extension.
 @use '../../../../src/Wex/BaseBundle/Resources/css/layouts/default/layout';
+
 // Base partials.
 @use '../../../../src/Wex/BaseBundle/Resources/css/layouts/wex/partials/default';
+
 // Layout partials.
 @use '../../partials/fonts';
+
 // Themes.
 @use './themes/default/layout' as theme-default-layout;
 
-
+// Allowed partials in all pages.
+@use '../../../../src/Wex/BaseBundle/Resources/css/partials/blocks';

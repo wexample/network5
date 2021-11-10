@@ -1,3 +1,9 @@
+@import "../../../mixins/global";
 
+$color-default-background: black;
+$color-default-text: #888;
+$color-default-title: #FFF;
+
+// Disabled.
 $color-disabled-background: #222;
-$color-disabled-text: #666;
+$color-disabled-text: #888;

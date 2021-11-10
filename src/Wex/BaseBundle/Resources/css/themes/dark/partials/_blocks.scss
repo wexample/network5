@@ -1,5 +1,11 @@
-body.theme-dark .block,
+$global-theme-name: 'dark' !default;
+
+@import "../mixins/_blocks";
+@import "../mixins/global";
+
+body.theme-#{$global-theme-name} .block,
 body.theme-default .theme-dark.block {
-  background: #010101;
+  background: $color-block-background;
+  color: $color-block-text;
 }
 

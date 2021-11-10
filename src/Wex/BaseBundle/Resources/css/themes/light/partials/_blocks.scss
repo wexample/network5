@@ -1,5 +1,11 @@
-body.theme-light .block,
+$global-theme-name: 'light' !default;
+
+@import "../mixins/_blocks";
+@import "../mixins/global";
+
+body.theme-#{$global-theme-name} .block,
 body.theme-default .theme-light.block {
-  background: #FFF;
+  background: $color-block-background;
+  color: $color-block-text;
 }
 

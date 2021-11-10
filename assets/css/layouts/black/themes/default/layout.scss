@@ -3,6 +3,7 @@ $global-theme-name: 'default';
 // Use both base themes.
 @use './../dark/layout' as theme-dark-layout;
 @use './../light/layout' as theme-light-layout;
+
 // Allowed partials in all pages.
 @use "../../../../../../src/Wex/BaseBundle/Resources/css/themes/dark/partials/blocks" as theme-dark-blocks;
 @use "../../../../../../src/Wex/BaseBundle/Resources/css/themes/light/partials/blocks" as theme-light-blocks;

@@ -2,6 +2,8 @@ $dark-gray: #2f2f36;
 $medium-gray: lighten($dark-gray, 50);
 $light-gray: lighten($medium-gray, 25);
 
+$selector-title-all: "h1, h2, h3, h4, h5, h6";
+
 @mixin full-parent-size {
   position: absolute;
   top: 0;
