@@ -6,4 +6,15 @@ use App\Wex\BaseBundle\Tests\SymfonyTestCase;
 
 abstract class NetworkTestCase extends SymfonyTestCase
 {
+    protected function getPageLayoutData(?string $content = null): array
+    {
+        $matches = [];
+        preg_match(
+            '/layoutData = ([.\S\s\n]*);(\s*)<\/script>/',
+            $content ?? $this->getContent(),
+            $matches,
+        );
+
+        return json_decode($matches[1], JSON_OBJECT_AS_ARRAY);
+    }
 }
