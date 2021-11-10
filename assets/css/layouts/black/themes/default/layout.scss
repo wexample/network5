@@ -1,3 +1,6 @@
 // Use both base themes.
 @use './../dark/layout' as theme-dark-layout;
 @use './../light/layout' as theme-light-layout;
+// Allowed partials in all pages.
+@use "../../../../../../src/Wex/BaseBundle/Resources/css/partials/themes/dark/blocks" as theme-dark-blocks;
+@use "../../../../../../src/Wex/BaseBundle/Resources/css/partials/themes/light/blocks" as theme-light-blocks;

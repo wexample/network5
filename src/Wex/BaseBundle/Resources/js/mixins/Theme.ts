@@ -88,11 +88,17 @@ const mixin: MixinInterface = {
         }
 
         setTheme(theme: string, updateAssets: boolean, complete?: Function) {
-            document.body.classList.remove(`theme-${this.activeTheme}`);
+            let classList = document.body.classList;
+
+            classList.forEach((className) => {
+                if (className.startsWith('theme-')) {
+                    classList.remove(className);
+                }
+            });
 
             this.activeTheme = theme;
 
-            document.body.classList.add(`theme-${this.activeTheme}`);
+            classList.add(`theme-${this.activeTheme}`);
 
             let callback = () => {
                 this.app.getService('events').trigger(
