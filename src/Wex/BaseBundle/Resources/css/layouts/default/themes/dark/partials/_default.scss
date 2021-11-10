@@ -3,10 +3,7 @@ body.theme-dark {
 }
 
 body.theme-dark,
-body.theme-default {
-  *.theme-dark,
-  .theme-dark * {
-    color: white;
-  }
+body.theme-default .theme-dark {
+  color: white;
 }
 

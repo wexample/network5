@@ -3,10 +3,8 @@ body.theme-light {
 }
 
 body.theme-light,
-body.theme-default {
-  *.theme-light,
-  .theme-light * {
-    color: black;
-  }
+body.theme-default .theme-light {
+  color: black;
 }
+
 

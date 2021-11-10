@@ -2,6 +2,9 @@
 @use '../../../../src/Wex/BaseBundle/Resources/css/partials/buttons';
 @use '../../../../src/Wex/BaseBundle/Resources/css/partials/inline-info';
 
+// Themed imports.
+@use '../../../../src/Wex/BaseBundle/Resources/css/partials/themes/light/blocks' as theme-light-block;
+
 .temp-container {
   max-width: 50rem;
   margin: 0 auto;

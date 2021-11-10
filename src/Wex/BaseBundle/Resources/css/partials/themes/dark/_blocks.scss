@@ -1,6 +1,5 @@
-.theme-dark {
-  &.block, .block {
-    background: rgba(255, 255, 255, .03);
-    color: rgba(255, 255, 255, .6);
-  }
+body.theme-dark .block,
+body.theme-default .theme-dark.block {
+  background: #010101;
 }
+

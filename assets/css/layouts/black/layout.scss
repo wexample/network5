@@ -4,4 +4,7 @@
 @use '../../../../src/Wex/BaseBundle/Resources/css/layouts/wex/partials/default';
 // Layout partials.
 @use '../../partials/fonts';
+// Themes.
+@use './themes/dark/layout' as theme-dark-layout;
+@use './themes/light/layout' as theme-light-layout;
 
