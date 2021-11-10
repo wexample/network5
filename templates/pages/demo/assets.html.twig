@@ -23,19 +23,19 @@
     </div>
     <h2>{{ '@page::themes.title' | trans }}</h2>
     <div class="blocks">
-        <div class="block blocks-col">
+        <div class="block blocks-col theme-light">
             <button data-theme="dark" class="demo-button-switch-theme mdc-button mdc-button--raised button button-full-width">
                 <div class="mdc-button__ripple"></div>
                 <span class="mdc-button__label">Thème sombre</span>
             </button>
         </div>
-        <div class="block blocks-col">
+        <div class="block blocks-col theme-light">
             <button data-theme="light" class="demo-button-switch-theme mdc-button mdc-button--raised button button-full-width">
                 <div class="mdc-button__ripple"></div>
                 <span class="mdc-button__label">Thème clair</span>
             </button>
         </div>
-        <div class="block blocks-col">
+        <div class="block blocks-col theme-light">
             <button data-theme="default" class="demo-button-switch-theme mdc-button mdc-button--raised button button-full-width">
                 <div class="mdc-button__ripple"></div>
                 <span class="mdc-button__label">Thème par défaut</span>
@@ -52,7 +52,7 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="block theme-dark">
+        <div class="block theme-light">
             {{ '@page::breakpoints.body' | trans | raw }}
             <br>
             <br>

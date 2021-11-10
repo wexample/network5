@@ -1,6 +1,8 @@
-.theme-dark {
-  &.inline-infos, .inline-infos {
-    color: white;
-    background: rgba(20, 20, 20, .7);
-  }
+$global-theme-name: 'dark' !default;
+
+body.theme-#{$global-theme-name} .inline-infos,
+body.theme-default .theme-dark.inline-infos {
+  //color: white;
+  background: rgba(20, 20, 20, .7);
+  color: lavenderblush;
 }

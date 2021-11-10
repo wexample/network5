@@ -1,0 +1,3 @@
+$global-theme-name: 'default' !default;
+
+@use '../dark/assets' with ($global-theme-name:$global-theme-name);

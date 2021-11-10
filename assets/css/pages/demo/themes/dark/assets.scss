@@ -1,9 +1,14 @@
-@import "../../../../../../src/Wex/BaseBundle/Resources/css/partials/themes/dark/inline-info";
+$global-theme-name: 'dark' !default;
+
+@use "../../../../../../src/Wex/BaseBundle/Resources/css/partials/themes/dark/inline-info" with (
+  $global-theme-name: $global-theme-name
+);
 
 $color-disabled-background: #222;
 $color-disabled-text: #666;
 
-.display-breakpoint {
+body.theme-#{$global-theme-name} .display-breakpoint,
+body.theme-default .theme-dark.display-breakpoint {
   .size-name {
     background: $color-disabled-background;
     color: $color-disabled-text;

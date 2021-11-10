@@ -2,8 +2,7 @@
 @use '../../../../src/Wex/BaseBundle/Resources/css/partials/buttons';
 @use '../../../../src/Wex/BaseBundle/Resources/css/partials/inline-info';
 
-// Themed imports.
-@use '../../../../src/Wex/BaseBundle/Resources/css/partials/themes/light/blocks' as theme-light-block;
+@use 'themes/default/assets';
 
 .temp-container {
   max-width: 50rem;
