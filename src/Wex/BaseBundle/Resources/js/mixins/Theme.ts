@@ -6,8 +6,6 @@ import AssetsInterface from "../interfaces/AssetInterface";
 const mixin: MixinInterface = {
     name: 'theme',
 
-    dependencies: {},
-
     hooks: {
         app: {
             init(registry: any) {

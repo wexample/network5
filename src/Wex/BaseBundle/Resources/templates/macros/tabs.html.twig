@@ -1,5 +1,6 @@
-{% macro start(group = 'default') %}
-<ul class="tabs tabs-{{ group }}">
+{% macro start(group = 'default', class = '') %}
+<ul class="tabs tabs-{{ group }} {{ class }}">
+    {{ com_init_parent('components/tabs', {group:group}) }}
     {% endmacro %}
 
     {% macro end() %}
