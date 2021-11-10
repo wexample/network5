@@ -3,7 +3,7 @@ ul.reset {
   padding: 0;
 
   li {
-    @extend .reset
+    @extend .reset;
   }
 }
 

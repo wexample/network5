@@ -1,4 +1,4 @@
-@import "../../../mixins/global";
+@import '../../../mixins/global';
 
 a {
   text-decoration: none;
@@ -7,7 +7,7 @@ a {
 
 #{$selector-title-all} {
   font-weight: normal;
-  font-family: "Fredoka One", sans-serif;
+  font-family: 'Fredoka One', sans-serif;
 }
 
 h1 {
@@ -20,6 +20,5 @@ h2 {
 }
 
 body {
-  font-family: "Work Sans Regular", sans-serif;
+  font-family: 'Work Sans Regular', sans-serif;
 }
-

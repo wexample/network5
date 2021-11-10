@@ -1,4 +1,4 @@
 export interface MixinMethodsInterface {
-    app?: object,
-    page?: object
+  app?: object;
+  page?: object;
 }

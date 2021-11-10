@@ -6,29 +6,23 @@ export default class {
         x: {
           position: 'left',
           size: 'width',
-          mouse: 'mouseX'
+          mouse: 'mouseX',
         },
         y: {
           position: 'top',
           size: 'height',
-          mouse: 'mouseY'
-        }
-      }
+          mouse: 'mouseY',
+        },
+      },
     });
   }
 
   calcDistance(x1, y1, x2, y2) {
-    return Math.sqrt(
-      Math.pow(x1 - x2, 2)
-      + Math.pow(y1 - y2, 2)
-    );
+    return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
   }
 
   createSvgElement(tagName) {
-    return document.createElementNS(
-      'http://www.w3.org/2000/svg',
-      tagName
-    );
+    return document.createElementNS('http://www.w3.org/2000/svg', tagName);
   }
 
   convertPosition(number) {
@@ -51,20 +45,32 @@ export default class {
   animatePathShadowItem(path, length) {
     let sheet = this.elStyleSheet.sheet;
 
-    sheet.insertRule('\
-            @keyframes displayPathShadow' + this.animationPathCounter + ' {\
+    sheet.insertRule(
+      '\
+            @keyframes displayPathShadow' +
+        this.animationPathCounter +
+        ' {\
                 0% {\
-                  stroke-dashoffset: ' + length + ';\
+                  stroke-dashoffset: ' +
+        length +
+        ';\
                 }\
                 50% {\
                   stroke-dashoffset: 0;\
                 }\
                 100% {\
-                  stroke-dashoffset: ' + -length + ';\
+                  stroke-dashoffset: ' +
+        -length +
+        ';\
                 }\
             }\
-            ', (sheet.cssRules || sheet.rules).length);
-    path.style.animation = 'displayPathShadow' + this.animationPathCounter + ' .4s cubic-bezier(.36,.34,.29,1) forwards';
+            ',
+      (sheet.cssRules || sheet.rules).length
+    );
+    path.style.animation =
+      'displayPathShadow' +
+      this.animationPathCounter +
+      ' .4s cubic-bezier(.36,.34,.29,1) forwards';
 
     this.animationPathCounter++;
   }

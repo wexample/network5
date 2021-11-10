@@ -1,10 +1,9 @@
 $global-theme-name: 'dark' !default;
 
-@use "../../../../../../src/Wex/BaseBundle/Resources/css/themes/dark/partials/inline-info" with (
-  $global-theme-name: $global-theme-name
-);
+@use '../../../../../../src/Wex/BaseBundle/Resources/css/themes/dark/partials/inline-info'
+  with ($global-theme-name: $global-theme-name);
 
-@import "../../../../../../src/Wex/BaseBundle/Resources/css/themes/dark/mixins/global";
+@import '../../../../../../src/Wex/BaseBundle/Resources/css/themes/dark/mixins/global';
 
 body.theme-#{$global-theme-name} .display-breakpoint,
 body.theme-default .theme-dark.display-breakpoint {

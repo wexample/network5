@@ -13,21 +13,23 @@
 }
 
 .display-breakpoint {
-  .size-name, .size-min {
+  .size-name,
+  .size-min {
     transition-property: font-size;
-    transition-duration: .8s;
+    transition-duration: 0.8s;
   }
 
   .size-name {
     width: 3rem;
     text-align: center;
-    padding: .2rem;
-    margin: -.1rem;
+    padding: 0.2rem;
+    margin: -0.1rem;
     margin-right: 1rem;
   }
 
   &.display-breakpoint-current {
-    .size-name, .size-min {
+    .size-name,
+    .size-min {
       font-size: 1.6rem;
     }
 

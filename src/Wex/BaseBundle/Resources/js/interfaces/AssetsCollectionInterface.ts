@@ -1,4 +1,4 @@
 export default interface AssetsCollectionInterface {
-    css: object[],
-    js: object[]
+  css: object[];
+  js: object[];
 }

@@ -20,6 +20,6 @@ extends:
 includes:
   title: Inclusions
   body:
-   Il est important de veiller a réduire les textes en double dans un fichier de traduction.
-   Pour ce faire, des clés magiques permettent de faire des inclusions d'un fichier vers un autre en utilisant en interne la syntaxe <b>@folder.file::key.sub_key</b>.
-   <br><br>Vous pouvez la combiner avec le mot clé <b>%</b>, si la clé, ou l'arborescence de clés sont les mêmes.
+    Il est important de veiller a réduire les textes en double dans un fichier de traduction.
+    Pour ce faire, des clés magiques permettent de faire des inclusions d'un fichier vers un autre en utilisant en interne la syntaxe <b>@folder.file::key.sub_key</b>.
+    <br><br>Vous pouvez la combiner avec le mot clé <b>%</b>, si la clé, ou l'arborescence de clés sont les mêmes.

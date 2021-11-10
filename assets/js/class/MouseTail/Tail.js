@@ -1,4 +1,4 @@
-import FrontElement from "../FrontElement/FrontElement";
+import FrontElement from '../FrontElement/FrontElement';
 
 export default class extends FrontElement {
   constructor(manager) {
@@ -16,19 +16,15 @@ export default class extends FrontElement {
         end: {
           x: 0,
           y: 0,
-        }
-      }
+        },
+      },
     });
 
     this.strokeWidthHalf = this.strokeWidth / 2;
   }
 
   render() {
-    this.setPoint(
-      'start',
-      this.manager.mouseX,
-      this.manager.mouseY
-    );
+    this.setPoint('start', this.manager.mouseX, this.manager.mouseY);
 
     setTimeout(
       this.renderSecondPoint.bind(this),
@@ -42,7 +38,7 @@ export default class extends FrontElement {
       this.manager.mouseX,
       this.manager.mouseY,
       pointStart.x,
-      pointStart.y,
+      pointStart.y
     );
 
     // The minimal distance between first and second points is too small.
@@ -51,11 +47,7 @@ export default class extends FrontElement {
       return;
     }
 
-    this.setPoint(
-      'end',
-      this.manager.mouseX,
-      this.manager.mouseY
-    );
+    this.setPoint('end', this.manager.mouseX, this.manager.mouseY);
 
     this.elSvg = this.createSvgElement('svg');
     this.elSvg.classList.add('mouse-tail-svg');
@@ -65,15 +57,22 @@ export default class extends FrontElement {
 
     this.elPath = this.createSvgElement('path');
     this.elPath.style.strokeWidth = this.strokeWidth;
-    this.elPath.setAttribute('d',
-      `M`
-      + `${width < 0 ? -width + this.strokeWidthHalf : this.strokeWidthHalf} `
-      + `${height < 0 ? -height + this.strokeWidthHalf : this.strokeWidthHalf}, `
-      + `${width > 0 ? width + this.strokeWidthHalf : this.strokeWidthHalf} `
-      + `${height > 0 ? height + this.strokeWidthHalf : this.strokeWidthHalf} `
+    this.elPath.setAttribute(
+      'd',
+      `M` +
+        `${width < 0 ? -width + this.strokeWidthHalf : this.strokeWidthHalf} ` +
+        `${
+          height < 0 ? -height + this.strokeWidthHalf : this.strokeWidthHalf
+        }, ` +
+        `${width > 0 ? width + this.strokeWidthHalf : this.strokeWidthHalf} ` +
+        `${height > 0 ? height + this.strokeWidthHalf : this.strokeWidthHalf} `
     );
 
-    this.animatePath(this.elPath, this.animatePathShadowItem.bind(this.manager), 0.05);
+    this.animatePath(
+      this.elPath,
+      this.animatePathShadowItem.bind(this.manager),
+      0.05
+    );
 
     this.elSvg.appendChild(this.elPath);
     document.body.appendChild(this.elSvg);
@@ -89,11 +88,16 @@ export default class extends FrontElement {
 
   setSvgPosition(direction) {
     let directionsMap = this.directionsMap;
-    let length = this.manager[directionsMap[direction].mouse] - this.points.start[direction];
+    let length =
+      this.manager[directionsMap[direction].mouse] -
+      this.points.start[direction];
     let pointName = length > 0 ? 'start' : 'end';
     let position = this.points[pointName][direction] - this.strokeWidthHalf;
-    this.elSvg.style[directionsMap[direction].position] = this.convertPosition(position);
-    this.elSvg.style[directionsMap[direction].size] = this.convertPosition(Math.abs(length) + this.strokeWidth);
+    this.elSvg.style[directionsMap[direction].position] =
+      this.convertPosition(position);
+    this.elSvg.style[directionsMap[direction].size] = this.convertPosition(
+      Math.abs(length) + this.strokeWidth
+    );
 
     return length;
   }

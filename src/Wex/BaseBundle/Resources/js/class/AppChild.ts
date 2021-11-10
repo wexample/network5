@@ -1,9 +1,9 @@
-import App from "./App";
+import App from './App';
 
 export default class {
-    protected readonly app: App;
+  protected readonly app: App;
 
-    constructor(app) {
-        this.app = app;
-    }
+  constructor(app) {
+    this.app = app;
+  }
 }

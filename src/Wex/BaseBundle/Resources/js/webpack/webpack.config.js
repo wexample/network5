@@ -46,8 +46,7 @@ Encore
   })
 
   // Load VueJs.
-  .enableVueLoader(() => {
-  }, {runtimeCompilerBuild: false})
+  .enableVueLoader(() => {}, { runtimeCompilerBuild: false })
 
   // enables Sass/SCSS support
   .enableSassLoader()

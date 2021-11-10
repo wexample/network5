@@ -8,8 +8,8 @@ A Symfony based system to generate lightweight web pages.
 ## What is in this package ?
 
 - Symfony 5.x
-  * Pre-installed user auth  
-  * Encore Webpack
+  - Pre-installed user auth
+  - Encore Webpack
 - Twig
 - Doctrine
 - Google Material Components

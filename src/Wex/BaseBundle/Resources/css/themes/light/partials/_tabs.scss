@@ -1,8 +1,9 @@
 .theme-dark {
-  &.tabs, .tabs {
+  &.tabs,
+  .tabs {
     a.tab {
       &:hover {
-        background: rgba(black, .5);
+        background: rgba(black, 0.5);
       }
 
       &.active {

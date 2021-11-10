@@ -1,5 +1,5 @@
 export default interface ComponentRenderDataInterface {
-    id: string,
-    initMode: string,
-    name: string
+  id: string;
+  initMode: string;
+  name: string;
 }

@@ -6,8 +6,7 @@ breakpoints:
     Nous nous basons sur les points d'arrêts définis par le framework <a href="https://getbootstrap.com/docs/5.0/layout/breakpoints/#available-breakpoints" rel="noopener" target="_blank">Bootstrap</a>, définissant une liste précise de dimensions d'écrans.
     Chaque type d'écran déclenche le chargement des fichiers CSS / JS spécifiques correspondants.
     <br><br>L'exemple ci-contre montre un changement de couleur suite au chargement de la feuille de style correspondant a la taille d'écran actuelle. Vous pouvez faire varier la sélection en redimensionnant votre écran.
-  body_js:
-    Le chargement de ces assets est géré par JavaScript. Vous pouvez consuler la <a href="?no_js">version sans JavaScript</a>.
+  body_js: Le chargement de ces assets est géré par JavaScript. Vous pouvez consuler la <a href="?no_js">version sans JavaScript</a>.
   body_no_js:
     Le chargement de ces assets est géré par le navigateur et l'attribut "media" de la balise <link>. Étant donné l'absence de JavaScript, l'ensemble des feuilles de styles doit être chargée dès le démarrage de la page.
     <br><br>Vous pouvez consuler la <a href="?no_js">version avec JavaScript</a>.
@@ -17,10 +16,10 @@ infos:
   template_name: Template
 
 resources:
-   title: Ressources
-   body_js: Voici la liste des assets actuellement utilisés par la page.
-   body_no_js: La liste des ressources ne se met dynamiquement à jour que lorsque JavaScript est activé. Vous pouvez retrouver la liste directement dans le code source de la page.
-   body_available: Voici la liste complète de tous les assets disponibles. Il seront chargés si besoin en fonction du contexte.
+  title: Ressources
+  body_js: Voici la liste des assets actuellement utilisés par la page.
+  body_no_js: La liste des ressources ne se met dynamiquement à jour que lorsque JavaScript est activé. Vous pouvez retrouver la liste directement dans le code source de la page.
+  body_available: Voici la liste complète de tous les assets disponibles. Il seront chargés si besoin en fonction du contexte.
 
 themes:
   title: Thèmes

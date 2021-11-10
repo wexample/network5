@@ -1,9 +1,9 @@
-import App from "./App";
+import App from './App';
 
 export default class AppService {
-    public app: App
+  public app: App;
 
-    constructor(app: App) {
-        this.app = app;
-    }
+  constructor(app: App) {
+    this.app = app;
+  }
 }

@@ -1,5 +1,5 @@
-import Tail from "./Tail";
-import FrontElement from "../FrontElement/FrontElement";
+import Tail from './Tail';
+import FrontElement from '../FrontElement/FrontElement';
 
 export default class extends FrontElement {
   constructor() {
@@ -14,7 +14,7 @@ export default class extends FrontElement {
       mouseXPrevious: 0,
       mouseY: 0,
       mouseYPrevious: 0,
-      tailTimeSecondPoint: 200
+      tailTimeSecondPoint: 200,
     });
 
     // Create circle el.
@@ -42,9 +42,10 @@ export default class extends FrontElement {
 
   onFrame() {
     this.refreshMouseDistance();
-    this.refreshMouseTails(
-        // this.refreshMouseCircle.bind(this)
-    );
+    this
+      .refreshMouseTails
+      // this.refreshMouseCircle.bind(this)
+      ();
   }
 
   refreshMouseDistance() {
@@ -75,7 +76,7 @@ export default class extends FrontElement {
     let style = this.elMouseCircle.style;
     let maxLimitCircle = 200;
     let persistence = 0.4;
-    let multiplier = .3;
+    let multiplier = 0.3;
 
     this.mouseCircleRadius = this.mouseDistance * multiplier;
 
@@ -84,8 +85,9 @@ export default class extends FrontElement {
       this.mouseCircleRadius = maxLimitCircle;
     }
 
-    this.mouseCircleRadius = (this.mouseCircleRadius * (1 - persistence))
-      + (this.mouseCircleRadiusPrevious * persistence);
+    this.mouseCircleRadius =
+      this.mouseCircleRadius * (1 - persistence) +
+      this.mouseCircleRadiusPrevious * persistence;
 
     style.display = 'block';
 
