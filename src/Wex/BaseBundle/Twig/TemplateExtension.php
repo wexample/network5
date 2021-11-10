@@ -148,14 +148,18 @@ class TemplateExtension extends AbstractExtension
         $translationExtension = $env->getExtension(
             TranslationExtension::class
         );
+        /** @var ComponentsExtension $componentsExtension */
+        $componentsExtension = $env->getExtension(
+            ComponentsExtension::class
+        );
 
         return [
+            VariableHelper::PLURAL_COMPONENT => $componentsExtension->componentsBuildPageData(),
             VariableHelper::PAGE => $pageTemplateName
                 ? $this->templateBuildPageData(
                     $env,
                     $pageTemplateName
                 ) : null,
-            // TODO Layout data only
             VariableHelper::TRANSLATIONS => $translationExtension->buildRenderData(),
             VariableHelper::TRANSLATIONS
             .ucfirst(VariableHelper::DOMAIN)

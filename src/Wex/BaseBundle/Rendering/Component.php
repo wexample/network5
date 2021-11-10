@@ -3,6 +3,9 @@
 namespace App\Wex\BaseBundle\Rendering;
 
 use App\Wex\BaseBundle\Helper\DomHelper;
+use App\Wex\BaseBundle\Helper\VariableHelper;
+use Doctrine\DBAL\Types\Types;
+use JetBrains\PhpStorm\ArrayShape;
 use function uniqid;
 
 class Component
@@ -12,7 +15,8 @@ class Component
     public function __construct(
         public string $name,
         public string $initMode
-    ) {
+    )
+    {
         $this->id = 'com-'.uniqid();
     }
 
@@ -28,5 +32,21 @@ class Component
                 'data-com-name' => $this->name,
             ]
         );
+    }
+
+    #[ArrayShape([
+        VariableHelper::ID => Types::STRING,
+        VariableHelper::NAME => Types::STRING
+    ])]
+    public function buildPageData(): array
+    {
+        return [
+            VariableHelper::ID => $this->id,
+            VariableHelper::NAME => $this->name,
+            // TODO
+//            'initContext' => $this->getContext(),
+//            VariableHelper::OPTIONS => $this->,
+//            VariableHelper::TYPE => $this->ty,
+        ];
     }
 }

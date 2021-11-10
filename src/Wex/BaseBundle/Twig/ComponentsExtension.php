@@ -57,6 +57,18 @@ class ComponentsExtension extends AbstractExtension
         ];
     }
 
+    public function componentsBuildPageData(): array
+    {
+        $data = [];
+        /** @var Component $component */
+        foreach ($this->components as $component)
+        {
+            $data[] = $component->buildPageData();
+        }
+
+        return $data;
+    }
+
     /**
      * Add component to the global page requirements.
      * It adds components assets to page assets.
@@ -74,7 +86,8 @@ class ComponentsExtension extends AbstractExtension
     public function saveComponent(
         string $name,
         string $initMode,
-    ): Component {
+    ): Component
+    {
         // Using an object allow continuing edit properties after save.
         $entry = new Component($name, $initMode);
 
@@ -101,7 +114,8 @@ class ComponentsExtension extends AbstractExtension
     public function comInitClass(
         string $name,
         array $options = []
-    ): string {
+    ): string
+    {
         $component = $this->saveComponent(
             $name,
             self::INIT_MODE_CLASS
