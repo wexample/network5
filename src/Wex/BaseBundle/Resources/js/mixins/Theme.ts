@@ -104,13 +104,9 @@ const mixin: MixinInterface = {
                 complete && complete();
             }
 
-            if (this.activeTheme !== ThemeService.THEME_DEFAULT) {
-                if (updateAssets) {
-                    let assetsService = this.app.getService('assets');
-                    assetsService.updateAssets(callback);
-                }
-            } else {
-                callback();
+            if (updateAssets) {
+                let assetsService = this.app.getService('assets');
+                assetsService.updateAssets(callback);
             }
         }
 
