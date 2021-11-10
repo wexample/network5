@@ -6,8 +6,8 @@ use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Translation\Translator;
 use Doctrine\DBAL\Types\Types;
 use JetBrains\PhpStorm\ArrayShape;
-use Twig\TwigFunction;
 use function str_starts_with;
+use Twig\TwigFunction;
 
 class TranslationExtension extends AbstractExtension
 {
@@ -44,9 +44,10 @@ class TranslationExtension extends AbstractExtension
     }
 
     #[ArrayShape([
-        VariableHelper::DOMAIN => VariableHelper::NULL."|".Types::STRING,
-        VariableHelper::CATALOG => Types::ARRAY
-    ])] public function buildRenderData(): array
+        VariableHelper::DOMAIN => VariableHelper::NULL.'|'.Types::STRING,
+        VariableHelper::CATALOG => Types::ARRAY,
+    ])]
+    public function buildRenderData(): array
     {
         return [
             VariableHelper::DOMAIN => $this->translator->getDomain(Translator::DOMAIN_TYPE_PAGE),
@@ -59,20 +60,26 @@ class TranslationExtension extends AbstractExtension
         $output = [];
         $all = $this->translator->getCatalogue()->all();
 
-        foreach ($keys as $id) {
+        foreach ($keys as $id)
+        {
             $domain = $this->translator->splitDomain($id);
 
-            if ($domain) {
+            if ($domain)
+            {
                 $id = $this->translator->splitId($id);
 
                 $domain = $this->translator->resolveDomain($domain);
-            } else {
+            } else
+            {
                 $domain = 'messages';
             }
 
-            if (isset($all[$domain])) {
-                foreach ($all[$domain] as $key => $trans) {
-                    if (str_starts_with($key, $id) || '*' === $id) {
+            if (isset($all[$domain]))
+            {
+                foreach ($all[$domain] as $key => $trans)
+                {
+                    if (str_starts_with($key, $id) || '*' === $id)
+                    {
                         $output[$domain.
                         $this->translator::DOMAIN_SEPARATOR.
                         $key] = $trans;

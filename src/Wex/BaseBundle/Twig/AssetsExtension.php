@@ -6,13 +6,11 @@ use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
 use function array_merge_recursive;
-use Doctrine\DBAL\Types\Types;
-use JetBrains\PhpStorm\ArrayShape;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Twig\TwigFunction;
 use function array_reverse;
 use function file_get_contents;
 use function json_decode;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Twig\TwigFunction;
 
 class AssetsExtension extends AbstractExtension
 {
@@ -68,8 +66,7 @@ class AssetsExtension extends AbstractExtension
      */
     public function __construct(
         KernelInterface $kernel
-    )
-    {
+    ) {
         $this->pathProject = $kernel->getProjectDir().'/';
         $this->pathPublic = $this->pathProject.self::DIR_PUBLIC;
         $this->pathBuild = $this->pathPublic.self::DIR_BUILD;
@@ -155,8 +152,7 @@ class AssetsExtension extends AbstractExtension
     public function assetsInitLayout(
         ?string $layoutName,
         bool $useJs,
-    )
-    {
+    ) {
         $layoutName = $layoutName ?: TemplateExtension::LAYOUT_NAME_DEFAULT;
         $backEndAssets = $this->assets;
         $this->assets = self::ASSETS_DEFAULT_EMPTY;
@@ -199,8 +195,7 @@ class AssetsExtension extends AbstractExtension
     public function assetsInitTemplate(
         string $templateName,
         bool $useJs
-    )
-    {
+    ) {
         $assets = $this->assetsDetect(
             $templateName,
             Asset::CONTEXT_PAGE
@@ -215,8 +210,7 @@ class AssetsExtension extends AbstractExtension
     public function assetsIsAvailable(
         Asset $asset,
         bool $useJs
-    ): bool
-    {
+    ): bool {
         // When using JS, we manage responsive
         // and extra theme style outside page rendering flow.
         if ((!$useJs) || $asset->responsive || $asset->theme)
@@ -262,8 +256,7 @@ class AssetsExtension extends AbstractExtension
     public function assetsDetect(
         string $templateName,
         string $context
-    ): array
-    {
+    ): array {
         $output = [];
 
         foreach (Asset::ASSETS_EXTENSIONS as $ext)
@@ -287,8 +280,7 @@ class AssetsExtension extends AbstractExtension
         string $ext,
         string $context,
         bool $searchTheme
-    ): array
-    {
+    ): array {
         $assetPathFull = $ext.'/'.$assetPath.'.'.$ext;
         $output = [];
 
@@ -343,7 +335,7 @@ class AssetsExtension extends AbstractExtension
                         $dirname,
                         VariableHelper::PLURAL_THEME,
                         $themeName,
-                        $basename
+                        $basename,
                     ]
                 );
 
@@ -370,8 +362,7 @@ class AssetsExtension extends AbstractExtension
     public function addAsset(
         string $pathRelative,
         string $context
-    ): ?Asset
-    {
+    ): ?Asset {
         $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
         if (!isset($this->manifest[$pathRelativeToPublic]))
         {
@@ -386,7 +377,8 @@ class AssetsExtension extends AbstractExtension
             );
 
             $this->assetsLoaded[$pathRelative] = $asset;
-        } else
+        }
+        else
         {
             $asset = $this->assetsLoaded[$pathRelative];
         }

@@ -4,9 +4,9 @@ namespace App\Wex\BaseBundle\Rendering;
 
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Twig\TemplateExtension;
-use Symfony\Component\HttpFoundation\Request;
 use function in_array;
 use function is_null;
+use Symfony\Component\HttpFoundation\Request;
 
 class AdaptiveResponse
 {

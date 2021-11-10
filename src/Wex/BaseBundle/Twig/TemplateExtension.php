@@ -6,9 +6,9 @@ use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Service\TemplateService;
 use App\Wex\BaseBundle\Translation\Translator;
+use function array_merge_recursive;
 use Doctrine\DBAL\Types\Types;
 use JetBrains\PhpStorm\ArrayShape;
-use function array_merge_recursive;
 use function str_ends_with;
 use function strlen;
 use function substr;
@@ -26,8 +26,7 @@ class TemplateExtension extends AbstractExtension
     public function __construct(
         private KernelInterface $kernel,
         private TemplateService $templateService
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array
@@ -61,8 +60,7 @@ class TemplateExtension extends AbstractExtension
         Environment $env,
         string $pageTemplateName,
         string $layoutTheme
-    ): array
-    {
+    ): array {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -79,7 +77,7 @@ class TemplateExtension extends AbstractExtension
                 'displayBreakpoints' => AssetsExtension::DISPLAY_BREAKPOINTS,
                 VariableHelper::ENV => $this->kernel->getEnvironment(),
                 VariableHelper::VARS => $jsExtension->jsVarsGet(JsExtension::VARS_GROUP_GLOBAL),
-                VariableHelper::THEME => $layoutTheme
+                VariableHelper::THEME => $layoutTheme,
             ]
         );
 
@@ -88,20 +86,20 @@ class TemplateExtension extends AbstractExtension
         return $output;
     }
 
-    #[ArrayShape([
+    #[ArrayShape(
+        [
             VariableHelper::ASSETS => "\App\Wex\BaseBundle\Rendering\Asset[][][]|array[]|\array[][]",
-            VariableHelper::BODY => VariableHelper::NULL."|".Types::STRING,
+            VariableHelper::BODY => VariableHelper::NULL.'|'.Types::STRING,
             VariableHelper::NAME => Types::STRING,
             VariableHelper::TRANSLATIONS => Types::ARRAY,
-            VariableHelper::VARS => Types::ARRAY
+            VariableHelper::VARS => Types::ARRAY,
         ]
     )]
     public function templateBuildPageData(
         Environment $env,
         string $pageName,
         ?string $body = null
-    ): array
-    {
+    ): array {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -139,14 +137,13 @@ class TemplateExtension extends AbstractExtension
     }
 
     #[ArrayShape([
-        VariableHelper::PAGE => Types::ARRAY."|".VariableHelper::NULL,
-        VariableHelper::TRANSLATIONS => Types::ARRAY
+        VariableHelper::PAGE => Types::ARRAY.'|'.VariableHelper::NULL,
+        VariableHelper::TRANSLATIONS => Types::ARRAY,
     ])]
     public function templateBuildRenderData(
         Environment $env,
         string $pageTemplateName = null
-    ): array
-    {
+    ): array {
         /** @var TranslationExtension $translationExtension */
         $translationExtension = $env->getExtension(
             TranslationExtension::class
@@ -172,7 +169,8 @@ class TemplateExtension extends AbstractExtension
         $ext = TemplateExtension::TEMPLATE_FILE_EXTENSION;
 
         // Path have extension.
-        if (str_ends_with($templatePath, $ext)) {
+        if (str_ends_with($templatePath, $ext))
+        {
             return substr(
                 $templatePath,
                 0,

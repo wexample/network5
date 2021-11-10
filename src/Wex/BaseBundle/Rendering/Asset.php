@@ -91,10 +91,10 @@ class Asset
         $pathWithoutExt = dirname($this->path).'/'.$info['filename'];
 
         $this->id = $context.'.'.PathHelper::relativeTo(
-                $pathWithoutExt,
-                '/'.AssetsExtension::DIR_BUILD.
+            $pathWithoutExt,
+            '/'.AssetsExtension::DIR_BUILD.
                 $this->type.'/'
-            );
+        );
     }
 
     /**
@@ -114,7 +114,7 @@ class Asset
     }
 
     /**
-     * Used in twig rendering like "asset.preloadAs"
+     * Used in twig rendering like "asset.preloadAs".
      */
     public function getPreloadAs(): ?string
     {
@@ -131,13 +131,15 @@ class Asset
         if ($this->type === static::EXTENSION_JS)
         {
             return $useJs && !$this->responsive;
-        } else if ($this->type === static::EXTENSION_CSS)
+        }
+        elseif ($this->type === static::EXTENSION_CSS)
         {
             if ($this->responsive)
             {
                 // Responsive CSS are loaded in page when JS is disabled.
                 return !$useJs;
-            } elseif ($this->theme)
+            }
+            elseif ($this->theme)
             {
                 // Theme CSS are loaded using JS.
                 // TODO Preload default theme.

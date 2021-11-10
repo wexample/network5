@@ -4,8 +4,6 @@ namespace App\Tests\Integration\Assets;
 
 use App\Tests\NetworkTestCase;
 use App\Wex\BaseBundle\Helper\VariableHelper;
-use function json_decode;
-use function preg_match;
 
 class AssetsTest extends NetworkTestCase
 {

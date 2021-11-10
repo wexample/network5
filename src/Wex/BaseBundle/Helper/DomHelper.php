@@ -17,7 +17,8 @@ class DomHelper
         $output = [];
         $attributes = $attributes ?: [];
 
-        foreach ($attributes as $key => $value) {
+        foreach ($attributes as $key => $value)
+        {
             $output[] = $key.'="'.$value.'"';
         }
 
@@ -29,20 +30,23 @@ class DomHelper
         array $attributes,
         string $body = '',
         bool $allowSingleTag = null
-    ): string
-    {
+    ): string {
         $output = '<'.$tagName;
 
         $outputAttributes = static::buildTagAttributes($attributes);
         $output .= $outputAttributes ? ' '.$outputAttributes : '';
 
-        if (is_null($allowSingleTag)) {
+        if (is_null($allowSingleTag))
+        {
             $allowSingleTag = static::TAG_ALLOWS_AUTO_CLOSING[$tagName] ?? false;
         }
 
-        if ($allowSingleTag && !$body) {
+        if ($allowSingleTag && !$body)
+        {
             $output .= '/>';
-        } else {
+        }
+        else
+        {
             $output .= '>'.$body.'</'.$tagName.'>';
         }
 

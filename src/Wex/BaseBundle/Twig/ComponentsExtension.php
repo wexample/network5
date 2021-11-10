@@ -23,7 +23,8 @@ class ComponentsExtension extends AbstractExtension
     public array $components = [];
 
     public function __construct(
-        protected AssetsExtension $assetsExtension)
+        protected AssetsExtension $assetsExtension
+    )
     {
     }
 
@@ -56,7 +57,6 @@ class ComponentsExtension extends AbstractExtension
         ];
     }
 
-
     /**
      * Add component to the global page requirements.
      * It adds components assets to page assets.
@@ -71,12 +71,11 @@ class ComponentsExtension extends AbstractExtension
 
         return $component->renderTag();
     }
-    
+
     public function saveComponent(
         string $name,
         string $initMode,
-    ): Component
-    {
+    ): Component {
         // Using an object allow continuing edit properties after save.
         $entry = new Component($name, $initMode);
 

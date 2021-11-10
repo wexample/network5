@@ -12,8 +12,7 @@ class Component
     public function __construct(
         public string $name,
         public string $initMode
-    )
-    {
+    ) {
         $this->id = 'com-'.uniqid();
     }
 

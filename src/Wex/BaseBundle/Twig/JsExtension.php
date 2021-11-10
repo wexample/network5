@@ -4,15 +4,15 @@ namespace App\Wex\BaseBundle\Twig;
 
 use App\Wex\BaseBundle\Api\Dto\Traits\EntityDto;
 use App\Wex\BaseBundle\Entity\Interfaces\AbstractEntityInterface;
-use ReflectionClass;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Twig\TwigFunction;
-use Twig\Extension\AbstractExtension;
 use function class_exists;
 use function is_array;
 use function is_object;
 use function is_subclass_of;
+use ReflectionClass;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 class JsExtension extends AbstractExtension
 {
@@ -30,8 +30,7 @@ class JsExtension extends AbstractExtension
      */
     public function __construct(
         private NormalizerInterface $normalizer,
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array
@@ -57,8 +56,7 @@ class JsExtension extends AbstractExtension
     public function jsVarExists(
         string $name,
         $group = self::VARS_GROUP_PAGE
-    ): bool
-    {
+    ): bool {
         return isset($this->jsVars[$group][$name]);
     }
 
@@ -73,9 +71,9 @@ class JsExtension extends AbstractExtension
     public function jsVars(
         array $array,
         string $group = self::VARS_GROUP_PAGE
-    ): void
-    {
-        foreach ($array as $name => $value) {
+    ): void {
+        foreach ($array as $name => $value)
+        {
             $this->jsVar($name, $value, $group);
         }
     }
@@ -87,11 +85,9 @@ class JsExtension extends AbstractExtension
         string $name,
         mixed $value,
         string $group = self::VARS_GROUP_PAGE
-    ): void
-    {
+    ): void {
         $this->jsVars[$group][$name] = $this->serializeValue($value);
     }
-
 
     /**
      * @throws ExceptionInterface
@@ -99,18 +95,19 @@ class JsExtension extends AbstractExtension
     public function serializeValue(mixed $item, $context = null): mixed
     {
         // Recursive exploration.
-        if (is_array($item)) {
+        if (is_array($item))
+        {
             return $this->serializeArray($item, $context);
         }
 
         // Convert entities.
-        if ($entityDto = $this->serializeEntity($item, $context)) {
+        if ($entityDto = $this->serializeEntity($item, $context))
+        {
             return $entityDto;
         }
 
         return $item;
     }
-
 
     /**
      * @throws ExceptionInterface
@@ -118,11 +115,11 @@ class JsExtension extends AbstractExtension
     public function serializeArray(
         array $array,
         array $context = null
-    ): array
-    {
+    ): array {
         $output = [];
 
-        foreach ($array as $key => $item) {
+        foreach ($array as $key => $item)
+        {
             $output[$key] = $this->serializeValue($item, $context);
         }
 
@@ -137,24 +134,26 @@ class JsExtension extends AbstractExtension
         ?array $context = [
             'displayFormat' => EntityDto::DISPLAY_FORMAT_DEFAULT,
         ]
-    ): ?array
-    {
+    ): ?array {
         if (is_object($value) &&
             is_subclass_of(
                 $value,
                 AbstractEntityInterface::class
-            )) {
+            ))
+        {
             $objectValue = $value;
             // Find if class is an entity and have an API Dto object.
             $dtoClassName = '\\App\\Api\\Dto\\'.
                 (new ReflectionClass($objectValue))->getShortName();
 
-            if (!isset($context['collection_operation_name'])) {
+            if (!isset($context['collection_operation_name']))
+            {
                 $context['collection_operation_name'] = 'twig_serialize_entity';
             }
 
             if (class_exists($dtoClassName) &&
-                is_subclass_of($dtoClassName, EntityDto::class)) {
+                is_subclass_of($dtoClassName, EntityDto::class))
+            {
                 return $this->normalizer->normalize(
                     $objectValue,
                     'jsonld',
