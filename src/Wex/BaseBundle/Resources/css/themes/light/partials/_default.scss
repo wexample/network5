@@ -1,8 +1,14 @@
+@import '../mixins/global';
+
 body.theme-light {
-  background: white;
+  background: $color-default-background;
 }
 
 body.theme-light,
 body.theme-default .theme-light {
-  color: black;
+  color: $color-default-text;
+
+  a {
+    color: $color-default-link;
+  }
 }
