@@ -7,11 +7,13 @@ import MixinPages from '../mixins/Pages';
 import MixinResponsive from '../mixins/Responsive';
 import MixinTheme from '../mixins/Theme';
 
+import {unique as arrayUnique} from '../helpers/Arrays';
+
 export default class {
   public bootJsBuffer: string[] = [];
   public hasCoreLoaded: boolean = false;
   public layoutPage: Page = null;
-  public mixins: object;
+  public mixins: MixinInterface[] = [];
   public readyCallbacks: Function[] = [];
   public elLayout: HTMLElement;
   public lib: object = {};
@@ -34,14 +36,7 @@ export default class {
     let doc = window.document;
 
     let run = () => {
-      this.mixins = this.getMixinsAndDependencies(this.getMixins());
-
-      Object.values(this.mixins).forEach((mixin: MixinInterface) => {
-        if (mixin.service) {
-          this.services[mixin.name] = new mixin.service(this);
-        }
-      });
-
+      this.loadMixins(this.getMixins());
       let mixinService = this.getService('mixins');
 
       // Init mixins.
@@ -123,35 +118,43 @@ export default class {
     return this.services[name];
   }
 
-  getMixins() {
-    return {
-      ...{
-        MixinAssets,
-        MixinMixin,
-        MixinPages,
-        MixinResponsive,
-        MixinTheme,
-      },
-    };
+  getMixins(): MixinInterface[] {
+    return [
+      MixinAssets,
+      MixinMixin,
+      MixinPages,
+      MixinResponsive,
+      MixinTheme,
+    ];
   }
 
-  getMixinsAndDependencies(mixins) {
-    Object.values(mixins).forEach((mixin: any) => {
-      if (mixin.dependencies) {
-        let dependencies = mixin.dependencies;
+  loadMixins(mixins: MixinInterface[]): void {
+    mixins = this.getMixinsAndDependencies(mixins);
 
-        mixins = {
-          ...mixins,
-          ...this.getMixinsAndDependencies(dependencies),
-        };
+    mixins.forEach((mixin: MixinInterface) => {
+      if (mixin.service) {
+        this.services[mixin.name] = new mixin.service(this);
       }
     });
 
-    return mixins;
+    this.mixins = arrayUnique([...mixins, ...this.mixins]) as MixinInterface[];
+  }
+
+  getMixinsAndDependencies(mixins: MixinInterface[]): MixinInterface[] {
+    mixins.forEach((mixin: any) => {
+      if (mixin.dependencies) {
+        mixins = [
+          ...mixins,
+          ...this.getMixinsAndDependencies(mixin.dependencies),
+        ];
+      }
+    });
+
+    return arrayUnique(mixins) as MixinInterface[];
   }
 
   mix(parentDest, group, split = false) {
-    Object.values(this.mixins).forEach((mixin) => {
+    this.mixins.forEach((mixin) => {
       if (mixin.methods && mixin.methods[group]) {
         let dest;
         let toMix = mixin.methods[group];

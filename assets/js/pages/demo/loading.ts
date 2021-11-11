@@ -2,6 +2,7 @@ import {MDCRipple} from '@material/ripple/index';
 import Page from '../../../../src/Wex/BaseBundle/Resources/js/class/Page';
 import UnitTest from '../../../../src/Wex/BaseBundle/Resources/js/class/UnitTest';
 import AssetBundleInterface from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/AssetBundleInterface';
+import MixinModals from '../../../../src/Wex/BaseBundle/Resources/js/mixins/Modals';
 
 const bundle: AssetBundleInterface = {
   bundleGroup: 'page',
@@ -22,6 +23,12 @@ const bundle: AssetBundleInterface = {
           setTimeout(() => {
             this.loadingStop();
           }, 1000);
+        });
+
+      this.el
+        .querySelector('#page-modal-show')
+        .addEventListener('click', () => {
+
         });
     }
   },

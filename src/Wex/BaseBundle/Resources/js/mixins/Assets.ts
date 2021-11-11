@@ -11,9 +11,9 @@ import AssetsInterface from '../interfaces/AssetInterface';
 const mixin: MixinInterface = {
   name: 'assets',
 
-  dependencies: {
+  dependencies: [
     MixinQueues,
-  },
+  ],
 
   hooks: {
     app: {

@@ -9,9 +9,9 @@ import LayoutRenderDataInterface from '../interfaces/LayoutRenderDataInterface';
 const mixin: MixinInterface = {
   name: 'pages',
 
-  dependencies: {
+  dependencies: [
     MixinLocale,
-  },
+  ],
 
   hooks: {
     app: {
@@ -21,8 +21,8 @@ const mixin: MixinInterface = {
         next: Function
       ) {
         if (
-          registry.MixinResponsive === MixinsAppService.LOAD_STATUS_COMPLETE &&
-          registry.MixinLocale === MixinsAppService.LOAD_STATUS_COMPLETE
+          registry.responsive === MixinsAppService.LOAD_STATUS_COMPLETE &&
+          registry.locale === MixinsAppService.LOAD_STATUS_COMPLETE
         ) {
           if (data.page) {
             this.app.getService('pages').create(data.page, next);

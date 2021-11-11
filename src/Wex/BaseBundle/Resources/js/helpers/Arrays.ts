@@ -19,3 +19,9 @@ export function fromArguments(args: unknown[]): unknown[] {
 export function shallowCopy(array: unknown[]): unknown[] {
   return array.slice(0);
 }
+
+export function unique(array: unknown[]): unknown[] {
+  return array.filter((value, index: number) => {
+    return array.indexOf(value) === index;
+  });
+}

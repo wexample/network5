@@ -4,9 +4,9 @@ import MixinLocale from './Locale';
 export default {
   name: 'prompts',
 
-  dependencies: {
+  dependencies: [
     MixinLocale,
-  },
+  ],
 
   service: class extends AppService {
     systemError(message, args = {}, debugData: any = null) {

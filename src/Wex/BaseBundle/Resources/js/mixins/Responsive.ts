@@ -11,16 +11,16 @@ import AssetsInterface from '../interfaces/AssetInterface';
 const mixin: MixinInterface = {
   name: 'responsive',
 
-  dependencies: {
+  dependencies: [
     MixinAssets,
     MixinEvents,
     MixinQueues,
-  },
+  ],
 
   hooks: {
     app: {
       init(registry: any) {
-        if (registry.MixinAssets === MixinsAppService.LOAD_STATUS_COMPLETE) {
+        if (registry.assets === MixinsAppService.LOAD_STATUS_COMPLETE) {
           let assetsService = this.app.getService('assets');
           let responsiveService = this.app.getService('responsive');
 

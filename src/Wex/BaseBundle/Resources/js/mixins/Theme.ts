@@ -9,7 +9,7 @@ const mixin: MixinInterface = {
   hooks: {
     app: {
       init(registry: any) {
-        if (registry.MixinAssets === MixinsAppService.LOAD_STATUS_COMPLETE) {
+        if (registry.assets === MixinsAppService.LOAD_STATUS_COMPLETE) {
           let assetsService = this.app.getService('assets');
           let themeService = this.app.getService('theme');
 
