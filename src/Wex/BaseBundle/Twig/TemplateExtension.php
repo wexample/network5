@@ -120,7 +120,7 @@ class TemplateExtension extends AbstractExtension
         return [
             VariableHelper::ASSETS => $assetsExtension->buildRenderData(Asset::CONTEXT_PAGE),
             VariableHelper::BODY => $body,
-            VariableHelper::PLURAL_COMPONENT => $comExtension->components,
+            VariableHelper::PLURAL_COMPONENT => $comExtension->componentsBuildPageData(),
             VariableHelper::NAME => $pageName,
             VariableHelper::TRANSLATIONS => $translationExtension->buildRenderData(),
             VariableHelper::VARS => $jsExtension->jsVarsGet(JsExtension::VARS_GROUP_PAGE),
@@ -154,7 +154,8 @@ class TemplateExtension extends AbstractExtension
         );
 
         return [
-            VariableHelper::PLURAL_COMPONENT => $componentsExtension->componentsBuildPageData(),
+           // TODO Layout level com
+            // VariableHelper::PLURAL_COMPONENT => $componentsExtension->componentsBuildPageData(),
             VariableHelper::PAGE => $pageTemplateName
                 ? $this->templateBuildPageData(
                     $env,

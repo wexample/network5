@@ -14,7 +14,8 @@ class Component
 
     public function __construct(
         public string $name,
-        public string $initMode
+        public string $initMode,
+        protected array $options
     )
     {
         $this->id = 'com-'.uniqid();
@@ -42,11 +43,9 @@ class Component
     {
         return [
             VariableHelper::ID => $this->id,
+            'initMode' => $this->initMode,
             VariableHelper::NAME => $this->name,
-            // TODO
-//            'initContext' => $this->getContext(),
-//            VariableHelper::OPTIONS => $this->,
-//            VariableHelper::TYPE => $this->ty,
+            VariableHelper::OPTIONS => $this->options,
         ];
     }
 }

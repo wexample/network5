@@ -20,7 +20,7 @@ class ComponentsExtension extends AbstractExtension
     /**
      * Save components options initialized by com_init.
      */
-    public array $components = [];
+    protected array $components = [];
 
     public function __construct(
         protected AssetsExtension $assetsExtension
@@ -77,7 +77,8 @@ class ComponentsExtension extends AbstractExtension
     {
         $component = $this->saveComponent(
             $name,
-            self::INIT_MODE_PREVIOUS
+            self::INIT_MODE_PREVIOUS,
+            $options
         );
 
         return $component->renderTag();
@@ -86,10 +87,11 @@ class ComponentsExtension extends AbstractExtension
     public function saveComponent(
         string $name,
         string $initMode,
+        array $options
     ): Component
     {
         // Using an object allow continuing edit properties after save.
-        $entry = new Component($name, $initMode);
+        $entry = new Component($name, $initMode, $options);
 
         $this->components[] = $entry;
 
@@ -118,7 +120,8 @@ class ComponentsExtension extends AbstractExtension
     {
         $component = $this->saveComponent(
             $name,
-            self::INIT_MODE_CLASS
+            self::INIT_MODE_CLASS,
+            $options
         );
 
         return 'com-class-loaded '.$component->id;
@@ -132,7 +135,8 @@ class ComponentsExtension extends AbstractExtension
     {
         $component = $this->saveComponent(
             $name,
-            self::INIT_MODE_PARENT
+            self::INIT_MODE_PARENT,
+            $options
         );
 
         return $component->renderTag();

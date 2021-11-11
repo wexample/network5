@@ -1,6 +1,5 @@
 import MixinInterface from '../interfaces/MixinInterface';
 import AppService from '../class/AppService';
-import MixinsAppService from '../class/MixinsAppService';
 import { format as StringFormat } from '../helpers/String';
 
 const mixin: MixinInterface = {
