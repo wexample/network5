@@ -10,6 +10,12 @@ const bundle: AssetBundleInterface = {
   definition: class extends Page {
     unitTest: UnitTest;
 
+    getPageLevelMixins() {
+      return [
+        MixinModals
+      ];
+    }
+
     init() {
       this.unitTest = new UnitTest();
       // TODO cleanup
@@ -28,7 +34,9 @@ const bundle: AssetBundleInterface = {
       this.el
         .querySelector('#page-modal-show')
         .addEventListener('click', () => {
+          let modalsService = this.app.getService('modals');
 
+          modalsService.open();
         });
     }
   },

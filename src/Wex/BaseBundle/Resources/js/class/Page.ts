@@ -2,6 +2,7 @@ import App from './App';
 import PageResponsiveDisplay from './PageResponsiveDisplay';
 import PageRenderDataInterface from '../interfaces/PageRenderDataInterface';
 import AppChild from './AppChild';
+import MixinInterface from "../interfaces/MixinInterface";
 
 export default class extends AppChild {
   public readonly el: HTMLElement;
@@ -19,8 +20,12 @@ export default class extends AppChild {
     super(app);
 
     this.isLayoutPage = renderData.isLayoutPage;
+    this.name = renderData.name;
+    this.onChangeResponsiveSizeProxy = this.onChangeResponsiveSize.bind(this);
+    this.onChangeThemeProxy = this.onChangeTheme.bind(this);
 
     if (this.isLayoutPage) {
+      this.app.layoutPage = this;
       this.el = this.app.elLayout;
     } else {
       this.el = renderData.el;
@@ -35,14 +40,14 @@ export default class extends AppChild {
     }
 
     this.elOverlay = this.el.querySelector('.page-overlay');
-    this.name = renderData.name;
-    this.onChangeResponsiveSizeProxy = this.onChangeResponsiveSize.bind(this);
-    this.onChangeThemeProxy = this.onChangeTheme.bind(this);
 
-    if (this.isLayoutPage) {
-      this.app.layoutPage = this;
-      this.el = this.app.elLayout;
-    }
+    this.app.loadMixins(
+      this.getPageLevelMixins()
+    );
+  }
+
+  getPageLevelMixins(): MixinInterface[] {
+    return [];
   }
 
   init(pageRenderData: PageRenderDataInterface) {
