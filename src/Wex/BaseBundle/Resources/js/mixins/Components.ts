@@ -16,7 +16,8 @@ const mixin: MixinInterface = {
     page: {
       loadPageRenderData(page: Page, registry: any) {
         // Wait for page loading.
-        if (registry.MixinPages !== MixinsAppService.LOAD_STATUS_COMPLETE) {
+        if (registry.MixinPages !== MixinsAppService.LOAD_STATUS_COMPLETE
+          || registry.MixinAssets !== MixinsAppService.LOAD_STATUS_COMPLETE) {
           return MixinsAppService.LOAD_STATUS_WAIT;
         }
 
