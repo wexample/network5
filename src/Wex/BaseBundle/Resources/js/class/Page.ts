@@ -5,6 +5,7 @@ import AppChild from './AppChild';
 
 export default class extends AppChild {
   public readonly el: HTMLElement;
+  public readonly elOverlay: HTMLElement;
   public readonly isLayoutPage: boolean;
   public readonly name: string;
   protected readonly onChangeResponsiveSizeProxy: Function;
@@ -17,8 +18,23 @@ export default class extends AppChild {
   constructor(app: App, renderData: PageRenderDataInterface) {
     super(app);
 
-    // Set readonly variables.
     this.isLayoutPage = renderData.isLayoutPage;
+
+    if (this.isLayoutPage) {
+      this.el = this.app.elLayout;
+    } else {
+      this.el = renderData.el;
+    }
+
+    if (!this.el) {
+      let promptService = this.app.getService('prompts');
+
+      promptService.systemError(
+        'page_message.error.page_missing_el'
+      );
+    }
+
+    this.elOverlay = this.el.querySelector('.page-overlay');
     this.name = renderData.name;
     this.onChangeResponsiveSizeProxy = this.onChangeResponsiveSize.bind(this);
     this.onChangeThemeProxy = this.onChangeTheme.bind(this);
@@ -76,7 +92,7 @@ export default class extends AppChild {
   }
 
   loadRenderData(renderData: PageRenderDataInterface, complete?: Function) {
-    this.vars = { ...this.vars, ...renderData.vars };
+    this.vars = {...this.vars, ...renderData.vars};
     this.renderData = renderData;
 
     this.app
@@ -126,5 +142,13 @@ export default class extends AppChild {
 
   updateLayoutTheme(theme: string) {
     // To override.
+  }
+
+  loadingStart() {
+    this.elOverlay.style.display = 'block';
+  }
+
+  loadingStop() {
+    this.elOverlay.style.display = 'none';
   }
 }
