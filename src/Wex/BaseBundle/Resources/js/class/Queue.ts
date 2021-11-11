@@ -1,15 +1,22 @@
-import App from './App';
+import {QueuesService} from "../mixins/Queues";
+import AppChild from "./AppChild";
+import {ServiceRegistryAppInterface} from "../interfaces/ServiceRegistryAppInterface";
 
-export default class Queue {
-  private readonly app: App;
+interface ServiceRegistryQueueInterface extends ServiceRegistryAppInterface {
+  queues: QueuesService
+}
+
+export default class Queue extends AppChild {
   public callbacks: Function[] = [];
   public commands: Function[] = [];
   private readonly name: string;
   public started: boolean = false;
   public static readonly EXEC_STOP = 'exec_stop';
+  protected readonly services: ServiceRegistryQueueInterface;
 
-  constructor(app: App, name: string) {
-    this.app = app;
+  constructor(service: QueuesService, name: string) {
+    super(service.app);
+
     this.name = name;
   }
 
@@ -67,7 +74,7 @@ export default class Queue {
   private complete(after?: Function) {
     if (this.started && !this.commands.length) {
       this.then(() => {
-        delete this.app.getService('queues').queues[this.name];
+        delete this.services.queues[this.name];
 
         this.reset();
 

@@ -1,22 +1,57 @@
-import MixinLocale from './Locale';
+import {MixinLocale} from './Locale';
 import MixinInterface from '../interfaces/MixinInterface';
 import Page from '../class/Page';
 import AppService from '../class/AppService';
 import MixinsAppService from '../class/MixinsAppService';
-import PageRenderDataInterface from '../interfaces/PageRenderDataInterface';
-import LayoutRenderDataInterface from '../interfaces/LayoutRenderDataInterface';
+import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
+import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
+import RequestOptionsPageInterface from "../interfaces/RequestOptionsPageInterface";
+import {AdaptiveService, MixinAdaptive} from "./Adaptive";
+import {PromptService} from "./Prompts";
+import {EventsService} from "./Events";
+import {ServiceRegistryPageInterface} from "../interfaces/ServiceRegistryPageInterface";
 
-const mixin: MixinInterface = {
+export class PagesService extends AppService {
+  pages: {};
+  services: ServiceRegistryPageInterface
+
+  create(data: RenderDataPageInterface, complete: Function): Page {
+    let classDefinition = this.app.getBundleClassDefinition(
+      'page',
+      data.name
+    );
+
+    if (!classDefinition) {
+      classDefinition = this.app.getClassPage();
+    }
+
+    let page = new classDefinition(this.app, data);
+    page.loadInitialRenderData(data, complete);
+
+    return page;
+  }
+
+  get(
+    path: string,
+    options: RequestOptionsPageInterface,
+    callback
+  ) {
+    console.log(this.services.adaptive);
+  }
+}
+
+export const MixinPages: MixinInterface = {
   name: 'pages',
 
   dependencies: [
     MixinLocale,
+    MixinAdaptive,
   ],
 
   hooks: {
     app: {
       loadLayoutRenderData(
-        data: LayoutRenderDataInterface,
+        data: RenderDataLayoutInterface,
         registry: any,
         next: Function
       ) {
@@ -25,7 +60,7 @@ const mixin: MixinInterface = {
           registry.locale === MixinsAppService.LOAD_STATUS_COMPLETE
         ) {
           if (data.page) {
-            this.app.getService('pages').create(data.page, next);
+            this.services.pages.create(data.page, next);
           }
 
           return MixinsAppService.LOAD_STATUS_STOP;
@@ -35,25 +70,5 @@ const mixin: MixinInterface = {
     },
   },
 
-  service: class extends AppService {
-    pages: {};
-
-    create(data: PageRenderDataInterface, complete: Function): Page {
-      let classDefinition = this.app.getBundleClassDefinition(
-        'page',
-        data.name
-      );
-
-      if (!classDefinition) {
-        classDefinition = this.app.getClassPage();
-      }
-
-      let page = new classDefinition(this.app, data);
-      page.loadInitialRenderData(data, complete);
-
-      return page;
-    }
-  },
+  service: PagesService
 };
-
-export default mixin;

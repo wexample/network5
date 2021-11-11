@@ -1,42 +1,44 @@
 import MixinInterface from '../interfaces/MixinInterface';
 import AppService from '../class/AppService';
-import { format as StringFormat } from '../helpers/String';
+import {format as StringFormat} from '../helpers/String';
 
-const mixin: MixinInterface = {
+export class LocaleService extends AppService {
+  transDomains: object = {};
+
+  trans(
+    string = '',
+    args = {},
+    domains = this.transDomains,
+    catalog = this.app.registry.layoutData.translations.catalog
+  ) {
+    let stringWithDomain;
+    let sep = this.app.registry.layoutData.translationsDomainSeparator;
+
+    // A domain is specified.
+    if (string.indexOf(sep) !== -1) {
+      if (string[0] === '@') {
+        let exp = string.split(sep);
+        let domainPart = exp[0].substr(1);
+        if (domains[domainPart]) {
+          stringWithDomain = domains[domainPart] + sep + exp[1];
+        }
+      } else {
+        stringWithDomain = string;
+      }
+    }
+    // Use default domain
+    else {
+      stringWithDomain = 'messages' + sep + string;
+    }
+
+    return StringFormat(catalog[stringWithDomain] || string, args);
+  }
+};
+
+export const MixinLocale: MixinInterface = {
   name: 'locale',
 
-  service: class extends AppService {
-    transDomains: object = {};
-
-    trans(
-      string = '',
-      args = {},
-      domains = this.transDomains,
-      catalog = this.app.registry.layoutData.translations.catalog
-    ) {
-      let stringWithDomain;
-      let sep = this.app.registry.layoutData.translationsDomainSeparator;
-
-      // A domain is specified.
-      if (string.indexOf(sep) !== -1) {
-        if (string[0] === '@') {
-          let exp = string.split(sep);
-          let domainPart = exp[0].substr(1);
-          if (domains[domainPart]) {
-            stringWithDomain = domains[domainPart] + sep + exp[1];
-          }
-        } else {
-          stringWithDomain = string;
-        }
-      }
-      // Use default domain
-      else {
-        stringWithDomain = 'messages' + sep + string;
-      }
-
-      return StringFormat(catalog[stringWithDomain] || string, args);
-    }
-  },
+  service: LocaleService,
 
   methods: {
     page: {
@@ -49,5 +51,3 @@ const mixin: MixinInterface = {
     },
   },
 };
-
-export default mixin;

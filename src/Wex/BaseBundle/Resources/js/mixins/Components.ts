@@ -2,10 +2,33 @@ import MixinInterface from '../interfaces/MixinInterface';
 import MixinsAppService from '../class/MixinsAppService';
 import AppService from '../class/AppService';
 import Page from '../class/Page';
-import ComponentRenderDataInterface from '../interfaces/ComponentRenderDataInterface';
-import MixinPrompts from './Prompts';
+import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
+import {MixinPrompts} from './Prompts';
 
-const mixin: MixinInterface = {
+export class ComponentsService extends AppService {
+  create(elContext: HTMLElement, renderData: RenderDataComponentInterface) {
+    let classDefinition = this.app.getBundleClassDefinition(
+      'component',
+      renderData.name
+    );
+
+    // Prevent multiple alerts for the same component.
+    if (!classDefinition) {
+      this.services.prompts.systemError(
+        'page_message.error.com_missing',
+        {},
+        {
+          ':type': renderData.name,
+        }
+      );
+    } else {
+      let component = new classDefinition(elContext, renderData);
+      component.init(renderData);
+    }
+  }
+}
+
+export const MixinComponents: MixinInterface = {
   name: 'components',
 
   dependencies: [
@@ -21,10 +44,9 @@ const mixin: MixinInterface = {
           return MixinsAppService.LOAD_STATUS_WAIT;
         }
 
-        let componentsService = this.app.getService('components');
         page.renderData.components.forEach(
-          (componentData: ComponentRenderDataInterface) => {
-            componentsService.create(page.el, componentData);
+          (componentData: RenderDataComponentInterface) => {
+            this.services.components.create(page.el, componentData);
           }
         );
 
@@ -33,30 +55,5 @@ const mixin: MixinInterface = {
     },
   },
 
-  service: class extends AppService {
-    create(elContext: HTMLElement, renderData: ComponentRenderDataInterface) {
-      let classDefinition = this.app.getBundleClassDefinition(
-        'component',
-        renderData.name
-      );
-
-      // Prevent multiple alerts for the same component.
-      if (!classDefinition) {
-        let promptService = this.app.getService('prompts');
-
-        promptService.systemError(
-          'page_message.error.com_missing',
-          {},
-          {
-            ':type': renderData.name,
-          }
-        );
-      } else {
-        let component = new classDefinition(elContext, renderData);
-        component.init(renderData);
-      }
-    }
-  },
+  service: ComponentsService,
 };
-
-export default mixin;

@@ -1,11 +1,18 @@
 import Page from '../../../../src/Wex/BaseBundle/Resources/js/class/Page';
 import UnitTest from '../../../../src/Wex/BaseBundle/Resources/js/class/UnitTest';
 import AssetBundleInterface from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/AssetBundleInterface';
+import {QueuesService} from "../../../../src/Wex/BaseBundle/Resources/js/mixins/Queues";
+import {ServiceRegistryPageInterface} from "../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistryPageInterface";
+
+interface ServiceRegistryPageCurrentInterface extends ServiceRegistryPageInterface {
+  queues: QueuesService
+}
 
 const bundle: AssetBundleInterface = {
   bundleGroup: 'page',
 
   definition: class extends Page {
+    services: ServiceRegistryPageCurrentInterface;
     unitTest: UnitTest;
 
     init() {
@@ -18,8 +25,7 @@ const bundle: AssetBundleInterface = {
 
       document.querySelectorAll('.demo-button-switch-theme').forEach((el) => {
         el.addEventListener('click', () => {
-          this.app
-            .getService('theme')
+          this.services.theme
             .setTheme(el.getAttribute('data-theme'), true);
         });
       });
@@ -28,7 +34,7 @@ const bundle: AssetBundleInterface = {
     updateCurrentResponsiveDisplay() {
       super.updateCurrentResponsiveDisplay();
 
-      let responsiveMixin = this.app.getService('responsive');
+      let responsiveMixin = this.services.responsive;
       let current = responsiveMixin.responsiveSizeCurrent;
 
       document
@@ -96,7 +102,7 @@ const bundle: AssetBundleInterface = {
 
     testQueues() {
       let test = this.unitTest;
-      let queuesMixin = this.app.getService('queues');
+      let queuesMixin = this.services.queues;
       let queue = queuesMixin.create('test-queue');
       let counterOne = 0;
 

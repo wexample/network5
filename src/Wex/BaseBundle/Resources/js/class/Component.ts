@@ -1,5 +1,5 @@
 import AppChild from './AppChild';
-import ComponentRenderDataInterface from '../interfaces/ComponentRenderDataInterface';
+import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
 import { findPreviousNode as DomFindPreviousNode } from '../helpers/Dom';
 
 export default abstract class Component extends AppChild {
@@ -12,7 +12,7 @@ export default abstract class Component extends AppChild {
 
   public static INIT_MODE_PREVIOUS: string = 'previous';
 
-  protected constructor(elContext, renderData: ComponentRenderDataInterface) {
+  protected constructor(elContext, renderData: RenderDataComponentInterface) {
     super(renderData);
 
     this.elContext = elContext;
@@ -40,7 +40,7 @@ export default abstract class Component extends AppChild {
     }
   }
 
-  public init(renderData: ComponentRenderDataInterface) {
+  public init(renderData: RenderDataComponentInterface) {
     // To override...
   }
 }

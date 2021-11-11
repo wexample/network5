@@ -1,11 +1,14 @@
 import Page from './Page';
 
-import MixinAssets from '../mixins/Assets';
 import MixinInterface from '../interfaces/MixinInterface';
-import MixinMixin from '../mixins/Mixins';
-import MixinPages from '../mixins/Pages';
-import MixinResponsive from '../mixins/Responsive';
-import MixinTheme from '../mixins/Theme';
+import {ServiceRegistryAppInterface} from "../interfaces/ServiceRegistryAppInterface";
+
+import {MixinAssets, AssetsService} from '../mixins/Assets';
+import {MixinMixins, MixinService} from '../mixins/Mixins';
+import {MixinPages, PagesService} from '../mixins/Pages';
+import {MixinResponsive, ResponsiveService} from '../mixins/Responsive';
+import {MixinTheme, ThemeService} from '../mixins/Theme';
+import {MixinQueues, QueuesService} from '../mixins/Queues';
 
 import {unique as arrayUnique} from '../helpers/Arrays';
 
@@ -18,7 +21,7 @@ export default class {
   public elLayout: HTMLElement;
   public lib: object = {};
   public registry: any;
-  public services: object = {};
+  public services: ServiceRegistryAppInterface = {};
   public isReady: boolean = false;
 
   constructor(readyCallback?: any | Function, globalName = 'app') {
@@ -37,10 +40,9 @@ export default class {
 
     let run = () => {
       this.loadMixins(this.getMixins());
-      let mixinService = this.getService('mixins');
 
       // Init mixins.
-      mixinService.invokeUntilComplete('init', 'app', [], () => {
+      this.services.mixins.invokeUntilComplete('init', 'app', [], () => {
         this.elLayout = doc.getElementById('layout');
 
         this.addLibraries(this.lib);
@@ -49,7 +51,7 @@ export default class {
         this.hasCoreLoaded = true;
 
         // Load layout data.
-        mixinService.invokeUntilComplete(
+        this.services.mixins.invokeUntilComplete(
           'loadLayoutRenderData',
           'app',
           [this.registry.layoutData],
@@ -114,15 +116,12 @@ export default class {
     return Page;
   }
 
-  getService(name) {
-    return this.services[name];
-  }
-
   getMixins(): MixinInterface[] {
     return [
       MixinAssets,
-      MixinMixin,
+      MixinMixins,
       MixinPages,
+      MixinQueues,
       MixinResponsive,
       MixinTheme,
     ];

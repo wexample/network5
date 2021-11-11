@@ -1,6 +1,6 @@
 import Page from './Page';
 import AppChild from './AppChild';
-import PageRenderDataInterface from '../interfaces/PageRenderDataInterface';
+import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
 
 export default class extends AppChild {
   protected readonly page: Page;
@@ -10,7 +10,7 @@ export default class extends AppChild {
     this.page = page;
   }
 
-  init(renderData: PageRenderDataInterface) {
+  init(renderData: RenderDataPageInterface) {
     // To override...
   }
 }

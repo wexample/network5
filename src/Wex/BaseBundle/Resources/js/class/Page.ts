@@ -1,8 +1,9 @@
 import App from './App';
 import PageResponsiveDisplay from './PageResponsiveDisplay';
-import PageRenderDataInterface from '../interfaces/PageRenderDataInterface';
+import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
 import AppChild from './AppChild';
 import MixinInterface from "../interfaces/MixinInterface";
+import {ServiceRegistryPageInterface} from "../interfaces/ServiceRegistryPageInterface";
 
 export default class extends AppChild {
   public readonly el: HTMLElement;
@@ -12,11 +13,12 @@ export default class extends AppChild {
   protected readonly onChangeResponsiveSizeProxy: Function;
   protected readonly onChangeThemeProxy: Function;
   protected readonly responsiveDisplays: any = [];
-  public renderData: PageRenderDataInterface;
+  public renderData: RenderDataPageInterface;
   public responsiveDisplayCurrent: PageResponsiveDisplay;
   public vars: any;
+  public services:ServiceRegistryPageInterface;
 
-  constructor(app: App, renderData: PageRenderDataInterface) {
+  constructor(app: App, renderData: RenderDataPageInterface) {
     super(app);
 
     this.isLayoutPage = renderData.isLayoutPage;
@@ -32,7 +34,7 @@ export default class extends AppChild {
     }
 
     if (!this.el) {
-      let promptService = this.app.getService('prompts');
+      let promptService = this.services.prompts;
 
       promptService.systemError(
         'page_message.error.page_missing_el'
@@ -50,7 +52,7 @@ export default class extends AppChild {
     return [];
   }
 
-  init(pageRenderData: PageRenderDataInterface) {
+  init(pageRenderData: RenderDataPageInterface) {
     // To override...
   }
 
@@ -59,7 +61,7 @@ export default class extends AppChild {
   }
 
   destroy() {
-    let eventsService = this.app.getService('events');
+    let eventsService = this.services.events;
 
     eventsService.forget(
       'responsive-change-size',
@@ -72,23 +74,20 @@ export default class extends AppChild {
   }
 
   loadInitialRenderData(
-    renderData: PageRenderDataInterface,
+    renderData: RenderDataPageInterface,
     complete?: Function
   ) {
     this.loadRenderData(renderData, () => {
-      let eventsService = this.app.getService('events');
-
-      eventsService.listen(
+      this.services.events.listen(
         'responsive-change-size',
         this.onChangeResponsiveSizeProxy
       );
 
-      eventsService.listen('theme-change', this.onChangeThemeProxy);
+      this.services.events.listen('theme-change', this.onChangeThemeProxy);
 
       this.updateCurrentResponsiveDisplay();
 
-      let themeService = this.app.getService('theme');
-      this.updateLayoutTheme(themeService.activeTheme);
+      this.updateLayoutTheme(this.services.theme.activeTheme);
 
       this.init(renderData);
 
@@ -96,19 +95,17 @@ export default class extends AppChild {
     });
   }
 
-  loadRenderData(renderData: PageRenderDataInterface, complete?: Function) {
+  loadRenderData(renderData: RenderDataPageInterface, complete?: Function) {
     this.vars = {...this.vars, ...renderData.vars};
     this.renderData = renderData;
 
-    this.app
-      .getService('mixins')
+    this.services.mixins
       .invokeUntilComplete('loadPageRenderData', 'page', [this], complete);
   }
 
   updateCurrentResponsiveDisplay() {
-    let responsiveMixin = this.app.getService('responsive');
-    let previous = responsiveMixin.responsiveSizePrevious;
-    let current = responsiveMixin.responsiveSizeCurrent;
+    let previous = this.services.responsive.responsiveSizePrevious;
+    let current = this.services.responsive.responsiveSizeCurrent;
     let displays = this.responsiveDisplays;
 
     if (previous !== current) {
