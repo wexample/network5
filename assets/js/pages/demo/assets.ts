@@ -1,11 +1,12 @@
 import Page from '../../../../src/Wex/BaseBundle/Resources/js/class/Page';
 import UnitTest from '../../../../src/Wex/BaseBundle/Resources/js/class/UnitTest';
 import AssetBundleInterface from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/AssetBundleInterface';
-import {QueuesService} from "../../../../src/Wex/BaseBundle/Resources/js/mixins/Queues";
-import {ServiceRegistryPageInterface} from "../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistryPageInterface";
+import { QueuesService } from '../../../../src/Wex/BaseBundle/Resources/js/mixins/Queues';
+import { ServiceRegistryPageInterface } from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistryPageInterface';
 
-interface ServiceRegistryPageCurrentInterface extends ServiceRegistryPageInterface {
-  queues: QueuesService
+interface ServiceRegistryPageCurrentInterface
+  extends ServiceRegistryPageInterface {
+  queues: QueuesService;
 }
 
 const bundle: AssetBundleInterface = {
@@ -25,8 +26,7 @@ const bundle: AssetBundleInterface = {
 
       document.querySelectorAll('.demo-button-switch-theme').forEach((el) => {
         el.addEventListener('click', () => {
-          this.services.theme
-            .setTheme(el.getAttribute('data-theme'), true);
+          this.services.theme.setTheme(el.getAttribute('data-theme'), true);
         });
       });
     }

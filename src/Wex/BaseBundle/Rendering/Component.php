@@ -16,8 +16,7 @@ class Component
         public string $name,
         public string $initMode,
         protected array $options
-    )
-    {
+    ) {
         $this->id = 'com-'.uniqid();
     }
 
@@ -37,7 +36,7 @@ class Component
 
     #[ArrayShape([
         VariableHelper::ID => Types::STRING,
-        VariableHelper::NAME => Types::STRING
+        VariableHelper::NAME => Types::STRING,
     ])]
     public function buildPageData(): array
     {

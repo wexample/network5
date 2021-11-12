@@ -12,6 +12,6 @@ export default class AppService {
   registerServices(services: string[]) {
     services.forEach((name) => {
       this.services[name] = this.app.services[name];
-    })
+    });
   }
 }

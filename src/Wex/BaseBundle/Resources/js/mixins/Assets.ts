@@ -1,4 +1,4 @@
-import {MixinQueues, QueuesService} from './Queues';
+import { MixinQueues, QueuesService } from './Queues';
 import AssetsCollectionInterface from '../interfaces/AssetsCollectionInterface';
 import MixinInterface from '../interfaces/MixinInterface';
 import Queue from '../class/Queue';
@@ -165,8 +165,8 @@ export class AssetsService extends AppService {
     let hasChange = false;
     let services: any = {
       assets: AssetsService,
-      queues: QueuesService
-    }
+      queues: QueuesService,
+    };
 
     this.forEachAssetInCollection(
       assetsCollection,
@@ -199,10 +199,9 @@ export class AssetsService extends AppService {
       let queueUnLoad = assetsService.removeAssets(toUnload);
 
       if (complete) {
-        this.services.queues
-          .afterAllQueues([queueLoad, queueUnLoad], () => {
-            complete();
-          });
+        this.services.queues.afterAllQueues([queueLoad, queueUnLoad], () => {
+          complete();
+        });
       }
     } else {
       complete && this.app.async(complete);
@@ -213,9 +212,7 @@ export class AssetsService extends AppService {
 export const MixinAssets: MixinInterface = {
   name: 'assets',
 
-  dependencies: [
-    MixinQueues,
-  ],
+  dependencies: [MixinQueues],
 
   hooks: {
     app: {

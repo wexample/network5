@@ -1,16 +1,16 @@
 import Page from './Page';
 
 import MixinInterface from '../interfaces/MixinInterface';
-import {ServiceRegistryAppInterface} from "../interfaces/ServiceRegistryAppInterface";
+import { ServiceRegistryAppInterface } from '../interfaces/ServiceRegistryAppInterface';
 
-import {MixinAssets, AssetsService} from '../mixins/Assets';
-import {MixinMixins, MixinService} from '../mixins/Mixins';
-import {MixinPages, PagesService} from '../mixins/Pages';
-import {MixinResponsive, ResponsiveService} from '../mixins/Responsive';
-import {MixinTheme, ThemeService} from '../mixins/Theme';
-import {MixinQueues, QueuesService} from '../mixins/Queues';
+import { MixinAssets } from '../mixins/Assets';
+import { MixinMixins } from '../mixins/Mixins';
+import { MixinPages } from '../mixins/Pages';
+import { MixinResponsive } from '../mixins/Responsive';
+import { MixinTheme } from '../mixins/Theme';
+import { MixinQueues } from '../mixins/Queues';
 
-import {unique as arrayUnique} from '../helpers/Arrays';
+import { unique as arrayUnique } from '../helpers/Arrays';
 
 export default class {
   public bootJsBuffer: string[] = [];

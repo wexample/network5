@@ -1,5 +1,4 @@
-import RequestOptionsAdaptiveInterface from "./RequestOptionsAdaptiveInterface";
+import RequestOptionsAdaptiveInterface from './RequestOptionsAdaptiveInterface';
 
-export default interface RequestOptionsPageInterface extends RequestOptionsAdaptiveInterface {
-
-}
+export default interface RequestOptionsPageInterface
+  extends RequestOptionsAdaptiveInterface {}

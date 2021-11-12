@@ -1,12 +1,16 @@
-import {MDCRipple} from '@material/ripple/index';
+import { MDCRipple } from '@material/ripple/index';
 import Page from '../../../../src/Wex/BaseBundle/Resources/js/class/Page';
 import UnitTest from '../../../../src/Wex/BaseBundle/Resources/js/class/UnitTest';
 import AssetBundleInterface from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/AssetBundleInterface';
-import {MixinModals, ModalsService} from '../../../../src/Wex/BaseBundle/Resources/js/mixins/Modals';
-import {ServiceRegistryPageInterface} from "../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistryPageInterface";
+import {
+  MixinModals,
+  ModalsService,
+} from '../../../../src/Wex/BaseBundle/Resources/js/mixins/Modals';
+import { ServiceRegistryPageInterface } from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistryPageInterface';
 
-interface ServiceRegistryPageCurrentInterface extends ServiceRegistryPageInterface {
-  modals: ModalsService
+interface ServiceRegistryPageCurrentInterface
+  extends ServiceRegistryPageInterface {
+  modals: ModalsService;
 }
 
 const bundle: AssetBundleInterface = {
@@ -17,9 +21,7 @@ const bundle: AssetBundleInterface = {
     unitTest: UnitTest;
 
     getPageLevelMixins() {
-      return [
-        MixinModals
-      ];
+      return [MixinModals];
     }
 
     init() {
@@ -49,7 +51,7 @@ const bundle: AssetBundleInterface = {
             })
             .then((body) => {
               console.log(body);
-            })
+            });
         });
     }
   },

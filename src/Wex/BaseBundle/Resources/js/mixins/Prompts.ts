@@ -1,7 +1,7 @@
 import AppService from '../class/AppService';
-import MixinInterface from "../interfaces/MixinInterface";
+import MixinInterface from '../interfaces/MixinInterface';
 
-import {MixinLocale} from './Locale';
+import { MixinLocale } from './Locale';
 
 export class PromptService extends AppService {
   systemError(message, args = {}, debugData: any = null) {
@@ -17,9 +17,7 @@ export class PromptService extends AppService {
 export const MixinPrompts: MixinInterface = {
   name: 'prompts',
 
-  dependencies: [
-    MixinLocale,
-  ],
+  dependencies: [MixinLocale],
 
   service: PromptService,
 };

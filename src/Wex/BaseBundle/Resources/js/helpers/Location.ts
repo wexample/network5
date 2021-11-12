@@ -1,9 +1,7 @@
 let paramsHash;
 
 export function paramReload() {
-  paramsHash = new URLSearchParams(
-    document.location.hash.substr(1)
-  );
+  paramsHash = new URLSearchParams(document.location.hash.substr(1));
 
   return paramsHash;
 }
@@ -16,15 +14,16 @@ export function hashParamGet(name: string, defaultValue: string = ''): string {
   return value !== null ? value : defaultValue;
 }
 
-export function hashParamSet(name: string, value: string, ignoreHistory = false) {
+export function hashParamSet(
+  name: string,
+  value: string,
+  ignoreHistory = false
+) {
   let location = document.location;
   paramsHash.set(name, value);
 
   updateLocation(
-    location.pathname +
-    location.search +
-    '#' +
-    paramsHash.toString(),
+    location.pathname + location.search + '#' + paramsHash.toString(),
     ignoreHistory
   );
 }
@@ -37,7 +36,7 @@ export function updateLocation(href, ignoreHistory = false) {
 
   // Choose between push or replace.
   window.history[ignoreHistory ? 'replaceState' : 'pushState'](
-    {manualState: true},
+    { manualState: true },
     document.title,
     href
   );

@@ -2,8 +2,8 @@ import App from './App';
 import PageResponsiveDisplay from './PageResponsiveDisplay';
 import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
 import AppChild from './AppChild';
-import MixinInterface from "../interfaces/MixinInterface";
-import {ServiceRegistryPageInterface} from "../interfaces/ServiceRegistryPageInterface";
+import MixinInterface from '../interfaces/MixinInterface';
+import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
 
 export default class extends AppChild {
   public readonly el: HTMLElement;
@@ -16,7 +16,7 @@ export default class extends AppChild {
   public renderData: RenderDataPageInterface;
   public responsiveDisplayCurrent: PageResponsiveDisplay;
   public vars: any;
-  public services:ServiceRegistryPageInterface;
+  public services: ServiceRegistryPageInterface;
 
   constructor(app: App, renderData: RenderDataPageInterface) {
     super(app);
@@ -36,16 +36,12 @@ export default class extends AppChild {
     if (!this.el) {
       let promptService = this.services.prompts;
 
-      promptService.systemError(
-        'page_message.error.page_missing_el'
-      );
+      promptService.systemError('page_message.error.page_missing_el');
     }
 
     this.elOverlay = this.el.querySelector('.page-overlay');
 
-    this.app.loadMixins(
-      this.getPageLevelMixins()
-    );
+    this.app.loadMixins(this.getPageLevelMixins());
   }
 
   getPageLevelMixins(): MixinInterface[] {
@@ -96,11 +92,15 @@ export default class extends AppChild {
   }
 
   loadRenderData(renderData: RenderDataPageInterface, complete?: Function) {
-    this.vars = {...this.vars, ...renderData.vars};
+    this.vars = { ...this.vars, ...renderData.vars };
     this.renderData = renderData;
 
-    this.services.mixins
-      .invokeUntilComplete('loadPageRenderData', 'page', [this], complete);
+    this.services.mixins.invokeUntilComplete(
+      'loadPageRenderData',
+      'page',
+      [this],
+      complete
+    );
   }
 
   updateCurrentResponsiveDisplay() {

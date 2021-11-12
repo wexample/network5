@@ -1,25 +1,20 @@
-import {MixinLocale} from './Locale';
+import { MixinLocale } from './Locale';
 import MixinInterface from '../interfaces/MixinInterface';
 import Page from '../class/Page';
 import AppService from '../class/AppService';
 import MixinsAppService from '../class/MixinsAppService';
 import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
 import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
-import RequestOptionsPageInterface from "../interfaces/RequestOptionsPageInterface";
-import {AdaptiveService, MixinAdaptive} from "./Adaptive";
-import {PromptService} from "./Prompts";
-import {EventsService} from "./Events";
-import {ServiceRegistryPageInterface} from "../interfaces/ServiceRegistryPageInterface";
+import RequestOptionsPageInterface from '../interfaces/RequestOptionsPageInterface';
+import { MixinAdaptive } from './Adaptive';
+import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
 
 export class PagesService extends AppService {
   pages: {};
-  services: ServiceRegistryPageInterface
+  services: ServiceRegistryPageInterface;
 
   create(data: RenderDataPageInterface, complete: Function): Page {
-    let classDefinition = this.app.getBundleClassDefinition(
-      'page',
-      data.name
-    );
+    let classDefinition = this.app.getBundleClassDefinition('page', data.name);
 
     if (!classDefinition) {
       classDefinition = this.app.getClassPage();
@@ -31,10 +26,7 @@ export class PagesService extends AppService {
     return page;
   }
 
-  get(
-    path: string,
-    options: RequestOptionsPageInterface
-  ): Promise<any> {
+  get(path: string, options: RequestOptionsPageInterface): Promise<any> {
     return this.services.adaptive.get(path, options);
   }
 }
@@ -42,10 +34,7 @@ export class PagesService extends AppService {
 export const MixinPages: MixinInterface = {
   name: 'pages',
 
-  dependencies: [
-    MixinLocale,
-    MixinAdaptive,
-  ],
+  dependencies: [MixinLocale, MixinAdaptive],
 
   hooks: {
     app: {
@@ -69,5 +58,5 @@ export const MixinPages: MixinInterface = {
     },
   },
 
-  service: PagesService
+  service: PagesService,
 };

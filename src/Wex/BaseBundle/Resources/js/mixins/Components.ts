@@ -3,7 +3,7 @@ import MixinsAppService from '../class/MixinsAppService';
 import AppService from '../class/AppService';
 import Page from '../class/Page';
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
-import {MixinPrompts} from './Prompts';
+import { MixinPrompts } from './Prompts';
 
 export class ComponentsService extends AppService {
   create(elContext: HTMLElement, renderData: RenderDataComponentInterface) {
@@ -31,16 +31,16 @@ export class ComponentsService extends AppService {
 export const MixinComponents: MixinInterface = {
   name: 'components',
 
-  dependencies: [
-    MixinPrompts,
-  ],
+  dependencies: [MixinPrompts],
 
   hooks: {
     page: {
       loadPageRenderData(page: Page, registry: any) {
         // Wait for page loading.
-        if (registry.pages !== MixinsAppService.LOAD_STATUS_COMPLETE
-          || registry.assets !== MixinsAppService.LOAD_STATUS_COMPLETE) {
+        if (
+          registry.pages !== MixinsAppService.LOAD_STATUS_COMPLETE ||
+          registry.assets !== MixinsAppService.LOAD_STATUS_COMPLETE
+        ) {
           return MixinsAppService.LOAD_STATUS_WAIT;
         }
 

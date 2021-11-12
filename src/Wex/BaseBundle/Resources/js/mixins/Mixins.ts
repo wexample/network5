@@ -1,7 +1,7 @@
 import MixinInterface from '../interfaces/MixinInterface';
 import AppService from '../class/AppService';
 import MixinsAppService from '../class/MixinsAppService';
-import {shallowCopy as arrayShallowCopy} from "../helpers/Arrays";
+import { shallowCopy as arrayShallowCopy } from '../helpers/Arrays';
 
 export class MixinService extends AppService {
   /**
@@ -44,7 +44,10 @@ export class MixinService extends AppService {
 
         if (mixin.hooks && mixin.hooks[group] && mixin.hooks[group][method]) {
           let argsLocal = args.concat([registry, next]);
-          registry[mixin.name] = mixin.hooks[group][method].apply(this, argsLocal);
+          registry[mixin.name] = mixin.hooks[group][method].apply(
+            this,
+            argsLocal
+          );
         }
 
         // "wait" says to retry after processing other services.

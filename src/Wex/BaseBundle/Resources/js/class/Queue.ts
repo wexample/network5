@@ -1,9 +1,9 @@
-import {QueuesService} from "../mixins/Queues";
-import AppChild from "./AppChild";
-import {ServiceRegistryAppInterface} from "../interfaces/ServiceRegistryAppInterface";
+import { QueuesService } from '../mixins/Queues';
+import AppChild from './AppChild';
+import { ServiceRegistryAppInterface } from '../interfaces/ServiceRegistryAppInterface';
 
 interface ServiceRegistryQueueInterface extends ServiceRegistryAppInterface {
-  queues: QueuesService
+  queues: QueuesService;
 }
 
 export default class Queue extends AppChild {

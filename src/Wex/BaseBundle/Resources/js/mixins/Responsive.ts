@@ -1,6 +1,6 @@
-import {MixinAssets} from './Assets';
-import {MixinEvents} from './Events';
-import {MixinQueues} from './Queues';
+import { MixinAssets } from './Assets';
+import { MixinEvents } from './Events';
+import { MixinQueues } from './Queues';
 import MixinInterface from '../interfaces/MixinInterface';
 import AppService from '../class/AppService';
 import MixinsAppService from '../class/MixinsAppService';
@@ -49,9 +49,7 @@ export class ResponsiveService extends AppService {
   }
 
   breakpointSupports(letter) {
-    return this.services.responsive
-      .detectSupported()
-      .hasOwnProperty(letter);
+    return this.services.responsive.detectSupported().hasOwnProperty(letter);
   }
 
   detectSupported() {
@@ -68,12 +66,12 @@ export class ResponsiveService extends AppService {
   }
 
   detectSize() {
-    return Object.entries(
-      this.services.responsive.detectSupported()
-    ).reduce((prev, current) => {
-      // Return item that is the greater one.
-      return current[1] > prev[1] ? current : prev;
-    })[0];
+    return Object.entries(this.services.responsive.detectSupported()).reduce(
+      (prev, current) => {
+        // Return item that is the greater one.
+        return current[1] > prev[1] ? current : prev;
+      }
+    )[0];
   }
 
   updateFilters(asset: AssetsInterface) {
@@ -89,11 +87,7 @@ export class ResponsiveService extends AppService {
 export const MixinResponsive: MixinInterface = {
   name: 'responsive',
 
-  dependencies: [
-    MixinAssets,
-    MixinEvents,
-    MixinQueues,
-  ],
+  dependencies: [MixinAssets, MixinEvents, MixinQueues],
 
   hooks: {
     app: {

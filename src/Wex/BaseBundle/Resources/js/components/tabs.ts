@@ -1,14 +1,14 @@
-import Component from "../class/Component";
-import {hashParamGet as locationHashParamGet} from '../helpers/Location';
-import {hashParamSet as locationHashParamSet} from '../helpers/Location';
-import {parseUrl as locationParseUrl} from '../helpers/Location';
+import Component from '../class/Component';
+import { hashParamGet as locationHashParamGet } from '../helpers/Location';
+import { hashParamSet as locationHashParamSet } from '../helpers/Location';
+import { parseUrl as locationParseUrl } from '../helpers/Location';
 
 export default {
   bundleGroup: 'component',
 
   definition: class extends Component {
-    protected elTabCurrent?: HTMLElement
-    protected elContentCurrent?: HTMLElement
+    protected elTabCurrent?: HTMLElement;
+    protected elContentCurrent?: HTMLElement;
     protected readonly group: string;
 
     constructor(elContext, renderData) {
@@ -77,11 +77,7 @@ export default {
       let elTab = document.getElementById(id);
       let elContent = document.getElementById(id + '-content');
 
-      locationHashParamSet(
-        'tab-' + this.group,
-        tabName,
-        ignoreHistory
-      );
+      locationHashParamSet('tab-' + this.group, tabName, ignoreHistory);
 
       // Clear previous.
       if (this.elTabCurrent) {

@@ -19,8 +19,7 @@ class TranslationExtension extends AbstractExtension
 
     public function __construct(
         public Translator $translator
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array
@@ -69,7 +68,8 @@ class TranslationExtension extends AbstractExtension
                 $id = $this->translator->splitId($id);
 
                 $domain = $this->translator->resolveDomain($domain);
-            } else
+            }
+            else
             {
                 $domain = 'messages';
             }

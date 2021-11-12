@@ -1,17 +1,16 @@
-import RequestOptionsAdaptiveInterface from "../interfaces/RequestOptionsAdaptiveInterface";
-import MixinInterface from "../interfaces/MixinInterface";
-import AppService from "../class/AppService";
+import RequestOptionsAdaptiveInterface from '../interfaces/RequestOptionsAdaptiveInterface';
+import MixinInterface from '../interfaces/MixinInterface';
+import AppService from '../class/AppService';
 
 export class AdaptiveService extends AppService {
   get(path, options: RequestOptionsAdaptiveInterface): Promise<any> {
-    return window.fetch(path)
-      .then((response:Response) => {
-        if (!response.ok) {
-          // TODO
-        }
+    return window.fetch(path).then((response: Response) => {
+      if (!response.ok) {
+        // TODO
+      }
 
-        return response;
-      });
+      return response;
+    });
   }
 }
 

@@ -13,10 +13,7 @@ export class ThemeService extends AppService {
   activePrint: boolean = false;
   activeTheme: string = null;
 
-  colorSchemes: string[] = [
-    ThemeService.THEME_DARK,
-    ThemeService.THEME_LIGHT,
-  ];
+  colorSchemes: string[] = [ThemeService.THEME_DARK, ThemeService.THEME_LIGHT];
 
   userHasForced?: null;
 
@@ -53,9 +50,7 @@ export class ThemeService extends AppService {
     }
 
     for (let colorScheme of this.colorSchemes) {
-      if (
-        window.matchMedia(`(prefers-color-scheme: ${colorScheme})`).matches
-      ) {
+      if (window.matchMedia(`(prefers-color-scheme: ${colorScheme})`).matches) {
         return colorScheme;
       }
     }
@@ -129,5 +124,5 @@ export const MixinTheme: MixinInterface = {
     },
   },
 
-  service: ThemeService
+  service: ThemeService,
 };

@@ -1,6 +1,6 @@
 import MixinInterface from '../interfaces/MixinInterface';
 import AppService from '../class/AppService';
-import {format as StringFormat} from '../helpers/String';
+import { format as StringFormat } from '../helpers/String';
 
 export class LocaleService extends AppService {
   transDomains: object = {};
@@ -33,7 +33,7 @@ export class LocaleService extends AppService {
 
     return StringFormat(catalog[stringWithDomain] || string, args);
   }
-};
+}
 
 export const MixinLocale: MixinInterface = {
   name: 'locale',

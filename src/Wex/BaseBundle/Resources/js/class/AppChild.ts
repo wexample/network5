@@ -1,5 +1,5 @@
 import App from './App';
-import {ServiceRegistryAppInterface} from "../interfaces/ServiceRegistryAppInterface";
+import { ServiceRegistryAppInterface } from '../interfaces/ServiceRegistryAppInterface';
 
 export default class {
   protected readonly app: App;
