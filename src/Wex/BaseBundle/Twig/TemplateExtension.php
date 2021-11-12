@@ -148,10 +148,6 @@ class TemplateExtension extends AbstractExtension
         $translationExtension = $env->getExtension(
             TranslationExtension::class
         );
-        /** @var ComponentsExtension $componentsExtension */
-        $componentsExtension = $env->getExtension(
-            ComponentsExtension::class
-        );
 
         return [
            // TODO Layout level com

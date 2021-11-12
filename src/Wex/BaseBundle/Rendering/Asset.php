@@ -131,11 +131,13 @@ class Asset
         if ($this->type === static::EXTENSION_JS) {
             return $useJs && !$this->responsive;
         }
+
         if ($this->type === static::EXTENSION_CSS) {
             if ($this->responsive) {
                 // Responsive CSS are loaded in page when JS is disabled.
                 return !$useJs;
             }
+
             if ($this->theme) {
                 // Theme CSS are loaded using JS.
                 // TODO Preload default theme.
