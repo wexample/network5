@@ -15,8 +15,7 @@ class DemoController extends AbstractPagesController
     #[Route(
         path: VariableHelper::DEMO.'/'.VariableHelper::ASSETS,
         name: VariableHelper::DEMO.'_'.VariableHelper::ASSETS
-    )
-    ]
+    )]
     public function assets(): Response
     {
         return $this->renderPage(
@@ -30,8 +29,7 @@ class DemoController extends AbstractPagesController
     #[Route(
         path: VariableHelper::DEMO.'/'.VariableHelper::PLURAL_COMPONENT,
         name: VariableHelper::DEMO.'_'.VariableHelper::PLURAL_COMPONENT
-    )
-    ]
+    )]
     public function components(): Response
     {
         return $this->renderPage(
@@ -42,8 +40,7 @@ class DemoController extends AbstractPagesController
     #[Route(
         path: VariableHelper::DEMO.'/'.VariableHelper::LOADING,
         name: VariableHelper::DEMO.'_'.VariableHelper::LOADING
-    )
-    ]
+    )]
     public function loading(): Response
     {
         return $this->renderPage(
@@ -52,10 +49,18 @@ class DemoController extends AbstractPagesController
     }
 
     #[Route(
+        path: VariableHelper::DEMO.'/'.VariableHelper::LOADING.'/fetch/simple',
+        name: VariableHelper::DEMO.'_'.VariableHelper::LOADING.'_fetch_simple'
+    )]
+    public function loadingFetchSimple(): Response
+    {
+        return new Response('ok');
+    }
+
+    #[Route(
         path: VariableHelper::DEMO.'/'.VariableHelper::TRANSLATIONS,
         name: VariableHelper::DEMO.'_'.VariableHelper::TRANSLATIONS
-    )
-    ]
+    )]
     public function translations(): Response
     {
         return $this->renderPage(

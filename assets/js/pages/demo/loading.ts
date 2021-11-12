@@ -42,7 +42,14 @@ const bundle: AssetBundleInterface = {
         .addEventListener('click', () => {
           let modalsService = this.services.modals;
 
-          modalsService.get('todo');
+          modalsService
+            .get('/demo/loading/fetch/simple', {})
+            .then((response: Response) => {
+              return response.text();
+            })
+            .then((body) => {
+              console.log(body);
+            })
         });
     }
   },

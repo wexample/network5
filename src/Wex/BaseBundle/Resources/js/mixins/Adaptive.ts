@@ -3,12 +3,17 @@ import MixinInterface from "../interfaces/MixinInterface";
 import AppService from "../class/AppService";
 
 export class AdaptiveService extends AppService {
-  get(path, options: RequestOptionsAdaptiveInterface, callback) {
-    console.log('ADAPTIVE ' + path);
+  get(path, options: RequestOptionsAdaptiveInterface): Promise<any> {
+    return window.fetch(path)
+      .then((response:Response) => {
+        if (!response.ok) {
+          // TODO
+        }
 
-    callback && callback();
+        return response;
+      });
   }
-};
+}
 
 export const MixinAdaptive: MixinInterface = {
   name: 'adaptive',

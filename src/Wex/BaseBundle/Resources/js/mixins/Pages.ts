@@ -33,10 +33,9 @@ export class PagesService extends AppService {
 
   get(
     path: string,
-    options: RequestOptionsPageInterface,
-    callback
-  ) {
-    console.log(this.services.adaptive);
+    options: RequestOptionsPageInterface
+  ): Promise<any> {
+    return this.services.adaptive.get(path, options);
   }
 }
 
