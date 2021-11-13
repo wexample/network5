@@ -1,7 +1,5 @@
 {%- extends 'layouts/public.html.twig' -%}
 
-{%- set template_path = _self -%}
-
 {%- block template_config -%}
     {{ js_var('demoVariable', 'demoVariableValueOverridden') }}
     {{ js_var('demoVariable', 'demoVariableValue') }}
