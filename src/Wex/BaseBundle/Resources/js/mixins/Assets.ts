@@ -1,4 +1,4 @@
-import { MixinQueues, QueuesService } from './Queues';
+import {MixinQueues, QueuesService} from './Queues';
 import AssetsCollectionInterface from '../interfaces/AssetsCollectionInterface';
 import MixinInterface from '../interfaces/MixinInterface';
 import Queue from '../class/Queue';
@@ -29,10 +29,10 @@ export class AssetsService extends AppService {
 
       queue.add(() => {
         if (asset.type === 'js') {
-          asset.el = this.addScript(asset.path);
-
           // Browsers does not load twice the JS file content.
           if (!asset.rendered) {
+            asset.el = this.addScript(asset.path);
+
             this.jsAssetsPending[asset.id] = asset;
 
             // Stops queue unit class has been loaded.
