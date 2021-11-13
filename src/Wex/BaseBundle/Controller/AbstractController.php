@@ -30,11 +30,29 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         array $parameters = [],
         Response $response = null
     ): ?Response {
-        return parent::render($view, $parameters, $response);
+        return $this->render($view, $parameters, $response);
     }
 
     public function getTwigEnvironment(): Environment
     {
         return $this->twigEnvironment;
+    }
+
+    protected function render(
+        string $view,
+        array $parameters = [],
+        Response $response = null
+    ): Response
+    {
+        // Add global variables for rendering.
+        $parameters['layout_use_js'] ??= $this->templateUseJs;
+        $parameters['template_path'] = $view;
+        $parameters['request_uri'] ??= $this->requestUri;
+
+        return parent::render(
+            $view,
+            $parameters,
+            $response
+        );
     }
 }

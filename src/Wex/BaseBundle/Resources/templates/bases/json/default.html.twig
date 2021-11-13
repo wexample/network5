@@ -1,11 +1,15 @@
+{%- extends '@WexBaseBundle/Resources/templates/bases/base.html.twig' -%}
+
 {%- block template_base -%}
+    {{- parent() -}}
+
     <div class="layout-{{ adaptive_rendering_base() }}">
         {%- block layout -%}
             {%- block layout_composer_json -%}
                 {%- block page -%}
                     {%- block page_composer_json -%}
                         {%- if block('page_body') is defined -%}
-                            {{ block('page_body') }}
+                            {{- block('page_body') -}}
                         {%- endif -%}
                     {%- endblock -%}
                 {%- endblock -%}
