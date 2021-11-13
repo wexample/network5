@@ -284,4 +284,13 @@ class ComponentsExtension extends AbstractExtension
 
         return $renderExtension->renderTagAttributes($attributes);
     }
+
+    public function comInitLayout(string $name, array $options = []):Component
+    {
+        return $this->saveComponent(
+            $name,
+            self::INIT_MODE_LAYOUT,
+            $options
+        );
+    }
 }

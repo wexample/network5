@@ -79,6 +79,18 @@ class AdaptiveResponseService
 
         if (self::OUTPUT_TYPE_RESPONSE_JSON === $type)
         {
+            if ($this->detectRenderingBase() === TemplateExtension::RENDERING_BASE_NAME_MODAL)
+            {
+                $env = $this->getController()->getTwigEnvironment();
+
+                /** @var ComponentsExtension $comExt */
+                $comExt = $env->getExtension(
+                    ComponentsExtension::class
+                );
+
+                $comExt->comInitLayout('components/modal');
+            }
+
             return $this->renderJson();
         }
 
@@ -155,12 +167,9 @@ class AdaptiveResponseService
         // but returning an empty body.
         $body = trim($body);
 
-        // TODO ADD MODAL
+        $templates = $comExt->comRenderLayout($env);
 
-        $pageTemplateContent = $comExt
-            ->comRenderLayout($env);
-
-        $output = array_merge_recursive(
+        return array_merge_recursive(
             $templateExtension->templateBuildRenderData(
                 $env,
                 $templateExtension->templateNameFromPath($this->getView())
@@ -169,10 +178,9 @@ class AdaptiveResponseService
                 VariableHelper::PAGE => [
                     VariableHelper::BODY => $body,
                 ],
+                VariableHelper::PLURAL_TEMPLATE => $templates
             ]
         );
-
-        return $output;
     }
 
     public function getController(): ?AbstractController

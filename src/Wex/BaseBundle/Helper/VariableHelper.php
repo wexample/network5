@@ -74,11 +74,15 @@ class VariableHelper
 
     public const PLURAL_THEME = self::THEME.'s';
 
+    public const PLURAL_TEMPLATE = self::TEMPLATE.'s';
+
     public const PREVIOUS = 'previous';
 
     public const RESPONSIVE = 'responsive';
 
     public const SEPARATOR = 'separator';
+
+    public const TEMPLATE = 'template';
 
     public const THEME = 'theme';
 
