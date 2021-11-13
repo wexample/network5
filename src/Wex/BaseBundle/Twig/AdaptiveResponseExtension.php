@@ -15,7 +15,8 @@ class AdaptiveResponseExtension extends AbstractExtension
     public function __construct(
         protected AdaptiveResponseService $adaptiveResponseService,
         protected RequestStack $requestStack,
-    ) {
+    )
+    {
     }
 
     protected function getCurrentResponse(): AdaptiveResponse
@@ -36,6 +37,14 @@ class AdaptiveResponseExtension extends AbstractExtension
                     self::FUNCTION_OPTION_NEEDS_CONTEXT => true,
                 ]
             ),
+
+            new TwigFunction(
+                'adaptive_rendering_base',
+                [
+                    $this,
+                    'adaptiveRenderingBase',
+                ]
+            ),
         ];
     }
 
@@ -51,5 +60,10 @@ class AdaptiveResponseExtension extends AbstractExtension
                 $context,
                 $this->requestStack->getMainRequest()
             );
+    }
+
+    public function adaptiveRenderingBase(): string
+    {
+        return $this->adaptiveResponseService->detectRenderingBase();
     }
 }

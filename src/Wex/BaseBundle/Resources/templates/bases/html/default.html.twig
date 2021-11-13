@@ -1,4 +1,4 @@
-{% import '@WexBaseBundle/Resources/templates/macros/assets.html.twig' as macro_assets %}
+{%- import '@WexBaseBundle/Resources/templates/macros/assets.html.twig' as macro_assets -%}
 
 {%- set page_title_default = '@page::page_title' -%}
 {%- set page_title = page_title|default(page_title_default) -%}
@@ -22,57 +22,57 @@
     <head>
         <meta charset="utf-8"/>
         <title>{{ template_head_title ? (template_head_title | trans(template_head_title_args)) ~ ' | ' : '' }}{{ 'common.app::name' | trans }}</title>
-        {% block preloads -%}
-            {% for asset in assets_preload_list('css') %}
+        {%- block preloads -%}
+            {%- for asset in assets_preload_list('css') -%}
                 <link rel="preload" href="{{ asset.path }}" as="{{ asset.preloadAs }}">
-            {%- endfor %}
-        {%- endblock %}
+            {%- endfor -%}
+        {%- endblock -%}
 
-        {% block styles -%}
+        {%- block styles -%}
             {{ macro_assets.render_available_css(layout_use_js) }}
-        {%- endblock %}
-        {% if layout_use_js %}
+        {%- endblock -%}
+        {%- if layout_use_js -%}
             <script nonce="layout-init">
-                "use strict";
+              "use strict";
 
-                // Use old school fashioned javascript notation to improve compatibility.
-                var AppRegistryBundlesManager = function AppRegistryBundlesManager(context) {
-                    this.context = context;
-                    this.classes = {};
-                };
+              // Use old school fashioned javascript notation to improve compatibility.
+              var AppRegistryBundlesManager = function AppRegistryBundlesManager(context) {
+                this.context = context;
+                this.classes = {};
+              };
 
-                AppRegistryBundlesManager.prototype = {
-                    add: function add(name, definition) {
-                        // Prevent class override.
-                        if (!this.classes[name]) {
-                            this.classes[name] = definition;
-                        }
+              AppRegistryBundlesManager.prototype = {
+                add: function add(name, definition) {
+                  // Prevent class override.
+                  if (!this.classes[name]) {
+                    this.classes[name] = definition;
+                  }
 
-                        var app = window.app;
-                        var id = this.context + '.' + name;
+                  var app = window.app;
+                  var id = this.context + '.' + name;
 
-                        if (!app.hasCoreLoaded) {
-                            // Wait app launch to play with assets methods.
-                            app.bootJsBuffer.push(id);
-                        } else {
-                            // Mark now that class is loaded.
-                            app.getService('assets').jsPendingLoaded(id);
-                        }
+                  if (!app.hasCoreLoaded) {
+                    // Wait app launch to play with assets methods.
+                    app.bootJsBuffer.push(id);
+                  } else {
+                    // Mark now that class is loaded.
+                    app.getService('assets').jsPendingLoaded(id);
+                  }
 
-                        // Return to allow export or extending class.
-                        return definition;
-                    }
-                };
+                  // Return to allow export or extending class.
+                  return definition;
+                }
+              };
 
-                window.appRegistry = {bundles:{}};
+              window.appRegistry = {bundles: {}};
 
-                [
-                    'component',
-                    'page',
-                    'vue'
-                ].forEach(function (item) {
-                    window.appRegistry.bundles[item] = new AppRegistryBundlesManager(item);
-                });
+              [
+                'component',
+                'page',
+                'vue'
+              ].forEach(function (item) {
+                window.appRegistry.bundles[item] = new AppRegistryBundlesManager(item);
+              });
 
             </script>
             <style>
@@ -80,7 +80,7 @@
                     display: none;
                 }
             </style>
-        {% endif %}
+        {%- endif -%}
         {%- block meta -%}
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <meta name="description" content="{{ (meta_description|default('@layout::meta.description')) | trans }}">
@@ -88,28 +88,39 @@
     </head>
     <body class="theme-{{ layout_theme }}">
     <div id="layout" class="layout-loading {{ layout_class|default('') }}">
-        {% if layout_use_js %}
-            {#- If javascript fails to complete, force removing loading state after 2 seconds.        -#}
+        {%- if layout_use_js -%}
+            {#- If javascript fails to complete, force removing loading state after 2 seconds. -#}
             <script nonce="layout-loading">
-                var elLayout = document.getElementById('layout');
-                elLayout.classList.add('layout-loading');
+              var elLayout = document.getElementById('layout');
+              elLayout.classList.add('layout-loading');
 
-                setTimeout(function () {
-                    elLayout.classList.remove('layout-loading');
-                }, 2000);
+              setTimeout(function () {
+                elLayout.classList.remove('layout-loading');
+              }, 2000);
             </script>
-        {% endif %}
-        {{ block('page_body') }}
+        {%- endif -%}
+
+        {%- block layout -%}
+            {%- block layout_composer_html -%}
+                {%- block page -%}
+                    <div class="page">
+                        {%- block page_composer_html -%}
+                            {{- block('page_body') -}}
+                        {%- endblock -%}
+                    </div>
+                {%- endblock -%}
+            {%- endblock -%}
+        {%- endblock -%}
     </div>
 
     {%- block template_assets -%}
         {{ macro_assets.render_available_css(layout_use_js) }}
 
-        {% if layout_use_js %}
+        {%- if layout_use_js -%}
             <script type="text/javascript" src="{{ asset('build/runtime.js') }}"></script>
             {{ macro_assets.render_available_js() }}
             <script type="text/javascript" nonce="layout-data">
-                window.appRegistry.layoutData = {{ template_build_layout_data(template_name, layout_theme) | json_encode(constant('JSON_PRETTY_PRINT')) | raw }};
+              window.appRegistry.layoutData = {{ template_build_layout_data(template_name, layout_theme) | json_encode(constant('JSON_PRETTY_PRINT')) | raw }};
             </script>
         {%- endif -%}
     {%- endblock -%}

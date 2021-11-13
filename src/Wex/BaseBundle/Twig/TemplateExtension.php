@@ -4,8 +4,10 @@ namespace App\Wex\BaseBundle\Twig;
 
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
+use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use App\Wex\BaseBundle\Service\TemplateService;
 use App\Wex\BaseBundle\Translation\Translator;
+use Exception;
 use function array_merge_recursive;
 use Doctrine\DBAL\Types\Types;
 use JetBrains\PhpStorm\ArrayShape;
@@ -21,12 +23,17 @@ class TemplateExtension extends AbstractExtension
 {
     public const TEMPLATE_FILE_EXTENSION = '.html.twig';
 
-    public const LAYOUT_NAME_DEFAULT = 'default';
+    public const LAYOUT_NAME_DEFAULT = VariableHelper::DEFAULT;
+
+    public const RENDERING_BASE_NAME_DEFAULT = VariableHelper::DEFAULT;
+
+    public const RENDERING_BASE_NAME_MODAL = VariableHelper::MODAL;
 
     public function __construct(
         private KernelInterface $kernel,
         private TemplateService $templateService
-    ) {
+    )
+    {
     }
 
     public function getFunctions(): array
@@ -60,7 +67,8 @@ class TemplateExtension extends AbstractExtension
         Environment $env,
         string $pageTemplateName,
         string $layoutTheme
-    ): array {
+    ): array
+    {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -70,26 +78,52 @@ class TemplateExtension extends AbstractExtension
             JsExtension::class
         );
 
-        $output = array_merge_recursive(
+        return array_merge_recursive(
             $this->templateBuildRenderData($env, $pageTemplateName),
             [
                 VariableHelper::ASSETS => $assetsExtension->buildRenderData(Asset::CONTEXT_LAYOUT),
                 'displayBreakpoints' => AssetsExtension::DISPLAY_BREAKPOINTS,
+                VariableHelper::PAGE => [
+                    'isLayoutPage' => true
+                ],
                 VariableHelper::ENV => $this->kernel->getEnvironment(),
-                VariableHelper::VARS => $jsExtension->jsVarsGet(JsExtension::VARS_GROUP_GLOBAL),
                 VariableHelper::THEME => $layoutTheme,
+                VariableHelper::VARS => $jsExtension->jsVarsGet(JsExtension::VARS_GROUP_GLOBAL),
             ]
         );
+    }
 
-        $output[VariableHelper::PAGE]['isLayoutPage'] = true;
+    /**
+     * @throws Exception
+     */
+    public function templateBuildAdaptiveJsonData(AdaptiveResponseService $adaptiveResponseService): array
+    {
+        $env = $adaptiveResponseService->getController()->getTwigEnvironment();
 
-        return $output;
+        $body = $adaptiveResponseService->getView()
+            ? $adaptiveResponseService->renderResponse()->getContent()
+            : $adaptiveResponseService->getBody();
+
+        // Allow to use a rendered vue as a component loader,
+        // but returning an empty body.
+        $body = trim($body);
+
+        return array_merge_recursive(
+            $this->templateBuildRenderData(
+                $env,
+                $this->templateNameFromPath($adaptiveResponseService->getView())
+            ),
+            [
+                VariableHelper::PAGE => [
+                    VariableHelper::BODY => $body
+                ]
+            ]
+        );
     }
 
     #[ArrayShape(
         [
             VariableHelper::ASSETS => "\App\Wex\BaseBundle\Rendering\Asset[][][]|array[]|\array[][]",
-            VariableHelper::BODY => VariableHelper::NULL.'|'.Types::STRING,
             VariableHelper::NAME => Types::STRING,
             VariableHelper::TRANSLATIONS => Types::ARRAY,
             VariableHelper::VARS => Types::ARRAY,
@@ -97,9 +131,9 @@ class TemplateExtension extends AbstractExtension
     )]
     public function templateBuildPageData(
         Environment $env,
-        string $pageName,
-        ?string $body = null
-    ): array {
+        string $pageName
+    ): array
+    {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -119,7 +153,6 @@ class TemplateExtension extends AbstractExtension
 
         return [
             VariableHelper::ASSETS => $assetsExtension->buildRenderData(Asset::CONTEXT_PAGE),
-            VariableHelper::BODY => $body,
             VariableHelper::PLURAL_COMPONENT => $comExtension->componentsBuildPageData(),
             VariableHelper::NAME => $pageName,
             VariableHelper::TRANSLATIONS => $translationExtension->buildRenderData(),
@@ -143,15 +176,14 @@ class TemplateExtension extends AbstractExtension
     public function templateBuildRenderData(
         Environment $env,
         string $pageTemplateName = null
-    ): array {
+    ): array
+    {
         /** @var TranslationExtension $translationExtension */
         $translationExtension = $env->getExtension(
             TranslationExtension::class
         );
 
         return [
-           // TODO Layout level com
-            // VariableHelper::PLURAL_COMPONENT => $componentsExtension->componentsBuildPageData(),
             VariableHelper::PAGE => $pageTemplateName
                 ? $this->templateBuildPageData(
                     $env,

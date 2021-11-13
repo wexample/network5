@@ -4,8 +4,8 @@
 
 {%- set layout_name = layout_name|default('public') -%}
 
-{%- block page_body -%}
-    {{ parent() }}
+{# Has a header bar with mobile burger and user menu #}
+{%- block layout_composer_html -%}
     <header>
         <div class="layout-header">
                 <a class="logo" href="{{ url('home_index') }}" title="{{ 'common.app::name' | trans }}">
@@ -28,11 +28,11 @@
             {{ macro_tabs.tab_to_page('demo_components') }}
             {{ macro_tabs.end() }}
         </nav>
-        {% if page_title %}
+        {% if page_title is defined %}
             <h1>{{ page_title | trans }}</h1>
         {% endif %}
         <div class="page-content-body">
-            {{ block('page_content_body') }}
+            {{ block('page') }}
         </div>
     </div>
 {%- endblock -%}

@@ -4,7 +4,14 @@ import AppService from '../class/AppService';
 
 export class AdaptiveService extends AppService {
   get(path, options: RequestOptionsAdaptiveInterface): Promise<any> {
-    return window.fetch(path).then((response: Response) => {
+    return window.fetch(path, {
+      ...{
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      },
+      ...options
+    }).then((response: Response) => {
       if (!response.ok) {
         // TODO
       }

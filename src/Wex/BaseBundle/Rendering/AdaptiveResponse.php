@@ -3,6 +3,7 @@
 namespace App\Wex\BaseBundle\Rendering;
 
 use App\Wex\BaseBundle\Helper\VariableHelper;
+use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use App\Wex\BaseBundle\Twig\TemplateExtension;
 use App\Wex\BaseBundle\WexBaseBundle;
 use function in_array;
@@ -31,7 +32,7 @@ class AdaptiveResponse
 
     public function getOutputType(array $context): string
     {
-        return $context['adaptive_output_type']
+        return $context[AdaptiveResponseService::RENDER_PARAM_NAME_OUTPUT_TYPE]
             ?? AdaptiveResponse::OUTPUT_TYPE_RESPONSE_HTML;
     }
 

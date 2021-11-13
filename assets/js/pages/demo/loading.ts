@@ -44,7 +44,7 @@ const bundle: AssetBundleInterface = {
           modalsService
             .get('/demo/loading/fetch/simple', {})
             .then((response: Response) => {
-              return response.text();
+              return response.json();
             })
             .then((body) => {
               console.log(body);

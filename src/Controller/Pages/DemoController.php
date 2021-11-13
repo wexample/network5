@@ -5,6 +5,7 @@ namespace App\Controller\Pages;
 use App\Wex\BaseBundle\Controller\AbstractPagesController;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Twig\AssetsExtension;
+use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -48,13 +49,21 @@ class DemoController extends AbstractPagesController
         );
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route(
         path: VariableHelper::DEMO.'/'.VariableHelper::LOADING.'/fetch/simple',
         name: VariableHelper::DEMO.'_'.VariableHelper::LOADING.'_fetch_simple'
     )]
     public function loadingFetchSimple(): Response
     {
-        return new Response('ok');
+        return $this
+            ->adaptiveResponse
+            ->setView(
+                $this->buildTemplatePath('loading-fetch-simple')
+            )
+            ->render();
     }
 
     #[Route(
