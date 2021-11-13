@@ -1,0 +1,197 @@
+@import '../mixins/global';
+@import '../mixins/modals';
+
+// Use custom name to avoid conflict with materialize.
+.modal {
+  $finalOpacity: 0.8;
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: none;
+
+  .layout-modal {
+    background-color: white;
+    box-shadow: 0 0.2rem 0.2rem rgba(0, 0, 0, 0.4),
+    0 0.6rem 2.3rem 0.7rem rgba(0, 0, 0, 0.21);
+    margin: 0 4rem;
+    width: 40rem;
+    max-width: 50rem;
+    border-radius: $block-border-radius;
+    overflow-y: hidden;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .modal-content {
+      overflow-y: auto;
+    }
+  }
+
+  &.opened {
+    @keyframes modal-page-overlay-open {
+      from {
+        background: rgba(0, 0, 0, 0);
+      }
+      to {
+        background: rgba(0, 0, 0, $finalOpacity);
+      }
+    }
+
+    animation: modal-page-overlay-open forwards;
+    animation-duration: 0.6s;
+    display: flex;
+
+    .layout-modal {
+      @keyframes modal-page-open {
+        from {
+          margin-top: 6rem;
+          opacity: 0;
+        }
+        to {
+          margin-top: 0;
+          opacity: 1;
+        }
+      }
+
+      animation: modal-page-open 0.6s forwards;
+      animation-timing-function: cubic-bezier(0.055, 0.94, 0.485, 0.995);
+    }
+  }
+
+  &.closed {
+    @keyframes modal-page-overlay-close {
+      from {
+        background: rgba(0, 0, 0, $finalOpacity);
+      }
+      to {
+        display: none;
+        background: rgba(0, 0, 0, 0);
+      }
+    }
+
+    animation: modal-page-overlay-close forwards;
+    animation-duration: 0.4s;
+    display: flex;
+
+    .layout-modal {
+      @keyframes modal-page-close {
+        from {
+          margin-top: 0;
+          opacity: 1;
+        }
+        to {
+          margin-top: 6rem;
+          opacity: 0;
+          display: none;
+        }
+      }
+
+      animation: modal-page-close 0.4s forwards;
+      animation-timing-function: cubic-bezier(0.055, 0.94, 0.485, 0.995);
+    }
+  }
+
+  &.modal-loading-started {
+    .modal-loading-bar {
+      width: 5%;
+      animation-timing-function: cubic-bezier(0, 0.5, 0.5, 1);
+    }
+  }
+
+  &.modal-loading-complete {
+    .modal-loading-bar {
+      @keyframes complete {
+        from {
+          width: 5%;
+        }
+        50% {
+          width: 100%;
+          opacity: 1;
+        }
+        100% {
+          width: 100%;
+          opacity: 0;
+        }
+      }
+
+      animation: 0.5s cubic-bezier(0.4, 0, 0, 1) 0s forwards complete;
+      width: 100%;
+    }
+  }
+}
+
+.modal-header {
+  display: flex;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+
+  h2 {
+    @include text-ellipsis;
+    font-size: 1.6rem;
+    padding: 1rem 1.3rem;
+    margin: 0;
+    flex-basis: 100%;
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  .close {
+    a {
+      padding: 1.1rem 1.1rem 0;
+      display: block;
+    }
+  }
+}
+
+.modal-loading {
+  background: #f5f5f5;
+  box-shadow: 0 0.08rem 0.3rem inset rgba(0, 0, 0, 0.2);
+
+  .modal-loading-bar {
+    background-color: $modal-progress-bar-color;
+    transition-duration: 0.5s;
+    height: 4px;
+    margin-top: -1px;
+    width: 0;
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  padding: 1.5rem;
+
+  .simple-text {
+    padding: 0 1rem 3rem;
+  }
+
+  .nav-buttons {
+    display: flex;
+
+    .nav-button {
+    }
+
+    .nav-button-previous {
+      width: 30%;
+
+      .btn {
+        background: transparent;
+        box-shadow: none;
+        text-transform: none;
+        color: $medium-gray;
+        white-space: nowrap;
+      }
+    }
+
+    .nav-button-submit {
+      width: 70%;
+    }
+  }
+
+  .form-footer {
+    margin: -1.5rem;
+    border-radius: 0 0 $modal-border-radius $modal-border-radius;
+  }
+}

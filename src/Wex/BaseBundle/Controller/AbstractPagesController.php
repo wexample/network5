@@ -23,8 +23,8 @@ abstract class AbstractPagesController extends AbstractController
 
     public function __construct(
         protected AdaptiveResponseService $adaptiveResponse,
+        protected Environment $twigEnvironment,
         protected RequestStack $requestStack,
-        protected Environment $twigEnvironment
     )
     {
         parent::__construct(

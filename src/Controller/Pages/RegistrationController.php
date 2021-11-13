@@ -7,6 +7,7 @@ use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Wex\BaseBundle\Controller\AbstractPagesController;
+use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -16,6 +17,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Twig\Environment;
 
 class RegistrationController extends AbstractPagesController
 {
@@ -25,10 +27,15 @@ class RegistrationController extends AbstractPagesController
     public const ROUTE_APP_REGISTER = 'app_register';
 
     public function __construct(
+        AdaptiveResponseService $adaptiveResponse,
         private EmailVerifier $emailVerifier,
-        RequestStack $requestStack
-    ) {
+        Environment $twigEnvironment,
+        RequestStack $requestStack,
+    )
+    {
         parent::__construct(
+            $adaptiveResponse,
+            $twigEnvironment,
             $requestStack
         );
     }
@@ -98,8 +105,7 @@ class RegistrationController extends AbstractPagesController
         try
         {
             $this->emailVerifier->handleEmailConfirmation($request, $user);
-        }
-        catch (VerifyEmailExceptionInterface $verifyEmailExceptionInterface)
+        } catch (VerifyEmailExceptionInterface $verifyEmailExceptionInterface)
         {
             $this->addFlash('verify_email_error', $verifyEmailExceptionInterface->getReason());
 

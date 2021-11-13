@@ -11,6 +11,9 @@ use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use function array_merge_recursive;
+use function in_array;
+use function is_null;
 use function trim;
 
 class AdaptiveResponseService
@@ -116,13 +119,13 @@ class AdaptiveResponseService
         $layout = $request->get('_template_base');
 
         // Layout not specified in query string.
-        if (\is_null($layout) && $request->isXmlHttpRequest())
+        if (is_null($layout) && $request->isXmlHttpRequest())
         {
             // Use modal as default ajax layout, but might be configurable.
             $layout = self::LAYOUT_MODAL;
         }
 
-        if (\in_array($layout, $this->allowedJsonLayout))
+        if (in_array($layout, $this->allowedJsonLayout))
         {
             return $layout;
         }
@@ -130,6 +133,9 @@ class AdaptiveResponseService
         return TemplateExtension::RENDERING_BASE_NAME_DEFAULT;
     }
 
+    /**
+     * @throws Exception
+     */
     public function renderJson(): JsonResponse
     {
         $response = new JsonResponse($this->renderJsonData());
