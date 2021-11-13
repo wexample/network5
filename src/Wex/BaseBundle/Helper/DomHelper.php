@@ -19,7 +19,10 @@ class DomHelper
 
         foreach ($attributes as $key => $value)
         {
-            $output[] = $key.'="'.$value.'"';
+            if ($value !== null)
+            {
+                $output[] = $key.'="'.$value.'"';
+            }
         }
 
         return implode(VariableHelper::_SPACE, $output);

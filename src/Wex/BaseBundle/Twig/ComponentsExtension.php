@@ -43,7 +43,7 @@ class ComponentsExtension extends AbstractExtension
                     'com',
                 ],
                 [
-                    self::FUNCTION_OPTION_IS_SAFE => [self::FUNCTION_OPTION_HTML],
+                    self::FUNCTION_OPTION_IS_SAFE => self::FUNCTION_OPTION_IS_SAFE_VALUE_HTML,
                     self::FUNCTION_OPTION_NEEDS_ENVIRONMENT => true,
                 ]
             ),
@@ -60,7 +60,7 @@ class ComponentsExtension extends AbstractExtension
                     $this,
                     'comInitParent',
                 ],
-                [self::FUNCTION_OPTION_IS_SAFE => [self::FUNCTION_OPTION_HTML]]
+                [self::FUNCTION_OPTION_IS_SAFE => self::FUNCTION_OPTION_IS_SAFE_VALUE_HTML]
             ),
             new TwigFunction(
                 'com_init_previous',
@@ -68,11 +68,26 @@ class ComponentsExtension extends AbstractExtension
                     $this,
                     'comInitPrevious',
                 ],
-                [self::FUNCTION_OPTION_IS_SAFE => [self::FUNCTION_OPTION_HTML]]
+                [self::FUNCTION_OPTION_IS_SAFE => self::FUNCTION_OPTION_IS_SAFE_VALUE_HTML]
+            ),
+            new TwigFunction(
+                'com_render_tag_attributes',
+                [
+                    $this,
+                    'comRenderTagAttributes',
+                ],
+                [
+                    self::FUNCTION_OPTION_IS_SAFE => self::FUNCTION_OPTION_IS_SAFE_VALUE_HTML,
+                    self::FUNCTION_OPTION_NEEDS_CONTEXT => true,
+                    self::FUNCTION_OPTION_NEEDS_ENVIRONMENT => true,
+                ]
             ),
         ];
     }
 
+    /**
+     * @throws Exception
+     */
     public function com(
         Environment $twig,
         string $name,
@@ -111,6 +126,8 @@ class ComponentsExtension extends AbstractExtension
                         // Convert into translation key notation.
                         $this->translator->buildDomainFromPath($name)
                     );
+
+                    $options['com_options'] = $options;
 
                     $output = $twig->render(
                         $templatePath,
@@ -215,5 +232,23 @@ class ComponentsExtension extends AbstractExtension
         );
 
         return $component->renderTag();
+    }
+
+    public function comRenderTagAttributes(Environment $env, array $context, array $defaults = []): string
+    {
+        $options = $context['com_options'];
+        $class = trim(($defaults['class'] ?? '').' '.($options['class'] ?? ''));
+
+        $attributes = array_merge([
+            'id' => $options['id'] ?? null,
+            'class' => $class === '' ? null : $class
+        ], ($options['attr'] ?? []));
+
+        /** @var RenderExtension $renderExtension */
+        $renderExtension = $env->getExtension(
+            RenderExtension::class
+        );
+
+        return $renderExtension->renderTagAttributes($attributes);
     }
 }

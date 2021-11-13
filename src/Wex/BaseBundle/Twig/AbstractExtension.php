@@ -11,6 +11,8 @@ abstract class AbstractExtension extends \Twig\Extension\AbstractExtension
      */
     protected const FUNCTION_OPTION_IS_SAFE = 'is_safe';
 
+    protected const FUNCTION_OPTION_IS_SAFE_VALUE_HTML = [self::FUNCTION_OPTION_HTML];
+
     /**
      * @var string
      */

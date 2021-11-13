@@ -16,7 +16,7 @@ class RenderExtension extends AbstractExtension
                     $this,
                     'renderTag',
                 ],
-                [self::FUNCTION_OPTION_IS_SAFE => [self::FUNCTION_OPTION_HTML]]
+                [self::FUNCTION_OPTION_IS_SAFE => self::FUNCTION_OPTION_IS_SAFE_VALUE_HTML]
             ),
             new TwigFunction(
                 'render_tag_attributes',
@@ -24,7 +24,7 @@ class RenderExtension extends AbstractExtension
                     $this,
                     'renderTagAttributes',
                 ],
-                [self::FUNCTION_OPTION_IS_SAFE => [self::FUNCTION_OPTION_HTML]]
+                [self::FUNCTION_OPTION_IS_SAFE => self::FUNCTION_OPTION_IS_SAFE_VALUE_HTML]
             ),
         ];
     }
