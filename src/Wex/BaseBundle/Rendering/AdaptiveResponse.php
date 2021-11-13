@@ -4,6 +4,7 @@ namespace App\Wex\BaseBundle\Rendering;
 
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Twig\TemplateExtension;
+use App\Wex\BaseBundle\WexBaseBundle;
 use function in_array;
 use function is_null;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +27,7 @@ class AdaptiveResponse
         self::LAYOUT_DEFAULT,
     ];
 
-    public const BASES_MAIN_DIR = '@WexBaseBundle/Resources/templates/bases/';
+    public const BASES_MAIN_DIR = WexBaseBundle::BUNDLE_PATH_TEMPLATES . 'bases/';
 
     public function getOutputType(array $context): string
     {

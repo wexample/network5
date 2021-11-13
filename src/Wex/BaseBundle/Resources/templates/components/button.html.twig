@@ -1,0 +1,4 @@
+<button {{ id is defined ? render_tag_attributes({id:id}) : '' }} class="mdc-button mdc-button--raised button button-full-width">
+    <div class="mdc-button__ripple"></div>
+    <span class="mdc-button__label">{{ text }}</span>
+</button>

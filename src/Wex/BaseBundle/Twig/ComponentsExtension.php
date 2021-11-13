@@ -4,6 +4,10 @@ namespace App\Wex\BaseBundle\Twig;
 
 use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Rendering\Component;
+use App\Wex\BaseBundle\Translation\Translator;
+use App\Wex\BaseBundle\WexBaseBundle;
+use Exception;
+use Twig\Environment;
 use Twig\TwigFunction;
 
 class ComponentsExtension extends AbstractExtension
@@ -23,13 +27,26 @@ class ComponentsExtension extends AbstractExtension
     protected array $components = [];
 
     public function __construct(
-        protected AssetsExtension $assetsExtension
-    ) {
+        protected AssetsExtension $assetsExtension,
+        private Translator $translator
+    )
+    {
     }
 
     public function getFunctions(): array
     {
         return [
+            new TwigFunction(
+                'com',
+                [
+                    $this,
+                    'com',
+                ],
+                [
+                    self::FUNCTION_OPTION_IS_SAFE => [self::FUNCTION_OPTION_HTML],
+                    self::FUNCTION_OPTION_NEEDS_ENVIRONMENT => true,
+                ]
+            ),
             new TwigFunction(
                 'com_init_class',
                 [
@@ -54,6 +71,65 @@ class ComponentsExtension extends AbstractExtension
                 [self::FUNCTION_OPTION_IS_SAFE => [self::FUNCTION_OPTION_HTML]]
             ),
         ];
+    }
+
+    public function com(
+        Environment $twig,
+        string $name,
+        array $options = []
+    )
+    {
+        $html = $this->comRenderHtml($twig, $name, $options);
+
+        return $html.$this->comInitPrevious($name, $options);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function comRenderHtml(
+        Environment $twig,
+        $name,
+        $options = []
+    ): ?string
+    {
+        $search = [
+            // Search local.
+            $name.TemplateExtension::TEMPLATE_FILE_EXTENSION,
+            // Search in base bundle.
+            WexBaseBundle::BUNDLE_PATH_TEMPLATES.$name.TemplateExtension::TEMPLATE_FILE_EXTENSION,
+        ];
+
+        try
+        {
+            foreach ($search as $templatePath)
+            {
+                if ($twig->getLoader()->exists($templatePath))
+                {
+                    $this->translator->setDomain(
+                        Translator::DOMAIN_TYPE_COMPONENT,
+                        // Convert into translation key notation.
+                        $this->translator->buildDomainFromPath($name)
+                    );
+
+                    $output = $twig->render(
+                        $templatePath,
+                        $options
+                    );
+
+                    $this->translator->revertDomain(
+                        Translator::DOMAIN_TYPE_COMPONENT
+                    );
+
+                    return $output;
+                }
+            }
+
+            return null;
+        } catch (Exception $exception)
+        {
+            throw new Exception('Error during rendering component '.$name.' : '.$exception->getMessage(), $exception->getCode(), $exception);
+        }
     }
 
     public function componentsBuildPageData(): array
@@ -87,7 +163,8 @@ class ComponentsExtension extends AbstractExtension
         string $name,
         string $initMode,
         array $options
-    ): Component {
+    ): Component
+    {
         // Using an object allow continuing edit properties after save.
         $entry = new Component($name, $initMode, $options);
 
@@ -114,7 +191,8 @@ class ComponentsExtension extends AbstractExtension
     public function comInitClass(
         string $name,
         array $options = []
-    ): string {
+    ): string
+    {
         $component = $this->saveComponent(
             $name,
             self::INIT_MODE_CLASS,

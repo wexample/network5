@@ -40,6 +40,8 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
 
     public const DOMAIN_PREFIX = '@';
 
+    public const KEYS_SEPARATOR = FileHelper::EXTENSION_SEPARATOR;
+
     public const DOMAIN_SAME_KEY_WILDCARD = '%';
 
     public const DOMAIN_TYPE_COMPONENT = VariableHelper::COMPONENT;
@@ -163,7 +165,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
 
                 // Append file name
                 $domain[] = $exp[0];
-                $domain = implode(FileHelper::EXTENSION_SEPARATOR, $domain);
+                $domain = implode(self::KEYS_SEPARATOR, $domain);
 
                 $this->translator->addResource(
                     $info->extension,
@@ -283,7 +285,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
                 $subTranslations = array_filter(
                     $all[$refDomain],
                     function ($key) use ($refKey): bool {
-                        return str_starts_with($key, $refKey.FileHelper::EXTENSION_SEPARATOR);
+                        return str_starts_with($key, $refKey.self::KEYS_SEPARATOR);
                     },
                     ARRAY_FILTER_USE_KEY
                 );
@@ -297,11 +299,11 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
             foreach ($items as $outputKey => $outputValue)
             {
                 $keyDiff = $key;
-                $prefix = $refKey.FileHelper::EXTENSION_SEPARATOR;
+                $prefix = $refKey.self::KEYS_SEPARATOR;
 
                 if (str_starts_with($outputKey, $prefix))
                 {
-                    $keyDiff = $key.FileHelper::EXTENSION_SEPARATOR
+                    $keyDiff = $key.self::KEYS_SEPARATOR
                         .substr(
                             $outputKey,
                             strlen($prefix)
@@ -457,10 +459,10 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
 
         return str_replace(
             '/',
-            FileHelper::EXTENSION_SEPARATOR,
+                self::KEYS_SEPARATOR,
             $info->dirname
-        ).FileHelper::EXTENSION_SEPARATOR.
-            current(explode(FileHelper::EXTENSION_SEPARATOR, $info->basename));
+        ).self::KEYS_SEPARATOR.
+            current(explode(self::KEYS_SEPARATOR, $info->basename));
     }
 
     public function setDomain(string $name, string $value): void
@@ -485,7 +487,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
             $convertedParts[] = TextHelper::toSnake($part);
         }
 
-        $domain = implode(FileHelper::EXTENSION_SEPARATOR, $convertedParts);
+        $domain = implode(self::KEYS_SEPARATOR, $convertedParts);
 
         $this->setDomain($name, $domain);
 
