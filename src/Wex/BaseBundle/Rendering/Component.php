@@ -29,7 +29,6 @@ class Component
                 // as component may be embedded into a vue,
                 // so replicated multiple times.
                 'class' => 'com-init '.$this->id,
-                'data-com-name' => $this->name,
             ]
         );
     }

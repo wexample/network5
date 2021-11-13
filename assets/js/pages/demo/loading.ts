@@ -1,4 +1,3 @@
-import { MDCRipple } from '@material/ripple/index';
 import Page from '../../../../src/Wex/BaseBundle/Resources/js/class/Page';
 import UnitTest from '../../../../src/Wex/BaseBundle/Resources/js/class/UnitTest';
 import AssetBundleInterface from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/AssetBundleInterface';
@@ -26,8 +25,6 @@ const bundle: AssetBundleInterface = {
 
     init() {
       this.unitTest = new UnitTest();
-      // TODO cleanup
-      document.querySelectorAll('.button').forEach((el) => new MDCRipple(el));
 
       this.el
         .querySelector('#page-overlay-show')
