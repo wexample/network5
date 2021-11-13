@@ -13,10 +13,6 @@ use Twig\Environment;
 
 abstract class AbstractPagesController extends AbstractController
 {
-    protected bool $templateUseJs;
-
-    protected string $requestUri;
-
     protected string $viewPathPrefix = '';
 
     public const NAMESPACE_CONTROLLER = 'App\\Controller\\';

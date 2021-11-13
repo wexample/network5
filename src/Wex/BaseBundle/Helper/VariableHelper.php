@@ -10,6 +10,8 @@ class VariableHelper
 
     public const ASSETS = 'assets';
 
+    public const CLASS_VAR = 'class';
+
     public const BODY = 'body';
 
     public const CATALOG = 'catalog';
@@ -62,13 +64,17 @@ class VariableHelper
 
     public const PAGE = 'page';
 
+    public const PARENT = 'parent';
+
+    public const PATH_ENTITY = 'Entity';
+
     public const PLURAL_COMPONENT = self::COMPONENT.'s';
 
     public const PLURAL_PAGE = self::PAGE.'s';
 
     public const PLURAL_THEME = self::THEME.'s';
 
-    public const PATH_ENTITY = 'Entity';
+    public const PREVIOUS = 'previous';
 
     public const RESPONSIVE = 'responsive';
 

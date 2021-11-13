@@ -2,11 +2,13 @@
 
 namespace App\Wex\BaseBundle\Twig;
 
+use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Rendering\Component;
 use App\Wex\BaseBundle\Translation\Translator;
 use App\Wex\BaseBundle\WexBaseBundle;
 use Exception;
+use JetBrains\PhpStorm\Pure;
 use Twig\Environment;
 use Twig\TwigFunction;
 use function array_merge;
@@ -15,13 +17,17 @@ use function trim;
 class ComponentsExtension extends AbstractExtension
 {
     // Component is loaded with a css class.
-    public const INIT_MODE_CLASS = 'class';
+    public const INIT_MODE_CLASS = VariableHelper::CLASS_VAR;
 
+    // Component is simply loaded from PHP or from backend adaptive event.
+    // It may have no target tag.
+    public const INIT_MODE_LAYOUT = VariableHelper::LAYOUT;
+    
     // Component is loaded from template into the target tag.
-    public const INIT_MODE_PARENT = 'parent';
+    public const INIT_MODE_PARENT = VariableHelper::PARENT;
 
     // Component is loaded from template, just after target tag.
-    public const INIT_MODE_PREVIOUS = 'previous';
+    public const INIT_MODE_PREVIOUS = VariableHelper::PREVIOUS;
 
     /**
      * Save components options initialized by com_init.
@@ -93,7 +99,8 @@ class ComponentsExtension extends AbstractExtension
         Environment $twig,
         string $name,
         array $options = []
-    ) {
+    ): string
+    {
         $html = $this->comRenderHtml($twig, $name, $options);
 
         return $html.$this->comInitPrevious($name, $options);
@@ -149,6 +156,7 @@ class ComponentsExtension extends AbstractExtension
         }
     }
 
+    #[Pure]
     public function componentsBuildPageData(): array
     {
         $data = [];
@@ -230,6 +238,33 @@ class ComponentsExtension extends AbstractExtension
         );
 
         return $component->renderTag();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function comRenderLayout(Environment $twig): string
+    {
+        $output = '';
+
+        /** @var Component $component */
+        foreach ($this->components as $component) {
+            if (ComponentsExtension::INIT_MODE_LAYOUT === $component->initMode) {
+                $componentOutput = $this->comRenderHtml(
+                    $twig,
+                    $component->name,
+                    $component->options
+                );
+
+                if ($componentOutput) {
+                    $componentOutput .= $component->renderTag();
+                }
+
+                $output .= $componentOutput;
+            }
+        }
+
+        return $output;
     }
 
     public function comRenderTagAttributes(Environment $env, array $context, array $defaults = []): string

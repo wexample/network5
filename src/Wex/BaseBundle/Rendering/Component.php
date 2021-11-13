@@ -15,7 +15,7 @@ class Component
     public function __construct(
         public string $name,
         public string $initMode,
-        protected array $options
+        public array $options = []
     ) {
         $this->id = 'com-'.uniqid();
     }

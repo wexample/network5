@@ -3,6 +3,7 @@
 {%- import '@WexBaseBundle/Resources/templates/macros/assets.html.twig' as macro_assets -%}
 
 {%- block template_config -%}
+    {{ parent() }}
     {{- assets_init_template(template_name, layout_use_js) -}}
     {{- translation_set_domain_from_path('layout', 'layouts/' ~ layout_name) -}}
 {%- endblock -%}
@@ -79,7 +80,7 @@
             <meta name="description" content="{{ (meta_description|default('@layout::meta.description')) | trans }}">
         {%- endblock -%}
     </head>
-    <body class="theme-{{ layout_theme }}">
+    <body class="theme-{{ layout_theme }} {{ body_class|default('') }}">
     <div id="layout" class="layout-loading {{ layout_class|default('') }}">
         {%- if layout_use_js -%}
             {#- If javascript fails to complete, force removing loading state after 2 seconds. -#}

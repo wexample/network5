@@ -91,34 +91,6 @@ class TemplateExtension extends AbstractExtension
         );
     }
 
-    /**
-     * @throws Exception
-     */
-    public function templateBuildAdaptiveJsonData(AdaptiveResponseService $adaptiveResponseService): array
-    {
-        $env = $adaptiveResponseService->getController()->getTwigEnvironment();
-
-        $body = $adaptiveResponseService->getView()
-            ? $adaptiveResponseService->renderResponse()->getContent()
-            : $adaptiveResponseService->getBody();
-
-        // Allow to use a rendered vue as a component loader,
-        // but returning an empty body.
-        $body = \trim($body);
-
-        return array_merge_recursive(
-            $this->templateBuildRenderData(
-                $env,
-                $this->templateNameFromPath($adaptiveResponseService->getView())
-            ),
-            [
-                VariableHelper::PAGE => [
-                    VariableHelper::BODY => $body,
-                ],
-            ]
-        );
-    }
-
     #[ArrayShape(
         [
             VariableHelper::ASSETS => "\App\Wex\BaseBundle\Rendering\Asset[][][]|array[]|\array[][]",

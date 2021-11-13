@@ -5,11 +5,13 @@ namespace App\Wex\BaseBundle\Service;
 use App\Wex\BaseBundle\Controller\AbstractController;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\AdaptiveResponse;
+use App\Wex\BaseBundle\Twig\ComponentsExtension;
 use App\Wex\BaseBundle\Twig\TemplateExtension;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use function trim;
 
 class AdaptiveResponseService
 {
@@ -118,7 +120,6 @@ class AdaptiveResponseService
 
     public function renderJson(): JsonResponse
     {
-        // TODO $templateExtension->templateBuildAdaptiveJsonData()
         $response = new JsonResponse($this->renderJsonData());
 
         // Prevents browser to display json response when
@@ -135,14 +136,43 @@ class AdaptiveResponseService
     {
         $env = $this->getController()->getTwigEnvironment();
 
+        /** @var ComponentsExtension $comExt */
+        $comExt = $env->getExtension(
+            ComponentsExtension::class
+        );
         /** @var TemplateExtension $templateExtension */
         $templateExtension = $env->getExtension(
             TemplateExtension::class
         );
 
-        return $templateExtension->templateBuildAdaptiveJsonData(
-            $this,
+        $env = $this->getController()->getTwigEnvironment();
+
+        $body = $this->getView()
+            ? $this->renderResponse()->getContent()
+            : $this->getBody();
+
+        // Allow to use a rendered vue as a component loader,
+        // but returning an empty body.
+        $body = trim($body);
+
+        // TODO ADD MODAL
+
+        $pageTemplateContent = $comExt
+            ->comRenderLayout($env);
+
+        $output = array_merge_recursive(
+            $templateExtension->templateBuildRenderData(
+                $env,
+                $templateExtension->templateNameFromPath($this->getView())
+            ),
+            [
+                VariableHelper::PAGE => [
+                    VariableHelper::BODY => $body,
+                ],
+            ]
         );
+
+        return $output;
     }
 
     public function getController(): ?AbstractController
@@ -158,7 +188,8 @@ class AdaptiveResponseService
     public function setView(
         string $view,
         $parameters = null
-    ): self {
+    ): self
+    {
         $this->view = $view;
 
         if ($parameters)
@@ -233,7 +264,8 @@ class AdaptiveResponseService
 
     public function setController(
         AbstractController $controller
-    ): self {
+    ): self
+    {
         $this->currentController = $controller;
 
         return $this;

@@ -10,6 +10,10 @@ use Twig\Environment;
 
 abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController implements AdaptiveResponseControllerInterface
 {
+    protected bool $templateUseJs;
+
+    protected string $requestUri;
+
     /* Set methods for adaptive rendering. */
     use AdaptiveResponseControllerTrait;
 
