@@ -1,4 +1,4 @@
-import {MixinQueues, QueuesService} from './Queues';
+import { MixinQueues, QueuesService } from './Queues';
 import AssetsCollectionInterface from '../interfaces/AssetsCollectionInterface';
 import MixinInterface from '../interfaces/MixinInterface';
 import Queue from '../class/Queue';

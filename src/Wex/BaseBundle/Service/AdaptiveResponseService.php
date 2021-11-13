@@ -41,6 +41,7 @@ class AdaptiveResponseService
     private ?AbstractController $currentController = null;
 
     private array $parameters = [];
+
     private ?string $view = null;
 
     private ?string $body = null;
@@ -101,13 +102,13 @@ class AdaptiveResponseService
         $layout = $request->get('_template_base');
 
         // Layout not specified in query string.
-        if (is_null($layout) && $request->isXmlHttpRequest())
+        if (\is_null($layout) && $request->isXmlHttpRequest())
         {
             // Use modal as default ajax layout, but might be configurable.
             $layout = self::LAYOUT_MODAL;
         }
 
-        if (in_array($layout, $this->allowedJsonLayout))
+        if (\in_array($layout, $this->allowedJsonLayout))
         {
             return $layout;
         }
@@ -157,8 +158,7 @@ class AdaptiveResponseService
     public function setView(
         string $view,
         $parameters = null
-    ): self
-    {
+    ): self {
         $this->view = $view;
 
         if ($parameters)
@@ -185,7 +185,7 @@ class AdaptiveResponseService
 
         $parameters = [
             self::RENDER_PARAM_NAME_OUTPUT_TYPE => $this->detectOutputType(),
-            self::RENDER_PARAM_NAME_BASE => $this->detectOutputType()
+            self::RENDER_PARAM_NAME_BASE => $this->detectOutputType(),
         ];
 
         return $controller->adaptiveRender(
@@ -233,8 +233,7 @@ class AdaptiveResponseService
 
     public function setController(
         AbstractController $controller
-    ): self
-    {
+    ): self {
         $this->currentController = $controller;
 
         return $this;

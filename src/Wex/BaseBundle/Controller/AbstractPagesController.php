@@ -6,10 +6,10 @@ use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use App\Wex\BaseBundle\Twig\TemplateExtension;
-use Twig\Environment;
 use function is_null;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 abstract class AbstractPagesController extends AbstractController
 {
@@ -29,8 +29,7 @@ abstract class AbstractPagesController extends AbstractController
         protected AdaptiveResponseService $adaptiveResponse,
         protected RequestStack $requestStack,
         protected Environment $twigEnvironment
-    )
-    {
+    ) {
         parent::__construct(
             $adaptiveResponse,
             $twigEnvironment
@@ -51,8 +50,7 @@ abstract class AbstractPagesController extends AbstractController
         string $view,
         array $parameters = [],
         Response $response = null
-    ): Response
-    {
+    ): Response {
         $templatePath = $this->buildTemplatePath($view);
 
         // Add global variables for rendering.

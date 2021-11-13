@@ -459,7 +459,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
 
         return str_replace(
             '/',
-                self::KEYS_SEPARATOR,
+            self::KEYS_SEPARATOR,
             $info->dirname
         ).self::KEYS_SEPARATOR.
             current(explode(self::KEYS_SEPARATOR, $info->basename));

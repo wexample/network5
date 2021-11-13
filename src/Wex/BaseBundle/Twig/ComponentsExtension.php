@@ -9,6 +9,8 @@ use App\Wex\BaseBundle\WexBaseBundle;
 use Exception;
 use Twig\Environment;
 use Twig\TwigFunction;
+use function array_merge;
+use function trim;
 
 class ComponentsExtension extends AbstractExtension
 {
@@ -29,8 +31,7 @@ class ComponentsExtension extends AbstractExtension
     public function __construct(
         protected AssetsExtension $assetsExtension,
         private Translator $translator
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array
@@ -92,8 +93,7 @@ class ComponentsExtension extends AbstractExtension
         Environment $twig,
         string $name,
         array $options = []
-    )
-    {
+    ) {
         $html = $this->comRenderHtml($twig, $name, $options);
 
         return $html.$this->comInitPrevious($name, $options);
@@ -106,8 +106,7 @@ class ComponentsExtension extends AbstractExtension
         Environment $twig,
         $name,
         $options = []
-    ): ?string
-    {
+    ): ?string {
         $search = [
             // Search local.
             $name.TemplateExtension::TEMPLATE_FILE_EXTENSION,
@@ -143,7 +142,8 @@ class ComponentsExtension extends AbstractExtension
             }
 
             return null;
-        } catch (Exception $exception)
+        }
+        catch (Exception $exception)
         {
             throw new Exception('Error during rendering component '.$name.' : '.$exception->getMessage(), $exception->getCode(), $exception);
         }
@@ -180,8 +180,7 @@ class ComponentsExtension extends AbstractExtension
         string $name,
         string $initMode,
         array $options
-    ): Component
-    {
+    ): Component {
         // Using an object allow continuing edit properties after save.
         $entry = new Component($name, $initMode, $options);
 
@@ -208,8 +207,7 @@ class ComponentsExtension extends AbstractExtension
     public function comInitClass(
         string $name,
         array $options = []
-    ): string
-    {
+    ): string {
         $component = $this->saveComponent(
             $name,
             self::INIT_MODE_CLASS,
@@ -241,7 +239,7 @@ class ComponentsExtension extends AbstractExtension
 
         $attributes = array_merge([
             'id' => $options['id'] ?? null,
-            'class' => $class === '' ? null : $class
+            'class' => $class === '' ? null : $class,
         ], ($options['attr'] ?? []));
 
         /** @var RenderExtension $renderExtension */

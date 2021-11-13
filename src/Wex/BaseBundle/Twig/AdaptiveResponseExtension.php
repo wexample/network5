@@ -15,8 +15,7 @@ class AdaptiveResponseExtension extends AbstractExtension
     public function __construct(
         protected AdaptiveResponseService $adaptiveResponseService,
         protected RequestStack $requestStack,
-    )
-    {
+    ) {
     }
 
     protected function getCurrentResponse(): AdaptiveResponse

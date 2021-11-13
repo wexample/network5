@@ -28,7 +28,7 @@ class AdaptiveResponse
         self::LAYOUT_DEFAULT,
     ];
 
-    public const BASES_MAIN_DIR = WexBaseBundle::BUNDLE_PATH_TEMPLATES . 'bases/';
+    public const BASES_MAIN_DIR = WexBaseBundle::BUNDLE_PATH_TEMPLATES.'bases/';
 
     public function getOutputType(array $context): string
     {

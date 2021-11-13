@@ -7,9 +7,9 @@ use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use App\Wex\BaseBundle\Service\TemplateService;
 use App\Wex\BaseBundle\Translation\Translator;
-use Exception;
 use function array_merge_recursive;
 use Doctrine\DBAL\Types\Types;
+use Exception;
 use JetBrains\PhpStorm\ArrayShape;
 use function str_ends_with;
 use function strlen;
@@ -32,8 +32,7 @@ class TemplateExtension extends AbstractExtension
     public function __construct(
         private KernelInterface $kernel,
         private TemplateService $templateService
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array
@@ -67,8 +66,7 @@ class TemplateExtension extends AbstractExtension
         Environment $env,
         string $pageTemplateName,
         string $layoutTheme
-    ): array
-    {
+    ): array {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -84,7 +82,7 @@ class TemplateExtension extends AbstractExtension
                 VariableHelper::ASSETS => $assetsExtension->buildRenderData(Asset::CONTEXT_LAYOUT),
                 'displayBreakpoints' => AssetsExtension::DISPLAY_BREAKPOINTS,
                 VariableHelper::PAGE => [
-                    'isLayoutPage' => true
+                    'isLayoutPage' => true,
                 ],
                 VariableHelper::ENV => $this->kernel->getEnvironment(),
                 VariableHelper::THEME => $layoutTheme,
@@ -106,7 +104,7 @@ class TemplateExtension extends AbstractExtension
 
         // Allow to use a rendered vue as a component loader,
         // but returning an empty body.
-        $body = trim($body);
+        $body = \trim($body);
 
         return array_merge_recursive(
             $this->templateBuildRenderData(
@@ -115,8 +113,8 @@ class TemplateExtension extends AbstractExtension
             ),
             [
                 VariableHelper::PAGE => [
-                    VariableHelper::BODY => $body
-                ]
+                    VariableHelper::BODY => $body,
+                ],
             ]
         );
     }
@@ -132,8 +130,7 @@ class TemplateExtension extends AbstractExtension
     public function templateBuildPageData(
         Environment $env,
         string $pageName
-    ): array
-    {
+    ): array {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -176,8 +173,7 @@ class TemplateExtension extends AbstractExtension
     public function templateBuildRenderData(
         Environment $env,
         string $pageTemplateName = null
-    ): array
-    {
+    ): array {
         /** @var TranslationExtension $translationExtension */
         $translationExtension = $env->getExtension(
             TranslationExtension::class
