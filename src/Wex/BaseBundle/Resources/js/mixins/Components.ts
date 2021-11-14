@@ -18,7 +18,6 @@ export class ComponentsService extends AppService {
 
   create(elContext: HTMLElement, renderData: RenderDataComponentInterface) {
     let classDefinition = this.app.getBundleClassDefinition(
-      'component',
       renderData.name
     );
 
@@ -68,9 +67,15 @@ export const MixinComponents: MixinInterface = {
     app: {
       loadRenderData(
         data: RenderDataLayoutInterface,
-        registry: any,
-        next: Function
+        registry: any
       ) {
+        if (
+          registry.pages !== MixinsAppService.LOAD_STATUS_COMPLETE ||
+          registry.assets !== MixinsAppService.LOAD_STATUS_COMPLETE
+        ) {
+          return MixinsAppService.LOAD_STATUS_WAIT;
+        }
+
         this.services.components.loadRenderData(data);
       },
     },

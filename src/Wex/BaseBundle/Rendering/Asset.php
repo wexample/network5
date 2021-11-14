@@ -84,7 +84,7 @@ class Asset
         // Remove the base part before build/{type}/ folder.
         $pathWithoutExt = dirname($this->path).'/'.$info['filename'];
 
-        $this->id = $context.'.'.PathHelper::relativeTo(
+        $this->id = PathHelper::relativeTo(
             $pathWithoutExt,
             '/'.AssetsExtension::DIR_BUILD.
                 $this->type.'/'

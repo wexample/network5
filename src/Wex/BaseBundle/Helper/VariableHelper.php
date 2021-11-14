@@ -6,6 +6,8 @@ class VariableHelper
 {
     public const _SPACE = ' ';
 
+    public const AJAX = 'ajax';
+
     public const ALL = 'all';
 
     public const ASSETS = 'assets';

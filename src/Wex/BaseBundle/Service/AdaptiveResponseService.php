@@ -3,6 +3,7 @@
 namespace App\Wex\BaseBundle\Service;
 
 use App\Wex\BaseBundle\Controller\AbstractController;
+use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\AdaptiveResponse;
 use App\Wex\BaseBundle\Twig\ComponentsExtension;
@@ -91,6 +92,11 @@ class AdaptiveResponseService
                     ComponentsExtension::class
                 );
 
+                $comExt->setContext(
+                    RenderingHelper::CONTEXT_AJAX,
+                    null
+                );
+
                 $comExt->comInitLayout('components/modal', [
                     'adaptiveResponseBodyDestination' => true
                 ]);
@@ -156,16 +162,10 @@ class AdaptiveResponseService
     {
         $env = $this->getController()->getTwigEnvironment();
 
-        /** @var ComponentsExtension $comExt */
-        $comExt = $env->getExtension(
-            ComponentsExtension::class
-        );
         /** @var TemplateExtension $templateExtension */
         $templateExtension = $env->getExtension(
             TemplateExtension::class
         );
-
-        $env = $this->getController()->getTwigEnvironment();
 
         $body = $this->getView()
             ? $this->renderResponse()->getContent()
@@ -175,19 +175,10 @@ class AdaptiveResponseService
         // but returning an empty body.
         $body = trim($body);
 
-        $templates = $comExt->comRenderLayout($env);
-
-        return array_merge_recursive(
-            $templateExtension->templateBuildRenderData(
-                $env,
-                $templateExtension->templateNameFromPath($this->getView())
-            ),
-            [
-                VariableHelper::PAGE => [
-                    VariableHelper::BODY => $body,
-                ],
-                VariableHelper::PLURAL_TEMPLATE => $templates
-            ]
+        return $templateExtension->templateBuildAjaxRenderData(
+            $env,
+            $templateExtension->templateNameFromPath($this->getView()),
+            $body
         );
     }
 

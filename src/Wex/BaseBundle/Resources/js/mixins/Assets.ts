@@ -218,7 +218,7 @@ export const MixinAssets: MixinInterface = {
           this.app.services.queues.create('assets-loading');
       },
 
-      loadLayoutRenderData(
+      loadRenderData(
         data: RenderDataLayoutInterface,
         registry: any,
         next: Function

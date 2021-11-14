@@ -42,10 +42,7 @@ const bundle: AssetBundleInterface = {
           let modalsService = this.services.modals;
 
           modalsService
-            .get('/demo/loading/fetch/simple', {})
-            .then((body) => {
-              console.log(body);
-            });
+            .get('/demo/loading/fetch/simple', {});
         });
     }
   },

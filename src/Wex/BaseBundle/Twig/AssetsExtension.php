@@ -358,7 +358,7 @@ class AssetsExtension extends AbstractExtension
 
     public function addAsset(
         string $pathRelative,
-        string $context
+        string $renderContext
     ): ?Asset {
         $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
         if (!isset($this->manifest[$pathRelativeToPublic]))
@@ -370,7 +370,7 @@ class AssetsExtension extends AbstractExtension
         {
             $asset = new Asset(
                 $this->manifest[$pathRelativeToPublic],
-                $context
+                $renderContext
             );
 
             $this->assetsLoaded[$pathRelative] = $asset;

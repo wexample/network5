@@ -8,6 +8,7 @@ use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Rendering\Component;
 use App\Wex\BaseBundle\Service\TemplateService;
 use App\Wex\BaseBundle\Translation\Translator;
+use Exception;
 use function array_merge_recursive;
 use Doctrine\DBAL\Types\Types;
 use JetBrains\PhpStorm\ArrayShape;
@@ -70,15 +71,59 @@ class TemplateExtension extends AbstractExtension
         string $layoutTheme
     ): array
     {
+        /** @var AssetsExtension $assetsExtension */
+        $assetsExtension = $env->getExtension(
+            AssetsExtension::class
+        );
+        /** @var ComponentsExtension $comExtension */
+        $comExtension = $env->getExtension(
+            ComponentsExtension::class
+        );
+
         return array_merge_recursive(
             $this->templateBuildRenderData($env, $pageTemplateName),
             [
+                VariableHelper::ASSETS => $assetsExtension->buildRenderData(RenderingHelper::CONTEXT_LAYOUT),
+                VariableHelper::PLURAL_COMPONENT => $comExtension->buildRenderData(RenderingHelper::CONTEXT_LAYOUT),
                 'displayBreakpoints' => AssetsExtension::DISPLAY_BREAKPOINTS,
                 VariableHelper::PAGE => [
                     'isLayoutPage' => true,
                 ],
                 VariableHelper::ENV => $this->kernel->getEnvironment(),
                 VariableHelper::THEME => $layoutTheme,
+            ]
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function templateBuildAjaxRenderData(
+        Environment $env,
+        string $pageTemplateName,
+        string $body
+    ): array
+    {
+        /** @var AssetsExtension $assetsExtension */
+        $assetsExtension = $env->getExtension(
+            AssetsExtension::class
+        );
+        /** @var ComponentsExtension $comExtension */
+        $comExtension = $env->getExtension(
+            ComponentsExtension::class
+        );
+
+        $templates = $comExtension->comRenderLayout($env);
+
+        return array_merge_recursive(
+            $this->templateBuildRenderData($env, $pageTemplateName),
+            [
+                VariableHelper::PLURAL_COMPONENT => $comExtension->buildRenderData(RenderingHelper::CONTEXT_AJAX),
+                VariableHelper::ASSETS => $assetsExtension->buildRenderData(RenderingHelper::CONTEXT_AJAX),
+                VariableHelper::PAGE => [
+                    VariableHelper::BODY => $body,
+                ],
+                VariableHelper::PLURAL_TEMPLATE => $templates
             ]
         );
     }
@@ -144,10 +189,6 @@ class TemplateExtension extends AbstractExtension
         string $pageTemplateName = null
     ): array
     {
-        /** @var AssetsExtension $assetsExtension */
-        $assetsExtension = $env->getExtension(
-            AssetsExtension::class
-        );
         /** @var JsExtension $jsExtension */
         $jsExtension = $env->getExtension(
             JsExtension::class
@@ -156,14 +197,8 @@ class TemplateExtension extends AbstractExtension
         $translationExtension = $env->getExtension(
             TranslationExtension::class
         );
-        /** @var ComponentsExtension $comExt */
-        $comExt = $env->getExtension(
-            ComponentsExtension::class
-        );
 
         return [
-            VariableHelper::ASSETS => $assetsExtension->buildRenderData(RenderingHelper::CONTEXT_LAYOUT),
-            VariableHelper::PLURAL_COMPONENT => $comExt->buildRenderData(RenderingHelper::CONTEXT_LAYOUT),
             VariableHelper::EVENTS => [],
             VariableHelper::PAGE => $pageTemplateName
                 ? $this->templateBuildPageRenderData(

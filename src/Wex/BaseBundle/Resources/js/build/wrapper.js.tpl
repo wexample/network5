@@ -2,4 +2,4 @@
 import ClassDefinition from '{classPath}';
 
 // Save it in global registry.
-appRegistry.bundles[ClassDefinition.bundleGroup].add('{className}', ClassDefinition);
+appRegistry.bundles.add('{className}', ClassDefinition);

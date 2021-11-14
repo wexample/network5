@@ -111,7 +111,6 @@ export default class extends AppChild {
     if (previous !== current) {
       if (displays[current] === undefined) {
         let display = this.app.getBundleClassDefinition(
-          'page',
           `${this.name}-${current}`
         );
 
@@ -127,7 +126,7 @@ export default class extends AppChild {
       }
 
       if (displays[current]) {
-        displays[current].onReonChangeThemesponsiveEnter();
+        displays[current].onResponsiveEnter();
       }
 
       this.responsiveDisplayCurrent = displays[current];

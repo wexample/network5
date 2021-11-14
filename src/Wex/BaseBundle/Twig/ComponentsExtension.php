@@ -340,19 +340,10 @@ class ComponentsExtension extends AbstractExtension
 
     public function comInitLayout(string $name, array $options = []): Component
     {
-        $this->setContext(
-            RenderingHelper::CONTEXT_LAYOUT,
-            null
-        );
-
-        $component = $this->registerComponent(
+        return $this->registerComponent(
             $name,
             self::INIT_MODE_LAYOUT,
             $options
         );
-
-        $this->revertContext();
-
-        return $component;
     }
 }
