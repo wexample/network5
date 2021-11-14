@@ -10,13 +10,21 @@ use function uniqid;
 
 class Component
 {
+    public const CONTEXT_LAYOUT = VariableHelper::LAYOUT;
+
+    public const CONTEXT_PAGE = VariableHelper::PAGE;
+
+    public const CONTEXT_VUE = VariableHelper::VUE;
+
     public string $id;
 
     public function __construct(
         public string $name,
         public string $initMode,
+        public string $context,
         public array $options = []
-    ) {
+    )
+    {
         $this->id = 'com-'.uniqid();
     }
 
@@ -37,9 +45,10 @@ class Component
         VariableHelper::ID => Types::STRING,
         VariableHelper::NAME => Types::STRING,
     ])]
-    public function buildPageData(): array
+    public function buildRenderData(): array
     {
         return [
+            VariableHelper::CONTEXT => $this->context,
             VariableHelper::ID => $this->id,
             'initMode' => $this->initMode,
             VariableHelper::NAME => $this->name,

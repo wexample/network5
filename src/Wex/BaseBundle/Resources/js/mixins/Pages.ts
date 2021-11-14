@@ -38,7 +38,7 @@ export const MixinPages: MixinInterface = {
 
   hooks: {
     app: {
-      loadLayoutRenderData(
+      loadRenderData(
         data: RenderDataLayoutInterface,
         registry: any,
         next: Function

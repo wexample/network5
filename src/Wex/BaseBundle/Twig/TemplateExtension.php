@@ -4,12 +4,11 @@ namespace App\Wex\BaseBundle\Twig;
 
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
-use App\Wex\BaseBundle\Service\AdaptiveResponseService;
+use App\Wex\BaseBundle\Rendering\Component;
 use App\Wex\BaseBundle\Service\TemplateService;
 use App\Wex\BaseBundle\Translation\Translator;
 use function array_merge_recursive;
 use Doctrine\DBAL\Types\Types;
-use Exception;
 use JetBrains\PhpStorm\ArrayShape;
 use function str_ends_with;
 use function strlen;
@@ -17,7 +16,6 @@ use function substr;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\Environment;
 use Twig\TwigFunction;
-use function ucfirst;
 
 class TemplateExtension extends AbstractExtension
 {
@@ -29,10 +27,13 @@ class TemplateExtension extends AbstractExtension
 
     public const RENDERING_BASE_NAME_MODAL = VariableHelper::MODAL;
 
+    protected const VAR_TRANSLATIONS_DOMAIN_SEPARATOR = VariableHelper::TRANSLATIONS.'DomainSeparator';
+
     public function __construct(
         private KernelInterface $kernel,
         private TemplateService $templateService
-    ) {
+    )
+    {
     }
 
     public function getFunctions(): array
@@ -49,7 +50,7 @@ class TemplateExtension extends AbstractExtension
                 'template_build_layout_data',
                 [
                     $this,
-                    'templateBuildLayoutData',
+                    'templateBuildLayoutRenderData',
                 ],
                 [
                     self::FUNCTION_OPTION_NEEDS_ENVIRONMENT => true,
@@ -62,18 +63,15 @@ class TemplateExtension extends AbstractExtension
         ];
     }
 
-    public function templateBuildLayoutData(
+    public function templateBuildLayoutRenderData(
         Environment $env,
         string $pageTemplateName,
         string $layoutTheme
-    ): array {
+    ): array
+    {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
-        );
-        /** @var JsExtension $jsExtension */
-        $jsExtension = $env->getExtension(
-            JsExtension::class
         );
 
         return array_merge_recursive(
@@ -86,23 +84,24 @@ class TemplateExtension extends AbstractExtension
                 ],
                 VariableHelper::ENV => $this->kernel->getEnvironment(),
                 VariableHelper::THEME => $layoutTheme,
-                VariableHelper::VARS => $jsExtension->jsVarsGet(JsExtension::VARS_GROUP_GLOBAL),
             ]
         );
     }
 
     #[ArrayShape(
         [
-            VariableHelper::ASSETS => "\App\Wex\BaseBundle\Rendering\Asset[][][]|array[]|\array[][]",
+            VariableHelper::ASSETS => Asset::class."[][][]|array[]|\array[][]",
             VariableHelper::NAME => Types::STRING,
+            VariableHelper::PLURAL_COMPONENT => Types::ARRAY,
             VariableHelper::TRANSLATIONS => Types::ARRAY,
             VariableHelper::VARS => Types::ARRAY,
         ]
     )]
-    public function templateBuildPageData(
+    public function templateBuildPageRenderData(
         Environment $env,
         string $pageName
-    ): array {
+    ): array
+    {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -122,8 +121,8 @@ class TemplateExtension extends AbstractExtension
 
         return [
             VariableHelper::ASSETS => $assetsExtension->buildRenderData(Asset::CONTEXT_PAGE),
-            VariableHelper::PLURAL_COMPONENT => $comExtension->componentsBuildPageData(),
             VariableHelper::NAME => $pageName,
+            VariableHelper::PLURAL_COMPONENT => $comExtension->buildRenderData(Component::CONTEXT_PAGE),
             VariableHelper::TRANSLATIONS => $translationExtension->buildRenderData(),
             VariableHelper::VARS => $jsExtension->jsVarsGet(JsExtension::VARS_GROUP_PAGE),
         ];
@@ -139,28 +138,41 @@ class TemplateExtension extends AbstractExtension
     }
 
     #[ArrayShape([
+        VariableHelper::EVENTS => Types::ARRAY,
         VariableHelper::PAGE => Types::ARRAY.'|'.VariableHelper::NULL,
+        self::VAR_TRANSLATIONS_DOMAIN_SEPARATOR => Types::STRING,
         VariableHelper::TRANSLATIONS => Types::ARRAY,
+        VariableHelper::VARS => Types::ARRAY,
     ])]
     public function templateBuildRenderData(
         Environment $env,
         string $pageTemplateName = null
-    ): array {
+    ): array
+    {
+        /** @var JsExtension $jsExtension */
+        $jsExtension = $env->getExtension(
+            JsExtension::class
+        );
         /** @var TranslationExtension $translationExtension */
         $translationExtension = $env->getExtension(
             TranslationExtension::class
         );
+        /** @var ComponentsExtension $comExt */
+        $comExt = $env->getExtension(
+            ComponentsExtension::class
+        );
 
         return [
+            VariableHelper::PLURAL_COMPONENT => $comExt->buildRenderData(Component::CONTEXT_LAYOUT),
+            VariableHelper::EVENTS => [],
             VariableHelper::PAGE => $pageTemplateName
-                ? $this->templateBuildPageData(
+                ? $this->templateBuildPageRenderData(
                     $env,
                     $pageTemplateName
                 ) : null,
             VariableHelper::TRANSLATIONS => $translationExtension->buildRenderData(),
-            VariableHelper::TRANSLATIONS
-            .ucfirst(VariableHelper::DOMAIN)
-            .ucfirst(VariableHelper::SEPARATOR) => Translator::DOMAIN_SEPARATOR,
+            self::VAR_TRANSLATIONS_DOMAIN_SEPARATOR => Translator::DOMAIN_SEPARATOR,
+            VariableHelper::VARS => $jsExtension->jsVarsGet(JsExtension::VARS_GROUP_GLOBAL),
         ];
     }
 

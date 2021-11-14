@@ -91,7 +91,9 @@ class AdaptiveResponseService
                     ComponentsExtension::class
                 );
 
-                $comExt->comInitLayout('components/modal');
+                $comExt->comInitLayout('components/modal', [
+                    'adaptiveResponseBodyDestination' => true
+                ]);
             }
 
             return $this->renderJson();
@@ -138,7 +140,7 @@ class AdaptiveResponseService
      */
     public function renderJson(): JsonResponse
     {
-        $response = new JsonResponse($this->renderJsonData());
+        $response = new JsonResponse($this->buildRenderData());
 
         // Prevents browser to display json response when
         // clicking on back button.
@@ -150,7 +152,7 @@ class AdaptiveResponseService
     /**
      * @throws Exception
      */
-    public function renderJsonData(): array
+    public function buildRenderData(): array
     {
         $env = $this->getController()->getTwigEnvironment();
 

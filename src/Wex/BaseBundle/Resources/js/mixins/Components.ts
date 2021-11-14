@@ -3,9 +3,19 @@ import MixinsAppService from '../class/MixinsAppService';
 import AppService from '../class/AppService';
 import Page from '../class/Page';
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
-import { MixinPrompts } from './Prompts';
+import {MixinPrompts} from './Prompts';
+import App from "../class/App";
+import RenderDataLayoutInterface from "../interfaces/RenderDataLayoutInterface";
 
 export class ComponentsService extends AppService {
+  elTemplates: HTMLElement
+
+  constructor(app: App) {
+    super(app);
+
+    this.elTemplates = document.getElementById('component-templates');
+  }
+
   create(elContext: HTMLElement, renderData: RenderDataComponentInterface) {
     let classDefinition = this.app.getBundleClassDefinition(
       'component',
@@ -26,6 +36,27 @@ export class ComponentsService extends AppService {
       component.init(renderData);
     }
   }
+
+  loadRenderData(data: RenderDataLayoutInterface) {
+    if (data.templates) {
+      // Append html for global components.
+      this.elTemplates
+        .insertAdjacentHTML('beforeend', data.templates);
+    }
+
+    if (data.components) {
+      this.createComponents(
+        data.components,
+        this.app.elLayout
+      );
+    }
+  }
+
+  createComponents(components: RenderDataComponentInterface[], elContext: HTMLElement) {
+    components.forEach((data: RenderDataComponentInterface) => {
+      this.create(elContext, data)
+    });
+  }
 }
 
 export const MixinComponents: MixinInterface = {
@@ -34,6 +65,16 @@ export const MixinComponents: MixinInterface = {
   dependencies: [MixinPrompts],
 
   hooks: {
+    app: {
+      loadRenderData(
+        data: RenderDataLayoutInterface,
+        registry: any,
+        next: Function
+      ) {
+        this.services.components.loadRenderData(data);
+      },
+    },
+
     page: {
       loadPageRenderData(page: Page, registry: any) {
         // Wait for page loading.

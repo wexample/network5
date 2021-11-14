@@ -73,7 +73,7 @@ export default class extends AppChild {
     renderData: RenderDataPageInterface,
     complete?: Function
   ) {
-    this.loadRenderData(renderData, () => {
+    this.loadPageRenderData(renderData, () => {
       this.services.events.listen(
         'responsive-change-size',
         this.onChangeResponsiveSizeProxy
@@ -91,7 +91,7 @@ export default class extends AppChild {
     });
   }
 
-  loadRenderData(renderData: RenderDataPageInterface, complete?: Function) {
+  loadPageRenderData(renderData: RenderDataPageInterface, complete?: Function) {
     this.vars = { ...this.vars, ...renderData.vars };
     this.renderData = renderData;
 

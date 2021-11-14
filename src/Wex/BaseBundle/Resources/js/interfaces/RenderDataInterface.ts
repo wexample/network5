@@ -7,4 +7,5 @@ export default interface RenderDataInterface {
     domain: string;
   };
   vars: object;
+  templates: string
 }

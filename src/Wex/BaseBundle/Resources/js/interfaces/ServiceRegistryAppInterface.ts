@@ -4,7 +4,7 @@ import { PagesService } from '../mixins/Pages';
 import { ResponsiveService } from '../mixins/Responsive';
 import { ThemeService } from '../mixins/Theme';
 
-export interface ServiceRegistryAppInterface {
+export default interface ServiceRegistryAppInterface {
   assets?: AssetsService;
   mixins?: MixinService;
   pages?: PagesService;

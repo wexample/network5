@@ -163,10 +163,6 @@ export class AssetsService extends AppService {
     let toLoad = {};
     let toUnload = {};
     let hasChange = false;
-    let services: any = {
-      assets: AssetsService,
-      queues: QueuesService,
-    };
 
     this.forEachAssetInCollection(
       assetsCollection,

@@ -16,13 +16,15 @@ use function trim;
 
 class ComponentsExtension extends AbstractExtension
 {
+    protected array $contextsStack;
+
     // Component is loaded with a css class.
     public const INIT_MODE_CLASS = VariableHelper::CLASS_VAR;
 
     // Component is simply loaded from PHP or from backend adaptive event.
     // It may have no target tag.
     public const INIT_MODE_LAYOUT = VariableHelper::LAYOUT;
-    
+
     // Component is loaded from template into the target tag.
     public const INIT_MODE_PARENT = VariableHelper::PARENT;
 
@@ -37,7 +39,26 @@ class ComponentsExtension extends AbstractExtension
     public function __construct(
         protected AssetsExtension $assetsExtension,
         private Translator $translator
-    ) {
+    )
+    {
+        $this->setContextName(
+            Component::CONTEXT_LAYOUT
+        );
+    }
+
+    public function setContextName(string $name)
+    {
+        $this->contextsStack[] = $name;
+    }
+
+    public function getContextName(): string
+    {
+        return end($this->contextsStack);
+    }
+
+    public function revertContext(): void
+    {
+        array_pop($this->contextsStack);
     }
 
     public function getFunctions(): array
@@ -89,6 +110,16 @@ class ComponentsExtension extends AbstractExtension
                     self::FUNCTION_OPTION_NEEDS_ENVIRONMENT => true,
                 ]
             ),
+            new TwigFunction(
+                'com_render_layout',
+                [
+                    $this,
+                    'comRenderLayout',
+                ],
+                [
+                    self::FUNCTION_OPTION_NEEDS_ENVIRONMENT => true,
+                ]
+            ),
         ];
     }
 
@@ -113,7 +144,8 @@ class ComponentsExtension extends AbstractExtension
         Environment $twig,
         $name,
         $options = []
-    ): ?string {
+    ): ?string
+    {
         $search = [
             // Search local.
             $name.TemplateExtension::TEMPLATE_FILE_EXTENSION,
@@ -149,21 +181,23 @@ class ComponentsExtension extends AbstractExtension
             }
 
             return null;
-        }
-        catch (Exception $exception)
+        } catch (Exception $exception)
         {
             throw new Exception('Error during rendering component '.$name.' : '.$exception->getMessage(), $exception->getCode(), $exception);
         }
     }
 
     #[Pure]
-    public function componentsBuildPageData(): array
+    public function buildRenderData(string $context): array
     {
         $data = [];
         /** @var Component $component */
         foreach ($this->components as $component)
         {
-            $data[] = $component->buildPageData();
+            if ($component->context === $context)
+            {
+                $data[] = $component->buildRenderData();
+            }
         }
 
         return $data;
@@ -175,7 +209,7 @@ class ComponentsExtension extends AbstractExtension
      */
     public function comInitPrevious(string $name, array $options = []): string
     {
-        $component = $this->saveComponent(
+        $component = $this->registerComponent(
             $name,
             self::INIT_MODE_PREVIOUS,
             $options
@@ -184,13 +218,19 @@ class ComponentsExtension extends AbstractExtension
         return $component->renderTag();
     }
 
-    public function saveComponent(
+    public function registerComponent(
         string $name,
         string $initMode,
         array $options
-    ): Component {
+    ): Component
+    {
         // Using an object allow continuing edit properties after save.
-        $entry = new Component($name, $initMode, $options);
+        $entry = new Component(
+            $name,
+            $initMode,
+            $this->getContextName(),
+            $options
+        );
 
         $this->components[] = $entry;
 
@@ -215,8 +255,9 @@ class ComponentsExtension extends AbstractExtension
     public function comInitClass(
         string $name,
         array $options = []
-    ): string {
-        $component = $this->saveComponent(
+    ): string
+    {
+        $component = $this->registerComponent(
             $name,
             self::INIT_MODE_CLASS,
             $options
@@ -231,7 +272,7 @@ class ComponentsExtension extends AbstractExtension
      */
     public function comInitParent(string $name, array $options = []): string
     {
-        $component = $this->saveComponent(
+        $component = $this->registerComponent(
             $name,
             self::INIT_MODE_PARENT,
             $options
@@ -248,15 +289,18 @@ class ComponentsExtension extends AbstractExtension
         $output = '';
 
         /** @var Component $component */
-        foreach ($this->components as $component) {
-            if (ComponentsExtension::INIT_MODE_LAYOUT === $component->initMode) {
+        foreach ($this->components as $component)
+        {
+            if (ComponentsExtension::INIT_MODE_LAYOUT === $component->initMode)
+            {
                 $componentOutput = $this->comRenderHtml(
                     $twig,
                     $component->name,
                     $component->options
                 );
 
-                if ($componentOutput) {
+                if ($componentOutput)
+                {
                     $componentOutput .= $component->renderTag();
                 }
 
@@ -285,12 +329,18 @@ class ComponentsExtension extends AbstractExtension
         return $renderExtension->renderTagAttributes($attributes);
     }
 
-    public function comInitLayout(string $name, array $options = []):Component
+    public function comInitLayout(string $name, array $options = []): Component
     {
-        return $this->saveComponent(
+        $this->setContextName(Component::CONTEXT_LAYOUT);
+
+        $component = $this->registerComponent(
             $name,
             self::INIT_MODE_LAYOUT,
             $options
         );
+
+        $this->revertContext();
+
+        return $component;
     }
 }

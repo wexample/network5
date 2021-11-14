@@ -1,16 +1,17 @@
 import Page from './Page';
 
 import MixinInterface from '../interfaces/MixinInterface';
-import { ServiceRegistryAppInterface } from '../interfaces/ServiceRegistryAppInterface';
+import ServiceRegistryAppInterface from '../interfaces/ServiceRegistryAppInterface';
 
-import { MixinAssets } from '../mixins/Assets';
-import { MixinMixins } from '../mixins/Mixins';
-import { MixinPages } from '../mixins/Pages';
-import { MixinResponsive } from '../mixins/Responsive';
-import { MixinTheme } from '../mixins/Theme';
-import { MixinQueues } from '../mixins/Queues';
+import {MixinAssets} from '../mixins/Assets';
+import {MixinMixins} from '../mixins/Mixins';
+import {MixinPages} from '../mixins/Pages';
+import {MixinResponsive} from '../mixins/Responsive';
+import {MixinTheme} from '../mixins/Theme';
+import {MixinQueues} from '../mixins/Queues';
 
-import { unique as arrayUnique } from '../helpers/Arrays';
+import {unique as arrayUnique} from '../helpers/Arrays';
+import RenderDataInterface from "../interfaces/RenderDataInterface";
 
 export default class {
   public bootJsBuffer: string[] = [];
@@ -50,11 +51,8 @@ export default class {
         // The main functionalities are ready.
         this.hasCoreLoaded = true;
 
-        // Load layout data.
-        this.services.mixins.invokeUntilComplete(
-          'loadLayoutRenderData',
-          'app',
-          [this.registry.layoutData],
+        this.loadRenderData(
+          this.registry.layoutData,
           () => {
             // Execute ready callbacks.
             this.readyComplete();
@@ -110,6 +108,22 @@ export default class {
 
       callback[method](thisArg || this, args);
     }
+  }
+
+  loadRenderData(data: RenderDataInterface, complete?: Function) {
+    this.services.mixins.invokeUntilComplete(
+      'loadRenderData',
+      'app',
+      [data],
+      () => {
+        // Execute ready callbacks.
+        this.readyComplete();
+        // Display page content.
+        this.elLayout.classList.remove('layout-loading');
+        // Launch constructor argument callback.
+        complete && complete.apply(this);
+      }
+    );
   }
 
   getClassPage() {
