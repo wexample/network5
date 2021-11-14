@@ -4,8 +4,8 @@ namespace App\Wex\BaseBundle\Twig;
 
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
-use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Rendering\Component;
+use App\Wex\BaseBundle\Rendering\ComponentContext;
 use App\Wex\BaseBundle\Translation\Translator;
 use App\Wex\BaseBundle\WexBaseBundle;
 use Exception;
@@ -49,17 +49,17 @@ class ComponentsExtension extends AbstractExtension
     }
 
     public function setContext(
-        string $group,
+        string $renderingContext,
         ?string $name,
     )
     {
-        $this->contextsStack[] = [
-            VariableHelper::GROUP => $group,
-            VariableHelper::NAME => $name ?: VariableHelper::DEFAULT,
-        ];
+        $this->contextsStack[] = new ComponentContext(
+            $renderingContext,
+            $name ?: VariableHelper::DEFAULT,
+        );
     }
 
-    public function getContext(): array
+    public function getContext(): ComponentContext
     {
         return end($this->contextsStack);
     }
@@ -196,13 +196,13 @@ class ComponentsExtension extends AbstractExtension
     }
 
     #[Pure]
-    public function buildRenderData(string $contextGroup): array
+    public function buildRenderData(string $renderContext): array
     {
         $data = [];
         /** @var Component $component */
         foreach ($this->components as $component)
         {
-            if ($component->context[VariableHelper::GROUP] === $contextGroup)
+            if ($component->context->renderContext === $renderContext)
             {
                 $data[] = $component->buildRenderData();
             }
@@ -228,28 +228,33 @@ class ComponentsExtension extends AbstractExtension
         array $options
     ): Component
     {
+        $context = $this->getContext();
+
         // Using an object allow continuing edit properties after save.
         $entry = new Component(
             $name,
             $initMode,
-            $this->getContext(),
+            $context,
             $options
         );
 
         $this->components[] = $entry;
 
-        $this->comLoadAssets($name);
+        $this->comLoadAssets(
+            $name,
+            $context->renderContext
+        );
 
         return $entry;
     }
 
-    public function comLoadAssets(string $name)
+    public function comLoadAssets(string $name, string $renderContext)
     {
         $this
             ->assetsExtension
             ->assetsDetect(
                 $name,
-                RenderingHelper::CONTEXT_PAGE
+                $renderContext
             );
     }
 

@@ -17,7 +17,7 @@ class Component
     public function __construct(
         public string $name,
         public string $initMode,
-        public array $context,
+        public ComponentContext $context,
         public array $options = []
     )
     {

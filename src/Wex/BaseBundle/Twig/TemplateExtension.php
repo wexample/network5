@@ -48,10 +48,10 @@ class TemplateExtension extends AbstractExtension
                 ]
             ),
             new TwigFunction(
-                'template_build_layout_data',
+                'template_build_initial_layout_render_data',
                 [
                     $this,
-                    'templateBuildLayoutRenderData',
+                    'templateBuildInitialLayoutRenderData',
                 ],
                 [
                     self::FUNCTION_OPTION_NEEDS_ENVIRONMENT => true,
@@ -64,21 +64,15 @@ class TemplateExtension extends AbstractExtension
         ];
     }
 
-    public function templateBuildLayoutRenderData(
+    public function templateBuildInitialLayoutRenderData(
         Environment $env,
         string $pageTemplateName,
         string $layoutTheme
     ): array
     {
-        /** @var AssetsExtension $assetsExtension */
-        $assetsExtension = $env->getExtension(
-            AssetsExtension::class
-        );
-
         return array_merge_recursive(
             $this->templateBuildRenderData($env, $pageTemplateName),
             [
-                VariableHelper::ASSETS => $assetsExtension->buildRenderData(RenderingHelper::CONTEXT_LAYOUT),
                 'displayBreakpoints' => AssetsExtension::DISPLAY_BREAKPOINTS,
                 VariableHelper::PAGE => [
                     'isLayoutPage' => true,
@@ -150,6 +144,10 @@ class TemplateExtension extends AbstractExtension
         string $pageTemplateName = null
     ): array
     {
+        /** @var AssetsExtension $assetsExtension */
+        $assetsExtension = $env->getExtension(
+            AssetsExtension::class
+        );
         /** @var JsExtension $jsExtension */
         $jsExtension = $env->getExtension(
             JsExtension::class
@@ -164,6 +162,7 @@ class TemplateExtension extends AbstractExtension
         );
 
         return [
+            VariableHelper::ASSETS => $assetsExtension->buildRenderData(RenderingHelper::CONTEXT_LAYOUT),
             VariableHelper::PLURAL_COMPONENT => $comExt->buildRenderData(RenderingHelper::CONTEXT_LAYOUT),
             VariableHelper::EVENTS => [],
             VariableHelper::PAGE => $pageTemplateName

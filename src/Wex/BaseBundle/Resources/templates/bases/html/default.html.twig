@@ -122,7 +122,7 @@
             <script type="text/javascript" src="{{ asset('build/runtime.js') }}"></script>
             {{ macro_assets.render_available_js() }}
             <script type="text/javascript" nonce="layout-data">
-              window.appRegistry.layoutData = {{ template_build_layout_data(template_name, layout_theme) | json_encode(constant('JSON_PRETTY_PRINT')) | raw }};
+              window.appRegistry.layoutData = {{ template_build_initial_layout_render_data(template_name, layout_theme) | json_encode(constant('JSON_PRETTY_PRINT')) | raw }};
             </script>
         {%- endif -%}
     {%- endblock -%}
