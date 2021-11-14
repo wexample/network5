@@ -2,6 +2,7 @@
 
 namespace App\Wex\BaseBundle\Twig;
 
+use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Rendering\Component;
@@ -41,17 +42,24 @@ class ComponentsExtension extends AbstractExtension
         private Translator $translator
     )
     {
-        $this->setContextName(
-            Component::CONTEXT_LAYOUT
+        $this->setContext(
+            RenderingHelper::CONTEXT_LAYOUT,
+            null
         );
     }
 
-    public function setContextName(string $name)
+    public function setContext(
+        string $group,
+        ?string $name,
+    )
     {
-        $this->contextsStack[] = $name;
+        $this->contextsStack[] = [
+            VariableHelper::GROUP => $group,
+            VariableHelper::NAME => $name ?: VariableHelper::DEFAULT,
+        ];
     }
 
-    public function getContextName(): string
+    public function getContext(): array
     {
         return end($this->contextsStack);
     }
@@ -188,13 +196,13 @@ class ComponentsExtension extends AbstractExtension
     }
 
     #[Pure]
-    public function buildRenderData(string $context): array
+    public function buildRenderData(string $contextGroup): array
     {
         $data = [];
         /** @var Component $component */
         foreach ($this->components as $component)
         {
-            if ($component->context === $context)
+            if ($component->context[VariableHelper::GROUP] === $contextGroup)
             {
                 $data[] = $component->buildRenderData();
             }
@@ -203,10 +211,6 @@ class ComponentsExtension extends AbstractExtension
         return $data;
     }
 
-    /**
-     * Add component to the global page requirements.
-     * It adds components assets to page assets.
-     */
     public function comInitPrevious(string $name, array $options = []): string
     {
         $component = $this->registerComponent(
@@ -228,7 +232,7 @@ class ComponentsExtension extends AbstractExtension
         $entry = new Component(
             $name,
             $initMode,
-            $this->getContextName(),
+            $this->getContext(),
             $options
         );
 
@@ -245,7 +249,7 @@ class ComponentsExtension extends AbstractExtension
             ->assetsExtension
             ->assetsDetect(
                 $name,
-                Asset::CONTEXT_PAGE
+                RenderingHelper::CONTEXT_PAGE
             );
     }
 
@@ -331,7 +335,10 @@ class ComponentsExtension extends AbstractExtension
 
     public function comInitLayout(string $name, array $options = []): Component
     {
-        $this->setContextName(Component::CONTEXT_LAYOUT);
+        $this->setContext(
+            RenderingHelper::CONTEXT_LAYOUT,
+            null
+        );
 
         $component = $this->registerComponent(
             $name,

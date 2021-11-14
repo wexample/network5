@@ -2,6 +2,7 @@
 
 namespace App\Wex\BaseBundle\Twig;
 
+use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Rendering\Component;
@@ -77,7 +78,7 @@ class TemplateExtension extends AbstractExtension
         return array_merge_recursive(
             $this->templateBuildRenderData($env, $pageTemplateName),
             [
-                VariableHelper::ASSETS => $assetsExtension->buildRenderData(Asset::CONTEXT_LAYOUT),
+                VariableHelper::ASSETS => $assetsExtension->buildRenderData(RenderingHelper::CONTEXT_LAYOUT),
                 'displayBreakpoints' => AssetsExtension::DISPLAY_BREAKPOINTS,
                 VariableHelper::PAGE => [
                     'isLayoutPage' => true,
@@ -120,9 +121,9 @@ class TemplateExtension extends AbstractExtension
         );
 
         return [
-            VariableHelper::ASSETS => $assetsExtension->buildRenderData(Asset::CONTEXT_PAGE),
+            VariableHelper::ASSETS => $assetsExtension->buildRenderData(RenderingHelper::CONTEXT_PAGE),
             VariableHelper::NAME => $pageName,
-            VariableHelper::PLURAL_COMPONENT => $comExtension->buildRenderData(Component::CONTEXT_PAGE),
+            VariableHelper::PLURAL_COMPONENT => $comExtension->buildRenderData(RenderingHelper::CONTEXT_PAGE),
             VariableHelper::TRANSLATIONS => $translationExtension->buildRenderData(),
             VariableHelper::VARS => $jsExtension->jsVarsGet(JsExtension::VARS_GROUP_PAGE),
         ];
@@ -163,7 +164,7 @@ class TemplateExtension extends AbstractExtension
         );
 
         return [
-            VariableHelper::PLURAL_COMPONENT => $comExt->buildRenderData(Component::CONTEXT_LAYOUT),
+            VariableHelper::PLURAL_COMPONENT => $comExt->buildRenderData(RenderingHelper::CONTEXT_LAYOUT),
             VariableHelper::EVENTS => [],
             VariableHelper::PAGE => $pageTemplateName
                 ? $this->templateBuildPageRenderData(

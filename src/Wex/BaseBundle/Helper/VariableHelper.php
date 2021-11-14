@@ -42,6 +42,8 @@ class VariableHelper
 
     public const FULL_NAME = 'full_name';
 
+    public const GROUP = 'group';
+
     public const HTML = 'html';
 
     public const JSON = 'json';

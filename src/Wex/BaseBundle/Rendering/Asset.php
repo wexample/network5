@@ -29,12 +29,6 @@ class Asset
         self::EXTENSION_JS => self::PRELOAD_AS_SCRIPT,
     ];
 
-    public const CONTEXT_LAYOUT = VariableHelper::LAYOUT;
-
-    public const CONTEXT_PAGE = VariableHelper::PAGE;
-
-    public const CONTEXT_VUE = VariableHelper::VUE;
-
     public const PRELOAD_AS_AUDIO = 'audio';
 
     public const PRELOAD_AS_DOCUMENT = 'document';

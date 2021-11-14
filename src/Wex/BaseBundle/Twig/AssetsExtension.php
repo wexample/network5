@@ -3,6 +3,7 @@
 namespace App\Wex\BaseBundle\Twig;
 
 use App\Wex\BaseBundle\Helper\FileHelper;
+use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
 use function array_merge_recursive;
@@ -162,7 +163,7 @@ class AssetsExtension extends AbstractExtension
 
         $assets = $this->assetsDetect(
             'layouts/'.$layoutName.'/layout',
-            Asset::CONTEXT_LAYOUT
+            RenderingHelper::CONTEXT_LAYOUT
         );
 
         $this->assetsPreload(
@@ -179,7 +180,7 @@ class AssetsExtension extends AbstractExtension
             $this->assetsDetectForType(
                 'layouts/default/layout',
                 Asset::EXTENSION_JS,
-                Asset::CONTEXT_LAYOUT,
+                RenderingHelper::CONTEXT_LAYOUT,
                 true
             );
         }
@@ -201,7 +202,7 @@ class AssetsExtension extends AbstractExtension
     ) {
         $assets = $this->assetsDetect(
             $templateName,
-            Asset::CONTEXT_PAGE
+            RenderingHelper::CONTEXT_PAGE
         );
 
         $this->assetsPreload(

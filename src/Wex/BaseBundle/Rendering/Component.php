@@ -10,18 +10,14 @@ use function uniqid;
 
 class Component
 {
-    public const CONTEXT_LAYOUT = VariableHelper::LAYOUT;
-
-    public const CONTEXT_PAGE = VariableHelper::PAGE;
-
-    public const CONTEXT_VUE = VariableHelper::VUE;
+    protected const VAR_INIT_MODE = 'initMode';
 
     public string $id;
 
     public function __construct(
         public string $name,
         public string $initMode,
-        public string $context,
+        public array $context,
         public array $options = []
     )
     {
@@ -42,7 +38,9 @@ class Component
     }
 
     #[ArrayShape([
+        VariableHelper::CONTEXT => Types::ARRAY,
         VariableHelper::ID => Types::STRING,
+        self::VAR_INIT_MODE => Types::STRING,
         VariableHelper::NAME => Types::STRING,
     ])]
     public function buildRenderData(): array
@@ -50,7 +48,7 @@ class Component
         return [
             VariableHelper::CONTEXT => $this->context,
             VariableHelper::ID => $this->id,
-            'initMode' => $this->initMode,
+            self::VAR_INIT_MODE => $this->initMode,
             VariableHelper::NAME => $this->name,
             VariableHelper::OPTIONS => $this->options,
         ];
