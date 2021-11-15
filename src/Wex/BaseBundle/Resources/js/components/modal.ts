@@ -4,6 +4,8 @@ import Page from "../class/Page";
 import PageHandlerComponent from "../class/PageHandlerComponent";
 import Keyboard from "../helpers/Keyboard";
 import Mouse from "../helpers/Mouse";
+import Variables from "../helpers/Variables";
+import Events from "../helpers/Events";
 
 export default {
   bundleGroup: 'component',
@@ -43,15 +45,15 @@ export default {
       this.onMouseDownOverlayProxy = this.onMouseDownOverlay.bind(this);
       this.onMouseUpOverlayProxy = this.onMouseUpOverlay.bind(this);
 
-      this.el.addEventListener('mousedown', this.onMouseDownOverlayProxy);
-      this.el.addEventListener('mouseup', this.onMouseUpOverlayProxy);
+      this.el.addEventListener(Events.MOUSEDOWN, this.onMouseDownOverlayProxy);
+      this.el.addEventListener(Events.MOUSEUP, this.onMouseUpOverlayProxy);
     }
 
     protected deactivateListeners(): void {
       super.deactivateListeners();
 
-      this.el.removeEventListener('mousedown', this.onMouseDownOverlayProxy);
-      this.el.removeEventListener('mouseup', this.onMouseUpOverlayProxy);
+      this.el.removeEventListener(Events.MOUSEDOWN, this.onMouseDownOverlayProxy);
+      this.el.removeEventListener(Events.MOUSEUP, this.onMouseUpOverlayProxy);
     }
 
     open() {
@@ -61,22 +63,22 @@ export default {
 
       this.opened = true;
 
-      this.el.classList.remove('closed');
-      this.el.classList.add('opened');
+      this.el.classList.remove(Variables.CLOSED);
+      this.el.classList.add(Variables.OPENED);
 
       this.focus();
     }
 
     close() {
       this.closing = true;
-      this.el.classList.remove('opened');
-      this.el.classList.add('closed');
+      this.el.classList.remove(Variables.OPENED);
+      this.el.classList.add(Variables.CLOSED);
 
       this.blur();
 
       // Sync with CSS animation.
       setTimeout(() => {
-        this.el.classList.remove('closed');
+        this.el.classList.remove(Variables.CLOSED);
         this.opened =
           this.focused =
             this.closing = false;

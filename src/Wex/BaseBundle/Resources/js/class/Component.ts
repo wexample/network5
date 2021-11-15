@@ -4,6 +4,7 @@ import {findPreviousNode as DomFindPreviousNode} from '../helpers/Dom';
 import ServiceRegistryAppInterface from "../interfaces/ServiceRegistryAppInterface";
 import {ComponentsService} from "../mixins/Components";
 import App from "./App";
+import Events from "../helpers/Events";
 
 interface ServiceRegistryComponentInterface extends ServiceRegistryAppInterface {
   components: ComponentsService;
@@ -70,7 +71,7 @@ export default abstract class Component extends AppChild {
       this.onKeyUpProxy = this.onKeyUp.bind(this);
 
       document.addEventListener(
-        'keyup',
+        Events.KEYUP,
         this.onKeyUpProxy as EventListenerOrEventListenerObject
       );
     }
@@ -79,7 +80,7 @@ export default abstract class Component extends AppChild {
   protected deactivateListeners(): void {
     if (this.listenKeyboardKey.length) {
       document.removeEventListener(
-        'keyup',
+        Events.KEYUP,
         this.onKeyUpProxy as EventListenerOrEventListenerObject
       );
     }
