@@ -38,9 +38,11 @@ export default {
       }
 
       this.opened = true;
-      this.focused = true;
+
       this.el.classList.remove('closed');
       this.el.classList.add('opened');
+
+      this.focus();
     }
 
     close() {
@@ -50,6 +52,8 @@ export default {
       this.opened =
       this.focused =
       this.closing = false;
+
+      this.blur();
     }
   },
 };

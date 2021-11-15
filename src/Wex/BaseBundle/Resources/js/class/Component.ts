@@ -15,7 +15,8 @@ export default abstract class Component extends AppChild {
   services: ServiceRegistryComponentInterface;
   listenKeyboardKey: string[] = []
   onKeyUpProxy: Function
-  focused: boolean = false
+  // Focus allows listening keyboard interactions.
+  protected focused: boolean = false
 
   public static INIT_MODE_CLASS: string = 'class';
 
@@ -52,8 +53,6 @@ export default abstract class Component extends AppChild {
         break;
     }
 
-    this.activateListeners();
-
     if (removePlaceHolder) {
       // Remove placeholder tag as it may interact with CSS or JS selectors.
       elPlaceholder.parentNode.removeChild(elPlaceholder);
@@ -88,6 +87,16 @@ export default abstract class Component extends AppChild {
 
   protected onListenedKeyUp(event: KeyboardEvent) {
     // To override...
+  }
+
+  public focus() {
+    this.focused = true;
+    this.activateListeners();
+  }
+
+  public blur() {
+    this.focused = false;
+    this.deactivateListeners();
   }
 
   public remove() {
