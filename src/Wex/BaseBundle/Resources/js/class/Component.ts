@@ -13,6 +13,9 @@ export default abstract class Component extends AppChild {
   el: HTMLElement;
   elContext: HTMLElement;
   services: ServiceRegistryComponentInterface;
+  listenKeyboardKey: string[] = []
+  onKeyUpProxy: Function
+  focused: boolean = false
 
   public static INIT_MODE_CLASS: string = 'class';
 
@@ -49,13 +52,49 @@ export default abstract class Component extends AppChild {
         break;
     }
 
+    this.activateListeners();
+
     if (removePlaceHolder) {
       // Remove placeholder tag as it may interact with CSS or JS selectors.
       elPlaceholder.parentNode.removeChild(elPlaceholder);
     }
   }
 
-  public init(renderData: RenderDataComponentInterface) {
+  protected onKeyUp(event: KeyboardEvent) {
+    if (this.focused && this.listenKeyboardKey.indexOf(event.key) !== -1) {
+      this.onListenedKeyUp(event);
+    }
+  }
+
+  protected activateListeners(): void {
+    if (this.listenKeyboardKey.length) {
+      this.onKeyUpProxy = this.onKeyUp.bind(this);
+
+      document.addEventListener(
+        'keyup',
+        this.onKeyUpProxy as EventListenerOrEventListenerObject
+      );
+    }
+  }
+
+  protected deactivateListeners() {
+    if (this.listenKeyboardKey.length) {
+      document.removeEventListener(
+        'keyup',
+        this.onKeyUpProxy as EventListenerOrEventListenerObject
+      );
+    }
+  }
+
+  protected onListenedKeyUp(event: KeyboardEvent) {
     // To override...
+  }
+
+  public remove() {
+    this.deactivateListeners();
+  }
+
+  public init(renderData: RenderDataComponentInterface) {
+    this.activateListeners();
   }
 }
