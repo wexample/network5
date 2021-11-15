@@ -2,6 +2,8 @@ import Component from '../class/Component';
 import { hashParamGet as locationHashParamGet } from '../helpers/Location';
 import { hashParamSet as locationHashParamSet } from '../helpers/Location';
 import { parseUrl as locationParseUrl } from '../helpers/Location';
+import App from "../class/App";
+import RenderDataComponentInterface from "../interfaces/RenderDataComponentInterface";
 
 export default {
   bundleGroup: 'component',
@@ -11,8 +13,12 @@ export default {
     protected elContentCurrent?: HTMLElement;
     protected readonly group: string;
 
-    constructor(elContext, renderData) {
-      super(elContext, renderData);
+    protected constructor(
+      app:App,
+      elContext: HTMLElement,
+      renderData: RenderDataComponentInterface
+    ) {
+      super(app, elContext, renderData);
 
       this.group = renderData.options.group;
     }

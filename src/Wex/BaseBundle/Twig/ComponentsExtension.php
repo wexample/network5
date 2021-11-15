@@ -6,6 +6,7 @@ use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Component;
 use App\Wex\BaseBundle\Rendering\ComponentContext;
+use App\Wex\BaseBundle\Service\RenderingService;
 use App\Wex\BaseBundle\Translation\Translator;
 use App\Wex\BaseBundle\WexBaseBundle;
 use Exception;
@@ -38,8 +39,9 @@ class ComponentsExtension extends AbstractExtension
     protected array $components = [];
 
     public function __construct(
-        protected AssetsExtension $assetsExtension,
-        private Translator $translator
+        private AssetsExtension $assetsExtension,
+        private RenderingService $renderingService,
+        private Translator $translator,
     )
     {
         $this->setContext(
@@ -235,6 +237,7 @@ class ComponentsExtension extends AbstractExtension
             $name,
             $initMode,
             $context,
+            $this->renderingService->getRenderRequestId(),
             $options
         );
 

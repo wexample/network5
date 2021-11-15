@@ -6,9 +6,11 @@ import RenderDataComponentInterface from '../interfaces/RenderDataComponentInter
 import {MixinPrompts} from './Prompts';
 import App from "../class/App";
 import RenderDataLayoutInterface from "../interfaces/RenderDataLayoutInterface";
+import Component from "../class/Component";
 
 export class ComponentsService extends AppService {
   elTemplates: HTMLElement
+  pageHandlerRegistry: { [key: string]: Component } = {};
 
   constructor(app: App) {
     super(app);
@@ -31,7 +33,7 @@ export class ComponentsService extends AppService {
         }
       );
     } else {
-      let component = new classDefinition(elContext, renderData);
+      let component = new classDefinition(this.app, elContext, renderData);
       component.init(renderData);
     }
   }
@@ -70,7 +72,6 @@ export const MixinComponents: MixinInterface = {
         registry: any
       ) {
         if (
-          registry.pages !== MixinsAppService.LOAD_STATUS_COMPLETE ||
           registry.assets !== MixinsAppService.LOAD_STATUS_COMPLETE
         ) {
           return MixinsAppService.LOAD_STATUS_WAIT;

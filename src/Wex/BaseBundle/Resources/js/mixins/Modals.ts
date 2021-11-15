@@ -10,17 +10,11 @@ export class ModalsService extends AppService {
 
   get(
     path: string,
-    options: RequestOptionsModalInterface = {},
-    callback?: Function
+    options: RequestOptionsModalInterface = {}
   ): Promise<any> {
     options.layout = options.layout || 'modal';
 
-    return this.services.pages.get(path, options).then((response: Response) => {
-      // TODO
-      console.log('open modal');
-
-      return response;
-    });
+    return this.services.pages.get(path, options);
   }
 }
 

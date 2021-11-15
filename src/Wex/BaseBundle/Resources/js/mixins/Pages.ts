@@ -44,6 +44,7 @@ export const MixinPages: MixinInterface = {
         next: Function
       ) {
         if (
+          registry.components === MixinsAppService.LOAD_STATUS_COMPLETE &&
           registry.responsive === MixinsAppService.LOAD_STATUS_COMPLETE &&
           registry.locale === MixinsAppService.LOAD_STATUS_COMPLETE
         ) {

@@ -5,7 +5,7 @@ namespace App\Wex\BaseBundle\Twig;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
-use App\Wex\BaseBundle\Rendering\Component;
+use App\Wex\BaseBundle\Service\RenderingService;
 use App\Wex\BaseBundle\Service\TemplateService;
 use App\Wex\BaseBundle\Translation\Translator;
 use Exception;
@@ -29,10 +29,13 @@ class TemplateExtension extends AbstractExtension
 
     public const RENDERING_BASE_NAME_MODAL = VariableHelper::MODAL;
 
+    protected const VAR_RENDER_REQUEST_ID = 'renderRequestId';
+
     protected const VAR_TRANSLATIONS_DOMAIN_SEPARATOR = VariableHelper::TRANSLATIONS.'DomainSeparator';
 
     public function __construct(
         private KernelInterface $kernel,
+        private RenderingService $renderingService,
         private TemplateService $templateService
     )
     {
@@ -163,6 +166,7 @@ class TemplateExtension extends AbstractExtension
             VariableHelper::ASSETS => $assetsExtension->buildRenderData(RenderingHelper::CONTEXT_PAGE),
             VariableHelper::NAME => $pageName,
             VariableHelper::PLURAL_COMPONENT => $comExtension->buildRenderData(RenderingHelper::CONTEXT_PAGE),
+            self::VAR_RENDER_REQUEST_ID => $this->renderingService->getRenderRequestId(),
             VariableHelper::TRANSLATIONS => $translationExtension->buildRenderData(),
             VariableHelper::VARS => $jsExtension->jsVarsGet(JsExtension::VARS_GROUP_PAGE),
         ];
@@ -205,6 +209,7 @@ class TemplateExtension extends AbstractExtension
                     $env,
                     $pageTemplateName
                 ) : null,
+            self::VAR_RENDER_REQUEST_ID => $this->renderingService->getRenderRequestId(),
             VariableHelper::TRANSLATIONS => $translationExtension->buildRenderData(),
             self::VAR_TRANSLATIONS_DOMAIN_SEPARATOR => Translator::DOMAIN_SEPARATOR,
             VariableHelper::VARS => $jsExtension->jsVarsGet(JsExtension::VARS_GROUP_GLOBAL),

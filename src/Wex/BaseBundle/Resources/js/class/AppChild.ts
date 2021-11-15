@@ -5,7 +5,7 @@ export default class {
   protected readonly app: App;
   protected readonly services: ServiceRegistryAppInterface;
 
-  constructor(app) {
+  constructor(app: App) {
     this.app = app;
     this.services = app.services;
   }

@@ -18,7 +18,9 @@ export class AdaptiveService extends AppService {
         if (response.ok) {
           return response.json();
         }
-
+        // TODO ERRORS HANDLING
+      })
+      .then((response) => {
         this.app.loadRenderData(response)
       });
   }

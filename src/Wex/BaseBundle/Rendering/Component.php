@@ -4,6 +4,7 @@ namespace App\Wex\BaseBundle\Rendering;
 
 use App\Wex\BaseBundle\Helper\DomHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
+use App\Wex\BaseBundle\Service\RenderingService;
 use Doctrine\DBAL\Types\Types;
 use JetBrains\PhpStorm\ArrayShape;
 use function uniqid;
@@ -18,6 +19,7 @@ class Component
         public string $name,
         public string $initMode,
         public ComponentContext $context,
+        public $renderRequestId,
         public array $options = []
     )
     {
@@ -51,6 +53,7 @@ class Component
             self::VAR_INIT_MODE => $this->initMode,
             VariableHelper::NAME => $this->name,
             VariableHelper::OPTIONS => $this->options,
+            RenderingService::VAR_RENDER_REQUEST_ID => $this->renderRequestId
         ];
     }
 }

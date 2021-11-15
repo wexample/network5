@@ -3,7 +3,7 @@ import PageResponsiveDisplay from './PageResponsiveDisplay';
 import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
 import AppChild from './AppChild';
 import MixinInterface from '../interfaces/MixinInterface';
-import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
+import {ServiceRegistryPageInterface} from '../interfaces/ServiceRegistryPageInterface';
 
 export default class extends AppChild {
   public readonly el: HTMLElement;
@@ -33,10 +33,20 @@ export default class extends AppChild {
       this.el = renderData.el;
     }
 
+    // A component may have been define as page container (modal / panel).
+    let pageHandler = this.services.components.pageHandlerRegistry[renderData.renderRequestId];
+    if (pageHandler) {
+      pageHandler.renderPageData(
+        renderData,
+        this
+      );
+    }
+
     if (!this.el) {
       let promptService = this.services.prompts;
 
       promptService.systemError('page_message.error.page_missing_el');
+      return;
     }
 
     this.elOverlay = this.el.querySelector('.page-overlay');
@@ -92,7 +102,7 @@ export default class extends AppChild {
   }
 
   loadPageRenderData(renderData: RenderDataPageInterface, complete?: Function) {
-    this.vars = { ...this.vars, ...renderData.vars };
+    this.vars = {...this.vars, ...renderData.vars};
     this.renderData = renderData;
 
     this.services.mixins.invokeUntilComplete(
