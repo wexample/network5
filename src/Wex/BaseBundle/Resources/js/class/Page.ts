@@ -36,7 +36,7 @@ export default class extends AppChild {
     // A component may have been define as page container (modal / panel).
     let pageHandler = this.services.components.pageHandlerRegistry[renderData.renderRequestId];
     if (pageHandler) {
-      pageHandler.renderPageData(
+      this.el = pageHandler.renderPageEl(
         renderData,
         this
       );

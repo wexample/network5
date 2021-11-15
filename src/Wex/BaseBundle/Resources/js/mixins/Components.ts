@@ -6,11 +6,11 @@ import RenderDataComponentInterface from '../interfaces/RenderDataComponentInter
 import {MixinPrompts} from './Prompts';
 import App from "../class/App";
 import RenderDataLayoutInterface from "../interfaces/RenderDataLayoutInterface";
-import Component from "../class/Component";
+import PageHandlerComponent from "../class/PageHandlerComponent";
 
 export class ComponentsService extends AppService {
   elTemplates: HTMLElement
-  pageHandlerRegistry: { [key: string]: Component } = {};
+  pageHandlerRegistry: { [key: string]: PageHandlerComponent } = {};
 
   constructor(app: App) {
     super(app);
