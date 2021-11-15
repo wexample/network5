@@ -1,7 +1,8 @@
 import MixinInterface from '../interfaces/MixinInterface';
 import AppService from '../class/AppService';
 import MixinsAppService from '../class/MixinsAppService';
-import { shallowCopy as arrayShallowCopy } from '../helpers/Arrays';
+import {shallowCopy as arrayShallowCopy} from '../helpers/Arrays';
+import PageHandlerComponent from "../class/PageHandlerComponent";
 
 export class MixinService extends AppService {
   /**
@@ -16,16 +17,25 @@ export class MixinService extends AppService {
    * @param args
    * @param callback
    * @param group
+   * @param timeoutLimit
    */
-  invokeUntilComplete(method, group = 'app', args = [], callback) {
-    let registry = {};
-    let mixins = arrayShallowCopy(this.app.mixins);
-    let loops = 0;
-    let loopsLimit = 100;
-    let errorTrace = [];
+  invokeUntilComplete(method, group = 'app', args = [], callback, timeoutLimit: number = 2000) {
+    let registry: { [key: string]: string } = {};
+    let mixins: MixinInterface[] = arrayShallowCopy(this.app.mixins) as MixinInterface[];
+    let loops: number = 0;
+    let loopsLimit: number = 100;
+    let errorTrace: MixinInterface[] = [];
+    let mixin: MixinInterface;
+
+    let timeout = setTimeout(() => {
+      throw (
+        `Mixins invocation timeout on method "${method}", stopping at "${mixin.name}".`
+      );
+    }, timeoutLimit);
 
     let step = () => {
-      let mixin = mixins.shift() as MixinInterface;
+      mixin = mixins.shift() as MixinInterface;
+
       if (mixin) {
         if (loops++ > loopsLimit) {
           console.error(errorTrace);
@@ -63,6 +73,8 @@ export class MixinService extends AppService {
       }
       // No more service.
       else {
+        clearTimeout(timeout);
+
         callback && callback(registry);
       }
     };
