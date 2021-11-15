@@ -3,6 +3,7 @@ import RenderDataPageInterface from "../interfaces/RenderDataPageInterface";
 import Page from "../class/Page";
 import PageHandlerComponent from "../class/PageHandlerComponent";
 import Keyboard from "../helpers/Keyboard";
+import Mouse from "../helpers/Mouse";
 
 export default {
   bundleGroup: 'component',
@@ -11,6 +12,10 @@ export default {
     closing: boolean
     elContent: HTMLElement
     listenKeyboardKey: string[] = [Keyboard.KEY_ESCAPE]
+    mouseDownOverlayTarget: EventTarget | null
+    mouseDownOverlayTimestamp: number | null
+    onMouseDownOverlayProxy: EventListenerObject
+    onMouseUpOverlayProxy: EventListenerObject
     opened: boolean = false
 
     init(renderData: RenderDataComponentInterface) {
@@ -32,6 +37,23 @@ export default {
       }
     }
 
+    protected activateListeners(): void {
+      super.activateListeners();
+
+      this.onMouseDownOverlayProxy = this.onMouseDownOverlay.bind(this);
+      this.onMouseUpOverlayProxy = this.onMouseUpOverlay.bind(this);
+
+      this.el.addEventListener('mousedown', this.onMouseDownOverlayProxy);
+      this.el.addEventListener('mouseup', this.onMouseUpOverlayProxy);
+    }
+
+    protected deactivateListeners(): void {
+      super.deactivateListeners();
+
+      this.el.removeEventListener('mousedown', this.onMouseDownOverlayProxy);
+      this.el.removeEventListener('mouseup', this.onMouseUpOverlayProxy);
+    }
+
     open() {
       if (this.opened) {
         return;
@@ -46,8 +68,11 @@ export default {
     }
 
     close() {
+      this.closing = true;
       this.el.classList.remove('opened');
       this.el.classList.add('closed');
+
+      this.blur();
 
       // Sync with CSS animation.
       setTimeout(() => {
@@ -56,8 +81,29 @@ export default {
           this.focused =
             this.closing = false;
       }, 400);
+    }
 
-      this.blur();
+    onMouseDownOverlay(event: MouseEvent) {
+      // Accept closing modal on clicking on the overlay,
+      // only if the mousedown is started on the overlay itself.
+      if (event.target === event.currentTarget) {
+        this.mouseDownOverlayTarget = event.target;
+        this.mouseDownOverlayTimestamp = Date.now();
+      } else {
+        this.mouseDownOverlayTarget = null;
+        this.mouseDownOverlayTimestamp = null;
+      }
+    }
+
+    onMouseUpOverlay(event: MouseEvent) {
+      // Check that click has been on the same element.
+      // Then prevent too long clicks.
+      if (
+        event.target === this.mouseDownOverlayTarget &&
+        Date.now() - this.mouseDownOverlayTimestamp < Mouse.CLICK_DURATION
+      ) {
+        this.close();
+      }
     }
   },
 };

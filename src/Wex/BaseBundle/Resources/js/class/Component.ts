@@ -76,7 +76,7 @@ export default abstract class Component extends AppChild {
     }
   }
 
-  protected deactivateListeners() {
+  protected deactivateListeners(): void {
     if (this.listenKeyboardKey.length) {
       document.removeEventListener(
         'keyup',
