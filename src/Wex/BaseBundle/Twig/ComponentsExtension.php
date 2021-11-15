@@ -14,6 +14,8 @@ use JetBrains\PhpStorm\Pure;
 use Twig\Environment;
 use Twig\TwigFunction;
 use function array_merge;
+use function array_pop;
+use function end;
 use function trim;
 
 class ComponentsExtension extends AbstractExtension

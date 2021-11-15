@@ -2,6 +2,8 @@
 
 namespace App\Wex\BaseBundle\Service;
 
+use function uniqid;
+
 class RenderingService
 {
     public const VAR_RENDER_REQUEST_ID = 'renderRequestId';
