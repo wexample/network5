@@ -39,10 +39,8 @@ const bundle: AssetBundleInterface = {
       this.el
         .querySelector('#page-modal-show')
         .addEventListener('click', () => {
-          let modalsService = this.services.modals;
-
-          modalsService
-            .get('/demo/loading/fetch/simple', {});
+          this.services.modals
+            .get('/demo/loading/fetch/simple');
         });
     }
   },

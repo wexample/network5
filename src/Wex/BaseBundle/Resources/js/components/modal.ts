@@ -48,10 +48,14 @@ export default {
     close() {
       this.el.classList.remove('opened');
       this.el.classList.add('closed');
-      
-      this.opened =
-      this.focused =
-      this.closing = false;
+
+      // Sync with CSS animation.
+      setTimeout(() => {
+        this.el.classList.remove('closed');
+        this.opened =
+          this.focused =
+            this.closing = false;
+      }, 400);
 
       this.blur();
     }

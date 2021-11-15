@@ -1,4 +1,4 @@
-import { MixinQueues, QueuesService } from './Queues';
+import {MixinQueues, QueuesService} from './Queues';
 import AssetsCollectionInterface from '../interfaces/AssetsCollectionInterface';
 import MixinInterface from '../interfaces/MixinInterface';
 import Queue from '../class/Queue';
@@ -13,9 +13,10 @@ export class AssetsService extends AppService {
 
   public static UPDATE_FILTER_REJECT = 'reject';
 
-  queue: Queue;
-  jsAssetsPending: object = {};
-  updateFilters: Function[] = [];
+  public assetsRegistry: any = {css: {}, js: {}};
+  public queue: Queue;
+  public jsAssetsPending: object = {};
+  public updateFilters: Function[] = [];
 
   appendAsset(asset, callback: Function = null) {
     let queue: Queue = this.queue;
@@ -163,11 +164,20 @@ export class AssetsService extends AppService {
     let toLoad = {};
     let toUnload = {};
     let hasChange = false;
+    let assetsRegistry = this.assetsRegistry;
 
     this.forEachAssetInCollection(
       assetsCollection,
       (asset: AssetsInterface) => {
         let type = asset.type;
+
+        // Asset has already been loaded,
+        // so it's local status may have been update,
+        // so we always prefer local version.
+        if (assetsRegistry[type][asset.name]) {
+          asset = assetsRegistry[type][asset.name];
+        }
+
         toLoad[type] = toLoad[type] || [];
         toUnload[type] = toUnload[type] || [];
 
@@ -175,6 +185,7 @@ export class AssetsService extends AppService {
           if (!asset.active) {
             hasChange = true;
             toLoad[type].push(asset);
+            assetsRegistry[type][asset.name] = asset;
           }
         } else {
           if (asset.active) {
