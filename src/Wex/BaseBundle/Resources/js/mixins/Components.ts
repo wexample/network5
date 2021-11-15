@@ -9,13 +9,13 @@ import RenderDataLayoutInterface from "../interfaces/RenderDataLayoutInterface";
 import PageHandlerComponent from "../class/PageHandlerComponent";
 
 export class ComponentsService extends AppService {
-  elTemplates: HTMLElement
+  elLayoutComponents: HTMLElement
   pageHandlerRegistry: { [key: string]: PageHandlerComponent } = {};
 
   constructor(app: App) {
     super(app);
 
-    this.elTemplates = document.getElementById('component-templates');
+    this.elLayoutComponents = document.getElementById('layout-components');
   }
 
   create(elContext: HTMLElement, renderData: RenderDataComponentInterface) {
@@ -41,7 +41,7 @@ export class ComponentsService extends AppService {
   loadRenderData(data: RenderDataLayoutInterface) {
     if (data.templates) {
       // Append html for global components.
-      this.elTemplates
+      this.elLayoutComponents
         .insertAdjacentHTML('beforeend', data.templates);
     }
 
