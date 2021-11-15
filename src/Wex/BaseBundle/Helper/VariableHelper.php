@@ -13,7 +13,7 @@ class VariableHelper
     public const ASSETS = 'assets';
 
     public const CLASS_VAR = 'class';
-    
+
     public const CONTEXT = 'context';
 
     public const BODY = 'body';

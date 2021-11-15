@@ -25,8 +25,7 @@ abstract class AbstractPagesController extends AbstractController
         protected AdaptiveResponseService $adaptiveResponse,
         protected Environment $twigEnvironment,
         protected RequestStack $requestStack,
-    )
-    {
+    ) {
         parent::__construct(
             $adaptiveResponse,
             $twigEnvironment
@@ -47,8 +46,7 @@ abstract class AbstractPagesController extends AbstractController
         string $view,
         array $parameters = [],
         Response $response = null
-    ): Response
-    {
+    ): Response {
         $templatePath = $this->buildTemplatePath($view);
 
         return $this->render(

@@ -1,11 +1,10 @@
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
-import App from "./App";
-import RenderDataPageInterface from "../interfaces/RenderDataPageInterface";
-import Page from "./Page";
-import Component from "./Component";
+import App from './App';
+import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
+import Page from './Page';
+import Component from './Component';
 
 export default abstract class PageHandlerComponent extends Component {
-
   protected constructor(
     app: App,
     elContext: HTMLElement,
@@ -18,7 +17,8 @@ export default abstract class PageHandlerComponent extends Component {
     // Basically a modal or a panel (layout level).
     if (renderData.options.adaptiveResponseBodyDestination) {
       // Save component in registry for further usage.
-      this.services.components.pageHandlerRegistry[renderData.renderRequestId] = this;
+      this.services.components.pageHandlerRegistry[renderData.renderRequestId] =
+        this;
     }
   }
 
@@ -27,7 +27,10 @@ export default abstract class PageHandlerComponent extends Component {
    * @param renderData
    * @param page
    */
-  public renderPageEl(renderData: RenderDataPageInterface, page: Page): HTMLElement {
+  public renderPageEl(
+    renderData: RenderDataPageInterface,
+    page: Page
+  ): HTMLElement {
     // To override...
     return null as HTMLElement;
   }

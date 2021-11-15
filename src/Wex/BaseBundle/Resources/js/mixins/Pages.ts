@@ -1,4 +1,4 @@
-import {MixinLocale} from './Locale';
+import { MixinLocale } from './Locale';
 import MixinInterface from '../interfaces/MixinInterface';
 import Page from '../class/Page';
 import AppService from '../class/AppService';
@@ -6,8 +6,8 @@ import MixinsAppService from '../class/MixinsAppService';
 import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
 import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 import RequestOptionsPageInterface from '../interfaces/RequestOptionsPageInterface';
-import {MixinAdaptive} from './Adaptive';
-import {ServiceRegistryPageInterface} from '../interfaces/ServiceRegistryPageInterface';
+import { MixinAdaptive } from './Adaptive';
+import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
 
 export class PagesService extends AppService {
   pages: {};
@@ -53,7 +53,6 @@ export const MixinPages: MixinInterface = {
 
             return MixinsAppService.LOAD_STATUS_STOP;
           } else {
-
             return MixinsAppService.LOAD_STATUS_COMPLETE;
           }
         }

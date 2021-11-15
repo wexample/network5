@@ -31,8 +31,7 @@ class RegistrationController extends AbstractPagesController
         private EmailVerifier $emailVerifier,
         Environment $twigEnvironment,
         RequestStack $requestStack,
-    )
-    {
+    ) {
         parent::__construct(
             $adaptiveResponse,
             $twigEnvironment,
@@ -105,7 +104,8 @@ class RegistrationController extends AbstractPagesController
         try
         {
             $this->emailVerifier->handleEmailConfirmation($request, $user);
-        } catch (VerifyEmailExceptionInterface $verifyEmailExceptionInterface)
+        }
+        catch (VerifyEmailExceptionInterface $verifyEmailExceptionInterface)
         {
             $this->addFlash('verify_email_error', $verifyEmailExceptionInterface->getReason());
 

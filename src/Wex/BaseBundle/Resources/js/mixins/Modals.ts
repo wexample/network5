@@ -8,10 +8,7 @@ export class ModalsService extends AppService {
     pages: PagesService;
   };
 
-  get(
-    path: string,
-    options: RequestOptionsModalInterface = {}
-  ): Promise<any> {
+  get(path: string, options: RequestOptionsModalInterface = {}): Promise<any> {
     options.layout = options.layout || 'modal';
 
     return this.services.pages.get(path, options);

@@ -10,12 +10,11 @@ use Twig\Environment;
 
 abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController implements AdaptiveResponseControllerInterface
 {
+    /* Set methods for adaptive rendering. */
+    use AdaptiveResponseControllerTrait;
     protected bool $templateUseJs;
 
     protected string $requestUri;
-
-    /* Set methods for adaptive rendering. */
-    use AdaptiveResponseControllerTrait;
 
     public function __construct(
         protected AdaptiveResponseService $adaptiveResponse,
@@ -46,8 +45,7 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         string $view,
         array $parameters = [],
         Response $response = null
-    ): Response
-    {
+    ): Response {
         // Add global variables for rendering.
         $parameters['layout_use_js'] ??= $this->templateUseJs;
         $parameters['template_path'] = $view;

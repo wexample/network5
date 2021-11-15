@@ -7,8 +7,6 @@ class ComponentContext
     public function __construct(
         public string $renderContext,
         public string $name
-    )
-    {
-
+    ) {
     }
 }

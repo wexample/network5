@@ -1,24 +1,24 @@
-import RenderDataComponentInterface from "../interfaces/RenderDataComponentInterface";
-import RenderDataPageInterface from "../interfaces/RenderDataPageInterface";
-import Page from "../class/Page";
-import PageHandlerComponent from "../class/PageHandlerComponent";
-import Keyboard from "../helpers/Keyboard";
-import Mouse from "../helpers/Mouse";
-import Variables from "../helpers/Variables";
-import Events from "../helpers/Events";
+import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
+import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
+import Page from '../class/Page';
+import PageHandlerComponent from '../class/PageHandlerComponent';
+import Keyboard from '../helpers/Keyboard';
+import Mouse from '../helpers/Mouse';
+import Variables from '../helpers/Variables';
+import Events from '../helpers/Events';
 
 export default {
   bundleGroup: 'component',
 
   definition: class extends PageHandlerComponent {
-    closing: boolean
-    elContent: HTMLElement
-    listenKeyboardKey: string[] = [Keyboard.KEY_ESCAPE]
-    mouseDownOverlayTarget: EventTarget | null
-    mouseDownOverlayTimestamp: number | null
-    onMouseDownOverlayProxy: EventListenerObject
-    onMouseUpOverlayProxy: EventListenerObject
-    opened: boolean = false
+    closing: boolean;
+    elContent: HTMLElement;
+    listenKeyboardKey: string[] = [Keyboard.KEY_ESCAPE];
+    mouseDownOverlayTarget: EventTarget | null;
+    mouseDownOverlayTimestamp: number | null;
+    onMouseDownOverlayProxy: EventListenerObject;
+    onMouseUpOverlayProxy: EventListenerObject;
+    opened: boolean = false;
 
     init(renderData: RenderDataComponentInterface) {
       this.elContent = this.el.querySelector('.modal-content');
@@ -28,7 +28,10 @@ export default {
       this.open();
     }
 
-    public renderPageEl(renderData: RenderDataPageInterface, page: Page): HTMLElement {
+    public renderPageEl(
+      renderData: RenderDataPageInterface,
+      page: Page
+    ): HTMLElement {
       this.elContent.innerHTML = renderData.body;
       return this.elContent;
     }
@@ -52,7 +55,10 @@ export default {
     protected deactivateListeners(): void {
       super.deactivateListeners();
 
-      this.el.removeEventListener(Events.MOUSEDOWN, this.onMouseDownOverlayProxy);
+      this.el.removeEventListener(
+        Events.MOUSEDOWN,
+        this.onMouseDownOverlayProxy
+      );
       this.el.removeEventListener(Events.MOUSEUP, this.onMouseUpOverlayProxy);
     }
 
@@ -79,9 +85,7 @@ export default {
       // Sync with CSS animation.
       setTimeout(() => {
         this.el.classList.remove(Variables.CLOSED);
-        this.opened =
-          this.focused =
-            this.closing = false;
+        this.opened = this.focused = this.closing = false;
       }, 400);
     }
 

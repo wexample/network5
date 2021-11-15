@@ -21,8 +21,7 @@ class Component
         public ComponentContext $context,
         public $renderRequestId,
         public array $options = []
-    )
-    {
+    ) {
         $this->id = 'com-'.uniqid();
     }
 
@@ -53,7 +52,7 @@ class Component
             self::VAR_INIT_MODE => $this->initMode,
             VariableHelper::NAME => $this->name,
             VariableHelper::OPTIONS => $this->options,
-            RenderingService::VAR_RENDER_REQUEST_ID => $this->renderRequestId
+            RenderingService::VAR_RENDER_REQUEST_ID => $this->renderRequestId,
         ];
     }
 }

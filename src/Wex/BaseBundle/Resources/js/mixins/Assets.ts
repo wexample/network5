@@ -1,4 +1,4 @@
-import {MixinQueues, QueuesService} from './Queues';
+import { MixinQueues, QueuesService } from './Queues';
 import AssetsCollectionInterface from '../interfaces/AssetsCollectionInterface';
 import MixinInterface from '../interfaces/MixinInterface';
 import Queue from '../class/Queue';
@@ -13,7 +13,7 @@ export class AssetsService extends AppService {
 
   public static UPDATE_FILTER_REJECT = 'reject';
 
-  public assetsRegistry: any = {css: {}, js: {}};
+  public assetsRegistry: any = { css: {}, js: {} };
   public queue: Queue;
   public jsAssetsPending: object = {};
   public updateFilters: Function[] = [];

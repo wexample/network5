@@ -9,12 +9,11 @@ use App\Wex\BaseBundle\Rendering\AdaptiveResponse;
 use App\Wex\BaseBundle\Twig\ComponentsExtension;
 use App\Wex\BaseBundle\Twig\TemplateExtension;
 use Exception;
+use function in_array;
+use function is_null;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use function array_merge_recursive;
-use function in_array;
-use function is_null;
 use function trim;
 
 class AdaptiveResponseService
@@ -98,7 +97,7 @@ class AdaptiveResponseService
                 );
 
                 $comExt->comInitLayout('components/modal', [
-                    'adaptiveResponseBodyDestination' => true
+                    'adaptiveResponseBodyDestination' => true,
                 ]);
             }
 
@@ -195,8 +194,7 @@ class AdaptiveResponseService
     public function setView(
         string $view,
         $parameters = null
-    ): self
-    {
+    ): self {
         $this->view = $view;
 
         if ($parameters)
@@ -271,8 +269,7 @@ class AdaptiveResponseService
 
     public function setController(
         AbstractController $controller
-    ): self
-    {
+    ): self {
         $this->currentController = $controller;
 
         return $this;

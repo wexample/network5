@@ -3,13 +3,13 @@ import MixinsAppService from '../class/MixinsAppService';
 import AppService from '../class/AppService';
 import Page from '../class/Page';
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
-import {MixinPrompts} from './Prompts';
-import App from "../class/App";
-import RenderDataLayoutInterface from "../interfaces/RenderDataLayoutInterface";
-import PageHandlerComponent from "../class/PageHandlerComponent";
+import { MixinPrompts } from './Prompts';
+import App from '../class/App';
+import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
+import PageHandlerComponent from '../class/PageHandlerComponent';
 
 export class ComponentsService extends AppService {
-  elLayoutComponents: HTMLElement
+  elLayoutComponents: HTMLElement;
   pageHandlerRegistry: { [key: string]: PageHandlerComponent } = {};
 
   constructor(app: App) {
@@ -19,9 +19,7 @@ export class ComponentsService extends AppService {
   }
 
   create(elContext: HTMLElement, renderData: RenderDataComponentInterface) {
-    let classDefinition = this.app.getBundleClassDefinition(
-      renderData.name
-    );
+    let classDefinition = this.app.getBundleClassDefinition(renderData.name);
 
     // Prevent multiple alerts for the same component.
     if (!classDefinition) {
@@ -41,21 +39,20 @@ export class ComponentsService extends AppService {
   loadRenderData(data: RenderDataLayoutInterface) {
     if (data.templates) {
       // Append html for global components.
-      this.elLayoutComponents
-        .insertAdjacentHTML('beforeend', data.templates);
+      this.elLayoutComponents.insertAdjacentHTML('beforeend', data.templates);
     }
 
     if (data.components) {
-      this.createComponents(
-        data.components,
-        this.app.elLayout
-      );
+      this.createComponents(data.components, this.app.elLayout);
     }
   }
 
-  createComponents(components: RenderDataComponentInterface[], elContext: HTMLElement) {
+  createComponents(
+    components: RenderDataComponentInterface[],
+    elContext: HTMLElement
+  ) {
     components.forEach((data: RenderDataComponentInterface) => {
-      this.create(elContext, data)
+      this.create(elContext, data);
     });
   }
 }
@@ -67,13 +64,8 @@ export const MixinComponents: MixinInterface = {
 
   hooks: {
     app: {
-      loadRenderData(
-        data: RenderDataLayoutInterface,
-        registry: any
-      ) {
-        if (
-          registry.assets !== MixinsAppService.LOAD_STATUS_COMPLETE
-        ) {
+      loadRenderData(data: RenderDataLayoutInterface, registry: any) {
+        if (registry.assets !== MixinsAppService.LOAD_STATUS_COMPLETE) {
           return MixinsAppService.LOAD_STATUS_WAIT;
         }
 

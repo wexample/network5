@@ -8,9 +8,9 @@ use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Service\RenderingService;
 use App\Wex\BaseBundle\Service\TemplateService;
 use App\Wex\BaseBundle\Translation\Translator;
-use Exception;
 use function array_merge_recursive;
 use Doctrine\DBAL\Types\Types;
+use Exception;
 use JetBrains\PhpStorm\ArrayShape;
 use function str_ends_with;
 use function strlen;
@@ -37,8 +37,7 @@ class TemplateExtension extends AbstractExtension
         private KernelInterface $kernel,
         private RenderingService $renderingService,
         private TemplateService $templateService
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array
@@ -72,8 +71,7 @@ class TemplateExtension extends AbstractExtension
         Environment $env,
         string $pageTemplateName,
         string $layoutTheme
-    ): array
-    {
+    ): array {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -105,8 +103,7 @@ class TemplateExtension extends AbstractExtension
         Environment $env,
         string $pageTemplateName,
         string $body
-    ): array
-    {
+    ): array {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -126,7 +123,7 @@ class TemplateExtension extends AbstractExtension
                 VariableHelper::PAGE => [
                     VariableHelper::BODY => $body,
                 ],
-                VariableHelper::PLURAL_TEMPLATE => $templates
+                VariableHelper::PLURAL_TEMPLATE => $templates,
             ]
         );
     }
@@ -143,8 +140,7 @@ class TemplateExtension extends AbstractExtension
     public function templateBuildPageRenderData(
         Environment $env,
         string $pageName
-    ): array
-    {
+    ): array {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -191,8 +187,7 @@ class TemplateExtension extends AbstractExtension
     public function templateBuildRenderData(
         Environment $env,
         string $pageTemplateName = null
-    ): array
-    {
+    ): array {
         /** @var JsExtension $jsExtension */
         $jsExtension = $env->getExtension(
             JsExtension::class

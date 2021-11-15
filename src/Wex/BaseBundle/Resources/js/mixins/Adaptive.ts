@@ -1,7 +1,7 @@
 import RequestOptionsAdaptiveInterface from '../interfaces/RequestOptionsAdaptiveInterface';
 import MixinInterface from '../interfaces/MixinInterface';
 import AppService from '../class/AppService';
-import MixinsAppService from "../class/MixinsAppService";
+import MixinsAppService from '../class/MixinsAppService';
 
 export class AdaptiveService extends AppService {
   get(path, options: RequestOptionsAdaptiveInterface): Promise<any> {
@@ -21,7 +21,7 @@ export class AdaptiveService extends AppService {
         // TODO ERRORS HANDLING
       })
       .then((response) => {
-        this.app.loadRenderData(response)
+        this.app.loadRenderData(response);
       });
   }
 }

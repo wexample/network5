@@ -1,6 +1,6 @@
 import RenderDataInterface from './RenderDataInterface';
 import RenderDataPageInterface from './RenderDataPageInterface';
-import RenderDataComponentInterface from "./RenderDataComponentInterface";
+import RenderDataComponentInterface from './RenderDataComponentInterface';
 
 export default interface RenderDataLayoutInterface extends RenderDataInterface {
   displayBreakpoints?: object;
