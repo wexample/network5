@@ -1,0 +1,32 @@
+// Using compiled css file avoid useless building deprecation notices.
+@import '~@fortawesome/fontawesome-free/css/all.css';
+
+@import '../mixins/icons_fa';
+@import '../mixins/global';
+
+// Icons.
+.icon {
+  display: inline-block;
+  line-height: normal;
+  font-size: 1.3rem;
+
+  .fa:before {
+    font-size: 80%;
+    padding: 10%;
+  }
+}
+
+// Allow to use font awesome icons in materialize input fields.
+.input-field .prefix.fa {
+  @include fa-margins;
+}
+
+// No double chevron in free version,
+// Allow second chevron icon to have a "double" class.
+
+.icon.double {
+  .fa-chevron-right,
+  .fa-chevron-left {
+    margin-left: -0.6rem;
+  }
+}

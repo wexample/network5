@@ -1,0 +1,13 @@
+$font-awesome-font-name: 'Font Awesome 5 Free';
+
+@mixin fa-icon {
+  font-family: $font-awesome-font-name;
+  font-weight: 900;
+  @include fa-margins;
+}
+
+@mixin fa-margins {
+  font-size: 1.6rem;
+  margin-left: 0.3rem;
+  margin-top: 0.2rem;
+}

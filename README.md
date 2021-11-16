@@ -13,7 +13,8 @@ A Symfony based system to generate lightweight web pages.
 - Twig
 - Doctrine
 - Google Material Components
-- Font Awesome Free Edition for the Web
+- Google Material Icons
+- Font Awesome Free Edition
 - TypeScript
 - VueJs
 - A bunch of wex customisations
