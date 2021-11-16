@@ -3,7 +3,6 @@
 
 // Use custom name to avoid conflict with materialize.
 .modal {
-  $finalOpacity: 0.8;
   z-index: 999;
   align-items: center;
   justify-content: center;
@@ -15,9 +14,8 @@
   display: none;
 
   .layout-modal {
-    background-color: white;
     box-shadow: 0 0.2rem 0.2rem rgba(0, 0, 0, 0.4),
-      0 0.6rem 2.3rem 0.7rem rgba(0, 0, 0, 0.21);
+    0 0.6rem 2.3rem 0.7rem rgba(0, 0, 0, 0.21);
     margin: 0 4rem;
     width: 40rem;
     max-width: 50rem;
@@ -35,10 +33,10 @@
   &.opened {
     @keyframes modal-page-overlay-open {
       from {
-        background: rgba(0, 0, 0, 0);
+        background: rgba($modal-overlay-color, 0);
       }
       to {
-        background: rgba(0, 0, 0, $finalOpacity);
+        background: rgba($modal-overlay-color, $modal-overlay-opacity);
       }
     }
 
@@ -66,11 +64,11 @@
   &.closed {
     @keyframes modal-page-overlay-close {
       from {
-        background: rgba(0, 0, 0, $finalOpacity);
+        background: rgba($modal-overlay-color, $modal-overlay-opacity);
       }
       to {
         display: none;
-        background: rgba(0, 0, 0, 0);
+        background: rgba($modal-overlay-color, 0);
       }
     }
 
@@ -135,7 +133,6 @@
     padding: 1rem 1.3rem;
     margin: 0;
     flex-basis: 100%;
-    color: rgba(0, 0, 0, 0.5);
   }
 
   .close {

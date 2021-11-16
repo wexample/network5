@@ -43,6 +43,7 @@ class AssetsExtension extends AbstractExtension
 
     public const THEMES = [
         self::THEME_DARK,
+        self::THEME_DEFAULT,
         self::THEME_LIGHT,
         self::THEME_PRINT,
     ];
@@ -70,7 +71,8 @@ class AssetsExtension extends AbstractExtension
      */
     public function __construct(
         KernelInterface $kernel
-    ) {
+    )
+    {
         $this->pathProject = $kernel->getProjectDir().'/';
         $this->pathPublic = $this->pathProject.self::DIR_PUBLIC;
         $this->pathBuild = $this->pathPublic.self::DIR_BUILD;
@@ -156,7 +158,8 @@ class AssetsExtension extends AbstractExtension
     public function assetsInitLayout(
         ?string $layoutName,
         bool $useJs,
-    ) {
+    )
+    {
         $layoutName = $layoutName ?: TemplateExtension::LAYOUT_NAME_DEFAULT;
         $backEndAssets = $this->assets;
         $this->assets = self::ASSETS_DEFAULT_EMPTY;
@@ -199,7 +202,8 @@ class AssetsExtension extends AbstractExtension
     public function assetsInitTemplate(
         string $templateName,
         bool $useJs
-    ) {
+    )
+    {
         $assets = $this->assetsDetect(
             $templateName,
             RenderingHelper::CONTEXT_PAGE
@@ -253,7 +257,8 @@ class AssetsExtension extends AbstractExtension
     public function assetsDetect(
         string $templateName,
         string $context
-    ): array {
+    ): array
+    {
         $output = [];
 
         foreach (Asset::ASSETS_EXTENSIONS as $ext)
@@ -277,7 +282,8 @@ class AssetsExtension extends AbstractExtension
         string $ext,
         string $context,
         bool $searchTheme
-    ): array {
+    ): array
+    {
         $assetPathFull = $ext.'/'.$assetPath.'.'.$ext;
         $output = [];
 
@@ -359,7 +365,8 @@ class AssetsExtension extends AbstractExtension
     public function addAsset(
         string $pathRelative,
         string $renderContext
-    ): ?Asset {
+    ): ?Asset
+    {
         $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
         if (!isset($this->manifest[$pathRelativeToPublic]))
         {
@@ -374,8 +381,7 @@ class AssetsExtension extends AbstractExtension
             );
 
             $this->assetsLoaded[$pathRelative] = $asset;
-        }
-        else
+        } else
         {
             $asset = $this->assetsLoaded[$pathRelative];
         }

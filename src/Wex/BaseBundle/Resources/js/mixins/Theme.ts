@@ -4,17 +4,19 @@ import AppService from '../class/AppService';
 import AssetsInterface from '../interfaces/AssetInterface';
 
 export class ThemeService extends AppService {
+
   public static THEME_DARK: string = 'dark';
+
   public static THEME_DEFAULT: string = 'default';
+
   public static THEME_LIGHT: string = 'light';
+
   public static THEME_PRINT: string = 'print';
 
   activeColorScheme?: string = ThemeService.THEME_DEFAULT;
   activePrint: boolean = false;
-  activeTheme: string = null;
-
+  activeTheme: string = ThemeService.THEME_DEFAULT;
   colorSchemes: string[] = [ThemeService.THEME_DARK, ThemeService.THEME_LIGHT];
-
   userHasForced?: null;
 
   activateListeners() {
