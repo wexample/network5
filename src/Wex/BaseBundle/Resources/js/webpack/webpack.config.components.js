@@ -27,9 +27,3 @@ tools.title('Components global');
     'components'
   );
 });
-
-tools.addAssetsCss(
-  './src/Wex/BaseBundle/Resources/',
-  'css/components/',
-  'scss'
-);
