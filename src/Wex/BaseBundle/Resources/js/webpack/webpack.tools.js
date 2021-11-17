@@ -2,6 +2,8 @@ const Encore = require('@symfony/webpack-encore');
 const glob = require('glob');
 const fs = require('fs');
 
+let entries = {};
+
 module.exports = {
   title(string) {
     console.log('');
@@ -61,9 +63,17 @@ module.exports = {
             .slice(0, -1)
             .join('.');
 
-          console.log('Watching : ' + srcFile.file);
-          console.log('    -> to ' + fileDist);
-          Encore[command](fileDist, srcFile.file);
+          // Ignore duplicates, it allows local script to override core script.
+          if (!entries[fileDist]) {
+            console.log('Watching : ' + srcFile.file);
+            console.log('    -> to ' + fileDist);
+            entries[fileDist] = srcFile.file;
+            Encore[command](fileDist, srcFile.file);
+          }
+          else {
+            console.log('Ignoring : ' + srcFile.file);
+            console.log('    -> Item already registered');
+          }
         }
       }
     }
