@@ -12,6 +12,7 @@ $global-theme-name: 'default';
 
 body.theme-default {
   // By default, the default theme is dark.
-  // We need to adjust modals and panels to use a
+  // We need to adjust modals and panels
+  // to use the light theme.
   @extend .theme-dark;
 }
