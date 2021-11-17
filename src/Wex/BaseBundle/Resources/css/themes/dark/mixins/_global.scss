@@ -1,9 +1,10 @@
 @import '../../../mixins/global';
 
 $color-default-background: black !default;
+$color-default-background-invert: white !default;
 $color-default-text: #888;
-$color-default-link: #fff;
-$color-default-title: #fff;
+$color-default-link: $color-default-background-invert !default;
+$color-default-title: $color-default-background-invert !default;
 
 // Disabled.
 $color-disabled-background: #222;
