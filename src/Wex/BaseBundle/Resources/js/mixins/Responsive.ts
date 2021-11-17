@@ -13,9 +13,8 @@ export class ResponsiveService extends AppService {
   updateResponsive(updateAssets: boolean, complete?: Function) {
     let current = this.detectSize();
 
-    this.responsiveSizePrevious = this.responsiveSizeCurrent;
-
-    if (current !== this.responsiveSizePrevious) {
+    if (current !== this.responsiveSizeCurrent) {
+      this.responsiveSizePrevious = this.responsiveSizeCurrent;
       this.responsiveSizeCurrent = current;
 
       if (updateAssets) {
