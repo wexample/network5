@@ -1,14 +1,19 @@
 @import '../mixins/global';
 
-body.theme-light {
+.theme-light {
   background: $color-default-background;
 }
 
-body.theme-light,
-body.theme-default .theme-light {
+.theme-light,
+.theme-default .page,
+.theme-default .theme-light {
   color: $color-default-text;
 
   a {
     color: $color-default-link;
+  }
+
+  #{$selector-title-all} {
+    color: $color-default-title;
   }
 }

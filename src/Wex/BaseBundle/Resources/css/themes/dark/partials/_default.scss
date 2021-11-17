@@ -1,11 +1,12 @@
 @import '../mixins/global';
 
-body.theme-dark {
+.theme-dark {
   background: $color-default-background;
 }
 
-body.theme-dark,
-body.theme-default .theme-dark {
+.theme-dark,
+.theme-default .page,
+.theme-default .theme-dark {
   color: $color-default-text;
 
   a {
