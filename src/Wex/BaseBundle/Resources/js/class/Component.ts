@@ -6,6 +6,7 @@ import Events from '../helpers/Events';
 import {ServiceRegistryComponentInterface} from "../interfaces/ServiceRegistryComponentInterface";
 
 export default abstract class Component extends AppChild {
+  autoActivateListeners: boolean = true;
   el: HTMLElement;
   elContext: HTMLElement;
   services: ServiceRegistryComponentInterface;
@@ -102,6 +103,8 @@ export default abstract class Component extends AppChild {
   }
 
   public init(renderData: RenderDataComponentInterface) {
-    this.activateListeners();
+    if (this.autoActivateListeners) {
+      this.activateListeners();
+    }
   }
 }

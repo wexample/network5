@@ -1,4 +1,6 @@
 export default abstract class {
+  public static CLICK = 'click';
+  
   public static KEYDOWN = 'keydown';
 
   public static KEYUP = 'keyup';

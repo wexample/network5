@@ -30,13 +30,9 @@ export default abstract class PageHandlerComponent extends Component {
    * @param renderData
    * @param page
    */
-  public renderPageEl(
-    renderData: RenderDataPageInterface,
-    page: Page
-  ) {
-    // No more usage.
-    delete this.services.components.pageHandlerRegistry[renderData.renderRequestId];
-  }
+  public abstract renderPageEl(page: Page, renderData: RenderDataPageInterface);
 
   public abstract getPageEl(): HTMLElement;
+
+  public abstract initPage(page: Page, renderData: RenderDataPageInterface): void;
 }

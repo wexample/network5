@@ -11,11 +11,13 @@ export default {
   bundleGroup: 'component',
 
   definition: class extends PageHandlerComponent {
+    autoActivateListeners: boolean = false;
     closing: boolean;
     elContent: HTMLElement;
     listenKeyboardKey: string[] = [Keyboard.KEY_ESCAPE];
     mouseDownOverlayTarget: EventTarget | null;
     mouseDownOverlayTimestamp: number | null;
+    onClickCloseProxy: EventListenerObject;
     onMouseDownOverlayProxy: EventListenerObject;
     onMouseUpOverlayProxy: EventListenerObject;
     opened: boolean = false;
@@ -24,19 +26,16 @@ export default {
       this.elContent = this.el.querySelector('.modal-content');
 
       super.init(renderData);
+    }
 
+    initPage(page: Page, renderData: RenderDataPageInterface) {
       this.open();
     }
 
     public renderPageEl(
-      renderData: RenderDataPageInterface,
-      page: Page
+      page: Page,
+      renderData: RenderDataPageInterface
     ) {
-      super.renderPageEl(
-        renderData,
-        page
-      );
-
       this.elContent.innerHTML = renderData.body;
     }
 
@@ -55,9 +54,13 @@ export default {
 
       this.onMouseDownOverlayProxy = this.onMouseDownOverlay.bind(this);
       this.onMouseUpOverlayProxy = this.onMouseUpOverlay.bind(this);
+      this.onClickCloseProxy = this.onClickClose.bind(this);
 
       this.el.addEventListener(Events.MOUSEDOWN, this.onMouseDownOverlayProxy);
       this.el.addEventListener(Events.MOUSEUP, this.onMouseUpOverlayProxy);
+
+      this.el.querySelector('.modal-close a')
+        .addEventListener(Events.CLICK, this.onClickCloseProxy);
     }
 
     protected deactivateListeners(): void {
@@ -97,6 +100,10 @@ export default {
 
         this.remove();
       }, 400);
+    }
+
+    onClickClose() {
+      this.close();
     }
 
     onMouseDownOverlay(event: MouseEvent) {

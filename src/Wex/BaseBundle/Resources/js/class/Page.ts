@@ -6,7 +6,7 @@ import MixinInterface from '../interfaces/MixinInterface';
 import {ServiceRegistryPageInterface} from '../interfaces/ServiceRegistryPageInterface';
 
 export default class extends AppChild {
-  public readonly el: HTMLElement;
+  public el: HTMLElement;
   public readonly elOverlay: HTMLElement;
   public readonly isLayoutPage: boolean;
   public readonly name: string;
@@ -37,7 +37,7 @@ export default class extends AppChild {
     let pageHandlerRegistry = this.services.components.pageHandlerRegistry;
     let pageHandler = pageHandlerRegistry[renderData.renderRequestId];
     if (pageHandler) {
-      pageHandler.renderPageEl(renderData, this);
+      pageHandler.renderPageEl(this, renderData);
       this.el = pageHandler.getPageEl();
     }
 
@@ -49,6 +49,11 @@ export default class extends AppChild {
     }
 
     this.elOverlay = this.el.querySelector('.page-overlay');
+
+    if (pageHandler) {
+      pageHandler.initPage(this, renderData);
+      delete pageHandlerRegistry[renderData.renderRequestId];
+    }
 
     this.app.loadMixins(this.getPageLevelMixins());
   }
