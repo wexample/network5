@@ -332,12 +332,14 @@ class AssetsExtension extends AbstractExtension
             $dirname = dirname($assetPath);
             foreach (self::THEMES as $themeName)
             {
+                // Theme's version should be place in :
+                // themes/[dark|light|...]/same/path
                 $themeAssetPath = implode(
                     FileHelper::FOLDER_SEPARATOR,
                     [
-                        $dirname,
                         VariableHelper::PLURAL_THEME,
                         $themeName,
+                        $dirname,
                         $basename,
                     ]
                 );
