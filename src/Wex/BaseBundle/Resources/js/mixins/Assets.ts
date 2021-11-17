@@ -150,11 +150,18 @@ export class AssetsService extends AppService {
 
   updateAssets(complete?: Function) {
     this.updateAssetsCollection(this.app.registry.layoutData.assets, () => {
-      this.updateAssetsCollection(
-        this.app.layoutPage.renderData.assets,
+      this.updatePageAssets(
+        this.app.layoutPage,
         complete
       );
     });
+  }
+
+  updatePageAssets(page:Page, complete?: Function) {
+      this.updateAssetsCollection(
+        page.renderData.assets,
+        complete
+      );
   }
 
   updateAssetsCollection(
@@ -243,8 +250,7 @@ export const MixinAssets: MixinInterface = {
 
     page: {
       loadPageRenderData(page: Page, registry: any, next: Function) {
-        // Reload all assets, even layout ones.
-        this.app.services.assets.updateAssets(next);
+        this.app.services.assets.updatePageAssets(page, next);
 
         return MixinsAppService.LOAD_STATUS_STOP;
       },
