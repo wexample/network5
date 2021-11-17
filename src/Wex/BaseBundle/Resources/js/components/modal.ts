@@ -31,8 +31,16 @@ export default {
     public renderPageEl(
       renderData: RenderDataPageInterface,
       page: Page
-    ): HTMLElement {
+    ) {
+      super.renderPageEl(
+        renderData,
+        page
+      );
+
       this.elContent.innerHTML = renderData.body;
+    }
+
+    public getPageEl(): HTMLElement {
       return this.elContent;
     }
 
@@ -86,6 +94,8 @@ export default {
       setTimeout(() => {
         this.el.classList.remove(Variables.CLOSED);
         this.opened = this.focused = this.closing = false;
+
+        this.remove();
       }, 400);
     }
 

@@ -1,15 +1,9 @@
 import AppChild from './AppChild';
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
-import { findPreviousNode as DomFindPreviousNode } from '../helpers/Dom';
-import ServiceRegistryAppInterface from '../interfaces/ServiceRegistryAppInterface';
-import { ComponentsService } from '../mixins/Components';
+import {findPreviousNode as DomFindPreviousNode} from '../helpers/Dom';
 import App from './App';
 import Events from '../helpers/Events';
-
-interface ServiceRegistryComponentInterface
-  extends ServiceRegistryAppInterface {
-  components: ComponentsService;
-}
+import {ServiceRegistryComponentInterface} from "../interfaces/ServiceRegistryComponentInterface";
 
 export default abstract class Component extends AppChild {
   el: HTMLElement;
@@ -103,6 +97,8 @@ export default abstract class Component extends AppChild {
 
   public remove() {
     this.deactivateListeners();
+
+    this.el.parentNode.removeChild(this.el);
   }
 
   public init(renderData: RenderDataComponentInterface) {

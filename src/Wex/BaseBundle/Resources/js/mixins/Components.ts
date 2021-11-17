@@ -7,6 +7,7 @@ import { MixinPrompts } from './Prompts';
 import App from '../class/App';
 import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 import PageHandlerComponent from '../class/PageHandlerComponent';
+import Component from "../class/Component";
 
 export class ComponentsService extends AppService {
   elLayoutComponents: HTMLElement;
@@ -31,7 +32,7 @@ export class ComponentsService extends AppService {
         }
       );
     } else {
-      let component = new classDefinition(this.app, elContext, renderData);
+      let component = new classDefinition(this.app, elContext, renderData) as Component;
       component.init(renderData);
     }
   }

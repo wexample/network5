@@ -3,8 +3,11 @@ import App from './App';
 import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
 import Page from './Page';
 import Component from './Component';
+import {ServiceRegistryComponentInterface} from "../interfaces/ServiceRegistryComponentInterface";
 
 export default abstract class PageHandlerComponent extends Component {
+  services: ServiceRegistryComponentInterface;
+
   protected constructor(
     app: App,
     elContext: HTMLElement,
@@ -30,8 +33,10 @@ export default abstract class PageHandlerComponent extends Component {
   public renderPageEl(
     renderData: RenderDataPageInterface,
     page: Page
-  ): HTMLElement {
-    // To override...
-    return null as HTMLElement;
+  ) {
+    // No more usage.
+    delete this.services.components.pageHandlerRegistry[renderData.renderRequestId];
   }
+
+  public abstract getPageEl(): HTMLElement;
 }
