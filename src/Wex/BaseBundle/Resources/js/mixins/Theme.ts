@@ -86,10 +86,9 @@ export class ThemeService extends AppService {
   }
 
   updateTheme(updateAssets: boolean, complete?: Function) {
-    let previous = this.activeTheme;
     let current = this.detectTheme();
 
-    if (previous !== current) {
+    if (this.activeTheme !== current) {
       this.setTheme(current, updateAssets, complete);
     } else {
       complete && complete();
