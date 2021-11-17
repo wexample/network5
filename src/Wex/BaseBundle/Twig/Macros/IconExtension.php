@@ -7,6 +7,10 @@ use stdClass;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\TwigFunction;
 use App\Wex\BaseBundle\Helper\DomHelper;
+use function explode;
+use function file_get_contents;
+use function json_decode;
+use function str_contains;
 
 class IconExtension extends AbstractExtension
 {
@@ -23,7 +27,7 @@ class IconExtension extends AbstractExtension
     /**
      * @var string
      */
-    const LIBRARY_SEPARATOR = ':';
+    public const LIBRARY_SEPARATOR = ':';
 
     protected stdClass $icons;
 
