@@ -2,6 +2,8 @@
 
 namespace App\Wex\BaseBundle\Rendering;
 
+use function property_exists;
+
 class JsonResource
 {
     public function merge(JsonResource $data)
@@ -11,7 +13,8 @@ class JsonResource
             if (property_exists($this, $key))
             {
                 $this->$key = $value;
-            } else
+            }
+            else
             {
                 throw new \Error('Unable to assign variable "'.$key.'" to object of type '.static::class);
             }

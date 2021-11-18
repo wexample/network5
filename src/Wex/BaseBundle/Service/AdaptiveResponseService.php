@@ -195,8 +195,7 @@ class AdaptiveResponseService
     public function setView(
         string $view,
         $parameters = null
-    ): self
-    {
+    ): self {
         $this->view = $view;
 
         if ($parameters)
@@ -271,8 +270,7 @@ class AdaptiveResponseService
 
     public function setController(
         AbstractController $controller
-    ): self
-    {
+    ): self {
         $this->currentController = $controller;
 
         return $this;

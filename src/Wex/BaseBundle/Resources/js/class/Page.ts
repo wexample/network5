@@ -3,7 +3,7 @@ import PageResponsiveDisplay from './PageResponsiveDisplay';
 import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
 import AppChild from './AppChild';
 import MixinInterface from '../interfaces/MixinInterface';
-import {ServiceRegistryPageInterface} from '../interfaces/ServiceRegistryPageInterface';
+import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
 
 export default class extends AppChild {
   public el: HTMLElement;
@@ -106,7 +106,7 @@ export default class extends AppChild {
   }
 
   loadPageRenderData(renderData: RenderDataPageInterface, complete?: Function) {
-    this.vars = {...this.vars, ...renderData.vars};
+    this.vars = { ...this.vars, ...renderData.vars };
     this.renderData = renderData;
 
     this.services.mixins.invokeUntilComplete(

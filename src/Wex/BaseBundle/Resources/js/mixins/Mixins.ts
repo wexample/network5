@@ -40,7 +40,7 @@ export class MixinService extends AppService {
     }, timeoutLimit);
 
     let step = () => {
-      let mixin:MixinInterface = mixins.shift() as MixinInterface;
+      let mixin: MixinInterface = mixins.shift() as MixinInterface;
 
       if (mixin) {
         currentName = mixin.name;

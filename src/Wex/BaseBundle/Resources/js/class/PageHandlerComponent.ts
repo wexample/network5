@@ -3,7 +3,7 @@ import App from './App';
 import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
 import Page from './Page';
 import Component from './Component';
-import {ServiceRegistryComponentInterface} from "../interfaces/ServiceRegistryComponentInterface";
+import { ServiceRegistryComponentInterface } from '../interfaces/ServiceRegistryComponentInterface';
 
 export default abstract class PageHandlerComponent extends Component {
   services: ServiceRegistryComponentInterface;
@@ -34,5 +34,8 @@ export default abstract class PageHandlerComponent extends Component {
 
   public abstract getPageEl(): HTMLElement;
 
-  public abstract initPage(page: Page, renderData: RenderDataPageInterface): void;
+  public abstract initPage(
+    page: Page,
+    renderData: RenderDataPageInterface
+  ): void;
 }

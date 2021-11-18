@@ -32,10 +32,7 @@ export default {
       this.open();
     }
 
-    public renderPageEl(
-      page: Page,
-      renderData: RenderDataPageInterface
-    ) {
+    public renderPageEl(page: Page, renderData: RenderDataPageInterface) {
       this.elContent.innerHTML = renderData.body;
     }
 
@@ -59,7 +56,8 @@ export default {
       this.el.addEventListener(Events.MOUSEDOWN, this.onMouseDownOverlayProxy);
       this.el.addEventListener(Events.MOUSEUP, this.onMouseUpOverlayProxy);
 
-      this.el.querySelector('.modal-close a')
+      this.el
+        .querySelector('.modal-close a')
         .addEventListener(Events.CLICK, this.onClickCloseProxy);
     }
 

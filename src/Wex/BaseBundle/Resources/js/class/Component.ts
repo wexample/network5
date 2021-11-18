@@ -1,9 +1,9 @@
 import AppChild from './AppChild';
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
-import {findPreviousNode as DomFindPreviousNode} from '../helpers/Dom';
+import { findPreviousNode as DomFindPreviousNode } from '../helpers/Dom';
 import App from './App';
 import Events from '../helpers/Events';
-import {ServiceRegistryComponentInterface} from "../interfaces/ServiceRegistryComponentInterface";
+import { ServiceRegistryComponentInterface } from '../interfaces/ServiceRegistryComponentInterface';
 
 export default abstract class Component extends AppChild {
   autoActivateListeners: boolean = true;

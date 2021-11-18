@@ -4,7 +4,6 @@ import AppService from '../class/AppService';
 import AssetsInterface from '../interfaces/AssetInterface';
 
 export class ThemeService extends AppService {
-
   public static THEME_DARK: string = 'dark';
 
   public static THEME_DEFAULT: string = 'default';

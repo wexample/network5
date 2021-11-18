@@ -2,15 +2,15 @@
 
 namespace App\Wex\BaseBundle\Twig\Macros;
 
-use App\Wex\BaseBundle\Twig\AbstractExtension;
-use stdClass;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Twig\TwigFunction;
 use App\Wex\BaseBundle\Helper\DomHelper;
+use App\Wex\BaseBundle\Twig\AbstractExtension;
 use function explode;
 use function file_get_contents;
 use function json_decode;
+use stdClass;
 use function str_contains;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Twig\TwigFunction;
 
 class IconExtension extends AbstractExtension
 {
@@ -33,8 +33,7 @@ class IconExtension extends AbstractExtension
 
     public function __construct(
         KernelInterface $kernel
-    )
-    {
+    ) {
         $pathBundle = $kernel
             ->getBundle('WexBaseBundle')
             ->getPath();
@@ -69,8 +68,7 @@ class IconExtension extends AbstractExtension
         string $name,
         string $class = '',
         string $tagName = 'i'
-    ): string
-    {
+    ): string {
         $type = null;
 
         if (str_contains($name, self::LIBRARY_SEPARATOR))
@@ -87,7 +85,7 @@ class IconExtension extends AbstractExtension
         if (self::ICONS_LIBRARY_MATERIAL === $type || (null === $type && isset($this->icons->material->$name)))
         {
             return DomHelper::buildTag($tagName, [
-                'class' => $class.'material-icons'
+                'class' => $class.'material-icons',
             ], $name);
         }
 
@@ -95,18 +93,19 @@ class IconExtension extends AbstractExtension
         if (self::ICONS_LIBRARY_FA === $type || (null === $type && isset($this->icons->fa->$name)))
         {
             return DomHelper::buildTag(
-                $tagName, [
-                'class' => $class
+                $tagName,
+                [
+                'class' => $class,
             ],
                 DomHelper::buildTag('i', [
-                    'class' => 'fa fa-'.$name
+                    'class' => 'fa fa-'.$name,
                 ])
             );
         }
 
         // Just display tag on error.
         return DomHelper::buildTag($tagName, [
-            'class' => $class
+            'class' => $class,
         ]);
     }
 }

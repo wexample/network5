@@ -69,8 +69,7 @@ module.exports = {
             console.log('    -> to ' + fileDist);
             entries[fileDist] = srcFile.file;
             Encore[command](fileDist, srcFile.file);
-          }
-          else {
+          } else {
             console.log('Ignoring : ' + srcFile.file);
             console.log('    -> Item already registered');
           }

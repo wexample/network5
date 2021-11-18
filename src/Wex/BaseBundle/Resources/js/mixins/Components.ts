@@ -3,11 +3,11 @@ import MixinsAppService from '../class/MixinsAppService';
 import AppService from '../class/AppService';
 import Page from '../class/Page';
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
-import {MixinPrompts} from './Prompts';
+import { MixinPrompts } from './Prompts';
 import App from '../class/App';
 import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 import PageHandlerComponent from '../class/PageHandlerComponent';
-import Component from "../class/Component";
+import Component from '../class/Component';
 
 export class ComponentsService extends AppService {
   elLayoutComponents: HTMLElement;
@@ -19,30 +19,35 @@ export class ComponentsService extends AppService {
     this.elLayoutComponents = document.getElementById('layout-components');
   }
 
-  create(elContext: HTMLElement, renderData: RenderDataComponentInterface, complete?: Function) {
-    this.services.assets.updateAssetsCollection(
-      renderData.assets,
-      () => {
-        let classDefinition = this.app.getBundleClassDefinition(renderData.name);
+  create(
+    elContext: HTMLElement,
+    renderData: RenderDataComponentInterface,
+    complete?: Function
+  ) {
+    this.services.assets.updateAssetsCollection(renderData.assets, () => {
+      let classDefinition = this.app.getBundleClassDefinition(renderData.name);
 
-        // Prevent multiple alerts for the same component.
-        if (!classDefinition) {
-          this.services.prompts.systemError(
-            'page_message.error.com_missing',
-            {},
-            {
-              ':type': renderData.name,
-              ':renderData': renderData
-            }
-          );
-        } else {
-          let component = new classDefinition(this.app, elContext, renderData) as Component;
-          component.init(renderData);
+      // Prevent multiple alerts for the same component.
+      if (!classDefinition) {
+        this.services.prompts.systemError(
+          'page_message.error.com_missing',
+          {},
+          {
+            ':type': renderData.name,
+            ':renderData': renderData,
+          }
+        );
+      } else {
+        let component = new classDefinition(
+          this.app,
+          elContext,
+          renderData
+        ) as Component;
+        component.init(renderData);
 
-          complete && complete();
-        }
+        complete && complete();
       }
-    );
+    });
   }
 
   loadLayoutRenderData(data: RenderDataLayoutInterface, complete?: Function) {
@@ -52,20 +57,12 @@ export class ComponentsService extends AppService {
     }
 
     if (data.components) {
-      this.createComponents(
-        data.components,
-        this.app.elLayout,
-        complete
-      );
+      this.createComponents(data.components, this.app.elLayout, complete);
     }
   }
 
   loadPageRenderData(page: Page, complete?: Function) {
-    this.createComponents(
-      page.renderData.components,
-      page.el,
-      complete
-    );
+    this.createComponents(page.renderData.components, page.el, complete);
   }
 
   createComponents(
@@ -98,7 +95,11 @@ export const MixinComponents: MixinInterface = {
 
   hooks: {
     app: {
-      loadRenderData(data: RenderDataLayoutInterface, registry: any, next: Function) {
+      loadRenderData(
+        data: RenderDataLayoutInterface,
+        registry: any,
+        next: Function
+      ) {
         if (registry.assets !== MixinsAppService.LOAD_STATUS_COMPLETE) {
           return MixinsAppService.LOAD_STATUS_WAIT;
         }

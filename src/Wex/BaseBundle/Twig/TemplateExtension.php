@@ -36,8 +36,7 @@ class TemplateExtension extends AbstractExtension
         private KernelInterface $kernel,
         private RenderingService $renderingService,
         private TemplateService $templateService
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array
@@ -71,8 +70,7 @@ class TemplateExtension extends AbstractExtension
         Environment $env,
         string $pageTemplateName,
         string $layoutTheme
-    ): RenderDataInitialLayout
-    {
+    ): RenderDataInitialLayout {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -112,8 +110,7 @@ class TemplateExtension extends AbstractExtension
         Environment $env,
         string $pageTemplateName,
         string $body
-    ): RenderDataAjax
-    {
+    ): RenderDataAjax {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -145,8 +142,7 @@ class TemplateExtension extends AbstractExtension
     public function templateBuildPageRenderData(
         Environment $env,
         string $pageName
-    ): RenderDataPage
-    {
+    ): RenderDataPage {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -200,8 +196,7 @@ class TemplateExtension extends AbstractExtension
     public function templateBuildLayoutRenderData(
         Environment $env,
         string $pageTemplateName = null
-    ): RenderDataLayout
-    {
+    ): RenderDataLayout {
         /** @var JsExtension $jsExtension */
         $jsExtension = $env->getExtension(
             JsExtension::class

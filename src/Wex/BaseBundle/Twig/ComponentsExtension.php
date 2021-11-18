@@ -44,8 +44,7 @@ class ComponentsExtension extends AbstractExtension
         private AssetsExtension $assetsExtension,
         private RenderingService $renderingService,
         private Translator $translator,
-    )
-    {
+    ) {
         $this->comSetContext(
             RenderingHelper::CONTEXT_LAYOUT,
             null
@@ -55,8 +54,7 @@ class ComponentsExtension extends AbstractExtension
     public function comSetContext(
         string $renderingContext,
         ?string $name,
-    )
-    {
+    ) {
         $this->contextsStack[] = new ComponentContext(
             $renderingContext,
             $name ?: VariableHelper::DEFAULT,
@@ -156,8 +154,7 @@ class ComponentsExtension extends AbstractExtension
         Environment $twig,
         string $name,
         array $options = []
-    ): string
-    {
+    ): string {
         $html = $this->comRenderHtml($twig, $name, $options);
 
         return $html.$this->comInitPrevious($name, $options);
@@ -170,8 +167,7 @@ class ComponentsExtension extends AbstractExtension
         Environment $twig,
         $name,
         $options = []
-    ): ?string
-    {
+    ): ?string {
         $search = [
             // Search local.
             $name.TemplateExtension::TEMPLATE_FILE_EXTENSION,
@@ -207,7 +203,8 @@ class ComponentsExtension extends AbstractExtension
             }
 
             return null;
-        } catch (Exception $exception)
+        }
+        catch (Exception $exception)
         {
             throw new Exception('Error during rendering component '.$name.' : '.$exception->getMessage(), $exception->getCode(), $exception);
         }
@@ -244,8 +241,7 @@ class ComponentsExtension extends AbstractExtension
         string $name,
         string $initMode,
         array $options
-    ): Component
-    {
+    ): Component {
         // Using an object allow continuing edit properties after save.
         $entry = new Component(
             $name,
@@ -280,8 +276,7 @@ class ComponentsExtension extends AbstractExtension
     public function comInitClass(
         string $name,
         array $options = []
-    ): string
-    {
+    ): string {
         $component = $this->registerComponent(
             $name,
             self::INIT_MODE_CLASS,
