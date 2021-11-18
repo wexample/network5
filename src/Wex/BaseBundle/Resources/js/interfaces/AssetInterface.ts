@@ -2,12 +2,12 @@ export default interface AssetsInterface {
   // Defines that assets should be rendered
   // event the loading process is not finished.
   active: boolean;
-  context: string;
   id: string;
   media: string;
   name: string;
   path: string;
   preload: boolean;
+  renderContext: string;
   responsive?: string;
   // Defines that asset has been fully loaded once,
   // so browser will not load it again

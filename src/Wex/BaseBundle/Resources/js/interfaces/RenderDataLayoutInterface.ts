@@ -4,7 +4,7 @@ import RenderDataComponentInterface from './RenderDataComponentInterface';
 
 export default interface RenderDataLayoutInterface extends RenderDataInterface {
   displayBreakpoints?: object;
-  components?: RenderDataComponentInterface[];
+  components: RenderDataComponentInterface[];
   env: string;
   page: RenderDataPageInterface;
   theme: string;

@@ -6,6 +6,7 @@ use App\Wex\BaseBundle\Controller\AbstractController;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\AdaptiveResponse;
+use App\Wex\BaseBundle\Rendering\RenderDataAjax;
 use App\Wex\BaseBundle\Twig\ComponentsExtension;
 use App\Wex\BaseBundle\Twig\TemplateExtension;
 use Exception;
@@ -91,7 +92,7 @@ class AdaptiveResponseService
                     ComponentsExtension::class
                 );
 
-                $comExt->setContext(
+                $comExt->comSetContext(
                     RenderingHelper::CONTEXT_AJAX,
                     null
                 );
@@ -157,7 +158,7 @@ class AdaptiveResponseService
     /**
      * @throws Exception
      */
-    public function buildRenderData(): array
+    public function buildRenderData(): RenderDataAjax
     {
         $env = $this->getController()->getTwigEnvironment();
 
@@ -194,7 +195,8 @@ class AdaptiveResponseService
     public function setView(
         string $view,
         $parameters = null
-    ): self {
+    ): self
+    {
         $this->view = $view;
 
         if ($parameters)
@@ -269,7 +271,8 @@ class AdaptiveResponseService
 
     public function setController(
         AbstractController $controller
-    ): self {
+    ): self
+    {
         $this->currentController = $controller;
 
         return $this;

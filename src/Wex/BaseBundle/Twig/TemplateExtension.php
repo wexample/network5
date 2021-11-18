@@ -4,14 +4,13 @@ namespace App\Wex\BaseBundle\Twig;
 
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
-use App\Wex\BaseBundle\Rendering\Asset;
+use App\Wex\BaseBundle\Rendering\RenderDataAjax;
+use App\Wex\BaseBundle\Rendering\RenderDataInitialLayout;
+use App\Wex\BaseBundle\Rendering\RenderDataLayout;
+use App\Wex\BaseBundle\Rendering\RenderDataPage;
 use App\Wex\BaseBundle\Service\RenderingService;
 use App\Wex\BaseBundle\Service\TemplateService;
-use App\Wex\BaseBundle\Translation\Translator;
-use function array_merge_recursive;
-use Doctrine\DBAL\Types\Types;
 use Exception;
-use JetBrains\PhpStorm\ArrayShape;
 use function str_ends_with;
 use function strlen;
 use function substr;
@@ -37,7 +36,8 @@ class TemplateExtension extends AbstractExtension
         private KernelInterface $kernel,
         private RenderingService $renderingService,
         private TemplateService $templateService
-    ) {
+    )
+    {
     }
 
     public function getFunctions(): array
@@ -71,7 +71,8 @@ class TemplateExtension extends AbstractExtension
         Environment $env,
         string $pageTemplateName,
         string $layoutTheme
-    ): array {
+    ): RenderDataInitialLayout
+    {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -81,19 +82,27 @@ class TemplateExtension extends AbstractExtension
             ComponentsExtension::class
         );
 
-        return array_merge_recursive(
-            $this->templateBuildRenderData($env, $pageTemplateName),
-            [
-                VariableHelper::ASSETS => $assetsExtension->buildRenderData(RenderingHelper::CONTEXT_LAYOUT),
-                VariableHelper::PLURAL_COMPONENT => $comExtension->buildRenderData(RenderingHelper::CONTEXT_LAYOUT),
-                'displayBreakpoints' => AssetsExtension::DISPLAY_BREAKPOINTS,
-                VariableHelper::PAGE => [
-                    'isLayoutPage' => true,
-                ],
-                VariableHelper::ENV => $this->kernel->getEnvironment(),
-                VariableHelper::THEME => $layoutTheme,
-            ]
+        $renderData = new RenderDataInitialLayout();
+
+        $renderData->merge(
+            $this->templateBuildLayoutRenderData($env, $pageTemplateName)
         );
+
+        $renderData->page->isLayoutPage = true;
+
+        $renderData->assets = $assetsExtension->assetsFiltered(
+            RenderingHelper::CONTEXT_LAYOUT
+        );
+
+        $renderData->components = $comExtension->buildRenderData(
+            RenderingHelper::CONTEXT_LAYOUT
+        );
+
+        $renderData->displayBreakpoints = AssetsExtension::DISPLAY_BREAKPOINTS;
+        $renderData->env = $this->kernel->getEnvironment();
+        $renderData->theme = $layoutTheme;
+
+        return $renderData;
     }
 
     /**
@@ -103,7 +112,8 @@ class TemplateExtension extends AbstractExtension
         Environment $env,
         string $pageTemplateName,
         string $body
-    ): array {
+    ): RenderDataAjax
+    {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -115,32 +125,28 @@ class TemplateExtension extends AbstractExtension
 
         $templates = $comExtension->comRenderLayout($env);
 
-        return array_merge_recursive(
-            $this->templateBuildRenderData($env, $pageTemplateName),
-            [
-                VariableHelper::PLURAL_COMPONENT => $comExtension->buildRenderData(RenderingHelper::CONTEXT_AJAX),
-                VariableHelper::ASSETS => $assetsExtension->buildRenderData(RenderingHelper::CONTEXT_AJAX),
-                VariableHelper::PAGE => [
-                    VariableHelper::BODY => $body,
-                ],
-                VariableHelper::PLURAL_TEMPLATE => $templates,
-            ]
+        $renderData = new RenderDataAjax();
+
+        $renderData->merge(
+            $this->templateBuildLayoutRenderData($env, $pageTemplateName)
         );
+
+        $renderData->page->body =
+            $body;
+        $renderData->assets =
+            $assetsExtension->assetsFiltered(RenderingHelper::CONTEXT_AJAX);
+        $renderData->components =
+            $comExtension->buildRenderData(RenderingHelper::CONTEXT_AJAX);
+        $renderData->templates = $templates;
+
+        return $renderData;
     }
 
-    #[ArrayShape(
-        [
-            VariableHelper::ASSETS => Asset::class."[][][]|array[]|\array[][]",
-            VariableHelper::NAME => Types::STRING,
-            VariableHelper::PLURAL_COMPONENT => Types::ARRAY,
-            VariableHelper::TRANSLATIONS => Types::ARRAY,
-            VariableHelper::VARS => Types::ARRAY,
-        ]
-    )]
     public function templateBuildPageRenderData(
         Environment $env,
         string $pageName
-    ): array {
+    ): RenderDataPage
+    {
         /** @var AssetsExtension $assetsExtension */
         $assetsExtension = $env->getExtension(
             AssetsExtension::class
@@ -158,14 +164,28 @@ class TemplateExtension extends AbstractExtension
             JsExtension::class
         );
 
-        return [
-            VariableHelper::ASSETS => $assetsExtension->buildRenderData(RenderingHelper::CONTEXT_PAGE),
-            VariableHelper::NAME => $pageName,
-            VariableHelper::PLURAL_COMPONENT => $comExtension->buildRenderData(RenderingHelper::CONTEXT_PAGE),
-            self::VAR_RENDER_REQUEST_ID => $this->renderingService->getRenderRequestId(),
-            VariableHelper::TRANSLATIONS => $translationExtension->buildRenderData(),
-            VariableHelper::VARS => $jsExtension->jsVarsGet(JsExtension::VARS_GROUP_PAGE),
-        ];
+        $renderData = new RenderDataPage();
+
+        $renderData->assets =
+            $assetsExtension->assetsFiltered(
+                RenderingHelper::CONTEXT_PAGE
+            );
+        $renderData->components =
+            $comExtension->buildRenderData(
+                RenderingHelper::CONTEXT_PAGE
+            );
+        $renderData->name =
+            $pageName;
+        $renderData->renderRequestId =
+            $this->renderingService->getRenderRequestId();
+        $renderData->translations =
+            $translationExtension->buildRenderData();
+        $renderData->vars =
+            $jsExtension->jsVarsGet(
+                JsExtension::VARS_GROUP_PAGE
+            );
+
+        return $renderData;
     }
 
     public function templateBuildPathFromRoute(string $route): string
@@ -177,17 +197,11 @@ class TemplateExtension extends AbstractExtension
         );
     }
 
-    #[ArrayShape([
-        VariableHelper::EVENTS => Types::ARRAY,
-        VariableHelper::PAGE => Types::ARRAY.'|'.VariableHelper::NULL,
-        self::VAR_TRANSLATIONS_DOMAIN_SEPARATOR => Types::STRING,
-        VariableHelper::TRANSLATIONS => Types::ARRAY,
-        VariableHelper::VARS => Types::ARRAY,
-    ])]
-    public function templateBuildRenderData(
+    public function templateBuildLayoutRenderData(
         Environment $env,
         string $pageTemplateName = null
-    ): array {
+    ): RenderDataLayout
+    {
         /** @var JsExtension $jsExtension */
         $jsExtension = $env->getExtension(
             JsExtension::class
@@ -197,18 +211,24 @@ class TemplateExtension extends AbstractExtension
             TranslationExtension::class
         );
 
-        return [
-            VariableHelper::EVENTS => [],
-            VariableHelper::PAGE => $pageTemplateName
-                ? $this->templateBuildPageRenderData(
-                    $env,
-                    $pageTemplateName
-                ) : null,
-            self::VAR_RENDER_REQUEST_ID => $this->renderingService->getRenderRequestId(),
-            VariableHelper::TRANSLATIONS => $translationExtension->buildRenderData(),
-            self::VAR_TRANSLATIONS_DOMAIN_SEPARATOR => Translator::DOMAIN_SEPARATOR,
-            VariableHelper::VARS => $jsExtension->jsVarsGet(JsExtension::VARS_GROUP_GLOBAL),
-        ];
+        $renderData = new RenderDataLayout();
+
+        $renderData->page = $pageTemplateName
+            ? $this->templateBuildPageRenderData(
+                $env,
+                $pageTemplateName
+            ) : null;
+
+        $renderData->renderRequestId = $this->renderingService->getRenderRequestId();
+
+        $renderData->translations = $translationExtension->buildRenderData();
+
+        $renderData->vars = $jsExtension
+            ->jsVarsGet(
+                JsExtension::VARS_GROUP_GLOBAL
+            );
+
+        return $renderData;
     }
 
     public function templateNameFromPath(string $templatePath): string

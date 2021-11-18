@@ -74,7 +74,7 @@ class Asset
     public ?string $type = null;
 
     #[NoReturn]
-    public function __construct(public string $path, public string $context)
+    public function __construct(public string $path, public string $renderContext)
     {
         $this->name = $this->createName($path);
 

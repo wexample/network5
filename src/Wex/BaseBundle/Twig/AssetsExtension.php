@@ -109,10 +109,10 @@ class AssetsExtension extends AbstractExtension
                 ]
             ),
             new TwigFunction(
-                'assets_list',
+                'assets_type_filtered',
                 [
                     $this,
-                    'assetsList',
+                    'assetsTypeFiltered',
                 ]
             ),
             new TwigFunction(
@@ -125,22 +125,51 @@ class AssetsExtension extends AbstractExtension
         ];
     }
 
-    public function buildRenderData(string $context): array
+    public function assetsTypeFiltered(string $context, string $filterType = null): array
+    {
+        $assets = $this->assetsFiltered(
+            $context,
+            $filterType
+        );
+
+        return $assets[$filterType];
+    }
+
+    public function assetsFiltered(string $context, string $filterType = null): array
     {
         $filtered = self::ASSETS_DEFAULT_EMPTY;
 
         foreach ($this->assets as $type => $group)
         {
-            foreach ($group as $asset)
+            if (!$filterType || $filterType === $type)
             {
-                if ($asset->context === $context)
+                foreach ($group as $asset)
                 {
-                    $filtered[$type][] = $asset;
+                    if ($asset->renderContext === $context)
+                    {
+                        $filtered[$type][] = $asset;
+                    }
                 }
             }
         }
 
         return $filtered;
+    }
+
+    public function assetsList(string $ext): array
+    {
+        $notLoaded = [];
+
+        /** @var Asset $asset */
+        foreach ($this->assets[$ext] as $asset)
+        {
+            if (!$asset->rendered)
+            {
+                $notLoaded[] = $asset;
+            }
+        }
+
+        return $notLoaded;
     }
 
     public function assetsPreload(array $assets, bool $useJs)
@@ -220,21 +249,6 @@ class AssetsExtension extends AbstractExtension
         // When using JS, we manage responsive
         // and extra theme style outside page rendering flow.
         return !((!$useJs) || $asset->responsive || $asset->theme);
-    }
-
-    public function assetsList(string $ext): array
-    {
-        $notLoaded = [];
-
-        foreach ($this->assets[$ext] as $asset)
-        {
-            if (!$asset->rendered)
-            {
-                $notLoaded[] = $asset;
-            }
-        }
-
-        return $notLoaded;
     }
 
     public function assetsPreloadList(string $ext): array

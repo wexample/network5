@@ -33,47 +33,49 @@ export class MixinService extends AppService {
     let loops: number = 0;
     let loopsLimit: number = 100;
     let errorTrace: MixinInterface[] = [];
-    let mixin: MixinInterface;
+    let currentName: string = 'startup';
 
     let timeout = setTimeout(() => {
-      throw `Mixins invocation timeout on method "${method}", stopping at "${mixin.name}".`;
+      throw `Mixins invocation timeout on method "${method}", stopping at "${currentName}".`;
     }, timeoutLimit);
 
     let step = () => {
-      mixin = mixins.shift() as MixinInterface;
+      let mixin:MixinInterface = mixins.shift() as MixinInterface;
 
       if (mixin) {
+        currentName = mixin.name;
+
         if (loops++ > loopsLimit) {
           console.error(errorTrace);
           throw (
             `Stopping more than ${loops} recursions during services invocation ` +
-            `on method "${method}", stopping at ${mixin.name}, see trace below.`
+            `on method "${method}", stopping at ${currentName}, see trace below.`
           );
         } else if (loops > loopsLimit - 10) {
           errorTrace.push(mixin);
         }
 
         let next = () => {
-          registry[mixin.name] = MixinsAppService.LOAD_STATUS_COMPLETE;
+          registry[currentName] = MixinsAppService.LOAD_STATUS_COMPLETE;
           step();
         };
 
         if (mixin.hooks && mixin.hooks[group] && mixin.hooks[group][method]) {
           let argsLocal = args.concat([registry, next]);
-          registry[mixin.name] = mixin.hooks[group][method].apply(
+          registry[currentName] = mixin.hooks[group][method].apply(
             this,
             argsLocal
           );
         }
 
         // "wait" says to retry after processing other services.
-        if (registry[mixin.name] === MixinsAppService.LOAD_STATUS_WAIT) {
+        if (registry[currentName] === MixinsAppService.LOAD_STATUS_WAIT) {
           // Enqueue again.
           mixins.push(mixin);
           step();
         }
         // "stop" allows to let service to relaunch process itself.
-        else if (registry[mixin.name] !== MixinsAppService.LOAD_STATUS_STOP) {
+        else if (registry[currentName] !== MixinsAppService.LOAD_STATUS_STOP) {
           next();
         }
       }

@@ -13,6 +13,8 @@ class Component
 {
     protected const VAR_INIT_MODE = 'initMode';
 
+    public array $assets = [];
+
     public string $id;
 
     public function __construct(
@@ -21,7 +23,8 @@ class Component
         public ComponentContext $context,
         public $renderRequestId,
         public array $options = []
-    ) {
+    )
+    {
         $this->id = 'com-'.uniqid();
     }
 
@@ -36,23 +39,5 @@ class Component
                 'class' => 'com-init '.$this->id,
             ]
         );
-    }
-
-    #[ArrayShape([
-        VariableHelper::CONTEXT => Types::ARRAY,
-        VariableHelper::ID => Types::STRING,
-        self::VAR_INIT_MODE => Types::STRING,
-        VariableHelper::NAME => Types::STRING,
-    ])]
-    public function buildRenderData(): array
-    {
-        return [
-            VariableHelper::CONTEXT => $this->context,
-            VariableHelper::ID => $this->id,
-            self::VAR_INIT_MODE => $this->initMode,
-            VariableHelper::NAME => $this->name,
-            VariableHelper::OPTIONS => $this->options,
-            RenderingService::VAR_RENDER_REQUEST_ID => $this->renderRequestId,
-        ];
     }
 }

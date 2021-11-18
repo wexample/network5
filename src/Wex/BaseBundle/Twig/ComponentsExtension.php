@@ -44,17 +44,19 @@ class ComponentsExtension extends AbstractExtension
         private AssetsExtension $assetsExtension,
         private RenderingService $renderingService,
         private Translator $translator,
-    ) {
-        $this->setContext(
+    )
+    {
+        $this->comSetContext(
             RenderingHelper::CONTEXT_LAYOUT,
             null
         );
     }
 
-    public function setContext(
+    public function comSetContext(
         string $renderingContext,
         ?string $name,
-    ) {
+    )
+    {
         $this->contextsStack[] = new ComponentContext(
             $renderingContext,
             $name ?: VariableHelper::DEFAULT,
@@ -66,7 +68,7 @@ class ComponentsExtension extends AbstractExtension
         return end($this->contextsStack);
     }
 
-    public function revertContext(): void
+    public function comRevertContext(): void
     {
         array_pop($this->contextsStack);
     }
@@ -130,6 +132,20 @@ class ComponentsExtension extends AbstractExtension
                     self::FUNCTION_OPTION_NEEDS_ENVIRONMENT => true,
                 ]
             ),
+            new TwigFunction(
+                'com_set_context',
+                [
+                    $this,
+                    'comSetContext',
+                ]
+            ),
+            new TwigFunction(
+                'com_revert_context',
+                [
+                    $this,
+                    'comRevertContext',
+                ]
+            ),
         ];
     }
 
@@ -140,7 +156,8 @@ class ComponentsExtension extends AbstractExtension
         Environment $twig,
         string $name,
         array $options = []
-    ): string {
+    ): string
+    {
         $html = $this->comRenderHtml($twig, $name, $options);
 
         return $html.$this->comInitPrevious($name, $options);
@@ -153,7 +170,8 @@ class ComponentsExtension extends AbstractExtension
         Environment $twig,
         $name,
         $options = []
-    ): ?string {
+    ): ?string
+    {
         $search = [
             // Search local.
             $name.TemplateExtension::TEMPLATE_FILE_EXTENSION,
@@ -189,8 +207,7 @@ class ComponentsExtension extends AbstractExtension
             }
 
             return null;
-        }
-        catch (Exception $exception)
+        } catch (Exception $exception)
         {
             throw new Exception('Error during rendering component '.$name.' : '.$exception->getMessage(), $exception->getCode(), $exception);
         }
@@ -205,7 +222,7 @@ class ComponentsExtension extends AbstractExtension
         {
             if ($component->context->renderContext === $renderContext)
             {
-                $data[] = $component->buildRenderData();
+                $data[] = $component;
             }
         }
 
@@ -227,35 +244,33 @@ class ComponentsExtension extends AbstractExtension
         string $name,
         string $initMode,
         array $options
-    ): Component {
-        $context = $this->getContext();
-
+    ): Component
+    {
         // Using an object allow continuing edit properties after save.
         $entry = new Component(
             $name,
             $initMode,
-            $context,
+            $this->getContext(),
             $this->renderingService->getRenderRequestId(),
             $options
         );
 
         $this->components[] = $entry;
 
-        $this->comLoadAssets(
-            $name,
-            $context->renderContext
+        $entry->assets = $this->comLoadAssets(
+            $name
         );
 
         return $entry;
     }
 
-    public function comLoadAssets(string $name, string $renderContext)
+    public function comLoadAssets(string $name): array
     {
-        $this
+        return $this
             ->assetsExtension
             ->assetsDetect(
                 $name,
-                $renderContext
+                RenderingHelper::CONTEXT_COMPONENT
             );
     }
 
@@ -265,7 +280,8 @@ class ComponentsExtension extends AbstractExtension
     public function comInitClass(
         string $name,
         array $options = []
-    ): string {
+    ): string
+    {
         $component = $this->registerComponent(
             $name,
             self::INIT_MODE_CLASS,
