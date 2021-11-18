@@ -4,7 +4,6 @@
 
 {%- block template_config -%}
     {{ parent() }}
-    {{- assets_init_template(template_name, layout_use_js) -}}
     {{- translation_set_domain_from_path('layout', 'layouts/' ~ layout_name) -}}
 {%- endblock -%}
 

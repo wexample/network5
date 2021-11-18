@@ -10,6 +10,7 @@
 {%- block template_base -%}
     {%- block template_config -%}
         {{- assets_init_layout(layout_name, layout_use_js) -}}
+        {{- assets_init_template(template_name, layout_use_js) -}}
         {{- translation_set_domain_from_path('page', template_path) -}}
     {%- endblock -%}
 {%- endblock -%}
