@@ -3,6 +3,7 @@
 namespace App\Wex\BaseBundle\Twig\Macros;
 
 use App\Wex\BaseBundle\Helper\DomHelper;
+use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Twig\AbstractExtension;
 use function explode;
 use function file_get_contents;
@@ -85,7 +86,7 @@ class IconExtension extends AbstractExtension
         if (self::ICONS_LIBRARY_MATERIAL === $type || (null === $type && isset($this->icons->material->$name)))
         {
             return DomHelper::buildTag($tagName, [
-                'class' => $class.'material-icons',
+                VariableHelper::CLASS_VAR => $class.'material-icons',
             ], $name);
         }
 
@@ -95,17 +96,17 @@ class IconExtension extends AbstractExtension
             return DomHelper::buildTag(
                 $tagName,
                 [
-                'class' => $class,
+                    VariableHelper::CLASS_VAR => $class,
             ],
                 DomHelper::buildTag('i', [
-                    'class' => 'fa fa-'.$name,
+                    VariableHelper::CLASS_VAR => 'fa fa-'.$name,
                 ])
             );
         }
 
         // Just display tag on error.
         return DomHelper::buildTag($tagName, [
-            'class' => $class,
+            VariableHelper::CLASS_VAR => $class,
         ]);
     }
 }

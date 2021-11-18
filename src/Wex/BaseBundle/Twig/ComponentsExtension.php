@@ -334,11 +334,11 @@ class ComponentsExtension extends AbstractExtension
     public function comRenderTagAttributes(Environment $env, array $context, array $defaults = []): string
     {
         $options = $context['com_options'];
-        $class = trim(($defaults['class'] ?? '').' '.($options['class'] ?? ''));
+        $class = trim(($defaults[VariableHelper::CLASS_VAR] ?? '').' '.($options[VariableHelper::CLASS_VAR] ?? ''));
 
         $attributes = array_merge([
-            'id' => $options['id'] ?? null,
-            'class' => $class === '' ? null : $class,
+            VariableHelper::ID => $options[VariableHelper::ID] ?? null,
+            VariableHelper::CLASS_VAR => $class === '' ? null : $class,
         ], ($options['attr'] ?? []));
 
         /** @var RenderExtension $renderExtension */

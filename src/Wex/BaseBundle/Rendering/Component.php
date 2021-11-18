@@ -3,6 +3,7 @@
 namespace App\Wex\BaseBundle\Rendering;
 
 use App\Wex\BaseBundle\Helper\DomHelper;
+use App\Wex\BaseBundle\Helper\VariableHelper;
 use function uniqid;
 
 class Component
@@ -31,7 +32,7 @@ class Component
                 // ID are not used as "id" html attribute,
                 // as component may be embedded into a vue,
                 // so replicated multiple times.
-                'class' => 'com-init '.$this->id,
+                VariableHelper::CLASS_VAR => 'com-init '.$this->id,
             ]
         );
     }
