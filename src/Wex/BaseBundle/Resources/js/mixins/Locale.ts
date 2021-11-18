@@ -9,10 +9,10 @@ export class LocaleService extends AppService {
     string = '',
     args = {},
     domains = this.transDomains,
-    catalog = this.app.registry.layoutData.translations.catalog
+    catalog = this.app.layout.renderData.translations.catalog
   ) {
     let stringWithDomain;
-    let sep = this.app.registry.layoutData.translationsDomainSeparator;
+    let sep = this.app.layout.renderData.translationsDomainSeparator;
 
     // A domain is specified.
     if (string.indexOf(sep) !== -1) {
@@ -44,7 +44,7 @@ export const MixinLocale: MixinInterface = {
     page: {
       trans(string = '', args = {}) {
         return this.app.locale.trans(string, args, this.translations.domains, {
-          ...this.app.registry.layoutData.translations.catalog,
+          ...this.app.layout.renderData.translations.catalog,
           ...this.translations.catalog,
         });
       },

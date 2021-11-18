@@ -12,7 +12,7 @@ abstract class NetworkTestCase extends SymfonyTestCase
     {
         $matches = [];
         preg_match(
-            '/layoutData = ([.\S\s\n]*);(\s*)<\/script>/',
+            '/layoutRenderData = ([.\S\s\n]*);(\s*)<\/script>/',
             $content ?? $this->getContent(),
             $matches,
         );

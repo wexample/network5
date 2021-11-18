@@ -1,17 +1,19 @@
-import AppChild from './AppChild';
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
 import { findPreviousNode as DomFindPreviousNode } from '../helpers/Dom';
 import App from './App';
 import Events from '../helpers/Events';
 import { ServiceRegistryComponentInterface } from '../interfaces/ServiceRegistryComponentInterface';
+import RenderNode from "./RenderNode";
 
-export default abstract class Component extends AppChild {
-  autoActivateListeners: boolean = true;
-  el: HTMLElement;
-  elContext: HTMLElement;
-  services: ServiceRegistryComponentInterface;
-  listenKeyboardKey: string[] = [];
-  onKeyUpProxy: Function;
+export default abstract class Component extends RenderNode {
+  public autoActivateListeners: boolean = true;
+  public el: HTMLElement;
+  public elContext: HTMLElement;
+  protected listenKeyboardKey: string[] = [];
+  protected onKeyUpProxy: Function;
+  public renderData: RenderDataComponentInterface;
+  protected readonly services: ServiceRegistryComponentInterface;
+
   // Focus allows listening keyboard interactions.
   protected focused: boolean = false;
 
@@ -23,14 +25,15 @@ export default abstract class Component extends AppChild {
 
   public static INIT_MODE_PREVIOUS: string = 'previous';
 
-  protected constructor(
-    app: App,
-    elContext: HTMLElement,
-    renderData: RenderDataComponentInterface
-  ) {
-    super(app);
+  constructor(app: App, parentRenderNode: RenderNode, elContext: HTMLElement) {
+    super(app, parentRenderNode);
 
     this.elContext = elContext;
+  }
+
+  init(renderData) {
+    super.init(renderData);
+
     let elPlaceholder = this.elContext.querySelector(
       '.' + renderData.id
     ) as HTMLElement;
@@ -54,6 +57,14 @@ export default abstract class Component extends AppChild {
       // Remove placeholder tag as it may interact with CSS or JS selectors.
       elPlaceholder.parentNode.removeChild(elPlaceholder);
     }
+
+    if (this.autoActivateListeners) {
+      this.activateListeners();
+    }
+  }
+
+  public getId(): string {
+    return this.renderData.id;
   }
 
   protected onKeyUp(event: KeyboardEvent) {
@@ -100,11 +111,5 @@ export default abstract class Component extends AppChild {
     this.deactivateListeners();
 
     this.el.parentNode.removeChild(this.el);
-  }
-
-  public init(renderData: RenderDataComponentInterface) {
-    if (this.autoActivateListeners) {
-      this.activateListeners();
-    }
   }
 }

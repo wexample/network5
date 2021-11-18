@@ -1,4 +1,4 @@
-import { MixinQueues, QueuesService } from './Queues';
+import { MixinQueues } from './Queues';
 import AssetsCollectionInterface from '../interfaces/AssetsCollectionInterface';
 import MixinInterface from '../interfaces/MixinInterface';
 import Queue from '../class/Queue';
@@ -7,13 +7,14 @@ import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 import MixinsAppService from '../class/MixinsAppService';
 import Page from '../class/Page';
 import AssetsInterface from '../interfaces/AssetInterface';
+import RenderNode from "../class/RenderNode";
 
 export class AssetsService extends AppService {
   public static UPDATE_FILTER_ACCEPT = 'accept';
 
   public static UPDATE_FILTER_REJECT = 'reject';
 
-  public assetsRegistry: any = { css: {}, js: {} };
+  public assetsRegistry: any = {css: {}, js: {}};
   public queue: Queue;
   public jsAssetsPending: object = {};
   public updateFilters: Function[] = [];
@@ -148,10 +149,40 @@ export class AssetsService extends AppService {
     return true;
   }
 
-  updateAssets(complete?: Function) {
-    this.updateAssetsCollection(this.app.registry.layoutData.assets, () => {
-      this.updatePageAssets(this.app.layoutPage, complete);
+  enqueueAssetsUpdate(
+    queue: Queue,
+    assetsCollection: AssetsCollectionInterface
+  ) {
+    queue.add((next: Function) => {
+      this.updateAssetsCollection(assetsCollection, next);
+      return Queue.EXEC_STOP;
     });
+  }
+
+  enqueueRenderNodeAssetsUpdate(queue, renderNode: RenderNode) {
+    // For main node.
+    this.enqueueAssetsUpdate(queue, renderNode.renderData.assets);
+    // For child nodes.
+    renderNode.forEachChildRenderNode((renderNode) => {
+      this.enqueueRenderNodeAssetsUpdate(queue, renderNode);
+    });
+  };
+
+  updateAssets(complete?: Function) {
+    // Only single queue for assets, for now.
+    let queue = this.services.queues.create() as Queue;
+    queue.async = true;
+
+    this.enqueueRenderNodeAssetsUpdate(
+      queue,
+      this.app.layout
+    );
+
+    queue.then(() => {
+      complete && complete();
+    });
+
+    queue.start();
   }
 
   updatePageAssets(page: Page, complete?: Function) {

@@ -53,7 +53,7 @@ export class ResponsiveService extends AppService {
 
   detectSupported() {
     let supported = {};
-    Object.entries(this.app.registry.layoutData.displayBreakpoints).forEach(
+    Object.entries(this.app.layout.renderData.displayBreakpoints).forEach(
       (entry) => {
         if (window.innerWidth > entry[1]) {
           supported[entry[0]] = entry[1];

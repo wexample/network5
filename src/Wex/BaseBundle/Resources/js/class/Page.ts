@@ -1,15 +1,15 @@
 import App from './App';
 import PageResponsiveDisplay from './PageResponsiveDisplay';
 import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
-import AppChild from './AppChild';
 import MixinInterface from '../interfaces/MixinInterface';
 import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
+import RenderNode from "./RenderNode";
 
-export default class extends AppChild {
+export default class extends RenderNode {
   public el: HTMLElement;
-  public readonly elOverlay: HTMLElement;
-  public readonly isLayoutPage: boolean;
-  public readonly name: string;
+  public elOverlay: HTMLElement;
+  public isLayoutPage: boolean;
+  public name: string;
   protected readonly onChangeResponsiveSizeProxy: Function;
   protected readonly onChangeThemeProxy: Function;
   protected readonly responsiveDisplays: any = [];
@@ -18,26 +18,35 @@ export default class extends AppChild {
   public vars: any;
   public services: ServiceRegistryPageInterface;
 
-  constructor(app: App, renderData: RenderDataPageInterface) {
+  constructor(app: App) {
     super(app);
+    this.onChangeResponsiveSizeProxy = this.onChangeResponsiveSize.bind(this);
+    this.onChangeThemeProxy = this.onChangeTheme.bind(this);
+  }
+
+  public getId(): string {
+    return 'page-' + this.name;
+  }
+
+  init(renderData: RenderDataPageInterface) {
+    super.init(renderData);
 
     this.isLayoutPage = renderData.isLayoutPage;
     this.name = renderData.name;
-    this.onChangeResponsiveSizeProxy = this.onChangeResponsiveSize.bind(this);
-    this.onChangeThemeProxy = this.onChangeTheme.bind(this);
 
     if (this.isLayoutPage) {
-      this.app.layoutPage = this;
+      this.app.layout.page = this;
       this.el = this.app.elLayout;
     } else {
       this.el = renderData.el;
     }
 
-    // A component may have been define as page container (modal / panel).
+    // A component may have been defined as page handler (modal / panel).
     let pageHandlerRegistry = this.services.components.pageHandlerRegistry;
     let pageHandler = pageHandlerRegistry[renderData.renderRequestId];
     if (pageHandler) {
       pageHandler.renderPageEl(this, renderData);
+      this.parentRenderNode = pageHandler;
       this.el = pageHandler.getPageEl();
     }
 
@@ -62,10 +71,6 @@ export default class extends AppChild {
     return [];
   }
 
-  init(pageRenderData: RenderDataPageInterface) {
-    // To override...
-  }
-
   exit() {
     // To override...
   }
@@ -87,7 +92,9 @@ export default class extends AppChild {
     renderData: RenderDataPageInterface,
     complete?: Function
   ) {
-    this.loadPageRenderData(renderData, () => {
+    this.init(renderData);
+
+    this.loadPageRenderData(() => {
       this.services.events.listen(
         'responsive-change-size',
         this.onChangeResponsiveSizeProxy
@@ -99,15 +106,14 @@ export default class extends AppChild {
 
       this.updateLayoutTheme(this.services.theme.activeTheme);
 
-      this.init(renderData);
+      this.ready();
 
       complete && complete(this);
     });
   }
 
-  loadPageRenderData(renderData: RenderDataPageInterface, complete?: Function) {
-    this.vars = { ...this.vars, ...renderData.vars };
-    this.renderData = renderData;
+  loadPageRenderData(complete?: Function) {
+    this.vars = {...this.vars, ...this.renderData.vars};
 
     this.services.mixins.invokeUntilComplete(
       'loadPageRenderData',
@@ -115,6 +121,10 @@ export default class extends AppChild {
       [this],
       complete
     );
+  }
+
+  ready() {
+    // To override with local page scripts.
   }
 
   updateCurrentResponsiveDisplay() {

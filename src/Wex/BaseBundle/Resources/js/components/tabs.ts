@@ -2,7 +2,6 @@ import Component from '../class/Component';
 import { hashParamGet as locationHashParamGet } from '../helpers/Location';
 import { hashParamSet as locationHashParamSet } from '../helpers/Location';
 import { parseUrl as locationParseUrl } from '../helpers/Location';
-import App from '../class/App';
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
 
 export default {
@@ -11,19 +10,13 @@ export default {
   definition: class extends Component {
     protected elTabCurrent?: HTMLElement;
     protected elContentCurrent?: HTMLElement;
-    protected readonly group: string;
+    protected group: string;
 
-    protected constructor(
-      app: App,
-      elContext: HTMLElement,
-      renderData: RenderDataComponentInterface
-    ) {
-      super(app, elContext, renderData);
+    init(renderData: RenderDataComponentInterface) {
+      super.init(renderData);
 
       this.group = renderData.options.group;
-    }
 
-    init(renderData) {
       this.el.querySelectorAll('a.tab-internal').forEach((elTab) => {
         if (this.isCurrentPageTab(elTab)) {
           elTab.addEventListener('click', this.clickInternal.bind(this));

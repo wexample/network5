@@ -22,6 +22,7 @@ export class ComponentsService extends AppService {
   create(
     elContext: HTMLElement,
     renderData: RenderDataComponentInterface,
+    page: Page = null,
     complete?: Function
   ) {
     this.services.assets.updateAssetsCollection(renderData.assets, () => {
@@ -40,9 +41,10 @@ export class ComponentsService extends AppService {
       } else {
         let component = new classDefinition(
           this.app,
-          elContext,
-          renderData
+          page,
+          elContext
         ) as Component;
+
         component.init(renderData);
 
         complete && complete();
@@ -57,17 +59,18 @@ export class ComponentsService extends AppService {
     }
 
     if (data.components) {
-      this.createComponents(data.components, this.app.elLayout, complete);
+      this.createComponents(data.components, this.app.elLayout, null, complete);
     }
   }
 
   loadPageRenderData(page: Page, complete?: Function) {
-    this.createComponents(page.renderData.components, page.el, complete);
+    this.createComponents(page.renderData.components, page.el, page, complete);
   }
 
   createComponents(
     components: RenderDataComponentInterface[],
     elContext: HTMLElement,
+    page: Page = null,
     complete?: Function
   ) {
     if (!components.length) {
@@ -79,7 +82,7 @@ export class ComponentsService extends AppService {
 
     components.forEach((data: RenderDataComponentInterface) => {
       counter++;
-      this.create(elContext, data, () => {
+      this.create(elContext, data, page, () => {
         if (--counter === 0) {
           complete && complete();
         }

@@ -16,7 +16,7 @@ const bundle: AssetBundleInterface = {
     services: ServiceRegistryPageCurrentInterface;
     unitTest: UnitTest;
 
-    init() {
+    ready() {
       this.unitTest = new UnitTest();
 
       this.testQueues();
@@ -80,7 +80,7 @@ const bundle: AssetBundleInterface = {
     }
 
     protected refreshAvailableAssets(type) {
-      let layoutData = this.app.registry.layoutData;
+      let layoutData = this.app.layout.renderData;
       let list = [];
 
       layoutData.assets[type].map((asset) => list.push(asset.path));
@@ -192,28 +192,28 @@ const bundle: AssetBundleInterface = {
       let test = this.unitTest;
 
       test.assertEquals(
-        this.app.layoutPage.vars.demoVariable,
+        this.app.layout.page.vars.demoVariable,
         'demoVariableValue',
         'Variable has proper value'
       );
 
       test.assertTrue(
-        typeof this.app.layoutPage.vars.demoVariableBoolean === 'boolean',
+        typeof this.app.layout.page.vars.demoVariableBoolean === 'boolean',
         'Variable has proper boolean value'
       );
 
       test.assertTrue(
-        typeof this.app.layoutPage.vars.demoVariableInteger === 'number',
+        typeof this.app.layout.page.vars.demoVariableInteger === 'number',
         'Variable int has proper number value'
       );
 
       test.assertTrue(
-        typeof this.app.layoutPage.vars.demoVariableFloat === 'number',
+        typeof this.app.layout.page.vars.demoVariableFloat === 'number',
         'Variable float has proper number value'
       );
 
       test.assertTrue(
-        typeof this.app.layoutPage.vars.demoVariableObject === 'object',
+        typeof this.app.layout.page.vars.demoVariableObject === 'object',
         'Variable object has proper number value'
       );
     }

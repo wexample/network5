@@ -7,6 +7,8 @@ const bundle: AssetBundleInterface = {
 
   definition: class extends Component {
     init(renderData: RenderDataComponentInterface) {
+      super.init(renderData);
+
       this.el.innerHTML = `<span class="success">✓</span>${this.el.innerHTML}`;
     }
   },

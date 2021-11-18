@@ -1,5 +1,4 @@
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
-import App from './App';
 import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
 import Page from './Page';
 import Component from './Component';
@@ -7,13 +6,10 @@ import { ServiceRegistryComponentInterface } from '../interfaces/ServiceRegistry
 
 export default abstract class PageHandlerComponent extends Component {
   services: ServiceRegistryComponentInterface;
+  childPage: Page
 
-  protected constructor(
-    app: App,
-    elContext: HTMLElement,
-    renderData: RenderDataComponentInterface
-  ) {
-    super(app, elContext, renderData);
+  init(renderData: RenderDataComponentInterface) {
+    super.init(renderData);
 
     // This component is defined as the manager of
     // rendered page from the request.
@@ -34,8 +30,10 @@ export default abstract class PageHandlerComponent extends Component {
 
   public abstract getPageEl(): HTMLElement;
 
-  public abstract initPage(
+  public initPage(
     page: Page,
     renderData: RenderDataPageInterface
-  ): void;
+  ): void {
+    this.childPage = page;
+  }
 }

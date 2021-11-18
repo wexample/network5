@@ -23,12 +23,13 @@ export default {
     opened: boolean = false;
 
     init(renderData: RenderDataComponentInterface) {
-      this.elContent = this.el.querySelector('.modal-content');
-
       super.init(renderData);
+
+      this.elContent = this.el.querySelector('.modal-content');
     }
 
     initPage(page: Page, renderData: RenderDataPageInterface) {
+      super.initPage(page, renderData);
       this.open();
     }
 

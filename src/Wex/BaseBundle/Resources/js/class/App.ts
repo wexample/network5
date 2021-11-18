@@ -12,23 +12,24 @@ import { MixinQueues } from '../mixins/Queues';
 
 import { unique as arrayUnique } from '../helpers/Arrays';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
+import LayoutInitial from "./LayoutInitial";
 
 export default class {
   public bootJsBuffer: string[] = [];
+  public bundles: any;
   public hasCoreLoaded: boolean = false;
-  public layoutPage: Page = null;
+  public layout: LayoutInitial = null;
   public mixins: MixinInterface[] = [];
   public readyCallbacks: Function[] = [];
   public elLayout: HTMLElement;
   public lib: object = {};
-  public registry: any;
   public services: ServiceRegistryAppInterface = {};
   public isReady: boolean = false;
 
   constructor(readyCallback?: any | Function, globalName = 'app') {
     window[globalName] = this;
 
-    this.registry = window['appRegistry'];
+    this.bundles = window['appRegistry'].bundles;
 
     // Allow callback as object definition.
     if (typeof readyCallback === 'object') {
@@ -40,6 +41,8 @@ export default class {
     let doc = window.document;
 
     let run = () => {
+      this.layout = new LayoutInitial(this);
+
       this.loadMixins(this.getMixins());
 
       // Init mixins.
@@ -51,7 +54,7 @@ export default class {
         // The main functionalities are ready.
         this.hasCoreLoaded = true;
 
-        this.loadRenderData(this.registry.layoutData, () => {
+        this.loadRenderData(this.layout.renderData, () => {
           // Execute ready callbacks.
           this.readyComplete();
           // Display page content.
@@ -203,7 +206,7 @@ export default class {
    * @param classRegistryName
    */
   getBundleClassDefinition(classRegistryName: string): any | null {
-    let bundle = this.registry.bundles.classes[classRegistryName];
+    let bundle = this.bundles.classes[classRegistryName];
 
     return bundle ? bundle.definition : null;
   }

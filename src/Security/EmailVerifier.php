@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Wex\BaseBundle\Helper\VariableHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +34,7 @@ class EmailVerifier
             $verifyEmailRouteName,
             $user->getId(),
             $user->getEmail(),
-            ['id' => $user->getId()]
+            [VariableHelper::ID => $user->getId()]
         );
 
         $context = $email->getContext();

@@ -7,9 +7,12 @@ interface ServiceRegistryQueueInterface extends ServiceRegistryAppInterface {
 }
 
 export default class Queue extends AppChild {
+  public async: boolean = false;
   public callbacks: Function[] = [];
   public commands: Function[] = [];
+  private nextProxy: Function;
   private readonly name: string;
+  private runningCounter: number = 0;
   public started: boolean = false;
   public static readonly EXEC_STOP = 'exec_stop';
   protected readonly services: ServiceRegistryQueueInterface;
@@ -18,6 +21,7 @@ export default class Queue extends AppChild {
     super(service.app);
 
     this.name = name;
+    this.nextProxy = this.next.bind(this);
   }
 
   add(command: Function) {
@@ -30,34 +34,58 @@ export default class Queue extends AppChild {
     this.callbacks = [];
     this.commands = [];
     this.started = false;
+    this.runningCounter = 0;
 
     return this;
   }
 
   next() {
     if (this.started) {
-      this.app.async(() => {
-        if (this.commands.length) {
-          let command = this.commands.shift();
-          let response = command(this);
+      if (this.async) {
+        this.runningCounter--;
 
-          if (response !== Queue.EXEC_STOP) {
-            this.next();
-          }
-        } else {
+        if (this.runningCounter === 0) {
           this.complete();
         }
-      });
+      } else {
+        this.app.async(() => {
+          if (this.commands.length) {
+            this.execOneCommand();
+          } else {
+            this.complete();
+          }
+        });
+      }
     }
 
     return this;
+  }
+
+  execOneCommand() {
+    let command = this.commands.shift();
+    let response = command(this.nextProxy, this);
+
+    if (response !== Queue.EXEC_STOP) {
+      this.next();
+    }
   }
 
   start() {
     if (!this.started) {
       this.started = true;
 
-      this.app.async(() => this.next());
+      // Async mode will launch every command in the same time.
+      if (this.async) {
+        this.app.async(() => {
+          while (this.commands.length) {
+            this.runningCounter++;
+            this.execOneCommand();
+          }
+        });
+      } else {
+        // Start first command.
+        this.app.async(() => this.next());
+      }
     }
 
     return this;
