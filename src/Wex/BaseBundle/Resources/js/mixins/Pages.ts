@@ -6,18 +6,15 @@ import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 import RequestOptionsPageInterface from '../interfaces/RequestOptionsPageInterface';
 import { MixinAdaptive } from './Adaptive';
 import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
-import { RenderNodeService } from "./RenderNodeService";
-import Page from "../class/Page";
-import RenderNode from "../class/RenderNode";
+import { RenderNodeService } from './RenderNodeService';
+import Page from '../class/Page';
+import RenderNode from '../class/RenderNode';
 
 export class PagesService extends RenderNodeService {
   pages: {};
   services: ServiceRegistryPageInterface;
 
-  createPage(
-    renderData: RenderDataPageInterface,
-    complete?: Function
-  ) {
+  createPage(renderData: RenderDataPageInterface, complete?: Function) {
     let el;
     let parentRenderNode;
 
@@ -28,11 +25,14 @@ export class PagesService extends RenderNodeService {
       el = renderData.el;
     }
 
-    let pageHandler = this.services.components.pageHandlerRegistry[renderData.renderRequestId];
+    let pageHandler =
+      this.services.components.pageHandlerRegistry[renderData.renderRequestId];
     if (pageHandler) {
       parentRenderNode = pageHandler;
-      delete this.services.components.pageHandlerRegistry[renderData.renderRequestId];
-      
+      delete this.services.components.pageHandlerRegistry[
+        renderData.renderRequestId
+      ];
+
       if (parentRenderNode) {
         parentRenderNode.renderPageEl(renderData);
         el = parentRenderNode.getPageEl();
@@ -46,12 +46,7 @@ export class PagesService extends RenderNodeService {
       return;
     }
 
-    this.createRenderNode(
-      el,
-      parentRenderNode,
-      renderData,
-      complete
-    );
+    this.createRenderNode(el, parentRenderNode, renderData, complete);
   }
 
   createRenderNodeInstance(
@@ -100,10 +95,7 @@ export const MixinPages: MixinInterface = {
           registry.locale === MixinsAppService.LOAD_STATUS_COMPLETE
         ) {
           if (renderData.page) {
-            this.services.pages.createPage(
-              renderData.page,
-              next
-            );
+            this.services.pages.createPage(renderData.page, next);
 
             return MixinsAppService.LOAD_STATUS_STOP;
           } else {

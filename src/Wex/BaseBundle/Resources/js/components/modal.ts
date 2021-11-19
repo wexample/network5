@@ -6,7 +6,7 @@ import Keyboard from '../helpers/Keyboard';
 import Mouse from '../helpers/Mouse';
 import Variables from '../helpers/Variables';
 import Events from '../helpers/Events';
-import RenderNode from "../class/RenderNode";
+import RenderNode from '../class/RenderNode';
 
 export default {
   bundleGroup: 'component',
@@ -72,10 +72,7 @@ export default {
         Events.MOUSEDOWN,
         this.onMouseDownOverlayProxy
       );
-      this.el.removeEventListener(
-        Events.MOUSEUP,
-        this.onMouseUpOverlayProxy
-      );
+      this.el.removeEventListener(Events.MOUSEUP, this.onMouseUpOverlayProxy);
 
       this.el
         .querySelector('.modal-close a')

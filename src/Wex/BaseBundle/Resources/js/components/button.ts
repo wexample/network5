@@ -1,6 +1,6 @@
 import Component from '../class/Component';
 import { MDCRipple } from '@material/ripple/index';
-import RenderDataComponentInterface from "../interfaces/RenderDataComponentInterface";
+import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
 
 export default {
   bundleGroup: 'component',

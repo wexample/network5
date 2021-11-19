@@ -6,8 +6,8 @@ import {
   ModalsService,
 } from '../../../../src/Wex/BaseBundle/Resources/js/mixins/Modals';
 import { ServiceRegistryPageInterface } from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistryPageInterface';
-import { traceRenderNodes as debugTraceRenderNodes } from "../../../../src/Wex/BaseBundle/Resources/js/helpers/Debug";
-import { MixinDebug } from "../../../../src/Wex/BaseBundle/Resources/js/mixins/Debug";
+import { traceRenderNodes as debugTraceRenderNodes } from '../../../../src/Wex/BaseBundle/Resources/js/helpers/Debug';
+import { MixinDebug } from '../../../../src/Wex/BaseBundle/Resources/js/mixins/Debug';
 
 interface ServiceRegistryPageCurrentInterface
   extends ServiceRegistryPageInterface {
@@ -22,10 +22,7 @@ const bundle: AssetBundleInterface = {
     unitTest: UnitTest;
 
     getPageLevelMixins() {
-      return [
-        MixinModals,
-        MixinDebug,
-      ];
+      return [MixinModals, MixinDebug];
     }
 
     ready() {
@@ -46,9 +43,11 @@ const bundle: AssetBundleInterface = {
       this.el
         .querySelector('#page-modal-show')
         .addEventListener('click', () => {
-          this.services.modals.get('/demo/loading/fetch/simple', {pageCalling: this}).then(() => {
-            debugTraceRenderNodes(this.app.layout);
-          });
+          this.services.modals
+            .get('/demo/loading/fetch/simple', { pageCalling: this })
+            .then(() => {
+              debugTraceRenderNodes(this.app.layout);
+            });
         });
     }
   },

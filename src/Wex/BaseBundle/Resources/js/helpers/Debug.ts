@@ -1,15 +1,10 @@
-import RenderNode from "../class/RenderNode";
+import RenderNode from '../class/RenderNode';
 
 export function traceRenderNodes(root: RenderNode) {
-  console.log(
-    traceRenderNodesPart(root)
-  );
+  console.log(traceRenderNodesPart(root));
 }
 
-export function traceRenderNodesPart(
-  root: RenderNode,
-  depth = 0
-): string {
+export function traceRenderNodesPart(root: RenderNode, depth = 0): string {
   let output = '';
   let treeCharNode = '└─';
   let treeCharProperty = ' ';
@@ -20,17 +15,14 @@ export function traceRenderNodesPart(
     return;
   }
 
-  output += "\n" + ident + ' ' + treeCharNode + '» ' + root.getRenderNodeType();
-  output += "\n" + ident + ' ' + treeCharProperty + '     #' + root.getId();
-  output += "\n" + ident + ' ' + treeCharProperty + '     #' + root.el;
+  output += '\n' + ident + ' ' + treeCharNode + '» ' + root.getRenderNodeType();
+  output += '\n' + ident + ' ' + treeCharProperty + '     #' + root.getId();
+  output += '\n' + ident + ' ' + treeCharProperty + '     #' + root.el;
 
   let children = Object.values(root.childRenderNodes);
 
   children.forEach((renderNode: RenderNode) => {
-    output += traceRenderNodesPart(
-      renderNode,
-      depth + 1
-    );
+    output += traceRenderNodesPart(renderNode, depth + 1);
   });
 
   return output;

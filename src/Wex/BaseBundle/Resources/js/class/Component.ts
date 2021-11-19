@@ -1,7 +1,7 @@
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
 import Events from '../helpers/Events';
 import { ServiceRegistryComponentInterface } from '../interfaces/ServiceRegistryComponentInterface';
-import RenderNode from "./RenderNode";
+import RenderNode from './RenderNode';
 
 export default abstract class Component extends RenderNode {
   protected listenKeyboardKey: string[] = [];

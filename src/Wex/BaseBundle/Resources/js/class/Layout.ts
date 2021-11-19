@@ -1,6 +1,6 @@
-import Page from "./Page";
-import RenderNode from "./RenderNode";
-import RenderDataLayoutInterface from "../interfaces/RenderDataLayoutInterface";
+import Page from './Page';
+import RenderNode from './RenderNode';
+import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 
 export default class extends RenderNode {
   public page: Page;

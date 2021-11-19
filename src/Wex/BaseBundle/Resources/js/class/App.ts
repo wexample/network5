@@ -12,7 +12,7 @@ import { MixinQueues } from '../mixins/Queues';
 
 import { unique as arrayUnique } from '../helpers/Arrays';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
-import LayoutInitial from "./LayoutInitial";
+import LayoutInitial from './LayoutInitial';
 
 export default class {
   public bootJsBuffer: string[] = [];
@@ -150,7 +150,7 @@ export default class {
     this.mixins = arrayUnique([...mixins, ...this.mixins]) as MixinInterface[];
   }
 
-  loadAndInitMixins(mixins:MixinInterface[], complete) {
+  loadAndInitMixins(mixins: MixinInterface[], complete) {
     this.loadMixins(mixins);
 
     // Init mixins.

@@ -1,8 +1,8 @@
 import AppService from '../class/AppService';
 import RequestOptionsPageInterface from '../interfaces/RequestOptionsPageInterface';
 import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
-import RenderDataInterface from "../interfaces/RenderDataInterface";
-import RenderNode from "../class/RenderNode";
+import RenderDataInterface from '../interfaces/RenderDataInterface';
+import RenderNode from '../class/RenderNode';
 
 export abstract class RenderNodeService extends AppService {
   pages: {};
@@ -14,18 +14,15 @@ export abstract class RenderNodeService extends AppService {
     renderData: RenderDataInterface,
     complete?: Function
   ) {
-    this.prepareRenderNodeDefinition(
-      renderData,
-      (classDefinition) => {
-        this.createRenderNodeInstance(
-          el,
-          parentRenderNode,
-          renderData,
-          classDefinition,
-          complete
-        );
-      }
-    );
+    this.prepareRenderNodeDefinition(renderData, (classDefinition) => {
+      this.createRenderNodeInstance(
+        el,
+        parentRenderNode,
+        renderData,
+        classDefinition,
+        complete
+      );
+    });
   }
 
   createRenderNodeInstance(

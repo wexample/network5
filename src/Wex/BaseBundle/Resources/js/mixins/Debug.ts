@@ -1,19 +1,19 @@
 import MixinInterface from '../interfaces/MixinInterface';
 import AppService from '../class/AppService';
-import App from "../../../../../../assets/js/class/App";
-import { ComponentsService } from "./Components";
-import Page from "../class/Page";
-import Component from "../class/Component";
-import RenderNode from "../class/RenderNode";
-import RenderDataInterface from "../interfaces/RenderDataInterface";
+import App from '../../../../../../assets/js/class/App';
+import { ComponentsService } from './Components';
+import Page from '../class/Page';
+import Component from '../class/Component';
+import RenderNode from '../class/RenderNode';
+import RenderDataInterface from '../interfaces/RenderDataInterface';
 
 class DebugRenderNode {
-  renderNode: RenderNode
+  renderNode: RenderNode;
   borderColors: any = {
     component: 'yellow',
     page: 'blue',
     layout: 'red',
-  }
+  };
 
   constructor(renderNode) {
     this.renderNode = renderNode;
@@ -58,9 +58,9 @@ export class DebugService extends AppService {
         function (renderNode: Component) {
           debugService.initRenderNode(renderNode);
           complete && complete.apply(this, arguments);
-        },
+        }
       );
-    }
+    };
   }
 
   initRenderNode(renderNode: RenderNode) {

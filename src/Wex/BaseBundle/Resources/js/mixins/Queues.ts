@@ -4,7 +4,7 @@ import MixinsAppService from '../class/MixinsAppService';
 
 import { deleteItem as ArrayDeleteItem } from '../helpers/Arrays';
 import { shallowCopy as ArrayShallowCopy } from '../helpers/Arrays';
-import { uniqueId as StringUniqueId } from "../helpers/String";
+import { uniqueId as StringUniqueId } from '../helpers/String';
 
 export class QueuesService extends MixinsAppService {
   queues: object = {};

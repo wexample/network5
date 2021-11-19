@@ -7,10 +7,10 @@ import App from '../class/App';
 import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 import PageHandlerComponent from '../class/PageHandlerComponent';
 import Component from '../class/Component';
-import { RenderNodeService } from "./RenderNodeService";
-import RenderNode from "../class/RenderNode";
-import { findPreviousNode as DomFindPreviousNode } from "../helpers/Dom";
-import RenderDataInterface from "../interfaces/RenderDataInterface";
+import { RenderNodeService } from './RenderNodeService';
+import RenderNode from '../class/RenderNode';
+import { findPreviousNode as DomFindPreviousNode } from '../helpers/Dom';
+import RenderDataInterface from '../interfaces/RenderDataInterface';
 
 export class ComponentsService extends RenderNodeService {
   elLayoutComponents: HTMLElement;
@@ -88,7 +88,7 @@ export class ComponentsService extends RenderNodeService {
     components.forEach((renderData: RenderDataComponentInterface) => {
       counter++;
 
-      let el: HTMLElement
+      let el: HTMLElement;
       let elPlaceholder = elContext.querySelector(
         '.' + renderData.id
       ) as HTMLElement;
@@ -113,15 +113,11 @@ export class ComponentsService extends RenderNodeService {
         elPlaceholder.parentNode.removeChild(elPlaceholder);
       }
 
-      this.createRenderNode(
-        el,
-        page,
-        renderData,
-        () => {
-          if (--counter === 0) {
-            complete && complete();
-          }
-        });
+      this.createRenderNode(el, page, renderData, () => {
+        if (--counter === 0) {
+          complete && complete();
+        }
+      });
     });
   }
 }

@@ -1,6 +1,6 @@
-import RenderDataInterface from "../interfaces/RenderDataInterface";
-import AppChild from "./AppChild";
-import App from "./App";
+import RenderDataInterface from '../interfaces/RenderDataInterface';
+import AppChild from './AppChild';
+import App from './App';
 
 export default abstract class RenderNode extends AppChild {
   public childRenderNodes: { [key: string]: RenderNode } = {};
@@ -8,7 +8,7 @@ export default abstract class RenderNode extends AppChild {
   protected focused: boolean = false;
   public id: string;
   public parentRenderNode: RenderNode;
-  public renderData: RenderDataInterface
+  public renderData: RenderDataInterface;
 
   constructor(
     app: App,
@@ -38,7 +38,9 @@ export default abstract class RenderNode extends AppChild {
   }
 
   forEachChildRenderNode(callback?: Function) {
-    Object.values(this.childRenderNodes).forEach((renderNode) => callback(renderNode));
+    Object.values(this.childRenderNodes).forEach((renderNode) =>
+      callback(renderNode)
+    );
   }
 
   public focus() {

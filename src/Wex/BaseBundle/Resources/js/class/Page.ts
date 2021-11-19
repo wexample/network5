@@ -3,8 +3,8 @@ import PageResponsiveDisplay from './PageResponsiveDisplay';
 import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
 import MixinInterface from '../interfaces/MixinInterface';
 import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
-import RenderNode from "./RenderNode";
-import PageHandlerComponent from "./PageHandlerComponent";
+import RenderNode from './RenderNode';
+import PageHandlerComponent from './PageHandlerComponent';
 
 export default class extends RenderNode {
   public elOverlay: HTMLElement;
@@ -40,10 +40,7 @@ export default class extends RenderNode {
     this.exit();
   }
 
-  init(
-    renderData: RenderDataPageInterface,
-    complete?: Function
-  ) {
+  init(renderData: RenderDataPageInterface, complete?: Function) {
     super.init(renderData);
 
     this.isLayoutPage = renderData.isLayoutPage;
@@ -55,31 +52,28 @@ export default class extends RenderNode {
 
     this.elOverlay = this.el.querySelector('.page-overlay');
 
-    this.vars = {...this.vars, ...this.renderData.vars};
+    this.vars = { ...this.vars, ...this.renderData.vars };
 
-    this.app.loadAndInitMixins(
-      this.getPageLevelMixins(),
-      () => {
-        this.services.mixins.invokeUntilComplete(
-          'loadPageRenderData',
-          'page',
-          [this],
-          () => {
-            this.updateCurrentResponsiveDisplay();
+    this.app.loadAndInitMixins(this.getPageLevelMixins(), () => {
+      this.services.mixins.invokeUntilComplete(
+        'loadPageRenderData',
+        'page',
+        [this],
+        () => {
+          this.updateCurrentResponsiveDisplay();
 
-            this.updateLayoutTheme(this.services.theme.activeTheme);
+          this.updateLayoutTheme(this.services.theme.activeTheme);
 
-            this.activateListeners();
+          this.activateListeners();
 
-            this.focus();
+          this.focus();
 
-            this.ready();
+          this.ready();
 
-            complete && complete(this);
-          }
-        );
-      }
-    );
+          complete && complete(this);
+        }
+      );
+    });
   }
 
   protected activateListeners(): void {
@@ -91,10 +85,7 @@ export default class extends RenderNode {
       this.onChangeResponsiveSizeProxy
     );
 
-    this.services.events.listen(
-      'theme-change',
-      this.onChangeThemeProxy
-    );
+    this.services.events.listen('theme-change', this.onChangeThemeProxy);
   }
 
   protected deactivateListeners(): void {

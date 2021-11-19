@@ -28,9 +28,7 @@ export class MixinService extends AppService {
     mixins: MixinInterface[] = null
   ) {
     let registry: { [key: string]: string } = {};
-    mixins = mixins || arrayShallowCopy(
-      this.app.mixins
-    ) as MixinInterface[];
+    mixins = mixins || (arrayShallowCopy(this.app.mixins) as MixinInterface[]);
     let loops: number = 0;
     let loopsLimit: number = 100;
     let errorTrace: MixinInterface[] = [];

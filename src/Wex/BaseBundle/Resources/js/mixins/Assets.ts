@@ -7,14 +7,14 @@ import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 import MixinsAppService from '../class/MixinsAppService';
 import Page from '../class/Page';
 import AssetsInterface from '../interfaces/AssetInterface';
-import RenderNode from "../class/RenderNode";
+import RenderNode from '../class/RenderNode';
 
 export class AssetsService extends AppService {
   public static UPDATE_FILTER_ACCEPT = 'accept';
 
   public static UPDATE_FILTER_REJECT = 'reject';
 
-  public assetsRegistry: any = {css: {}, js: {}};
+  public assetsRegistry: any = { css: {}, js: {} };
   public queue: Queue;
   public jsAssetsPending: object = {};
   public updateFilters: Function[] = [];
@@ -166,17 +166,14 @@ export class AssetsService extends AppService {
     renderNode.forEachChildRenderNode((renderNode) => {
       this.enqueueRenderNodeAssetsUpdate(queue, renderNode);
     });
-  };
+  }
 
   updateAssets(complete?: Function) {
     // Only single queue for assets, for now.
     let queue = this.services.queues.create() as Queue;
     queue.async = true;
 
-    this.enqueueRenderNodeAssetsUpdate(
-      queue,
-      this.app.layout
-    );
+    this.enqueueRenderNodeAssetsUpdate(queue, this.app.layout);
 
     queue.then(() => {
       complete && complete();
