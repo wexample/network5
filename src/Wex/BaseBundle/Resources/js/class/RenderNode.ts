@@ -5,9 +5,11 @@ import App from "./App";
 export default abstract class RenderNode extends AppChild {
   public autoActivateListeners: boolean = true;
   public childRenderNodes: { [key: string]: RenderNode } = {};
-  public renderData: RenderDataInterface
+  public el: HTMLElement;
+  protected focused: boolean = false;
   public id: string;
   public parentRenderNode: RenderNode;
+  public renderData: RenderDataInterface
 
   constructor(app: App, parentRenderNode: RenderNode = null) {
     super(app);
@@ -30,6 +32,24 @@ export default abstract class RenderNode extends AppChild {
 
   forEachChildRenderNode(callback?: Function) {
     Object.values(this.childRenderNodes).forEach((renderNode) => callback(renderNode));
+  }
+
+  public focus() {
+    if (this.parentRenderNode) {
+      this.parentRenderNode.blur();
+    }
+
+    this.focused = true;
+    this.activateListeners();
+  }
+
+  public blur() {
+    if (this.parentRenderNode) {
+      this.parentRenderNode.focus();
+    }
+
+    this.focused = false;
+    this.deactivateListeners();
   }
 
   protected activateListeners(): void {

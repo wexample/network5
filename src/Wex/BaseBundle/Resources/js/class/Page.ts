@@ -4,14 +4,15 @@ import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
 import MixinInterface from '../interfaces/MixinInterface';
 import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
 import RenderNode from "./RenderNode";
+import PageHandlerComponent from "./PageHandlerComponent";
 
 export default class extends RenderNode {
-  public el: HTMLElement;
   public elOverlay: HTMLElement;
   public isLayoutPage: boolean;
   public name: string;
   protected onChangeResponsiveSizeProxy: Function;
   protected onChangeThemeProxy: Function;
+  public parentRenderNode: PageHandlerComponent;
   protected readonly responsiveDisplays: any = [];
   public renderData: RenderDataPageInterface;
   public responsiveDisplayCurrent: PageResponsiveDisplay;
@@ -91,6 +92,8 @@ export default class extends RenderNode {
         this.updateCurrentResponsiveDisplay();
 
         this.updateLayoutTheme(this.services.theme.activeTheme);
+
+        this.focus();
 
         this.ready();
 

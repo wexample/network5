@@ -6,15 +6,11 @@ import { ServiceRegistryComponentInterface } from '../interfaces/ServiceRegistry
 import RenderNode from "./RenderNode";
 
 export default abstract class Component extends RenderNode {
-  public el: HTMLElement;
   public elContext: HTMLElement;
   protected listenKeyboardKey: string[] = [];
   protected onKeyUpProxy: Function;
   public renderData: RenderDataComponentInterface;
   protected readonly services: ServiceRegistryComponentInterface;
-
-  // Focus allows listening keyboard interactions.
-  protected focused: boolean = false;
 
   public static INIT_MODE_CLASS: string = 'class';
 
@@ -97,16 +93,6 @@ export default abstract class Component extends RenderNode {
 
   protected onListenedKeyUp(event: KeyboardEvent) {
     // To override...
-  }
-
-  public focus() {
-    this.focused = true;
-    this.activateListeners();
-  }
-
-  public blur() {
-    this.focused = false;
-    this.deactivateListeners();
   }
 
   public remove() {

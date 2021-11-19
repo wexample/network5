@@ -29,7 +29,7 @@ const bundle: AssetBundleInterface = {
       this.el
         .querySelector('.open-another-modal')
         .addEventListener('click', () => {
-          this.services.modals.get('/demo/loading/fetch/simple');
+          this.services.modals.get('/demo/loading/fetch/simple', {pageCalling: this});
         });
     }
   },

@@ -11,6 +11,10 @@ export class ModalsService extends AppService {
   get(path: string, options: RequestOptionsModalInterface = {}): Promise<any> {
     options.layout = options.layout || 'modal';
 
+    if (options.pageCalling) {
+      options.pageCalling.blur();
+    }
+
     return this.services.pages.get(path, options);
   }
 }
