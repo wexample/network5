@@ -104,7 +104,10 @@ export default class extends RenderNode {
         this.onChangeResponsiveSizeProxy
       );
 
-      this.services.events.listen('theme-change', this.onChangeThemeProxy);
+      this.services.events.listen(
+        'theme-change',
+        this.onChangeThemeProxy
+      );
 
       this.updateCurrentResponsiveDisplay();
 
