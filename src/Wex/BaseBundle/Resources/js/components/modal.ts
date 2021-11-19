@@ -22,8 +22,8 @@ export default {
     onMouseUpOverlayProxy: EventListenerObject;
     opened: boolean = false;
 
-    init(renderData: RenderDataComponentInterface) {
-      super.init(renderData);
+    loadRenderData(renderData: RenderDataComponentInterface) {
+      super.loadRenderData(renderData);
 
       this.elContent = this.el.querySelector('.modal-content');
     }

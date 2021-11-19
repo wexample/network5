@@ -6,8 +6,8 @@ export default {
   bundleGroup: 'component',
 
   definition: class extends Component {
-    init(renderData: RenderDataComponentInterface) {
-      super.init(renderData);
+    loadRenderData(renderData: RenderDataComponentInterface) {
+      super.loadRenderData(renderData);
 
       new MDCRipple(this.el);
     }

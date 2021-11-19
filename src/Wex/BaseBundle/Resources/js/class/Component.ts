@@ -31,8 +31,8 @@ export default abstract class Component extends RenderNode {
     this.elContext = elContext;
   }
 
-  init(renderData) {
-    super.init(renderData);
+  loadRenderData(renderData) {
+    super.loadRenderData(renderData);
 
     let elPlaceholder = this.elContext.querySelector(
       '.' + renderData.id

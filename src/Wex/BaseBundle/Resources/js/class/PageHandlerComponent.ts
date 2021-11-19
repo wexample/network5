@@ -8,8 +8,8 @@ export default abstract class PageHandlerComponent extends Component {
   services: ServiceRegistryComponentInterface;
   childPage: Page
 
-  init(renderData: RenderDataComponentInterface) {
-    super.init(renderData);
+  loadRenderData(renderData: RenderDataComponentInterface) {
+    super.loadRenderData(renderData);
 
     // This component is defined as the manager of
     // rendered page from the request.

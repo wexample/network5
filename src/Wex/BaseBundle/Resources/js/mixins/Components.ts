@@ -45,7 +45,7 @@ export class ComponentsService extends AppService {
           elContext
         ) as Component;
 
-        component.init(renderData);
+        component.loadRenderData(renderData);
 
         complete && complete();
       }

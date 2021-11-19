@@ -32,8 +32,8 @@ export default class extends RenderNode {
     return 'page';
   }
 
-  init(renderData: RenderDataPageInterface) {
-    super.init(renderData);
+  loadRenderData(renderData: RenderDataPageInterface) {
+    super.loadRenderData(renderData);
 
     this.isLayoutPage = renderData.isLayoutPage;
     this.name = renderData.name;
@@ -96,7 +96,7 @@ export default class extends RenderNode {
     renderData: RenderDataPageInterface,
     complete?: Function
   ) {
-    this.init(renderData);
+    this.loadRenderData(renderData);
 
     this.loadPageRenderData(() => {
       this.services.events.listen(

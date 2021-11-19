@@ -12,8 +12,8 @@ export default {
     protected elContentCurrent?: HTMLElement;
     protected group: string;
 
-    init(renderData: RenderDataComponentInterface) {
-      super.init(renderData);
+    loadRenderData(renderData: RenderDataComponentInterface) {
+      super.loadRenderData(renderData);
 
       this.group = renderData.options.group;
 
