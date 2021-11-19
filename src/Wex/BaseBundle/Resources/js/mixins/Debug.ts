@@ -46,16 +46,16 @@ export class DebugService extends AppService {
     let methodOriginal = mixinService.createRenderNode;
 
     mixinService.createRenderNode = function (
-      elContext: HTMLElement,
+      el: HTMLElement,
       page: Page = null,
       renderData: RenderDataInterface,
       complete?: Function
     ) {
       methodOriginal.call(
-        mixinService,
-        elContext,
-        renderData,
+        this,
+        el,
         page,
+        renderData,
         function (renderNode: Component) {
           debugService.initRenderNode(renderNode);
           complete && complete.apply(this, arguments);
