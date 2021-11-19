@@ -28,6 +28,10 @@ export default class extends RenderNode {
     return 'page-' + this.name;
   }
 
+  public getRenderNodeType(): string {
+    return 'page';
+  }
+
   init(renderData: RenderDataPageInterface) {
     super.init(renderData);
 

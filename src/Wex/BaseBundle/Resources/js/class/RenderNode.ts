@@ -32,4 +32,6 @@ export default abstract class RenderNode extends AppChild {
   }
 
   public abstract getId(): string;
+
+  public abstract getRenderNodeType(): string;
 }

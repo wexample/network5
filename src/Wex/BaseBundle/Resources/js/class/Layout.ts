@@ -8,6 +8,10 @@ export default class extends RenderNode {
   public renderData: RenderDataLayoutInterface;
 
   public getId(): string {
-    return 'page-' + this.renderData.renderRequestId;
+    return 'layout-' + this.renderData.renderRequestId;
+  }
+
+  public getRenderNodeType(): string {
+    return 'layout';
   }
 }

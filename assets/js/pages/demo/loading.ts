@@ -6,6 +6,7 @@ import {
   ModalsService,
 } from '../../../../src/Wex/BaseBundle/Resources/js/mixins/Modals';
 import { ServiceRegistryPageInterface } from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistryPageInterface';
+import { traceRenderNodes as debugTraceRenderNodes } from "../../../../src/Wex/BaseBundle/Resources/js/helpers/Debug";
 
 interface ServiceRegistryPageCurrentInterface
   extends ServiceRegistryPageInterface {
@@ -36,10 +37,14 @@ const bundle: AssetBundleInterface = {
           }, 1000);
         });
 
+      debugTraceRenderNodes(this.app.layout);
+
       this.el
         .querySelector('#page-modal-show')
         .addEventListener('click', () => {
-          this.services.modals.get('/demo/loading/fetch/simple');
+          this.services.modals.get('/demo/loading/fetch/simple').then(() => {
+            debugTraceRenderNodes(this.app.layout);
+          });
         });
     }
   },

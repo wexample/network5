@@ -67,6 +67,10 @@ export default abstract class Component extends RenderNode {
     return this.renderData.id;
   }
 
+  public getRenderNodeType(): string {
+    return 'component';
+  }
+
   protected onKeyUp(event: KeyboardEvent) {
     if (this.focused && this.listenKeyboardKey.indexOf(event.key) !== -1) {
       this.onListenedKeyUp(event);
