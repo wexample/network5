@@ -78,26 +78,30 @@ export default class extends RenderNode {
     }
 
     this.loadRenderData(renderData);
-    this.app.loadMixins(this.getPageLevelMixins());
 
     this.vars = {...this.vars, ...this.renderData.vars};
 
-    this.services.mixins.invokeUntilComplete(
-      'loadPageRenderData',
-      'page',
-      [this],
+    this.app.loadAndInitMixins(
+      this.getPageLevelMixins(),
       () => {
-        this.activateListeners();
+        this.services.mixins.invokeUntilComplete(
+          'loadPageRenderData',
+          'page',
+          [this],
+          () => {
+            this.activateListeners();
 
-        this.updateCurrentResponsiveDisplay();
+            this.updateCurrentResponsiveDisplay();
 
-        this.updateLayoutTheme(this.services.theme.activeTheme);
+            this.updateLayoutTheme(this.services.theme.activeTheme);
 
-        this.focus();
+            this.focus();
 
-        this.ready();
+            this.ready();
 
-        complete && complete(this);
+            complete && complete(this);
+          }
+        );
       }
     );
   }

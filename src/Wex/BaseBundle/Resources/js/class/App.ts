@@ -43,10 +43,7 @@ export default class {
     let run = () => {
       this.layout = new LayoutInitial(this);
 
-      this.loadMixins(this.getMixins());
-
-      // Init mixins.
-      this.services.mixins.invokeUntilComplete('init', 'app', [], () => {
+      this.loadAndInitMixins(this.getMixins(), () => {
         this.elLayout = doc.getElementById('layout');
 
         this.addLibraries(this.lib);
@@ -151,6 +148,20 @@ export default class {
     });
 
     this.mixins = arrayUnique([...mixins, ...this.mixins]) as MixinInterface[];
+  }
+
+  loadAndInitMixins(mixins:MixinInterface[], complete) {
+    this.loadMixins(mixins);
+
+    // Init mixins.
+    this.services.mixins.invokeUntilComplete(
+      'init',
+      'app',
+      [],
+      complete,
+      undefined,
+      mixins
+    );
   }
 
   getMixinsAndDependencies(mixins: MixinInterface[]): MixinInterface[] {

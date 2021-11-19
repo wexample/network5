@@ -47,7 +47,7 @@ export class ComponentsService extends AppService {
 
         component.loadRenderData(renderData);
 
-        complete && complete();
+        complete && complete(component);
       }
     });
   }

@@ -17,16 +17,18 @@ export class MixinService extends AppService {
    * @param callback
    * @param group
    * @param timeoutLimit
+   * @param mixins
    */
   invokeUntilComplete(
     method,
     group = 'app',
     args = [],
     callback,
-    timeoutLimit: number = 2000
+    timeoutLimit: number = 2000,
+    mixins: MixinInterface[] = null
   ) {
     let registry: { [key: string]: string } = {};
-    let mixins: MixinInterface[] = arrayShallowCopy(
+    mixins = mixins || arrayShallowCopy(
       this.app.mixins
     ) as MixinInterface[];
     let loops: number = 0;

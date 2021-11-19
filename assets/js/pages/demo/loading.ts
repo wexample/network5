@@ -7,6 +7,7 @@ import {
 } from '../../../../src/Wex/BaseBundle/Resources/js/mixins/Modals';
 import { ServiceRegistryPageInterface } from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistryPageInterface';
 import { traceRenderNodes as debugTraceRenderNodes } from "../../../../src/Wex/BaseBundle/Resources/js/helpers/Debug";
+import { MixinDebug } from "../../../../src/Wex/BaseBundle/Resources/js/mixins/Debug";
 
 interface ServiceRegistryPageCurrentInterface
   extends ServiceRegistryPageInterface {
@@ -21,7 +22,10 @@ const bundle: AssetBundleInterface = {
     unitTest: UnitTest;
 
     getPageLevelMixins() {
-      return [MixinModals];
+      return [
+        MixinModals,
+        MixinDebug,
+      ];
     }
 
     ready() {
