@@ -77,6 +77,8 @@ export default class extends RenderNode {
   }
 
   protected activateListeners(): void {
+    super.activateListeners();
+
     this.onChangeResponsiveSizeProxy = this.onChangeResponsiveSize.bind(this);
     this.onChangeThemeProxy = this.onChangeTheme.bind(this);
 
@@ -89,6 +91,8 @@ export default class extends RenderNode {
   }
 
   protected deactivateListeners(): void {
+    super.deactivateListeners();
+
     this.services.events.forget(
       'responsive-change-size',
       this.onChangeResponsiveSizeProxy
