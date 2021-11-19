@@ -1,6 +1,5 @@
 import MixinInterface from '../interfaces/MixinInterface';
 import MixinsAppService from '../class/MixinsAppService';
-import AppService from '../class/AppService';
 import Page from '../class/Page';
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
 import { MixinPrompts } from './Prompts';
@@ -8,8 +7,12 @@ import App from '../class/App';
 import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 import PageHandlerComponent from '../class/PageHandlerComponent';
 import Component from '../class/Component';
+import { RenderNodeService } from "./RenderNodeService";
+import RenderNode from "../class/RenderNode";
+import { findPreviousNode as DomFindPreviousNode } from "../helpers/Dom";
+import RenderDataInterface from "../interfaces/RenderDataInterface";
 
-export class ComponentsService extends AppService {
+export class ComponentsService extends RenderNodeService {
   elLayoutComponents: HTMLElement;
   pageHandlerRegistry: { [key: string]: PageHandlerComponent } = {};
 
@@ -19,37 +22,39 @@ export class ComponentsService extends AppService {
     this.elLayoutComponents = document.getElementById('layout-components');
   }
 
-  create(
-    elContext: HTMLElement,
-    renderData: RenderDataComponentInterface,
-    page: Page = null,
+  createRenderNodeInstance(
+    el: HTMLElement,
+    parentRenderNode: RenderNode,
+    renderData: RenderDataInterface,
+    classDefinition: any,
     complete?: Function
-  ) {
-    this.services.assets.updateAssetsCollection(renderData.assets, () => {
-      let classDefinition = this.app.getBundleClassDefinition(renderData.name);
+  ): RenderNode | null {
+    // Prevent multiple alerts for the same component.
+    if (!classDefinition) {
+      this.services.prompts.systemError(
+        'page_message.error.com_missing',
+        {},
+        {
+          ':type': renderData.name,
+          ':renderData': renderData,
+        }
+      );
+    } else {
+      let renderNode = super.createRenderNodeInstance(
+        el,
+        parentRenderNode,
+        renderData,
+        classDefinition
+      ) as Component;
 
-      // Prevent multiple alerts for the same component.
-      if (!classDefinition) {
-        this.services.prompts.systemError(
-          'page_message.error.com_missing',
-          {},
-          {
-            ':type': renderData.name,
-            ':renderData': renderData,
-          }
-        );
-      } else {
-        let component = new classDefinition(
-          this.app,
-          page,
-          elContext
-        ) as Component;
+      renderNode.init(renderData);
 
-        component.loadRenderData(renderData);
+      renderNode.loadRenderData(renderData);
 
-        complete && complete(component);
-      }
-    });
+      complete && complete(renderNode);
+
+      return renderNode;
+    }
   }
 
   loadLayoutRenderData(data: RenderDataLayoutInterface, complete?: Function) {
@@ -80,13 +85,43 @@ export class ComponentsService extends AppService {
 
     let counter: number = 0;
 
-    components.forEach((data: RenderDataComponentInterface) => {
+    components.forEach((renderData: RenderDataComponentInterface) => {
       counter++;
-      this.create(elContext, data, page, () => {
-        if (--counter === 0) {
-          complete && complete();
-        }
-      });
+
+      let el: HTMLElement
+      let elPlaceholder = elContext.querySelector(
+        '.' + renderData.id
+      ) as HTMLElement;
+      let removePlaceHolder = true;
+
+      switch (renderData.initMode) {
+        case Component.INIT_MODE_CLASS:
+          el = elPlaceholder;
+          removePlaceHolder = false;
+          break;
+        case Component.INIT_MODE_PARENT:
+          el = elPlaceholder.parentElement;
+          break;
+        case Component.INIT_MODE_LAYOUT:
+        case Component.INIT_MODE_PREVIOUS:
+          el = DomFindPreviousNode(elPlaceholder);
+          break;
+      }
+
+      if (removePlaceHolder) {
+        // Remove placeholder tag as it may interact with CSS or JS selectors.
+        elPlaceholder.parentNode.removeChild(elPlaceholder);
+      }
+
+      this.createRenderNode(
+        el,
+        page,
+        renderData,
+        () => {
+          if (--counter === 0) {
+            complete && complete();
+          }
+        });
     });
   }
 }

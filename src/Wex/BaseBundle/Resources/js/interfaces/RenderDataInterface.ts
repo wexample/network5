@@ -11,4 +11,5 @@ export default interface RenderDataInterface {
   };
   vars: object;
   templates: string;
+  name: string;
 }

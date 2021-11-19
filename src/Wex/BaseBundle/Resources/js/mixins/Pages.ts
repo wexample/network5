@@ -1,29 +1,80 @@
 import { MixinLocale } from './Locale';
 import MixinInterface from '../interfaces/MixinInterface';
-import Page from '../class/Page';
-import AppService from '../class/AppService';
 import MixinsAppService from '../class/MixinsAppService';
 import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
 import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 import RequestOptionsPageInterface from '../interfaces/RequestOptionsPageInterface';
 import { MixinAdaptive } from './Adaptive';
 import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
+import { RenderNodeService } from "./RenderNodeService";
+import Page from "../class/Page";
+import RenderNode from "../class/RenderNode";
 
-export class PagesService extends AppService {
+export class PagesService extends RenderNodeService {
   pages: {};
   services: ServiceRegistryPageInterface;
 
-  create(renderData: RenderDataPageInterface, complete: Function) {
-    this.services.assets.updateAssetsCollection(renderData.assets, () => {
-      let classDefinition = this.app.getBundleClassDefinition(renderData.name);
+  createPage(
+    renderData: RenderDataPageInterface,
+    complete?: Function
+  ) {
+    let el;
+    let parentRenderNode;
 
-      if (!classDefinition) {
-        classDefinition = this.app.getClassPage();
+    if (renderData.isLayoutPage) {
+      el = this.app.elLayout;
+      parentRenderNode = this.app.layout;
+    } else {
+      el = renderData.el;
+    }
+
+    let pageHandler = this.services.components.pageHandlerRegistry[renderData.renderRequestId];
+    if (pageHandler) {
+      parentRenderNode = pageHandler;
+      delete this.services.components.pageHandlerRegistry[renderData.renderRequestId];
+      
+      if (parentRenderNode) {
+        parentRenderNode.renderPageEl(renderData);
+        el = parentRenderNode.getPageEl();
       }
+    }
 
-      let page = new classDefinition(this.app);
-      page.init(renderData, complete);
-    });
+    if (!el) {
+      let promptService = this.services.prompts;
+
+      promptService.systemError('page_message.error.page_missing_el');
+      return;
+    }
+
+    this.createRenderNode(
+      el,
+      parentRenderNode,
+      renderData,
+      complete
+    );
+  }
+
+  createRenderNodeInstance(
+    el: HTMLElement,
+    parentRenderNode: RenderNode,
+    renderData: RenderDataPageInterface,
+    classDefinition: any,
+    complete?: Function
+  ): RenderNode | null {
+    if (!classDefinition) {
+      classDefinition = this.app.getClassPage();
+    }
+
+    let page = super.createRenderNodeInstance(
+      el,
+      parentRenderNode,
+      renderData,
+      classDefinition
+    ) as Page;
+
+    page.init(renderData, complete);
+
+    return page;
   }
 
   get(path: string, options: RequestOptionsPageInterface): Promise<any> {
@@ -39,7 +90,7 @@ export const MixinPages: MixinInterface = {
   hooks: {
     app: {
       loadRenderData(
-        data: RenderDataLayoutInterface,
+        renderData: RenderDataLayoutInterface,
         registry: any,
         next: Function
       ) {
@@ -48,8 +99,11 @@ export const MixinPages: MixinInterface = {
           registry.responsive === MixinsAppService.LOAD_STATUS_COMPLETE &&
           registry.locale === MixinsAppService.LOAD_STATUS_COMPLETE
         ) {
-          if (data.page) {
-            this.services.pages.create(data.page, next);
+          if (renderData.page) {
+            this.services.pages.createPage(
+              renderData.page,
+              next
+            );
 
             return MixinsAppService.LOAD_STATUS_STOP;
           } else {

@@ -44,40 +44,16 @@ export default class extends RenderNode {
     renderData: RenderDataPageInterface,
     complete?: Function
   ) {
+    super.init(renderData);
+
     this.isLayoutPage = renderData.isLayoutPage;
     this.name = renderData.name;
 
     if (this.isLayoutPage) {
       this.app.layout.page = this;
-      this.el = this.app.elLayout;
-    } else {
-      this.el = renderData.el;
-    }
-
-    // A component may have been defined as page handler (modal / panel).
-    let pageHandlerRegistry = this.services.components.pageHandlerRegistry;
-    let pageHandler = pageHandlerRegistry[renderData.renderRequestId];
-    if (pageHandler) {
-      pageHandler.renderPageEl(this, renderData);
-      this.parentRenderNode = pageHandler;
-      this.el = pageHandler.getPageEl();
-    }
-
-    if (!this.el) {
-      let promptService = this.services.prompts;
-
-      promptService.systemError('page_message.error.page_missing_el');
-      return;
     }
 
     this.elOverlay = this.el.querySelector('.page-overlay');
-
-    if (pageHandler) {
-      pageHandler.initPage(this, renderData);
-      delete pageHandlerRegistry[renderData.renderRequestId];
-    }
-
-    this.loadRenderData(renderData);
 
     this.vars = {...this.vars, ...this.renderData.vars};
 
@@ -89,11 +65,11 @@ export default class extends RenderNode {
           'page',
           [this],
           () => {
-            this.activateListeners();
-
             this.updateCurrentResponsiveDisplay();
 
             this.updateLayoutTheme(this.services.theme.activeTheme);
+
+            this.activateListeners();
 
             this.focus();
 

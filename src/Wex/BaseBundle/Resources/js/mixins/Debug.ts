@@ -6,6 +6,7 @@ import RenderDataComponentInterface from "../interfaces/RenderDataComponentInter
 import Page from "../class/Page";
 import Component from "../class/Component";
 import RenderNode from "../class/RenderNode";
+import RenderDataInterface from "../interfaces/RenderDataInterface";
 
 class DebugRenderNode {
   renderNode: RenderNode
@@ -42,12 +43,12 @@ export class DebugService extends AppService {
   addTrackers() {
     let mixinService = this.app.services['components'] as ComponentsService;
     let debugService = this;
-    let methodOriginal = mixinService.create;
+    let methodOriginal = mixinService.createRenderNode;
 
-    mixinService.create = function (
+    mixinService.createRenderNode = function (
       elContext: HTMLElement,
-      renderData: RenderDataComponentInterface,
       page: Page = null,
+      renderData: RenderDataInterface,
       complete?: Function
     ) {
       methodOriginal.call(

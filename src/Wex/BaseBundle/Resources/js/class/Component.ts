@@ -1,12 +1,9 @@
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
-import { findPreviousNode as DomFindPreviousNode } from '../helpers/Dom';
-import App from './App';
 import Events from '../helpers/Events';
 import { ServiceRegistryComponentInterface } from '../interfaces/ServiceRegistryComponentInterface';
 import RenderNode from "./RenderNode";
 
 export default abstract class Component extends RenderNode {
-  public elContext: HTMLElement;
   protected listenKeyboardKey: string[] = [];
   protected onKeyUpProxy: Function;
   public renderData: RenderDataComponentInterface;
@@ -19,43 +16,6 @@ export default abstract class Component extends RenderNode {
   public static INIT_MODE_PARENT: string = 'parent';
 
   public static INIT_MODE_PREVIOUS: string = 'previous';
-
-  constructor(app: App, parentRenderNode: RenderNode, elContext: HTMLElement) {
-    super(app, parentRenderNode);
-    this.elContext = elContext;
-  }
-
-  loadRenderData(renderData) {
-    super.loadRenderData(renderData);
-
-    let elPlaceholder = this.elContext.querySelector(
-      '.' + renderData.id
-    ) as HTMLElement;
-    let removePlaceHolder = true;
-
-    switch (renderData.initMode) {
-      case Component.INIT_MODE_CLASS:
-        this.el = elPlaceholder;
-        removePlaceHolder = false;
-        break;
-      case Component.INIT_MODE_PARENT:
-        this.el = elPlaceholder.parentElement;
-        break;
-      case Component.INIT_MODE_LAYOUT:
-      case Component.INIT_MODE_PREVIOUS:
-        this.el = DomFindPreviousNode(elPlaceholder);
-        break;
-    }
-
-    if (removePlaceHolder) {
-      // Remove placeholder tag as it may interact with CSS or JS selectors.
-      elPlaceholder.parentNode.removeChild(elPlaceholder);
-    }
-
-    if (this.autoActivateListeners) {
-      this.activateListeners();
-    }
-  }
 
   public getId(): string {
     return this.renderData.id;

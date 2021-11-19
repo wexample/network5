@@ -14,9 +14,15 @@ export function traceRenderNodesPart(
   let treeCharNode = '└─';
   let treeCharProperty = ' ';
   let ident = '   '.repeat(depth);
+  let depthLimit = 10;
+
+  if (depth > depthLimit) {
+    return;
+  }
 
   output += "\n" + ident + ' ' + treeCharNode + '» ' + root.getRenderNodeType();
-  output += "\n" + ident +' ' + treeCharProperty + '     #' + root.getId();
+  output += "\n" + ident + ' ' + treeCharProperty + '     #' + root.getId();
+  output += "\n" + ident + ' ' + treeCharProperty + '     #' + root.el;
 
   let children = Object.values(root.childRenderNodes);
 

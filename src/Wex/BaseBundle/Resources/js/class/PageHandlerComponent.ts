@@ -1,12 +1,10 @@
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
 import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
-import Page from './Page';
 import Component from './Component';
 import { ServiceRegistryComponentInterface } from '../interfaces/ServiceRegistryComponentInterface';
 
 export default abstract class PageHandlerComponent extends Component {
   services: ServiceRegistryComponentInterface;
-  childPage: Page
 
   loadRenderData(renderData: RenderDataComponentInterface) {
     super.loadRenderData(renderData);
@@ -24,16 +22,8 @@ export default abstract class PageHandlerComponent extends Component {
   /**
    * Used by page handlers (modal / panels).
    * @param renderData
-   * @param page
    */
-  public abstract renderPageEl(page: Page, renderData: RenderDataPageInterface);
+  public abstract renderPageEl(renderData: RenderDataPageInterface);
 
   public abstract getPageEl(): HTMLElement;
-
-  public initPage(
-    page: Page,
-    renderData: RenderDataPageInterface
-  ): void {
-    this.childPage = page;
-  }
 }

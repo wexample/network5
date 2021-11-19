@@ -3,7 +3,6 @@ import AppChild from "./AppChild";
 import App from "./App";
 
 export default abstract class RenderNode extends AppChild {
-  public autoActivateListeners: boolean = true;
   public childRenderNodes: { [key: string]: RenderNode } = {};
   public el: HTMLElement;
   protected focused: boolean = false;
@@ -11,23 +10,31 @@ export default abstract class RenderNode extends AppChild {
   public parentRenderNode: RenderNode;
   public renderData: RenderDataInterface
 
-  constructor(app: App, parentRenderNode: RenderNode = null) {
+  constructor(
+    app: App,
+    el: HTMLElement = null,
+    parentRenderNode: RenderNode = null
+  ) {
     super(app);
 
-    if (parentRenderNode) {
-      this.parentRenderNode = parentRenderNode;
-    } else {
-      // Append to initial layout.
-      this.parentRenderNode = this.app.layout;
-    }
+    this.el = el;
+    this.parentRenderNode = parentRenderNode;
+  }
+
+  public init(renderData: RenderDataInterface) {
+    this.loadRenderData(renderData);
   }
 
   loadRenderData(renderData: RenderDataInterface) {
     this.renderData = renderData;
 
     if (this.parentRenderNode) {
-      this.parentRenderNode.childRenderNodes[this.getId()] = this;
+      this.parentRenderNode.appendChildRenderNode(this);
     }
+  }
+
+  appendChildRenderNode(renderNode: RenderNode) {
+    this.childRenderNodes[renderNode.getId()] = renderNode;
   }
 
   forEachChildRenderNode(callback?: Function) {
@@ -35,19 +42,11 @@ export default abstract class RenderNode extends AppChild {
   }
 
   public focus() {
-    if (this.parentRenderNode) {
-      this.parentRenderNode.blur();
-    }
-
     this.focused = true;
     this.activateListeners();
   }
 
   public blur() {
-    if (this.parentRenderNode) {
-      this.parentRenderNode.focus();
-    }
-
     this.focused = false;
     this.deactivateListeners();
   }

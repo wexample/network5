@@ -6,12 +6,12 @@ import Keyboard from '../helpers/Keyboard';
 import Mouse from '../helpers/Mouse';
 import Variables from '../helpers/Variables';
 import Events from '../helpers/Events';
+import RenderNode from "../class/RenderNode";
 
 export default {
   bundleGroup: 'component',
 
   definition: class extends PageHandlerComponent {
-    autoActivateListeners: boolean = false;
     closing: boolean;
     elContent: HTMLElement;
     listenKeyboardKey: string[] = [Keyboard.KEY_ESCAPE];
@@ -28,12 +28,15 @@ export default {
       this.elContent = this.el.querySelector('.modal-content');
     }
 
-    initPage(page: Page, renderData: RenderDataPageInterface) {
-      super.initPage(page, renderData);
-      this.open();
+    appendChildRenderNode(renderNode: RenderNode) {
+      super.appendChildRenderNode(renderNode);
+
+      if (renderNode instanceof Page) {
+        this.open();
+      }
     }
 
-    public renderPageEl(page: Page, renderData: RenderDataPageInterface) {
+    public renderPageEl(renderData: RenderDataPageInterface) {
       this.elContent.innerHTML = renderData.body;
     }
 
@@ -69,7 +72,14 @@ export default {
         Events.MOUSEDOWN,
         this.onMouseDownOverlayProxy
       );
-      this.el.removeEventListener(Events.MOUSEUP, this.onMouseUpOverlayProxy);
+      this.el.removeEventListener(
+        Events.MOUSEUP,
+        this.onMouseUpOverlayProxy
+      );
+
+      this.el
+        .querySelector('.modal-close a')
+        .removeEventListener(Events.CLICK, this.onClickCloseProxy);
     }
 
     open() {
