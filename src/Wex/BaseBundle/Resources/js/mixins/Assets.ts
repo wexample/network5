@@ -185,10 +185,6 @@ export class AssetsService extends AppService {
     queue.start();
   }
 
-  updatePageAssets(page: Page, complete?: Function) {
-    this.updateAssetsCollection(page.renderData.assets, complete);
-  }
-
   updateAssetsCollection(
     assetsCollection: AssetsCollectionInterface,
     complete?: Function
@@ -267,14 +263,6 @@ export const MixinAssets: MixinInterface = {
       ) {
         // Load only layout assets.
         this.app.services.assets.updateAssetsCollection(data.assets, next);
-
-        return MixinsAppService.LOAD_STATUS_STOP;
-      },
-    },
-
-    page: {
-      loadPageRenderData(page: Page, registry: any, next: Function) {
-        this.app.services.assets.updatePageAssets(page, next);
 
         return MixinsAppService.LOAD_STATUS_STOP;
       },

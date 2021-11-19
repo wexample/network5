@@ -10,19 +10,13 @@ export default class extends RenderNode {
   public elOverlay: HTMLElement;
   public isLayoutPage: boolean;
   public name: string;
-  protected readonly onChangeResponsiveSizeProxy: Function;
-  protected readonly onChangeThemeProxy: Function;
+  protected onChangeResponsiveSizeProxy: Function;
+  protected onChangeThemeProxy: Function;
   protected readonly responsiveDisplays: any = [];
   public renderData: RenderDataPageInterface;
   public responsiveDisplayCurrent: PageResponsiveDisplay;
   public vars: any;
   public services: ServiceRegistryPageInterface;
-
-  constructor(app: App) {
-    super(app);
-    this.onChangeResponsiveSizeProxy = this.onChangeResponsiveSize.bind(this);
-    this.onChangeThemeProxy = this.onChangeTheme.bind(this);
-  }
 
   public getId(): string {
     return 'page-' + this.name;
@@ -32,9 +26,23 @@ export default class extends RenderNode {
     return 'page';
   }
 
-  loadRenderData(renderData: RenderDataPageInterface) {
-    super.loadRenderData(renderData);
+  getPageLevelMixins(): MixinInterface[] {
+    return [];
+  }
 
+  exit() {
+    // To override...
+  }
+
+  destroy() {
+    this.deactivateListeners();
+    this.exit();
+  }
+
+  init(
+    renderData: RenderDataPageInterface,
+    complete?: Function
+  ) {
     this.isLayoutPage = renderData.isLayoutPage;
     this.name = renderData.name;
 
@@ -68,65 +76,53 @@ export default class extends RenderNode {
       delete pageHandlerRegistry[renderData.renderRequestId];
     }
 
-    this.app.loadMixins(this.getPageLevelMixins());
-  }
-
-  getPageLevelMixins(): MixinInterface[] {
-    return [];
-  }
-
-  exit() {
-    // To override...
-  }
-
-  destroy() {
-    let eventsService = this.services.events;
-
-    eventsService.forget(
-      'responsive-change-size',
-      this.onChangeResponsiveSizeProxy
-    );
-
-    eventsService.forget('theme-change', this.onChangeResponsiveSizeProxy);
-
-    this.exit();
-  }
-
-  loadInitialRenderData(
-    renderData: RenderDataPageInterface,
-    complete?: Function
-  ) {
     this.loadRenderData(renderData);
+    this.app.loadMixins(this.getPageLevelMixins());
 
-    this.loadPageRenderData(() => {
-      this.services.events.listen(
-        'responsive-change-size',
-        this.onChangeResponsiveSizeProxy
-      );
-
-      this.services.events.listen(
-        'theme-change',
-        this.onChangeThemeProxy
-      );
-
-      this.updateCurrentResponsiveDisplay();
-
-      this.updateLayoutTheme(this.services.theme.activeTheme);
-
-      this.ready();
-
-      complete && complete(this);
-    });
-  }
-
-  loadPageRenderData(complete?: Function) {
     this.vars = {...this.vars, ...this.renderData.vars};
 
     this.services.mixins.invokeUntilComplete(
       'loadPageRenderData',
       'page',
       [this],
-      complete
+      () => {
+        this.activateListeners();
+
+        this.updateCurrentResponsiveDisplay();
+
+        this.updateLayoutTheme(this.services.theme.activeTheme);
+
+        this.ready();
+
+        complete && complete(this);
+      }
+    );
+  }
+
+  protected activateListeners(): void {
+    this.onChangeResponsiveSizeProxy = this.onChangeResponsiveSize.bind(this);
+    this.onChangeThemeProxy = this.onChangeTheme.bind(this);
+
+    this.services.events.listen(
+      'responsive-change-size',
+      this.onChangeResponsiveSizeProxy
+    );
+
+    this.services.events.listen(
+      'theme-change',
+      this.onChangeThemeProxy
+    );
+  }
+
+  protected deactivateListeners(): void {
+    this.services.events.forget(
+      'responsive-change-size',
+      this.onChangeResponsiveSizeProxy
+    );
+
+    this.services.events.forget(
+      'theme-change',
+      this.onChangeResponsiveSizeProxy
     );
   }
 

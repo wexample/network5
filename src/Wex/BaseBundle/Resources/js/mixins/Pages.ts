@@ -13,17 +13,17 @@ export class PagesService extends AppService {
   pages: {};
   services: ServiceRegistryPageInterface;
 
-  create(data: RenderDataPageInterface, complete: Function): Page {
-    let classDefinition = this.app.getBundleClassDefinition(data.name);
+  create(renderData: RenderDataPageInterface, complete: Function) {
+    this.services.assets.updateAssetsCollection(renderData.assets, () => {
+      let classDefinition = this.app.getBundleClassDefinition(renderData.name);
 
-    if (!classDefinition) {
-      classDefinition = this.app.getClassPage();
-    }
+      if (!classDefinition) {
+        classDefinition = this.app.getClassPage();
+      }
 
-    let page = new classDefinition(this.app, data);
-    page.loadInitialRenderData(data, complete);
-
-    return page;
+      let page = new classDefinition(this.app);
+      page.init(renderData, complete);
+    });
   }
 
   get(path: string, options: RequestOptionsPageInterface): Promise<any> {

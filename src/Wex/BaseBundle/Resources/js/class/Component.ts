@@ -6,7 +6,6 @@ import { ServiceRegistryComponentInterface } from '../interfaces/ServiceRegistry
 import RenderNode from "./RenderNode";
 
 export default abstract class Component extends RenderNode {
-  public autoActivateListeners: boolean = true;
   public el: HTMLElement;
   public elContext: HTMLElement;
   protected listenKeyboardKey: string[] = [];
@@ -27,7 +26,6 @@ export default abstract class Component extends RenderNode {
 
   constructor(app: App, parentRenderNode: RenderNode, elContext: HTMLElement) {
     super(app, parentRenderNode);
-
     this.elContext = elContext;
   }
 

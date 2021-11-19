@@ -3,6 +3,7 @@ import AppChild from "./AppChild";
 import App from "./App";
 
 export default abstract class RenderNode extends AppChild {
+  public autoActivateListeners: boolean = true;
   public childRenderNodes: { [key: string]: RenderNode } = {};
   public renderData: RenderDataInterface
   public id: string;
@@ -29,6 +30,14 @@ export default abstract class RenderNode extends AppChild {
 
   forEachChildRenderNode(callback?: Function) {
     Object.values(this.childRenderNodes).forEach((renderNode) => callback(renderNode));
+  }
+
+  protected activateListeners(): void {
+    // To override...
+  }
+
+  protected deactivateListeners(): void {
+    // To override...
   }
 
   public abstract getId(): string;
