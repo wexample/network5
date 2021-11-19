@@ -2,7 +2,6 @@ import MixinInterface from '../interfaces/MixinInterface';
 import AppService from '../class/AppService';
 import App from "../../../../../../assets/js/class/App";
 import { ComponentsService } from "./Components";
-import RenderDataComponentInterface from "../interfaces/RenderDataComponentInterface";
 import Page from "../class/Page";
 import Component from "../class/Component";
 import RenderNode from "../class/RenderNode";
