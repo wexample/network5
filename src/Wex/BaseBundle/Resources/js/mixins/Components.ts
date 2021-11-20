@@ -11,6 +11,7 @@ import { RenderNodeService } from './RenderNodeService';
 import RenderNode from '../class/RenderNode';
 import { findPreviousNode as DomFindPreviousNode } from '../helpers/Dom';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
+import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
 
 export class ComponentsService extends RenderNodeService {
   elLayoutComponents: HTMLElement;
@@ -48,23 +49,43 @@ export class ComponentsService extends RenderNodeService {
     }
   }
 
-  loadLayoutRenderData(data: RenderDataLayoutInterface, complete?: Function) {
-    if (data.templates) {
+  loadLayoutRenderData(
+    renderData: RenderDataLayoutInterface,
+    requestOptions: RequestOptionsInterface,
+    complete?: Function
+  ) {
+    if (renderData.templates) {
       // Append html for global components.
-      this.elLayoutComponents.insertAdjacentHTML('beforeend', data.templates);
+      this.elLayoutComponents.insertAdjacentHTML('beforeend', renderData.templates);
     }
 
-    if (data.components) {
-      this.createComponents(data.components, this.app.layout.el, null, complete);
+    if (renderData.components) {
+      this.createComponents(
+        renderData.components,
+        requestOptions,
+        this.app.layout.el,
+        null,
+        complete
+      );
     }
   }
 
-  loadPageRenderData(page: Page, complete?: Function) {
-    this.createComponents(page.renderData.components, page.el, page, complete);
+  loadPageRenderData(
+    page: Page,
+    complete?: Function
+  ) {
+    this.createComponents(
+      page.renderData.components,
+      page.requestOptions,
+      page.el,
+      page,
+      complete
+    );
   }
 
   createComponents(
     components: RenderDataComponentInterface[],
+    requestOptions: RequestOptionsInterface,
     elContext: HTMLElement,
     page: Page,
     complete?: Function
@@ -104,7 +125,7 @@ export class ComponentsService extends RenderNodeService {
         elPlaceholder.parentNode.removeChild(elPlaceholder);
       }
 
-      this.createRenderNode(el, page, renderData, () => {
+      this.createRenderNode(el, page, renderData, requestOptions, () => {
         if (--counter === 0) {
           complete && complete();
         }
@@ -121,7 +142,8 @@ export const MixinComponents: MixinInterface = {
   hooks: {
     app: {
       loadRenderData(
-        data: RenderDataLayoutInterface,
+        renderData: RenderDataLayoutInterface,
+        requestOptions: RequestOptionsInterface,
         registry: any,
         next: Function
       ) {
@@ -129,7 +151,11 @@ export const MixinComponents: MixinInterface = {
           return MixinsAppService.LOAD_STATUS_WAIT;
         }
 
-        this.services.components.loadLayoutRenderData(data, next);
+        this.services.components.loadLayoutRenderData(
+          renderData,
+          requestOptions,
+          next
+        );
 
         return MixinsAppService.LOAD_STATUS_STOP;
       },

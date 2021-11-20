@@ -10,6 +10,7 @@ export class ModalsService extends AppService {
 
   get(path: string, options: RequestOptionsModalInterface = {}): Promise<any> {
     options.layout = options.layout || 'modal';
+    options.callingPage = this.app.layout.pageFocused;
 
     return this.services.pages.get(path, options);
   }

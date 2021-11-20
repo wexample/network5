@@ -55,7 +55,7 @@ export default abstract class Component extends RenderNode {
     // To override...
   }
 
-  public remove() {
+  public exit() {
     this.deactivateListeners();
 
     this.el.parentNode.removeChild(this.el);

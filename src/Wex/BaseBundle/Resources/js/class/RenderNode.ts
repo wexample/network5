@@ -1,6 +1,7 @@
 import RenderDataInterface from '../interfaces/RenderDataInterface';
 import AppChild from './AppChild';
 import App from './App';
+import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
 
 export default abstract class RenderNode extends AppChild {
   public childRenderNodes: { [key: string]: RenderNode } = {};
@@ -25,7 +26,17 @@ export default abstract class RenderNode extends AppChild {
     complete && complete(this);
   }
 
-  loadRenderData(renderData: RenderDataInterface) {
+  public exit() {
+    this.forEachChildRenderNode((renderNode) => {
+      renderNode.exit();
+    });
+
+    if (this.parentRenderNode) {
+      this.parentRenderNode.removeChildRenderNode(this);
+    }
+  }
+
+  loadRenderData(renderData: RenderDataInterface, requestOptions: RequestOptionsInterface) {
     this.renderData = renderData;
 
     if (this.parentRenderNode) {
@@ -35,6 +46,10 @@ export default abstract class RenderNode extends AppChild {
 
   appendChildRenderNode(renderNode: RenderNode) {
     this.childRenderNodes[renderNode.getId()] = renderNode;
+  }
+
+  removeChildRenderNode(renderNode: RenderNode) {
+    delete this.childRenderNodes[renderNode.getId()];
   }
 
   forEachChildRenderNode(callback?: Function) {

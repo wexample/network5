@@ -9,12 +9,17 @@ import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageI
 import { RenderNodeService } from './RenderNodeService';
 import Page from '../class/Page';
 import RenderNode from '../class/RenderNode';
+import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
 
 export class PagesService extends RenderNodeService {
-  pages: {};
-  services: ServiceRegistryPageInterface;
+  public pages: {};
+  public services: ServiceRegistryPageInterface;
 
-  createPage(renderData: RenderDataPageInterface, complete?: Function) {
+  createPage(
+    renderData: RenderDataPageInterface,
+    requestOptions: RequestOptionsInterface,
+    complete?: Function
+  ) {
     let el;
     let parentRenderNode;
 
@@ -25,18 +30,19 @@ export class PagesService extends RenderNodeService {
       el = renderData.el;
     }
 
-    let pageHandler =
-      this.services.components.pageHandlerRegistry[renderData.renderRequestId];
-    if (pageHandler) {
-      parentRenderNode = pageHandler;
-      delete this.services.components.pageHandlerRegistry[
-        renderData.renderRequestId
-        ];
+    let pageHandler = this.services.components
+      .pageHandlerRegistry[renderData.renderRequestId];
 
-      if (parentRenderNode) {
-        parentRenderNode.renderPageEl(renderData);
-        el = parentRenderNode.getPageEl();
-      }
+    if (pageHandler) {
+      renderData.pageHandler = pageHandler;
+
+      delete this.services.components
+        .pageHandlerRegistry[renderData.renderRequestId];
+
+      pageHandler.renderPageEl(renderData);
+      el = pageHandler.getPageEl();
+
+      parentRenderNode = pageHandler;
     }
 
     if (!el) {
@@ -46,7 +52,13 @@ export class PagesService extends RenderNodeService {
       return;
     }
 
-    this.createRenderNode(el, parentRenderNode, renderData, complete);
+    this.createRenderNode(
+      el,
+      parentRenderNode,
+      renderData,
+      requestOptions,
+      complete
+    );
   }
 
   createRenderNodeInstance(
@@ -77,6 +89,7 @@ export const MixinPages: MixinInterface = {
     app: {
       loadRenderData(
         renderData: RenderDataLayoutInterface,
+        requestOptions: RequestOptionsInterface,
         registry: any,
         next: Function
       ) {
@@ -86,7 +99,7 @@ export const MixinPages: MixinInterface = {
           registry.locale === MixinsAppService.LOAD_STATUS_COMPLETE
         ) {
           if (renderData.page) {
-            this.services.pages.createPage(renderData.page, next);
+            this.services.pages.createPage(renderData.page, requestOptions, next);
 
             return MixinsAppService.LOAD_STATUS_STOP;
           } else {

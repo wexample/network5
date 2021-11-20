@@ -15,6 +15,7 @@ import RenderDataInterface from '../interfaces/RenderDataInterface';
 import LayoutInitial from './LayoutInitial';
 import RenderDataLayoutInterface from "../interfaces/RenderDataLayoutInterface";
 import AsyncConstructor from "./AsyncConstructor";
+import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
 
 export default class extends AsyncConstructor {
   public bootJsBuffer: string[] = [];
@@ -54,7 +55,7 @@ export default class extends AsyncConstructor {
         // The main functionalities are ready.
         this.hasCoreLoaded = true;
 
-        this.loadRenderData(this.layout.renderData, () => {
+        this.loadRenderData(this.layout.renderData, {}, () => {
           // Display page content.
           this.layout.el.classList.remove('layout-loading');
           // Execute ready callbacks.
@@ -80,11 +81,15 @@ export default class extends AsyncConstructor {
     setTimeout(callback);
   }
 
-  loadRenderData(data: RenderDataInterface, complete?: Function) {
+  loadRenderData(
+    renderData: RenderDataInterface,
+    requestOptions: RequestOptionsInterface,
+    complete?: Function
+  ) {
     this.services.mixins.invokeUntilComplete(
       'loadRenderData',
       'app',
-      [data],
+      [renderData, requestOptions],
       () => {
         // Execute ready callbacks.
         this.readyComplete();

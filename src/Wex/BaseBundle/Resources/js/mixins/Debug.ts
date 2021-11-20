@@ -7,10 +7,12 @@ import { RenderNodeService } from "./RenderNodeService";
 import { PagesService } from "./Pages";
 import Variables from "../helpers/Variables";
 import DebugRenderNode from "../class/Debug/DebugRenderNode";
+import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
 
 export class DebugService extends AppService {
-  renderNodes: any = {};
-  el: HTMLElement
+  public renderNodes: any = {};
+  public elDebugHelpers: HTMLElement
+  public elDebugHelpersGlobal: HTMLElement
 
   init() {
     this.createEl();
@@ -18,14 +20,17 @@ export class DebugService extends AppService {
   }
 
   createEl() {
-    this.el = document.createElement('div');
+    this.elDebugHelpers = document.createElement('div');
     let componentsService = this.app.services[Variables.PLURAL_COMPONENT] as ComponentsService;
-    this.el.setAttribute(Variables.ID, 'layout-debug-helpers');
+    this.elDebugHelpers.setAttribute(Variables.ID, 'layout-debug-helpers');
+
+    this.elDebugHelpersGlobal = document.createElement('div');
+    this.elDebugHelpers.appendChild(this.elDebugHelpersGlobal);
 
     componentsService
       .elLayoutComponents.parentNode
       .insertBefore(
-        this.el,
+        this.elDebugHelpers,
         componentsService.elLayoutComponents
       );
   }
@@ -43,6 +48,7 @@ export class DebugService extends AppService {
       el: HTMLElement,
       parentRenderNode: RenderNode,
       renderData: RenderDataInterface,
+      requestOptions: RequestOptionsInterface,
       complete?: Function
     ): RenderNode | null {
       return methodOriginal.call(
@@ -50,6 +56,7 @@ export class DebugService extends AppService {
         el,
         parentRenderNode,
         renderData,
+        requestOptions,
         (renderNode: RenderNode) => {
           debugService.initRenderNode(renderNode);
           complete && complete(renderNode);

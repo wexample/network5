@@ -7,24 +7,33 @@ import Mouse from '../helpers/Mouse';
 import Variables from '../helpers/Variables';
 import Events from '../helpers/Events';
 import RenderNode from '../class/RenderNode';
+import RequestOptionsModalInterface from "../interfaces/RequestOptionsModalInterface";
 
 export default {
   bundleGroup: 'component',
 
   definition: class extends PageHandlerComponent {
-    closing: boolean;
-    elContent: HTMLElement;
-    listenKeyboardKey: string[] = [Keyboard.KEY_ESCAPE];
-    mouseDownOverlayTarget: EventTarget | null;
-    mouseDownOverlayTimestamp: number | null;
-    onClickCloseProxy: EventListenerObject;
-    onMouseDownOverlayProxy: EventListenerObject;
-    onMouseUpOverlayProxy: EventListenerObject;
-    opened: boolean = false;
+    public closing: boolean;
+    public elContent: HTMLElement;
+    public listenKeyboardKey: string[] = [Keyboard.KEY_ESCAPE];
+    public mouseDownOverlayTarget: EventTarget | null;
+    public mouseDownOverlayTimestamp: number | null;
+    public onClickCloseProxy: EventListenerObject;
+    public onMouseDownOverlayProxy: EventListenerObject;
+    public onMouseUpOverlayProxy: EventListenerObject;
+    public opened: boolean = false;
+    public callingPage: Page;
 
-    loadRenderData(renderData: RenderDataComponentInterface) {
-      super.loadRenderData(renderData);
+    loadRenderData(
+      renderData: RenderDataComponentInterface,
+      requestOptions: RequestOptionsModalInterface
+    ) {
+      super.loadRenderData(
+        renderData,
+        requestOptions
+      );
 
+      this.callingPage = requestOptions.callingPage;
       this.elContent = this.el.querySelector('.modal-content');
     }
 
@@ -101,10 +110,12 @@ export default {
 
       // Sync with CSS animation.
       setTimeout(() => {
+        this.page.exit();
+
         this.el.classList.remove(Variables.CLOSED);
         this.opened = this.focused = this.closing = false;
 
-        this.remove();
+        this.exit();
       }, 400);
     }
 

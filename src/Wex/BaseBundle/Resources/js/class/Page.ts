@@ -5,6 +5,8 @@ import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageI
 import RenderNode from './RenderNode';
 import PageHandlerComponent from './PageHandlerComponent';
 import RenderDataInterface from "../interfaces/RenderDataInterface";
+import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
+import RequestOptionsPageInterface from "../interfaces/RequestOptionsPageInterface";
 
 export default class extends RenderNode {
   public elOverlay: HTMLElement;
@@ -15,6 +17,7 @@ export default class extends RenderNode {
   public parentRenderNode: PageHandlerComponent;
   protected readonly responsiveDisplays: any = [];
   public renderData: RenderDataPageInterface;
+  public requestOptions: RequestOptionsPageInterface;
   public responsiveDisplayCurrent: PageResponsiveDisplay;
   public vars: any;
   public services: ServiceRegistryPageInterface;
@@ -31,20 +34,24 @@ export default class extends RenderNode {
     return [];
   }
 
-  exit() {
-    // To override...
-  }
-
-  destroy() {
+  public exit() {
     this.deactivateListeners();
-    this.exit();
+
+    super.exit();
   }
 
-  loadRenderData(renderData: RenderDataInterface) {
-    super.loadRenderData(renderData);
+  loadRenderData(
+    renderData: RenderDataInterface,
+    requestOptions: RequestOptionsInterface
+  ) {
+    super.loadRenderData(
+      renderData,
+      requestOptions
+    );
 
     this.isLayoutPage = this.renderData.isLayoutPage;
     this.name = this.renderData.name;
+    this.requestOptions = requestOptions;
 
     if (this.isLayoutPage) {
       this.app.layout.page = this;
@@ -64,6 +71,10 @@ export default class extends RenderNode {
         'page',
         [this],
         () => {
+          if (this.renderData.pageHandler) {
+            this.renderData.pageHandler.setPage(this);
+          }
+
           this.updateCurrentResponsiveDisplay();
 
           this.updateLayoutTheme(this.services.theme.activeTheme);
