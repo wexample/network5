@@ -34,9 +34,17 @@ class DebugRenderNode {
 
 export class DebugService extends AppService {
   renderNodes: any = {};
+  el: HTMLElement
 
   constructor(app: App) {
     super(app);
+  }
+
+  init() {
+    this.el = document.createElement('div');
+    this.app.layout.el.appendChild(this.el);
+
+    this.addTrackers();
   }
 
   addTrackers() {
@@ -79,7 +87,7 @@ export const MixinDebug: MixinInterface = {
   hooks: {
     app: {
       init() {
-        this.app.services.debug.addTrackers();
+        this.app.services.debug.init();
       },
     },
   },
