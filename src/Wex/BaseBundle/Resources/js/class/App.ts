@@ -13,9 +13,9 @@ import { MixinQueues } from '../mixins/Queues';
 import { unique as arrayUnique } from '../helpers/Arrays';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
 import LayoutInitial from './LayoutInitial';
-import RenderDataLayoutInterface from "../interfaces/RenderDataLayoutInterface";
-import AsyncConstructor from "./AsyncConstructor";
-import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
+import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
+import AsyncConstructor from './AsyncConstructor';
+import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 
 export default class extends AsyncConstructor {
   public bootJsBuffer: string[] = [];
@@ -43,9 +43,13 @@ export default class extends AsyncConstructor {
     let doc = window.document;
 
     let run = () => {
-      let registry: { bundles: any, layoutRenderData: RenderDataLayoutInterface } = window['appRegistry'];
+      let registry: {
+        bundles: any;
+        layoutRenderData: RenderDataLayoutInterface;
+      } = window['appRegistry'];
       this.bundles = registry.bundles;
-      this.layoutRenderData = registry.layoutRenderData as RenderDataLayoutInterface;
+      this.layoutRenderData =
+        registry.layoutRenderData as RenderDataLayoutInterface;
       this.layout = new LayoutInitial(this);
       this.layout.el = doc.getElementById('layout');
 

@@ -8,7 +8,7 @@ import MixinsAppService from '../class/MixinsAppService';
 import Page from '../class/Page';
 import AssetsInterface from '../interfaces/AssetInterface';
 import RenderNode from '../class/RenderNode';
-import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
+import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 
 export class AssetsService extends AppService {
   public static UPDATE_FILTER_ACCEPT = 'accept';
@@ -261,7 +261,10 @@ export const MixinAssets: MixinInterface = {
         next: Function
       ) {
         // Load only layout assets.
-        this.app.services.assets.updateAssetsCollection(renderData.assets, next);
+        this.app.services.assets.updateAssetsCollection(
+          renderData.assets,
+          next
+        );
 
         return MixinsAppService.LOAD_STATUS_STOP;
       },

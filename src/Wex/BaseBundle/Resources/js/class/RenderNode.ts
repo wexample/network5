@@ -1,7 +1,7 @@
 import RenderDataInterface from '../interfaces/RenderDataInterface';
 import AppChild from './AppChild';
 import App from './App';
-import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
+import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 
 export default abstract class RenderNode extends AppChild {
   public childRenderNodes: { [key: string]: RenderNode } = {};
@@ -36,7 +36,10 @@ export default abstract class RenderNode extends AppChild {
     }
   }
 
-  loadRenderData(renderData: RenderDataInterface, requestOptions: RequestOptionsInterface) {
+  loadRenderData(
+    renderData: RenderDataInterface,
+    requestOptions: RequestOptionsInterface
+  ) {
     this.renderData = renderData;
 
     if (this.parentRenderNode) {

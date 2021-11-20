@@ -2,8 +2,8 @@ import RequestOptionsAdaptiveInterface from '../interfaces/RequestOptionsAdaptiv
 import MixinInterface from '../interfaces/MixinInterface';
 import AppService from '../class/AppService';
 import MixinsAppService from '../class/MixinsAppService';
-import RenderDataInterface from "../interfaces/RenderDataInterface";
-import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
+import RenderDataInterface from '../interfaces/RenderDataInterface';
+import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 
 export class AdaptiveService extends AppService {
   get(path, requestOptions: RequestOptionsAdaptiveInterface): Promise<any> {

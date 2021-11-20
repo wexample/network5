@@ -7,7 +7,7 @@ import Mouse from '../helpers/Mouse';
 import Variables from '../helpers/Variables';
 import Events from '../helpers/Events';
 import RenderNode from '../class/RenderNode';
-import RequestOptionsModalInterface from "../interfaces/RequestOptionsModalInterface";
+import RequestOptionsModalInterface from '../interfaces/RequestOptionsModalInterface';
 
 export default {
   bundleGroup: 'component',
@@ -28,10 +28,7 @@ export default {
       renderData: RenderDataComponentInterface,
       requestOptions: RequestOptionsModalInterface
     ) {
-      super.loadRenderData(
-        renderData,
-        requestOptions
-      );
+      super.loadRenderData(renderData, requestOptions);
 
       this.callingPage = requestOptions.callingPage;
       this.elContent = this.el.querySelector('.modal-content');

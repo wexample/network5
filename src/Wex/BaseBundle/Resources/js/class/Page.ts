@@ -4,9 +4,9 @@ import MixinInterface from '../interfaces/MixinInterface';
 import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
 import RenderNode from './RenderNode';
 import PageHandlerComponent from './PageHandlerComponent';
-import RenderDataInterface from "../interfaces/RenderDataInterface";
-import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
-import RequestOptionsPageInterface from "../interfaces/RequestOptionsPageInterface";
+import RenderDataInterface from '../interfaces/RenderDataInterface';
+import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import RequestOptionsPageInterface from '../interfaces/RequestOptionsPageInterface';
 
 export default class extends RenderNode {
   public elOverlay: HTMLElement;
@@ -44,10 +44,7 @@ export default class extends RenderNode {
     renderData: RenderDataInterface,
     requestOptions: RequestOptionsInterface
   ) {
-    super.loadRenderData(
-      renderData,
-      requestOptions
-    );
+    super.loadRenderData(renderData, requestOptions);
 
     this.isLayoutPage = this.renderData.isLayoutPage;
     this.name = this.renderData.name;
@@ -59,7 +56,7 @@ export default class extends RenderNode {
 
     this.elOverlay = this.el.querySelector('.page-overlay');
 
-    this.vars = {...this.vars, ...this.renderData.vars};
+    this.vars = { ...this.vars, ...this.renderData.vars };
   }
 
   init(complete?: Function) {
@@ -94,8 +91,7 @@ export default class extends RenderNode {
   public focus() {
     super.focus();
 
-    this.app.layout.pageFocused
-    && this.app.layout.pageFocused.blur();
+    this.app.layout.pageFocused && this.app.layout.pageFocused.blur();
   }
 
   protected activateListeners(): void {

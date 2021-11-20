@@ -11,7 +11,7 @@ import { RenderNodeService } from './RenderNodeService';
 import RenderNode from '../class/RenderNode';
 import { findPreviousNode as DomFindPreviousNode } from '../helpers/Dom';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
-import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
+import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 
 export class ComponentsService extends RenderNodeService {
   elLayoutComponents: HTMLElement;
@@ -56,7 +56,10 @@ export class ComponentsService extends RenderNodeService {
   ) {
     if (renderData.templates) {
       // Append html for global components.
-      this.elLayoutComponents.insertAdjacentHTML('beforeend', renderData.templates);
+      this.elLayoutComponents.insertAdjacentHTML(
+        'beforeend',
+        renderData.templates
+      );
     }
 
     if (renderData.components) {
@@ -70,10 +73,7 @@ export class ComponentsService extends RenderNodeService {
     }
   }
 
-  loadPageRenderData(
-    page: Page,
-    complete?: Function
-  ) {
+  loadPageRenderData(page: Page, complete?: Function) {
     this.createComponents(
       page.renderData.components,
       page.requestOptions,

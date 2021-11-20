@@ -3,7 +3,7 @@ import RequestOptionsPageInterface from '../interfaces/RequestOptionsPageInterfa
 import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
 import RenderNode from '../class/RenderNode';
-import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
+import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 
 export abstract class RenderNodeService extends AppService {
   pages: {};
@@ -24,10 +24,7 @@ export abstract class RenderNodeService extends AppService {
         classDefinition
       );
 
-      instance.loadRenderData(
-        renderData,
-        requestOptions
-      );
+      instance.loadRenderData(renderData, requestOptions);
 
       instance.init(complete);
     });

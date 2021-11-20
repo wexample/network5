@@ -1,7 +1,7 @@
-import AppChild from "../AppChild";
-import RenderNode from "../RenderNode";
-import { DebugService } from "../../mixins/Debug";
-import Variables from "../../helpers/Variables";
+import AppChild from '../AppChild';
+import RenderNode from '../RenderNode';
+import { DebugService } from '../../mixins/Debug';
+import Variables from '../../helpers/Variables';
 
 export default class DebugRenderNode extends AppChild {
   public borderColors: any = {
@@ -36,9 +36,7 @@ export default class DebugRenderNode extends AppChild {
     let debugRenderNode = this;
 
     this.renderNode.exit = function () {
-      debugRenderNode.el.parentNode.removeChild(
-        debugRenderNode.el
-      );
+      debugRenderNode.el.parentNode.removeChild(debugRenderNode.el);
 
       if (debugRenderNode.renderNode.getRenderNodeType() === Variables.PAGE) {
         debugRenderNode.elDebugHelpers.parentNode.removeChild(
@@ -46,11 +44,8 @@ export default class DebugRenderNode extends AppChild {
         );
       }
 
-      methodOriginal.apply(
-        renderNode,
-        arguments
-      );
-    }
+      methodOriginal.apply(renderNode, arguments);
+    };
   }
 
   convertPosition(number) {

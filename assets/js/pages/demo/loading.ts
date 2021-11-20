@@ -42,11 +42,9 @@ const bundle: AssetBundleInterface = {
       this.el
         .querySelector('#page-modal-show')
         .addEventListener('click', () => {
-          this.services.modals
-            .get('/demo/loading/fetch/simple')
-            .then(() => {
-              debugTraceRenderNodes(this.app.layout);
-            });
+          this.services.modals.get('/demo/loading/fetch/simple').then(() => {
+            debugTraceRenderNodes(this.app.layout);
+          });
         });
     }
   },

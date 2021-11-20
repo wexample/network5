@@ -2,8 +2,8 @@ import RenderDataComponentInterface from '../interfaces/RenderDataComponentInter
 import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
 import Component from './Component';
 import { ServiceRegistryComponentInterface } from '../interfaces/ServiceRegistryComponentInterface';
-import Page from "./Page";
-import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
+import Page from './Page';
+import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 
 export default abstract class PageHandlerComponent extends Component {
   services: ServiceRegistryComponentInterface;
@@ -13,10 +13,7 @@ export default abstract class PageHandlerComponent extends Component {
     renderData: RenderDataComponentInterface,
     requestOptions: RequestOptionsInterface
   ) {
-    super.loadRenderData(
-      renderData,
-      requestOptions
-    );
+    super.loadRenderData(renderData, requestOptions);
 
     // This component is defined as the manager of
     // rendered page from the request.

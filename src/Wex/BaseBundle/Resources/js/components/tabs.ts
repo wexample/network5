@@ -3,7 +3,7 @@ import { hashParamGet as locationHashParamGet } from '../helpers/Location';
 import { hashParamSet as locationHashParamSet } from '../helpers/Location';
 import { parseUrl as locationParseUrl } from '../helpers/Location';
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
-import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
+import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 
 export default {
   bundleGroup: 'component',
@@ -17,10 +17,7 @@ export default {
       renderData: RenderDataComponentInterface,
       requestOptions: RequestOptionsInterface
     ) {
-      super.loadRenderData(
-        renderData,
-        requestOptions
-      );
+      super.loadRenderData(renderData, requestOptions);
 
       this.group = renderData.options.group;
 

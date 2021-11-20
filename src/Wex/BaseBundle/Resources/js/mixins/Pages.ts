@@ -9,7 +9,7 @@ import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageI
 import { RenderNodeService } from './RenderNodeService';
 import Page from '../class/Page';
 import RenderNode from '../class/RenderNode';
-import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
+import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 
 export class PagesService extends RenderNodeService {
   public pages: {};
@@ -30,14 +30,15 @@ export class PagesService extends RenderNodeService {
       el = renderData.el;
     }
 
-    let pageHandler = this.services.components
-      .pageHandlerRegistry[renderData.renderRequestId];
+    let pageHandler =
+      this.services.components.pageHandlerRegistry[renderData.renderRequestId];
 
     if (pageHandler) {
       renderData.pageHandler = pageHandler;
 
-      delete this.services.components
-        .pageHandlerRegistry[renderData.renderRequestId];
+      delete this.services.components.pageHandlerRegistry[
+        renderData.renderRequestId
+      ];
 
       pageHandler.renderPageEl(renderData);
       el = pageHandler.getPageEl();
@@ -71,7 +72,7 @@ export class PagesService extends RenderNodeService {
       el,
       parentRenderNode,
       renderData,
-      classDefinition || this.app.getClassPage(),
+      classDefinition || this.app.getClassPage()
     ) as Page;
   }
 
@@ -99,7 +100,11 @@ export const MixinPages: MixinInterface = {
           registry.locale === MixinsAppService.LOAD_STATUS_COMPLETE
         ) {
           if (renderData.page) {
-            this.services.pages.createPage(renderData.page, requestOptions, next);
+            this.services.pages.createPage(
+              renderData.page,
+              requestOptions,
+              next
+            );
 
             return MixinsAppService.LOAD_STATUS_STOP;
           } else {
