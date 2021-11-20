@@ -1,9 +1,7 @@
 @import '../mixins/global';
 @import '../mixins/modals';
 
-// Use custom name to avoid conflict with materialize.
 .modal {
-  z-index: 999;
   align-items: center;
   justify-content: center;
   position: fixed;
