@@ -1,5 +1,4 @@
 import Layout from './Layout';
-import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 import App from './App';
 
 export default class extends Layout {
@@ -8,7 +7,6 @@ export default class extends Layout {
   constructor(app: App) {
     super(app);
 
-    this.renderData = window['appRegistry']
-      .layoutRenderData as RenderDataLayoutInterface;
+    this.renderData = app.layoutRenderData;
   }
 }

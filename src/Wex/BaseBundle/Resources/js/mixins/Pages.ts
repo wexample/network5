@@ -19,7 +19,7 @@ export class PagesService extends RenderNodeService {
     let parentRenderNode;
 
     if (renderData.isLayoutPage) {
-      el = this.app.elLayout;
+      el = this.app.layout.el;
       parentRenderNode = this.app.layout;
     } else {
       el = renderData.el;

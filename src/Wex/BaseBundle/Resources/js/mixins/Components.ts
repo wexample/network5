@@ -55,7 +55,7 @@ export class ComponentsService extends RenderNodeService {
     }
 
     if (data.components) {
-      this.createComponents(data.components, this.app.elLayout, null, complete);
+      this.createComponents(data.components, this.app.layout.el, null, complete);
     }
   }
 

@@ -13,12 +13,14 @@ import { MixinQueues } from '../mixins/Queues';
 import { unique as arrayUnique } from '../helpers/Arrays';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
 import LayoutInitial from './LayoutInitial';
+import RenderDataLayoutInterface from "../interfaces/RenderDataLayoutInterface";
 
 export default class {
   public bootJsBuffer: string[] = [];
   public bundles: any;
   public hasCoreLoaded: boolean = false;
   public layout: LayoutInitial = null;
+  public layoutRenderData: RenderDataLayoutInterface = null;
   public mixins: MixinInterface[] = [];
   public readyCallbacks: Function[] = [];
   public elLayout: HTMLElement;
@@ -28,8 +30,6 @@ export default class {
 
   constructor(readyCallback?: any | Function, globalName = 'app') {
     window[globalName] = this;
-
-    this.bundles = window['appRegistry'].bundles;
 
     // Allow callback as object definition.
     if (typeof readyCallback === 'object') {
@@ -41,11 +41,13 @@ export default class {
     let doc = window.document;
 
     let run = () => {
+      let registry: { bundles: any, layoutRenderData: RenderDataLayoutInterface } = window['appRegistry'];
+      this.bundles = registry.bundles;
+      this.layoutRenderData = registry.layoutRenderData as RenderDataLayoutInterface;
       this.layout = new LayoutInitial(this);
+      this.layout.el = doc.getElementById('layout');
 
       this.loadAndInitMixins(this.getMixins(), () => {
-        this.elLayout = doc.getElementById('layout');
-
         this.addLibraries(this.lib);
 
         // The main functionalities are ready.
@@ -55,7 +57,7 @@ export default class {
           // Execute ready callbacks.
           this.readyComplete();
           // Display page content.
-          this.elLayout.classList.remove('layout-loading');
+          this.layout.el.classList.remove('layout-loading');
           // Launch constructor argument callback.
           readyCallback && readyCallback.apply(this);
         });
@@ -116,7 +118,7 @@ export default class {
         // Execute ready callbacks.
         this.readyComplete();
         // Display page content.
-        this.elLayout.classList.remove('layout-loading');
+        this.layout.el.classList.remove('layout-loading');
         // Launch constructor argument callback.
         complete && complete.apply(this);
       }
