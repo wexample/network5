@@ -46,6 +46,7 @@ export class MixinService extends AppService {
 
         if (loops++ > loopsLimit) {
           console.error(errorTrace);
+          console.error(registry);
           throw (
             `Stopping more than ${loops} recursions during services invocation ` +
             `on method "${method}", stopping at ${currentName}, see trace below.`
