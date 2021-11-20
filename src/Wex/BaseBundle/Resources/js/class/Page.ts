@@ -52,7 +52,7 @@ export default class extends RenderNode {
 
     this.elOverlay = this.el.querySelector('.page-overlay');
 
-    this.vars = { ...this.vars, ...this.renderData.vars };
+    this.vars = {...this.vars, ...this.renderData.vars};
 
     this.app.loadAndInitMixins(this.getPageLevelMixins(), () => {
       this.services.mixins.invokeUntilComplete(
@@ -74,6 +74,13 @@ export default class extends RenderNode {
         }
       );
     });
+  }
+
+  public focus() {
+    super.focus();
+
+    this.app.layout.pageFocused
+    && this.app.layout.pageFocused.blur();
   }
 
   protected activateListeners(): void {

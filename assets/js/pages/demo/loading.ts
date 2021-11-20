@@ -44,7 +44,7 @@ const bundle: AssetBundleInterface = {
         .querySelector('#page-modal-show')
         .addEventListener('click', () => {
           this.services.modals
-            .get('/demo/loading/fetch/simple', { pageCalling: this })
+            .get('/demo/loading/fetch/simple')
             .then(() => {
               debugTraceRenderNodes(this.app.layout);
             });
