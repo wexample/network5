@@ -1,0 +1,8 @@
+@import '../mixins/global';
+
+.debug-render-node {
+  position: fixed;
+  border: 5px solid;
+  box-sizing: border-box;
+  pointer-events: none;
+}

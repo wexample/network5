@@ -24,7 +24,7 @@ const bundle: AssetBundleInterface = {
       return [MixinModals];
     }
 
-    ready() {
+    mounted() {
       this.unitTest = new UnitTest();
 
       this.el

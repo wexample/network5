@@ -14,21 +14,22 @@ import { unique as arrayUnique } from '../helpers/Arrays';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
 import LayoutInitial from './LayoutInitial';
 import RenderDataLayoutInterface from "../interfaces/RenderDataLayoutInterface";
+import AsyncConstructor from "./AsyncConstructor";
 
-export default class {
+export default class extends AsyncConstructor {
   public bootJsBuffer: string[] = [];
   public bundles: any;
   public hasCoreLoaded: boolean = false;
   public layout: LayoutInitial = null;
   public layoutRenderData: RenderDataLayoutInterface = null;
   public mixins: MixinInterface[] = [];
-  public readyCallbacks: Function[] = [];
   public elLayout: HTMLElement;
   public lib: object = {};
   public services: ServiceRegistryAppInterface = {};
-  public isReady: boolean = false;
 
   constructor(readyCallback?: any | Function, globalName = 'app') {
+    super();
+
     window[globalName] = this;
 
     // Allow callback as object definition.
@@ -54,10 +55,10 @@ export default class {
         this.hasCoreLoaded = true;
 
         this.loadRenderData(this.layout.renderData, () => {
-          // Execute ready callbacks.
-          this.readyComplete();
           // Display page content.
           this.layout.el.classList.remove('layout-loading');
+          // Execute ready callbacks.
+          this.readyComplete();
           // Launch constructor argument callback.
           readyCallback && readyCallback.apply(this);
         });
@@ -77,36 +78,6 @@ export default class {
 
   async(callback) {
     setTimeout(callback);
-  }
-
-  ready(callback) {
-    if (this.isReady) {
-      callback();
-    } else {
-      this.readyCallbacks.push(callback);
-    }
-  }
-
-  readyComplete() {
-    this.isReady = true;
-    // Launch callbacks.
-    this.callbacks(this.readyCallbacks);
-  }
-
-  /**
-   * Execute an array of callbacks functions.
-   */
-  callbacks(callbacksArray, args = [], thisArg = null) {
-    let method = args ? 'apply' : 'call';
-    let callback = null;
-
-    while ((callback = callbacksArray.shift())) {
-      if (!callback) {
-        throw 'Trying to execute undefined callback.';
-      }
-
-      callback[method](thisArg || this, args);
-    }
   }
 
   loadRenderData(data: RenderDataInterface, complete?: Function) {

@@ -6,7 +6,7 @@ const bundle: AssetBundleInterface = {
   bundleGroup: 'component',
 
   definition: class extends Component {
-    ready() {
+    mounted() {
       this.el.innerHTML = `<span class="success">✓</span>${this.el.innerHTML}`;
     }
   },

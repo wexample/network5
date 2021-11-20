@@ -6,25 +6,51 @@ import RenderNode from '../class/RenderNode';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
 import { RenderNodeService } from "./RenderNodeService";
 import { PagesService } from "./Pages";
+import AppChild from "../class/AppChild";
 
-class DebugRenderNode {
-  renderNode: RenderNode;
+class DebugRenderNode extends AppChild {
   borderColors: any = {
     component: 'yellow',
     page: 'blue',
     layout: 'red',
   };
+  el: HTMLElement;
+  renderNode: RenderNode;
+  service: DebugService;
 
   constructor(renderNode) {
-    this.renderNode = renderNode;
+    super(renderNode.app);
 
-    this.show();
+    this.renderNode = renderNode;
+    this.service = this.app.services['debug'] as DebugService;
+
+    this.el = document.createElement('div');
+    this.el.classList.add('debug-render-node');
+    this.el.style.borderColor = this.getBorderColor();
+    this.service.el.appendChild(this.el);
+
+    this.app.ready(() => {
+      this.app.layout.page.ready(() => {
+        setTimeout(() => {
+          this.update();
+        },100);
+      });
+    });
   }
 
-  show() {
-    if (this.renderNode.el) {
-      this.renderNode.el.style.border = `4px solid ${this.getBorderColor()}`;
-    }
+  convertPosition(number) {
+    return `${number}px`;
+  }
+
+  update() {
+    let rect = this.renderNode.el.getBoundingClientRect();
+
+    Object.assign(this.el.style, {
+      top: this.convertPosition(rect.top),
+      left: this.convertPosition(rect.left),
+      width: this.convertPosition(rect.width),
+      height: this.convertPosition(rect.height),
+    });
   }
 
   getBorderColor(): string {

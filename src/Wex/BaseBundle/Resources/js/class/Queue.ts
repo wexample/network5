@@ -8,9 +8,9 @@ interface ServiceRegistryQueueInterface extends ServiceRegistryAppInterface {
 
 export default class Queue extends AppChild {
   public async: boolean = false;
-  public callbacks: Function[] = [];
+  public completeCallbacks: Function[] = [];
   public commands: Function[] = [];
-  private nextProxy: Function;
+  private readonly nextProxy: Function;
   private readonly name: string;
   private runningCounter: number = 0;
   public started: boolean = false;
@@ -31,7 +31,7 @@ export default class Queue extends AppChild {
   }
 
   reset() {
-    this.callbacks = [];
+    this.completeCallbacks = [];
     this.commands = [];
     this.started = false;
     this.runningCounter = 0;
@@ -92,10 +92,10 @@ export default class Queue extends AppChild {
   }
 
   then(callback: Function) {
-    if (!this.commands.length && !this.callbacks.length) {
+    if (!this.commands.length && !this.completeCallbacks.length) {
       this.app.async(callback);
     } else {
-      this.callbacks.push(callback);
+      this.completeCallbacks.push(callback);
     }
   }
 
@@ -109,7 +109,7 @@ export default class Queue extends AppChild {
         after && after();
       });
 
-      this.app.callbacks(this.callbacks);
+      this.app.callbacks(this.completeCallbacks);
     } else if (after) {
       this.then(after);
     }

@@ -16,7 +16,7 @@ const bundle: AssetBundleInterface = {
     services: ServiceRegistryPageCurrentInterface;
     unitTest: UnitTest;
 
-    ready() {
+    mounted() {
       this.unitTest = new UnitTest();
 
       this.testQueues();
@@ -136,7 +136,7 @@ const bundle: AssetBundleInterface = {
           'Queue commands list is empty'
         );
         test.assertTrue(
-          queue.callbacks.length === 0,
+          queue.completeCallbacks.length === 0,
           'Queue callbacks is empty'
         );
 

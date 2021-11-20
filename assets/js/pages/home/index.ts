@@ -5,7 +5,7 @@ const bundle: AssetBundleInterface = {
   bundleGroup: 'page',
 
   definition: class extends Page {
-    ready() {
+    mounted() {
       console.log('Home init');
     }
   },

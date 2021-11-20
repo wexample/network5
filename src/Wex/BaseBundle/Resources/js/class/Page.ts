@@ -56,6 +56,8 @@ export default class extends RenderNode {
   }
 
   init(complete?: Function) {
+    this.ready(complete);
+
     this.app.loadAndInitMixins(this.getPageLevelMixins(), () => {
       this.services.mixins.invokeUntilComplete(
         'loadPageRenderData',
@@ -70,9 +72,9 @@ export default class extends RenderNode {
 
           this.focus();
 
-          this.ready();
+          this.mounted();
 
-          complete && complete(this);
+          this.readyComplete(this);
         }
       );
     });
@@ -113,7 +115,7 @@ export default class extends RenderNode {
     );
   }
 
-  ready() {
+  mounted() {
     // To override with local page scripts.
   }
 
