@@ -8,11 +8,11 @@ export class ModalsService extends AppService {
     pages: PagesService;
   };
 
-  get(path: string, options: RequestOptionsModalInterface = {}): Promise<any> {
-    options.layout = options.layout || 'modal';
-    options.callingPage = this.app.layout.pageFocused;
+  get(path: string, requestOptions: RequestOptionsModalInterface = {}): Promise<any> {
+    requestOptions.layout = requestOptions.layout || 'modal';
+    requestOptions.parentRenderNode = this.app.layout.pageFocused;
 
-    return this.services.pages.get(path, options);
+    return this.services.pages.get(path, requestOptions);
   }
 }
 

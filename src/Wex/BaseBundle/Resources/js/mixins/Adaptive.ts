@@ -25,9 +25,11 @@ export class AdaptiveService extends AppService {
       .then((response: RenderDataInterface) => {
         // Wait render data loading to continue.
         return new Promise((resolve, reject) => {
-          this.app.loadRenderData(response, requestOptions, () => {
-            resolve(response);
-          });
+          this.app.loadRenderData(
+            response,
+            requestOptions,
+            () => resolve(response)
+          );
         });
       });
   }

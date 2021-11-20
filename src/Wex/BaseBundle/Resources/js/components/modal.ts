@@ -22,7 +22,6 @@ export default {
     public onMouseDownOverlayProxy: EventListenerObject;
     public onMouseUpOverlayProxy: EventListenerObject;
     public opened: boolean = false;
-    public callingPage: Page;
 
     loadRenderData(
       renderData: RenderDataComponentInterface,
@@ -30,7 +29,6 @@ export default {
     ) {
       super.loadRenderData(renderData, requestOptions);
 
-      this.callingPage = requestOptions.callingPage;
       this.elContent = this.el.querySelector('.modal-content');
     }
 
