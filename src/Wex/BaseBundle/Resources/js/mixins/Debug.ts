@@ -50,7 +50,6 @@ export class DebugService extends AppService {
 
     renderNodeService.createRenderNode = function (
       el: HTMLElement,
-      parentRenderNode: RenderNode,
       renderData: RenderDataInterface,
       requestOptions: RequestOptionsInterface,
       complete?: Function
@@ -58,7 +57,6 @@ export class DebugService extends AppService {
       return methodOriginal.call(
         renderNodeService,
         el,
-        parentRenderNode,
         renderData,
         requestOptions,
         (renderNode: RenderNode) => {

@@ -25,7 +25,6 @@ export class ComponentsService extends RenderNodeService {
 
   createRenderNodeInstance(
     el: HTMLElement,
-    parentRenderNode: RenderNode,
     renderData: RenderDataInterface,
     classDefinition: any
   ): RenderNode | null {
@@ -42,7 +41,6 @@ export class ComponentsService extends RenderNodeService {
     } else {
       return super.createRenderNodeInstance(
         el,
-        parentRenderNode,
         renderData,
         classDefinition
       ) as Component;
@@ -125,7 +123,9 @@ export class ComponentsService extends RenderNodeService {
         elPlaceholder.parentNode.removeChild(elPlaceholder);
       }
 
-      this.createRenderNode(el, page, renderData, requestOptions, () => {
+      requestOptions.parentRenderNode = page;
+
+      this.createRenderNode(el, renderData, requestOptions, () => {
         if (--counter === 0) {
           complete && complete();
         }

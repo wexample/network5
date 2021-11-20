@@ -21,11 +21,10 @@ export class PagesService extends RenderNodeService {
     complete?: Function
   ) {
     let el;
-    let parentRenderNode;
 
     if (renderData.isLayoutPage) {
       el = this.app.layout.el;
-      parentRenderNode = this.app.layout;
+      requestOptions.parentRenderNode = this.app.layout;
     } else {
       el = renderData.el;
     }
@@ -43,7 +42,7 @@ export class PagesService extends RenderNodeService {
       pageHandler.renderPageEl(renderData);
       el = pageHandler.getPageEl();
 
-      parentRenderNode = pageHandler;
+      requestOptions.parentRenderNode = pageHandler;
     }
 
     if (!el) {
@@ -55,7 +54,6 @@ export class PagesService extends RenderNodeService {
 
     this.createRenderNode(
       el,
-      parentRenderNode,
       renderData,
       requestOptions,
       complete
@@ -64,13 +62,11 @@ export class PagesService extends RenderNodeService {
 
   createRenderNodeInstance(
     el: HTMLElement,
-    parentRenderNode: RenderNode,
     renderData: RenderDataPageInterface,
     classDefinition: any
   ): RenderNode | null {
     return super.createRenderNodeInstance(
       el,
-      parentRenderNode,
       renderData,
       classDefinition || this.app.getClassPage()
     ) as Page;

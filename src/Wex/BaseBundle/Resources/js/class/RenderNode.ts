@@ -13,13 +13,11 @@ export default abstract class RenderNode extends AppChild {
 
   constructor(
     app: App,
-    el: HTMLElement = null,
-    parentRenderNode: RenderNode = null
+    el: HTMLElement = null
   ) {
     super(app);
 
     this.el = el;
-    this.parentRenderNode = parentRenderNode;
   }
 
   public init(complete?: Function) {
@@ -42,12 +40,13 @@ export default abstract class RenderNode extends AppChild {
   ) {
     this.renderData = renderData;
 
-    if (this.parentRenderNode) {
-      this.parentRenderNode.appendChildRenderNode(this);
+    if (requestOptions.parentRenderNode) {
+      requestOptions.parentRenderNode.appendChildRenderNode(this);
     }
   }
 
   appendChildRenderNode(renderNode: RenderNode) {
+    renderNode.parentRenderNode = this;
     this.childRenderNodes[renderNode.getId()] = renderNode;
   }
 
