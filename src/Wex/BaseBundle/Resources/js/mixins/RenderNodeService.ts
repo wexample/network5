@@ -15,13 +15,16 @@ export abstract class RenderNodeService extends AppService {
     complete?: Function
   ) {
     this.prepareRenderNodeDefinition(renderData, (classDefinition) => {
-      this.createRenderNodeInstance(
+      let instance = this.createRenderNodeInstance(
         el,
         parentRenderNode,
         renderData,
-        classDefinition,
-        complete
+        classDefinition
       );
+
+      instance.loadRenderData(renderData);
+
+      instance.init(complete);
     });
   }
 
@@ -29,8 +32,7 @@ export abstract class RenderNodeService extends AppService {
     el: HTMLElement,
     parentRenderNode: RenderNode,
     renderData: RenderDataInterface,
-    classDefinition: any,
-    complete?: Function
+    classDefinition: any
   ): RenderNode | null {
     return new classDefinition(this.app, el, parentRenderNode);
   }

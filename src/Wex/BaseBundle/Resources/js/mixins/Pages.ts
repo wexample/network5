@@ -31,7 +31,7 @@ export class PagesService extends RenderNodeService {
       parentRenderNode = pageHandler;
       delete this.services.components.pageHandlerRegistry[
         renderData.renderRequestId
-      ];
+        ];
 
       if (parentRenderNode) {
         parentRenderNode.renderPageEl(renderData);
@@ -53,23 +53,14 @@ export class PagesService extends RenderNodeService {
     el: HTMLElement,
     parentRenderNode: RenderNode,
     renderData: RenderDataPageInterface,
-    classDefinition: any,
-    complete?: Function
+    classDefinition: any
   ): RenderNode | null {
-    if (!classDefinition) {
-      classDefinition = this.app.getClassPage();
-    }
-
-    let page = super.createRenderNodeInstance(
+    return super.createRenderNodeInstance(
       el,
       parentRenderNode,
       renderData,
-      classDefinition
+      classDefinition || this.app.getClassPage(),
     ) as Page;
-
-    page.init(renderData, complete);
-
-    return page;
   }
 
   get(path: string, options: RequestOptionsPageInterface): Promise<any> {

@@ -1,10 +1,10 @@
-import App from './App';
 import PageResponsiveDisplay from './PageResponsiveDisplay';
 import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
 import MixinInterface from '../interfaces/MixinInterface';
 import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
 import RenderNode from './RenderNode';
 import PageHandlerComponent from './PageHandlerComponent';
+import RenderDataInterface from "../interfaces/RenderDataInterface";
 
 export default class extends RenderNode {
   public elOverlay: HTMLElement;
@@ -40,11 +40,11 @@ export default class extends RenderNode {
     this.exit();
   }
 
-  init(renderData: RenderDataPageInterface, complete?: Function) {
-    super.init(renderData);
+  loadRenderData(renderData: RenderDataInterface) {
+    super.loadRenderData(renderData);
 
-    this.isLayoutPage = renderData.isLayoutPage;
-    this.name = renderData.name;
+    this.isLayoutPage = this.renderData.isLayoutPage;
+    this.name = this.renderData.name;
 
     if (this.isLayoutPage) {
       this.app.layout.page = this;
@@ -53,7 +53,9 @@ export default class extends RenderNode {
     this.elOverlay = this.el.querySelector('.page-overlay');
 
     this.vars = {...this.vars, ...this.renderData.vars};
+  }
 
+  init(complete?: Function) {
     this.app.loadAndInitMixins(this.getPageLevelMixins(), () => {
       this.services.mixins.invokeUntilComplete(
         'loadPageRenderData',

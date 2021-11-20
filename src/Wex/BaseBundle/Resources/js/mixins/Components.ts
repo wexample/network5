@@ -26,8 +26,7 @@ export class ComponentsService extends RenderNodeService {
     el: HTMLElement,
     parentRenderNode: RenderNode,
     renderData: RenderDataInterface,
-    classDefinition: any,
-    complete?: Function
+    classDefinition: any
   ): RenderNode | null {
     // Prevent multiple alerts for the same component.
     if (!classDefinition) {
@@ -40,20 +39,12 @@ export class ComponentsService extends RenderNodeService {
         }
       );
     } else {
-      let renderNode = super.createRenderNodeInstance(
+      return super.createRenderNodeInstance(
         el,
         parentRenderNode,
         renderData,
         classDefinition
       ) as Component;
-
-      renderNode.init(renderData);
-
-      renderNode.loadRenderData(renderData);
-
-      complete && complete(renderNode);
-
-      return renderNode;
     }
   }
 
@@ -75,7 +66,7 @@ export class ComponentsService extends RenderNodeService {
   createComponents(
     components: RenderDataComponentInterface[],
     elContext: HTMLElement,
-    page: Page = null,
+    page: Page,
     complete?: Function
   ) {
     if (!components.length) {

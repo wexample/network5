@@ -21,8 +21,8 @@ export default abstract class RenderNode extends AppChild {
     this.parentRenderNode = parentRenderNode;
   }
 
-  public init(renderData: RenderDataInterface) {
-    this.loadRenderData(renderData);
+  public init(complete?: Function) {
+    complete && complete(this);
   }
 
   loadRenderData(renderData: RenderDataInterface) {

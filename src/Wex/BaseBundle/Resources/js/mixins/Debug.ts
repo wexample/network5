@@ -2,10 +2,10 @@ import MixinInterface from '../interfaces/MixinInterface';
 import AppService from '../class/AppService';
 import App from '../../../../../../assets/js/class/App';
 import { ComponentsService } from './Components';
-import Page from '../class/Page';
-import Component from '../class/Component';
 import RenderNode from '../class/RenderNode';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
+import { RenderNodeService } from "./RenderNodeService";
+import { PagesService } from "./Pages";
 
 class DebugRenderNode {
   renderNode: RenderNode;
@@ -40,26 +40,29 @@ export class DebugService extends AppService {
   }
 
   addTrackers() {
-    let mixinService = this.app.services['components'] as ComponentsService;
-    let debugService = this;
-    let methodOriginal = mixinService.createRenderNode;
+    this.addTrackersToRenderNodeService(this.app.services['components'] as ComponentsService);
+    this.addTrackersToRenderNodeService(this.app.services['pages'] as PagesService);
+  }
 
-    mixinService.createRenderNode = function (
+  addTrackersToRenderNodeService(renderNodeService: RenderNodeService) {
+    let debugService = this;
+    let methodOriginal = renderNodeService.createRenderNode;
+
+    renderNodeService.createRenderNode = function (
       el: HTMLElement,
-      page: Page = null,
+      parentRenderNode: RenderNode,
       renderData: RenderDataInterface,
       complete?: Function
-    ) {
-      methodOriginal.call(
-        this,
+    ): RenderNode | null {
+      return methodOriginal.call(
+        renderNodeService,
         el,
-        page,
+        parentRenderNode,
         renderData,
-        function (renderNode: Component) {
+        (renderNode: RenderNode) => {
           debugService.initRenderNode(renderNode);
-          complete && complete.apply(this, arguments);
-        }
-      );
+          complete && complete(renderNode);
+        });
     };
   }
 
