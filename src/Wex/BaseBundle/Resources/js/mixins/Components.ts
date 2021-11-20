@@ -65,7 +65,6 @@ export class ComponentsService extends RenderNodeService {
         renderData.components,
         requestOptions,
         this.app.layout.el,
-        null,
         complete
       );
     }
@@ -76,7 +75,6 @@ export class ComponentsService extends RenderNodeService {
       page.renderData.components,
       page.requestOptions,
       page.el,
-      page,
       complete
     );
   }
@@ -85,7 +83,6 @@ export class ComponentsService extends RenderNodeService {
     components: RenderDataComponentInterface[],
     requestOptions: RequestOptionsInterface,
     elContext: HTMLElement,
-    page: Page,
     complete?: Function
   ) {
     if (!components.length) {
@@ -122,8 +119,6 @@ export class ComponentsService extends RenderNodeService {
         // Remove placeholder tag as it may interact with CSS or JS selectors.
         elPlaceholder.parentNode.removeChild(elPlaceholder);
       }
-
-      requestOptions.parentRenderNode = page;
 
       this.createRenderNode(el, renderData, requestOptions, () => {
         if (--counter === 0) {

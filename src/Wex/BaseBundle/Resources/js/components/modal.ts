@@ -111,6 +111,8 @@ export default {
         this.opened = this.focused = this.closing = false;
 
         this.exit();
+
+        this.parentRenderNode.focus();
       }, 400);
     }
 

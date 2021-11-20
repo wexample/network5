@@ -92,6 +92,7 @@ export default class extends RenderNode {
     super.focus();
 
     this.app.layout.pageFocused && this.app.layout.pageFocused.blur();
+    this.app.layout.pageFocused = this;
   }
 
   protected activateListeners(): void {
