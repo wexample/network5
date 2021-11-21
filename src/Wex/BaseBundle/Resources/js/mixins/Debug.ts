@@ -29,9 +29,8 @@ export class DebugService extends AppService {
     this.elDebugHelpersGlobal = document.createElement('div');
     this.elDebugHelpers.appendChild(this.elDebugHelpersGlobal);
 
-    componentsService.elLayoutComponents.parentNode.insertBefore(
-      this.elDebugHelpers,
-      componentsService.elLayoutComponents
+    this.app.layout.el.appendChild(
+      this.elDebugHelpers
     );
   }
 
