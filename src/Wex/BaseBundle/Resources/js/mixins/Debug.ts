@@ -26,9 +26,7 @@ export class DebugService extends AppService {
     this.elDebugHelpersGlobal = document.createElement('div');
     this.elDebugHelpers.appendChild(this.elDebugHelpersGlobal);
 
-    this.app.layout.el.appendChild(
-      this.elDebugHelpers
-    );
+    this.app.layout.el.appendChild(this.elDebugHelpers);
   }
 
   addTrackers() {

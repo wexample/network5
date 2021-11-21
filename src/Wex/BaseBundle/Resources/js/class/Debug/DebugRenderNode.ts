@@ -17,7 +17,7 @@ export default class DebugRenderNode extends AppChild {
     exit: function (
       methodOriginal: Function,
       renderNode: RenderNode,
-      debugRenderNode: DebugRenderNode,
+      debugRenderNode: DebugRenderNode
     ) {
       return function () {
         debugRenderNode.el.parentNode.removeChild(debugRenderNode.el);
@@ -29,39 +29,43 @@ export default class DebugRenderNode extends AppChild {
         }
 
         methodOriginal.apply(renderNode, arguments);
-      }
+      };
     },
 
     focus: function (
       methodOriginal: Function,
       renderNode: RenderNode,
-      debugRenderNode: DebugRenderNode,
+      debugRenderNode: DebugRenderNode
     ) {
       return function () {
         debugRenderNode.focus();
 
         renderNode.forEachChildRenderNode((childRenderNode) => {
-          debugRenderNode.service.debugRenderNodes[childRenderNode.getId()].focus();
+          debugRenderNode.service.debugRenderNodes[
+            childRenderNode.getId()
+          ].focus();
         });
 
         methodOriginal.apply(renderNode, arguments);
-      }
+      };
     },
 
     blur: function (
       methodOriginal: Function,
       renderNode: RenderNode,
-      debugRenderNode: DebugRenderNode,
+      debugRenderNode: DebugRenderNode
     ) {
       return function () {
         debugRenderNode.blur();
 
         renderNode.forEachChildRenderNode((childRenderNode) => {
-          debugRenderNode.service.debugRenderNodes[childRenderNode.getId()].blur();
+          debugRenderNode.service.debugRenderNodes[
+            childRenderNode.getId()
+          ].blur();
         });
 
         methodOriginal.apply(renderNode, arguments);
-      }
+      };
     },
   };
 
@@ -100,14 +104,14 @@ export default class DebugRenderNode extends AppChild {
         this.renderNode[name] = methodReplacementGenerator(
           this.renderNode[name],
           this.renderNode,
-          this,
+          this
         );
       }
     });
   }
 
   blur() {
-    this.el.classList.remove('focus')
+    this.el.classList.remove('focus');
   }
 
   focus() {
@@ -125,11 +129,8 @@ export default class DebugRenderNode extends AppChild {
     this.service.elDebugHelpers.appendChild(this.el);
 
     this.renderNode.ready(() => {
-      this.el.setAttribute(
-        'id',
-        `debug-${this.renderNode.getId()}`
-      );
-    })
+      this.el.setAttribute('id', `debug-${this.renderNode.getId()}`);
+    });
   }
 
   createElDebugHelpers() {

@@ -72,9 +72,10 @@ export class ComponentsService extends RenderNodeService {
 
   loadPageRenderData(page: Page, complete?: Function) {
     let requestOptions: RequestOptionsInterface = {
-      ...page.requestOptions, ...{
-        parentRenderNode: page
-      }
+      ...page.requestOptions,
+      ...{
+        parentRenderNode: page,
+      },
     };
 
     this.createComponents(

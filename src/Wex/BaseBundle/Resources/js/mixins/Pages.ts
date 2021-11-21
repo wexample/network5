@@ -52,12 +52,7 @@ export class PagesService extends RenderNodeService {
       return;
     }
 
-    this.createRenderNode(
-      el,
-      renderData,
-      requestOptions,
-      complete
-    );
+    this.createRenderNode(el, renderData, requestOptions, complete);
   }
 
   createRenderNodeInstance(

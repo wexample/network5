@@ -11,10 +11,7 @@ export default abstract class RenderNode extends AppChild {
   public parentRenderNode: RenderNode;
   public renderData: RenderDataInterface;
 
-  constructor(
-    app: App,
-    el: HTMLElement = null
-  ) {
+  constructor(app: App, el: HTMLElement = null) {
     super(app);
 
     this.el = el;
@@ -26,11 +23,9 @@ export default abstract class RenderNode extends AppChild {
   }
 
   public exit() {
-    this.forEachChildRenderNode(
-      (renderNode: RenderNode) => {
-        renderNode.exit();
-      }
-    );
+    this.forEachChildRenderNode((renderNode: RenderNode) => {
+      renderNode.exit();
+    });
 
     if (this.parentRenderNode) {
       this.parentRenderNode.removeChildRenderNode(this);
