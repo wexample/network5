@@ -172,7 +172,7 @@ export class AssetsService extends AppService {
   updateAssets(complete?: Function) {
     // Only single queue for assets, for now.
     let queue = this.services.queues.create() as Queue;
-    queue.async = true;
+    queue.isAsync = true;
 
     this.enqueueRenderNodeAssetsUpdate(queue, this.app.layout);
 

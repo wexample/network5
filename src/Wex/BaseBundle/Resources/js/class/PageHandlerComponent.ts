@@ -34,7 +34,6 @@ export default abstract class PageHandlerComponent extends Component {
   public abstract getPageEl(): HTMLElement;
 
   public setPage(page: Page) {
-    this.appendChildRenderNode(page);
     this.page = page;
   }
 }

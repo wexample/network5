@@ -2,6 +2,10 @@ export default abstract class {
   public isReady: boolean = false;
   public readyCallbacks: Function[] = [];
 
+  async(callback) {
+    setTimeout(callback);
+  }
+
   ready(callback) {
     if (this.isReady) {
       callback();
@@ -13,7 +17,7 @@ export default abstract class {
   readyComplete(...args: any[]) {
     this.isReady = true;
     // Launch callbacks.
-    this.callbacks(this.readyCallbacks, args);
+    this.async(() => this.callbacks(this.readyCallbacks, args));
   }
 
   /**

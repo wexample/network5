@@ -13,6 +13,57 @@ export default class DebugRenderNode extends AppChild {
   public elDebugHelpers: HTMLElement;
   public renderNode: RenderNode;
   protected service: DebugService;
+  protected renderNodeDebugOverlay = {
+    exit: function (
+      methodOriginal: Function,
+      renderNode: RenderNode,
+      debugRenderNode: DebugRenderNode,
+    ) {
+      return function () {
+        debugRenderNode.el.parentNode.removeChild(debugRenderNode.el);
+
+        if (debugRenderNode.renderNode.getRenderNodeType() === Variables.PAGE) {
+          // debugRenderNode.elDebugHelpers.parentNode.removeChild(
+          //   debugRenderNode.elDebugHelpers
+          // );
+        }
+
+        methodOriginal.apply(renderNode, arguments);
+      }
+    },
+
+    focus: function (
+      methodOriginal: Function,
+      renderNode: RenderNode,
+      debugRenderNode: DebugRenderNode,
+    ) {
+      return function () {
+        debugRenderNode.focus();
+
+        renderNode.forEachChildRenderNode((childRenderNode) => {
+          debugRenderNode.service.debugRenderNodes[childRenderNode.getId()].focus();
+        });
+
+        methodOriginal.apply(renderNode, arguments);
+      }
+    },
+
+    blur: function (
+      methodOriginal: Function,
+      renderNode: RenderNode,
+      debugRenderNode: DebugRenderNode,
+    ) {
+      return function () {
+        debugRenderNode.blur();
+
+        renderNode.forEachChildRenderNode((childRenderNode) => {
+          debugRenderNode.service.debugRenderNodes[childRenderNode.getId()].blur();
+        });
+
+        methodOriginal.apply(renderNode, arguments);
+      }
+    },
+  };
 
   constructor(renderNode) {
     super(renderNode.app);
@@ -27,25 +78,40 @@ export default class DebugRenderNode extends AppChild {
     }
 
     this.addTrackers();
-    this.update();
+
+    // After app loaded.
+    renderNode.ready(() => {
+      this.service.debugRenderNodes[this.renderNode.getId()] = this;
+      // Wait rendering complete.
+      setTimeout(() => {
+        this.update();
+      }, 100);
+    });
   }
 
   addTrackers() {
-    let renderNode = this.renderNode;
-    let methodOriginal = renderNode.exit;
-    let debugRenderNode = this;
+    let methods = Object.entries(this.renderNodeDebugOverlay);
 
-    this.renderNode.exit = function () {
-      debugRenderNode.el.parentNode.removeChild(debugRenderNode.el);
+    methods.forEach((data) => {
+      let name: string = data[0];
+      let methodReplacementGenerator = data[1];
 
-      if (debugRenderNode.renderNode.getRenderNodeType() === Variables.PAGE) {
-        debugRenderNode.elDebugHelpers.parentNode.removeChild(
-          debugRenderNode.elDebugHelpers
+      if (typeof methodReplacementGenerator === 'function') {
+        this.renderNode[name] = methodReplacementGenerator(
+          this.renderNode[name],
+          this.renderNode,
+          this,
         );
       }
+    });
+  }
 
-      methodOriginal.apply(renderNode, arguments);
-    };
+  blur() {
+    this.el.classList.remove('focus')
+  }
+
+  focus() {
+    this.el.classList.add('focus');
   }
 
   convertPosition(number) {
@@ -57,6 +123,13 @@ export default class DebugRenderNode extends AppChild {
     this.el.classList.add('debug-render-node');
     this.el.style.borderColor = this.getBorderColor();
     this.service.elDebugHelpers.appendChild(this.el);
+
+    this.renderNode.ready(() => {
+      this.el.setAttribute(
+        'id',
+        `debug-${this.renderNode.getId()}`
+      );
+    })
   }
 
   createElDebugHelpers() {

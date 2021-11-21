@@ -7,7 +7,7 @@ interface ServiceRegistryQueueInterface extends ServiceRegistryAppInterface {
 }
 
 export default class Queue extends AppChild {
-  public async: boolean = false;
+  public isAsync: boolean = false;
   public completeCallbacks: Function[] = [];
   public commands: Function[] = [];
   private readonly nextProxy: Function;
@@ -41,7 +41,7 @@ export default class Queue extends AppChild {
 
   next() {
     if (this.started) {
-      if (this.async) {
+      if (this.isAsync) {
         this.runningCounter--;
 
         if (this.runningCounter === 0) {
@@ -75,7 +75,7 @@ export default class Queue extends AppChild {
       this.started = true;
 
       // Async mode will launch every command in the same time.
-      if (this.async) {
+      if (this.isAsync) {
         this.app.async(() => {
           while (this.commands.length) {
             this.runningCounter++;

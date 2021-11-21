@@ -81,10 +81,6 @@ export default class extends AsyncConstructor {
     }
   }
 
-  async(callback) {
-    setTimeout(callback);
-  }
-
   loadRenderData(
     renderData: RenderDataInterface,
     requestOptions: RequestOptionsInterface,
@@ -124,7 +120,7 @@ export default class extends AsyncConstructor {
     mixins = this.getMixinsAndDependencies(mixins);
 
     mixins.forEach((mixin: MixinInterface) => {
-      if (mixin.service) {
+      if (!this.services[mixin.name] && mixin.service) {
         this.services[mixin.name] = new mixin.service(this);
       }
     });

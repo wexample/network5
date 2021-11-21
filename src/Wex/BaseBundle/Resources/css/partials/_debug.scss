@@ -2,7 +2,12 @@
 
 .debug-render-node {
   position: fixed;
-  border: 5px solid;
+  border: 1px solid;
   box-sizing: border-box;
   pointer-events: none;
+  opacity: .1;
+
+  &.focus {
+    opacity: 1;
+  }
 }

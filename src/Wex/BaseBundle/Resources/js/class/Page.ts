@@ -34,12 +34,6 @@ export default class extends RenderNode {
     return [];
   }
 
-  public exit() {
-    this.deactivateListeners();
-
-    super.exit();
-  }
-
   loadRenderData(
     renderData: RenderDataInterface,
     requestOptions: RequestOptionsInterface

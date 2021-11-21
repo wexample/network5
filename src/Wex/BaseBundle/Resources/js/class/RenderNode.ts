@@ -6,7 +6,7 @@ import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 export default abstract class RenderNode extends AppChild {
   public childRenderNodes: { [key: string]: RenderNode } = {};
   public el: HTMLElement;
-  protected focused: boolean = false;
+  public focused: boolean = false;
   public id: string;
   public parentRenderNode: RenderNode;
   public renderData: RenderDataInterface;
@@ -21,13 +21,16 @@ export default abstract class RenderNode extends AppChild {
   }
 
   public init(complete?: Function) {
-    complete && complete(this);
+    this.ready(complete);
+    this.readyComplete(this);
   }
 
   public exit() {
-    this.forEachChildRenderNode((renderNode) => {
-      renderNode.exit();
-    });
+    this.forEachChildRenderNode(
+      (renderNode: RenderNode) => {
+        renderNode.exit();
+      }
+    );
 
     if (this.parentRenderNode) {
       this.parentRenderNode.removeChildRenderNode(this);

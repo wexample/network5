@@ -10,7 +10,7 @@ import DebugRenderNode from '../class/Debug/DebugRenderNode';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 
 export class DebugService extends AppService {
-  public renderNodes: any = {};
+  public debugRenderNodes: any = {};
   public elDebugHelpers: HTMLElement;
   public elDebugHelpersGlobal: HTMLElement;
 
@@ -21,9 +21,6 @@ export class DebugService extends AppService {
 
   createEl() {
     this.elDebugHelpers = document.createElement('div');
-    let componentsService = this.app.services[
-      Variables.PLURAL_COMPONENT
-    ] as ComponentsService;
     this.elDebugHelpers.setAttribute(Variables.ID, 'layout-debug-helpers');
 
     this.elDebugHelpersGlobal = document.createElement('div');
@@ -45,35 +42,24 @@ export class DebugService extends AppService {
 
   addTrackersToRenderNodeService(renderNodeService: RenderNodeService) {
     let debugService = this;
-    let methodOriginal = renderNodeService.createRenderNode;
+    let methodOriginal = renderNodeService.createRenderNodeInstance;
 
-    renderNodeService.createRenderNode = function (
+    renderNodeService.createRenderNodeInstance = function (
       el: HTMLElement,
       renderData: RenderDataInterface,
       requestOptions: RequestOptionsInterface,
       complete?: Function
     ): RenderNode | null {
-      return methodOriginal.call(
-        renderNodeService,
-        el,
-        renderData,
-        requestOptions,
-        (renderNode: RenderNode) => {
-          debugService.initRenderNode(renderNode);
-          complete && complete(renderNode);
-        }
-      );
+      let instance = methodOriginal.apply(renderNodeService, arguments);
+
+      debugService.initRenderNode(instance);
+
+      return instance;
     };
   }
 
   initRenderNode(renderNode: RenderNode) {
-    // After app loaded.
-    this.app.ready(() => {
-      // Wait rendering complete.
-      setTimeout(() => {
-        this.renderNodes[renderNode.getId()] = new DebugRenderNode(renderNode);
-      }, 100);
-    });
+    new DebugRenderNode(renderNode);
   }
 }
 

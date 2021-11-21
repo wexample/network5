@@ -36,7 +36,9 @@ export default {
       super.appendChildRenderNode(renderNode);
 
       if (renderNode instanceof Page) {
-        this.open();
+        renderNode.ready(() => {
+          this.open();
+        });
       }
     }
 
@@ -105,8 +107,6 @@ export default {
 
       // Sync with CSS animation.
       setTimeout(() => {
-        this.page.exit();
-
         this.el.classList.remove(Variables.CLOSED);
         this.opened = this.focused = this.closing = false;
 

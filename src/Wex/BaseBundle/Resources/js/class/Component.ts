@@ -56,11 +56,7 @@ export default abstract class Component extends RenderNode {
   }
 
   public exit() {
-    this.forEachChildRenderNode(
-      (renderNode: RenderNode) => {
-        renderNode.exit();
-      }
-    );
+    super.exit();
 
     this.parentRenderNode.removeChildRenderNode(this);
 
