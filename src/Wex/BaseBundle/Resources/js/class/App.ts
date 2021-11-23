@@ -212,7 +212,7 @@ export default class extends AsyncConstructor {
     return bundle ? bundle.definition : null;
   }
 
-  addLib(name, object) {
+  addLib(name: string, object: any) {
     this.lib[name] = object;
   }
 

@@ -37,11 +37,11 @@ export default class MixinsService extends AppService {
     }, timeoutLimit);
 
     let step = () => {
-      let mixin: AppService = mixins.shift() as AppService;
+      let service: AppService = mixins.shift() as AppService;
 
-      if (mixin) {
-        currentName = mixin.name;
-        let hooks = mixin.registerHooks();
+      if (service) {
+        currentName = service.name;
+        let hooks = service.registerHooks();
 
         if (loops++ > loopsLimit) {
           console.error(errorTrace);
@@ -51,7 +51,7 @@ export default class MixinsService extends AppService {
             `on method "${method}", stopping at ${currentName}, see trace below.`
           );
         } else if (loops > loopsLimit - 10) {
-          errorTrace.push(mixin);
+          errorTrace.push(service);
         }
 
         let next = () => {
@@ -61,13 +61,13 @@ export default class MixinsService extends AppService {
 
         if (hooks && hooks[group] && hooks[group][method]) {
           let argsLocal = args.concat([registry, next]);
-          registry[currentName] = hooks[group][method].apply(this, argsLocal);
+          registry[currentName] = hooks[group][method].apply(service, argsLocal);
         }
 
         // "wait" says to retry after processing other services.
         if (registry[currentName] === MixinsAppService.LOAD_STATUS_WAIT) {
           // Enqueue again.
-          mixins.push(mixin);
+          mixins.push(service);
           step();
         }
         // "stop" allows to let service to relaunch process itself.
