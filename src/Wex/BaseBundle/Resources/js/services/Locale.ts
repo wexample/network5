@@ -8,10 +8,15 @@ export default class LocaleService extends AppService {
     return {
       page: {
         trans(string = '', args = {}) {
-          return this.app.locale.trans(string, args, this.translations.domains, {
-            ...this.app.layout.renderData.translations.catalog,
-            ...this.translations.catalog,
-          });
+          return this.app.locale.trans(
+            string,
+            args,
+            this.translations.domains,
+            {
+              ...this.app.layout.renderData.translations.catalog,
+              ...this.translations.catalog,
+            }
+          );
         },
       },
     };

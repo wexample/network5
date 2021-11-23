@@ -12,11 +12,11 @@ export default class AppService {
     this.name = this.app.buildServiceName(this.constructor.name);
   }
 
-  registerHooks():{app?:{},page?:{}} {
+  registerHooks(): { app?: {}; page?: {} } {
     return {};
-  };
+  }
 
   registerMethods() {
     return {};
-  };
+  }
 }

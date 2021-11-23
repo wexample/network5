@@ -1,4 +1,4 @@
-import Component from "../class/Component";
+import Component from '../class/Component';
 
 export default {
   bundleGroup: 'component',
@@ -9,5 +9,5 @@ export default {
 
       console.log('Vue components loaded');
     }
-  }
+  },
 };

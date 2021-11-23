@@ -11,7 +11,7 @@ import RenderNode from '../class/RenderNode';
 import { findPreviousNode as DomFindPreviousNode } from '../helpers/Dom';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
-import AppService from "../class/AppService";
+import AppService from '../class/AppService';
 
 export default class ComponentsService extends RenderNodeService {
   elLayoutComponents: HTMLElement;
@@ -63,7 +63,7 @@ export default class ComponentsService extends RenderNodeService {
           return MixinsAppService.LOAD_STATUS_STOP;
         },
       },
-    }
+    };
   }
 
   createRenderNodeInstance(

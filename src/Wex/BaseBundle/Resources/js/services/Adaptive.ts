@@ -3,10 +3,10 @@ import AppService from '../class/AppService';
 import MixinsAppService from '../class/MixinsAppService';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
-import ComponentsService from "./Components";
+import ComponentsService from './Components';
 
 export default class AdaptiveService extends AppService {
-  public static dependencies: typeof AppService[] = [ComponentsService]
+  public static dependencies: typeof AppService[] = [ComponentsService];
 
   registerHooks() {
     return {
@@ -24,7 +24,7 @@ export default class AdaptiveService extends AppService {
           return MixinsAppService.LOAD_STATUS_WAIT;
         },
       },
-    }
+    };
   }
 
   get(path, requestOptions: RequestOptionsAdaptiveInterface): Promise<any> {

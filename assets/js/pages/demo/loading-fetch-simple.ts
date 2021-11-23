@@ -3,7 +3,7 @@ import UnitTest from '../../../../src/Wex/BaseBundle/Resources/js/class/UnitTest
 import AssetBundleInterface from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/AssetBundleInterface';
 import ModalsService from '../../../../src/Wex/BaseBundle/Resources/js/services/Modals';
 import { ServiceRegistryPageInterface } from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistryPageInterface';
-import AppService from "../../../../src/Wex/BaseBundle/Resources/js/class/AppService";
+import AppService from '../../../../src/Wex/BaseBundle/Resources/js/class/AppService';
 
 interface ServiceRegistryPageCurrentInterface
   extends ServiceRegistryPageInterface {

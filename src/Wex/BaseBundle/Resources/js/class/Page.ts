@@ -6,7 +6,7 @@ import PageHandlerComponent from './PageHandlerComponent';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 import RequestOptionsPageInterface from '../interfaces/RequestOptionsPageInterface';
-import AppService from "./AppService";
+import AppService from './AppService';
 
 export default class extends RenderNode {
   public elOverlay: HTMLElement;

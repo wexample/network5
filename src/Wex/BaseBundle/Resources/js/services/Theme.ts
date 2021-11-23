@@ -36,7 +36,7 @@ export default class ThemeService extends AppService {
           return MixinsAppService.LOAD_STATUS_WAIT;
         },
       },
-    }
+    };
   }
 
   activateListeners() {

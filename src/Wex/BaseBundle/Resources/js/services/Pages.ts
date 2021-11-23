@@ -9,8 +9,8 @@ import RenderNodeService from './RenderNodeService';
 import Page from '../class/Page';
 import RenderNode from '../class/RenderNode';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
-import AppService from "../class/AppService";
-import EventsService from "./Events";
+import AppService from '../class/AppService';
+import EventsService from './Events';
 
 export default class PagesService extends RenderNodeService {
   public pages: {};
@@ -18,8 +18,8 @@ export default class PagesService extends RenderNodeService {
   public static dependencies: typeof AppService[] = [
     AdaptiveService,
     EventsService,
-    LocaleService
-  ]
+    LocaleService,
+  ];
 
   registerHooks() {
     return {
@@ -75,7 +75,7 @@ export default class PagesService extends RenderNodeService {
 
       delete this.services.components.pageHandlerRegistry[
         renderData.renderRequestId
-        ];
+      ];
 
       pageHandler.renderPageEl(renderData);
       el = pageHandler.getPageEl();

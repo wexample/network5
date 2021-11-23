@@ -15,7 +15,7 @@ import LayoutInitial from './LayoutInitial';
 import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 import AsyncConstructor from './AsyncConstructor';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
-import AppService from "./AppService";
+import AppService from './AppService';
 
 export default class extends AsyncConstructor {
   public bootJsBuffer: string[] = [];
@@ -102,7 +102,7 @@ export default class extends AsyncConstructor {
   }
 
   buildServiceName(serviceName: string): string {
-    return serviceName.slice(0, -('Service'.length)).toLowerCase();
+    return serviceName.slice(0, -'Service'.length).toLowerCase();
   }
 
   getClassPage() {
@@ -150,7 +150,9 @@ export default class extends AsyncConstructor {
     );
   }
 
-  getServicesAndDependencies(services: typeof AppService[]): typeof AppService[] {
+  getServicesAndDependencies(
+    services: typeof AppService[]
+  ): typeof AppService[] {
     services.forEach((service: typeof AppService) => {
       if (service.dependencies) {
         services = [

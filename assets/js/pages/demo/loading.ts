@@ -4,7 +4,7 @@ import AssetBundleInterface from '../../../../src/Wex/BaseBundle/Resources/js/in
 import ModalsService from '../../../../src/Wex/BaseBundle/Resources/js/services/Modals';
 import { ServiceRegistryPageInterface } from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistryPageInterface';
 import { traceRenderNodes as debugTraceRenderNodes } from '../../../../src/Wex/BaseBundle/Resources/js/helpers/Debug';
-import AppService from "../../../../src/Wex/BaseBundle/Resources/js/class/AppService";
+import AppService from '../../../../src/Wex/BaseBundle/Resources/js/class/AppService';
 
 interface ServiceRegistryPageCurrentInterface
   extends ServiceRegistryPageInterface {
