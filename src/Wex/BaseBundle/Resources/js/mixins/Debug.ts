@@ -17,6 +17,11 @@ export class DebugService extends AppService {
   init() {
     this.createEl();
     this.addTrackers();
+
+
+    window.addEventListener('resize', () =>
+      this.update()
+    );
   }
 
   createEl() {
@@ -58,6 +63,12 @@ export class DebugService extends AppService {
 
   initRenderNode(renderNode: RenderNode) {
     new DebugRenderNode(renderNode);
+  }
+
+  update() {
+    Object.values(this.debugRenderNodes).forEach((debugRenderNode: DebugRenderNode) => {
+      debugRenderNode.update();
+    })
   }
 }
 
