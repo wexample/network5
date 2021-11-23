@@ -12,7 +12,7 @@ use Twig\TwigFunction;
 
 class VueExtension extends AbstractExtension
 {
-    const TEMPLATE_FILE_EXTENSION = '.vue.twig';
+    public const TEMPLATE_FILE_EXTENSION = '.vue.twig';
 
     public array $renderedTemplates = [];
 
@@ -42,10 +42,12 @@ class VueExtension extends AbstractExtension
 
     /**
      * @param Environment $env
-     * @param string $path
-     * @param array|null $options
-     * @param array|null $twigContext
+     * @param string      $path
+     * @param array|null  $options
+     * @param array|null  $twigContext
+     *
      * @return string
+     *
      * @throws Exception
      */
     public function vue(
@@ -53,8 +55,7 @@ class VueExtension extends AbstractExtension
         string $path,
         ?array $options = [],
         ?array $twigContext = []
-    ): string
-    {
+    ): string {
         return $this->vueRender(
             $env,
             $path,
@@ -73,8 +74,7 @@ class VueExtension extends AbstractExtension
         ?array $attributes = [],
         ?array $twigContext = [],
         ?bool $root = false
-    ): string
-    {
+    ): string {
         $vueComName = $this->createVueComName($path);
         $pathTemplate = $path.self::TEMPLATE_FILE_EXTENSION;
 
@@ -119,7 +119,7 @@ class VueExtension extends AbstractExtension
                 'template',
                 [
                     'class' => 'vue vue-loading',
-                    'id' => 'vue-template-'.$vueComName
+                    'id' => 'vue-template-'.$vueComName,
                 ],
                 $env->render(
                     $pathTemplate,
@@ -135,7 +135,7 @@ class VueExtension extends AbstractExtension
         return DomHelper::buildTag(
             $vueComName,
             [
-                'class' => $vueComId
+                'class' => $vueComId,
             ],
             $outputBody
         );
@@ -151,11 +151,11 @@ class VueExtension extends AbstractExtension
 
             // Use reference to identify sub folders length.
             $templatePath = count(
-                    explode(
+                explode(
                         FileHelper::FOLDER_SEPARATOR,
                         WexBaseBundle::BUNDLE_PATH_TEMPLATES
                     )
-                ) - 1;
+            ) - 1;
 
             // Remove sub folders.
             $exp = array_slice($exp, $templatePath);
@@ -167,7 +167,8 @@ class VueExtension extends AbstractExtension
             WexBaseBundle::BUNDLE_PATH_ALIAS_PREFIX,
             '',
             strtolower(
-                implode('-',
+                implode(
+                    '-',
                     explode(
                         FileHelper::FOLDER_SEPARATOR,
                         $path
