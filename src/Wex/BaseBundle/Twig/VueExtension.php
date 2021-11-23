@@ -11,6 +11,10 @@ use Twig\TwigFunction;
 
 class VueExtension extends AbstractExtension
 {
+    const TEMPLATE_FILE_EXTENSION = '.vue.twig';
+
+    public array $renderedTemplates = [];
+
     public function getFunctions(): array
     {
         return [
@@ -23,6 +27,13 @@ class VueExtension extends AbstractExtension
                 [
                     self::FUNCTION_OPTION_NEEDS_ENVIRONMENT => true,
                     self::FUNCTION_OPTION_IS_SAFE => [self::FUNCTION_OPTION_HTML],
+                ]
+            ),
+            new TwigFunction(
+                'vue_render_templates',
+                [
+                    $this,
+                    'vueRenderTemplate',
                 ]
             ),
         ];
@@ -64,19 +75,53 @@ class VueExtension extends AbstractExtension
     ): string
     {
         $vueComName = $this->createVueComName($path);
+        $pathTemplate = $path.self::TEMPLATE_FILE_EXTENSION;
 
         $vueComId = $vueComName.'-'.md5(random_int(0, mt_getrandmax()).microtime());
 
         $attributes['class'] ??= '';
         $attributes['class'] .= ' '.$vueComId;
 
+        $context = [
+            'path' => $path,
+            'vueComId' => $vueComId,
+            'vueComName' => $vueComName,
+            'attrs' => $attributes,
+        ];
 
+        $outputBody = '';
+        if ($root)
+        {
+            /** @var ComponentsExtension $comExt */
+            $comExt = $env
+                ->getExtension(ComponentsExtension::class);
+
+            $outputBody = $comExt->comInitParent(
+                'components/vue',
+                $context
+            );
+        }
+
+        if (!isset($this->renderedTemplates[$vueComName]))
+        {
+            $template = DomHelper::buildTag(
+                'template',
+                [
+                    'class' => 'vue vue-loading',
+                    'id' => 'vue-template-'.$vueComName
+                ],
+                $env->render($pathTemplate, $twigContext)
+            );
+
+            $this->renderedTemplates[$vueComName] = $template;
+        }
 
         return DomHelper::buildTag(
             $vueComName,
             [
                 'class' => $vueComId
-            ]
+            ],
+            $outputBody
         );
     }
 
@@ -114,5 +159,11 @@ class VueExtension extends AbstractExtension
                 )
             )
         );
+    }
+
+    public function vueRenderTemplate(): string
+    {
+        // Add vue js templates.
+        return implode('', $this->renderedTemplates);
     }
 }

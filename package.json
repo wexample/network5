@@ -7,7 +7,7 @@
         "regenerator-runtime": "^0.13.2",
         "sass": "^1.43.2",
         "sass-loader": "^12.2.0",
-        "stimulus": "^2.0.0",
+        "stimulus": "3.0.1",
         "ts-loader": "^9.0.0",
         "typescript": "^4.4.4",
         "webpack-notifier": "^1.6.0"
@@ -25,6 +25,7 @@
         "material-components-web": "^13.0.0",
         "material-design-icons": "^3.0.1",
         "vue": "^3.2.20",
-        "vue-loader": "^15.9.8"
+        "vue-loader": "^16.1.0",
+        "vue-template-compiler": "^2.6.14"
     }
 }
