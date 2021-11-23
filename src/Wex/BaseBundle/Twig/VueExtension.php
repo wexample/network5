@@ -4,6 +4,7 @@ namespace App\Wex\BaseBundle\Twig;
 
 use App\Wex\BaseBundle\Helper\DomHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
+use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\WexBaseBundle;
 use Exception;
 use Twig\Environment;
@@ -104,14 +105,29 @@ class VueExtension extends AbstractExtension
 
         if (!isset($this->renderedTemplates[$vueComName]))
         {
+            /** @var ComponentsExtension $comExt */
+            $comExt = $env->getExtension(
+                ComponentsExtension::class
+            );
+
+            $comExt->comSetContext(
+                RenderingHelper::CONTEXT_VUE,
+                $vueComName
+            );
+
             $template = DomHelper::buildTag(
                 'template',
                 [
                     'class' => 'vue vue-loading',
                     'id' => 'vue-template-'.$vueComName
                 ],
-                $env->render($pathTemplate, $twigContext)
+                $env->render(
+                    $pathTemplate,
+                    $twigContext + $context
+                )
             );
+
+            $comExt->comRevertContext();
 
             $this->renderedTemplates[$vueComName] = $template;
         }
