@@ -5,7 +5,7 @@ import RenderDataInterface from '../interfaces/RenderDataInterface';
 import RenderNode from '../class/RenderNode';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 
-export abstract class RenderNodeService extends AppService {
+export default abstract class RenderNodeService extends AppService {
   pages: {};
   services: ServiceRegistryPageInterface;
 

@@ -1,19 +1,57 @@
-import { MixinLocale } from './Locale';
-import MixinInterface from '../interfaces/MixinInterface';
+import LocaleService from './Locale';
 import MixinsAppService from '../class/MixinsAppService';
 import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
 import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 import RequestOptionsPageInterface from '../interfaces/RequestOptionsPageInterface';
-import { MixinAdaptive } from './Adaptive';
+import AdaptiveService from './Adaptive';
 import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
-import { RenderNodeService } from './RenderNodeService';
+import RenderNodeService from './RenderNodeService';
 import Page from '../class/Page';
 import RenderNode from '../class/RenderNode';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import AppService from "../class/AppService";
+import EventsService from "./Events";
 
-export class PagesService extends RenderNodeService {
+export default class PagesService extends RenderNodeService {
   public pages: {};
   public services: ServiceRegistryPageInterface;
+  public static dependencies: typeof AppService[] = [
+    AdaptiveService,
+    EventsService,
+    LocaleService
+  ]
+
+  registerHooks() {
+    return {
+      app: {
+        loadRenderData(
+          renderData: RenderDataLayoutInterface,
+          requestOptions: RequestOptionsInterface,
+          registry: any,
+          next: Function
+        ) {
+          if (
+            registry.components === MixinsAppService.LOAD_STATUS_COMPLETE &&
+            registry.responsive === MixinsAppService.LOAD_STATUS_COMPLETE &&
+            registry.locale === MixinsAppService.LOAD_STATUS_COMPLETE
+          ) {
+            if (renderData.page) {
+              this.services.pages.createPage(
+                renderData.page,
+                requestOptions,
+                next
+              );
+
+              return MixinsAppService.LOAD_STATUS_STOP;
+            } else {
+              return MixinsAppService.LOAD_STATUS_COMPLETE;
+            }
+          }
+          return MixinsAppService.LOAD_STATUS_WAIT;
+        },
+      },
+    };
+  }
 
   createPage(
     renderData: RenderDataPageInterface,
@@ -37,7 +75,7 @@ export class PagesService extends RenderNodeService {
 
       delete this.services.components.pageHandlerRegistry[
         renderData.renderRequestId
-      ];
+        ];
 
       pageHandler.renderPageEl(renderData);
       el = pageHandler.getPageEl();
@@ -71,41 +109,3 @@ export class PagesService extends RenderNodeService {
     return this.services.adaptive.get(path, options);
   }
 }
-
-export const MixinPages: MixinInterface = {
-  name: 'pages',
-
-  dependencies: [MixinLocale, MixinAdaptive],
-
-  hooks: {
-    app: {
-      loadRenderData(
-        renderData: RenderDataLayoutInterface,
-        requestOptions: RequestOptionsInterface,
-        registry: any,
-        next: Function
-      ) {
-        if (
-          registry.components === MixinsAppService.LOAD_STATUS_COMPLETE &&
-          registry.responsive === MixinsAppService.LOAD_STATUS_COMPLETE &&
-          registry.locale === MixinsAppService.LOAD_STATUS_COMPLETE
-        ) {
-          if (renderData.page) {
-            this.services.pages.createPage(
-              renderData.page,
-              requestOptions,
-              next
-            );
-
-            return MixinsAppService.LOAD_STATUS_STOP;
-          } else {
-            return MixinsAppService.LOAD_STATUS_COMPLETE;
-          }
-        }
-        return MixinsAppService.LOAD_STATUS_WAIT;
-      },
-    },
-  },
-
-  service: PagesService,
-};

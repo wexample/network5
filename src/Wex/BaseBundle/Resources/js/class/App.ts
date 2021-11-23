@@ -1,14 +1,13 @@
 import Page from './Page';
 
-import MixinInterface from '../interfaces/MixinInterface';
 import ServiceRegistryAppInterface from '../interfaces/ServiceRegistryAppInterface';
 
-import { MixinAssets } from '../mixins/Assets';
-import { MixinMixins } from '../mixins/Mixins';
-import { MixinPages } from '../mixins/Pages';
-import { MixinResponsive } from '../mixins/Responsive';
-import { MixinTheme } from '../mixins/Theme';
-import { MixinQueues } from '../mixins/Queues';
+import AssetsService from '../services/Assets';
+import MixinsService from '../services/Mixins';
+import PagesService from '../services/Pages';
+import ResponsiveService from '../services/Responsive';
+import ThemeService from '../services/Theme';
+import QueuesService from '../services/Queues';
 
 import { unique as arrayUnique } from '../helpers/Arrays';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
@@ -16,6 +15,7 @@ import LayoutInitial from './LayoutInitial';
 import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 import AsyncConstructor from './AsyncConstructor';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import AppService from "./AppService";
 
 export default class extends AsyncConstructor {
   public bootJsBuffer: string[] = [];
@@ -23,7 +23,7 @@ export default class extends AsyncConstructor {
   public hasCoreLoaded: boolean = false;
   public layout: LayoutInitial = null;
   public layoutRenderData: RenderDataLayoutInterface = null;
-  public mixins: MixinInterface[] = [];
+  public mixins: typeof AppService[] = [];
   public elLayout: HTMLElement;
   public lib: object = {};
   public services: ServiceRegistryAppInterface = {};
@@ -53,7 +53,7 @@ export default class extends AsyncConstructor {
       this.layout = new LayoutInitial(this);
       this.layout.el = doc.getElementById('layout');
 
-      this.loadAndInitMixins(this.getMixins(), () => {
+      this.loadAndInitServices(this.getServices(), () => {
         this.addLibraries(this.lib);
 
         // The main functionalities are ready.
@@ -101,35 +101,43 @@ export default class extends AsyncConstructor {
     );
   }
 
+  buildServiceName(serviceName: string): string {
+    return serviceName.slice(0, -('Service'.length)).toLowerCase();
+  }
+
   getClassPage() {
     return Page;
   }
 
-  getMixins(): MixinInterface[] {
+  getServices(): typeof AppService[] {
     return [
-      MixinAssets,
-      MixinMixins,
-      MixinPages,
-      MixinQueues,
-      MixinResponsive,
-      MixinTheme,
+      AssetsService,
+      MixinsService,
+      PagesService,
+      QueuesService,
+      ResponsiveService,
+      ThemeService,
     ];
   }
 
-  loadMixins(mixins: MixinInterface[]): void {
-    mixins = this.getMixinsAndDependencies(mixins);
+  loadServices(services: typeof AppService[]): AppService[] {
+    services = this.getServicesAndDependencies(services);
+    let instances = [];
 
-    mixins.forEach((mixin: MixinInterface) => {
-      if (!this.services[mixin.name] && mixin.service) {
-        this.services[mixin.name] = new mixin.service(this);
+    services.forEach((service: typeof AppService) => {
+      let name = this.buildServiceName(service.name);
+
+      if (!this.services[name]) {
+        this.services[name] = new service(this);
+        instances.push(this.services[name]);
       }
     });
 
-    this.mixins = arrayUnique([...mixins, ...this.mixins]) as MixinInterface[];
+    return instances;
   }
 
-  loadAndInitMixins(mixins: MixinInterface[], complete) {
-    this.loadMixins(mixins);
+  loadAndInitServices(ServicesDefinitions: typeof AppService[], complete) {
+    let services = this.loadServices(ServicesDefinitions);
 
     // Init mixins.
     this.services.mixins.invokeUntilComplete(
@@ -138,32 +146,34 @@ export default class extends AsyncConstructor {
       [],
       complete,
       undefined,
-      mixins
+      services
     );
   }
 
-  getMixinsAndDependencies(mixins: MixinInterface[]): MixinInterface[] {
-    mixins.forEach((mixin: any) => {
-      if (mixin.dependencies) {
-        mixins = [
-          ...mixins,
-          ...this.getMixinsAndDependencies(mixin.dependencies),
+  getServicesAndDependencies(services: typeof AppService[]): typeof AppService[] {
+    services.forEach((service: typeof AppService) => {
+      if (service.dependencies) {
+        services = [
+          ...services,
+          ...this.getServicesAndDependencies(service.dependencies),
         ];
       }
     });
 
-    return arrayUnique(mixins) as MixinInterface[];
+    return arrayUnique(services) as typeof AppService[];
   }
 
   mix(parentDest, group, split = false) {
-    this.mixins.forEach((mixin) => {
-      if (mixin.methods && mixin.methods[group]) {
+    Object.values(this.services).forEach((service: AppService) => {
+      let methods = service.registerMethods();
+
+      if (methods && methods[group]) {
         let dest;
-        let toMix = mixin.methods[group];
+        let toMix = methods[group];
 
         if (split) {
           dest = {};
-          parentDest[mixin.name] = dest;
+          parentDest[service.name] = dest;
         } else {
           dest = parentDest;
         }

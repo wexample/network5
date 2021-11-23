@@ -1,10 +1,10 @@
-import MixinInterface from '../interfaces/MixinInterface';
 import AppService from '../class/AppService';
 import RequestOptionsModalInterface from '../interfaces/RequestOptionsModalInterface';
-import { MixinPages, PagesService } from './Pages';
+import PagesService from './Pages';
 
-export class ModalsService extends AppService {
-  services: {
+export default class ModalsService extends AppService {
+  public static dependencies: typeof AppService[] = [PagesService];
+  public services: {
     pages: PagesService;
   };
 
@@ -18,11 +18,3 @@ export class ModalsService extends AppService {
     return this.services.pages.get(path, requestOptions);
   }
 }
-
-export const MixinModals: MixinInterface = {
-  name: 'modals',
-
-  dependencies: [MixinPages],
-
-  service: ModalsService,
-};

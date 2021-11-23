@@ -1,6 +1,6 @@
 import AppChild from '../AppChild';
 import RenderNode from '../RenderNode';
-import { DebugService } from '../../mixins/Debug';
+import DebugService from '../../services/Debug';
 import Variables from '../../helpers/Variables';
 
 export default class DebugRenderNode extends AppChild {

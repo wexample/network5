@@ -1,26 +1,69 @@
-import MixinInterface from '../interfaces/MixinInterface';
 import MixinsAppService from '../class/MixinsAppService';
 import Page from '../class/Page';
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
-import { MixinPrompts } from './Prompts';
+import PromptService from './Prompts';
 import App from '../class/App';
 import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 import PageHandlerComponent from '../class/PageHandlerComponent';
 import Component from '../class/Component';
-import { RenderNodeService } from './RenderNodeService';
+import RenderNodeService from './RenderNodeService';
 import RenderNode from '../class/RenderNode';
 import { findPreviousNode as DomFindPreviousNode } from '../helpers/Dom';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import AppService from "../class/AppService";
 
-export class ComponentsService extends RenderNodeService {
+export default class ComponentsService extends RenderNodeService {
   elLayoutComponents: HTMLElement;
   pageHandlerRegistry: { [key: string]: PageHandlerComponent } = {};
+
+  public static dependencies: typeof AppService[] = [PromptService];
 
   constructor(app: App) {
     super(app);
 
     this.elLayoutComponents = document.getElementById('layout-components');
+  }
+
+  registerHooks() {
+    return {
+      app: {
+        loadRenderData(
+          renderData: RenderDataLayoutInterface,
+          requestOptions: RequestOptionsInterface,
+          registry: any,
+          next: Function
+        ) {
+          if (registry.assets !== MixinsAppService.LOAD_STATUS_COMPLETE) {
+            return MixinsAppService.LOAD_STATUS_WAIT;
+          }
+
+          this.services.components.loadLayoutRenderData(
+            renderData,
+            requestOptions,
+            next
+          );
+
+          return MixinsAppService.LOAD_STATUS_STOP;
+        },
+      },
+
+      page: {
+        loadPageRenderData(page: Page, registry: any, next: Function) {
+          // Wait for page loading.
+          if (
+            registry.pages !== MixinsAppService.LOAD_STATUS_COMPLETE ||
+            registry.assets !== MixinsAppService.LOAD_STATUS_COMPLETE
+          ) {
+            return MixinsAppService.LOAD_STATUS_WAIT;
+          }
+
+          this.services.components.loadPageRenderData(page, next);
+
+          return MixinsAppService.LOAD_STATUS_STOP;
+        },
+      },
+    }
   }
 
   createRenderNodeInstance(
@@ -135,50 +178,3 @@ export class ComponentsService extends RenderNodeService {
     });
   }
 }
-
-export const MixinComponents: MixinInterface = {
-  name: 'components',
-
-  dependencies: [MixinPrompts],
-
-  hooks: {
-    app: {
-      loadRenderData(
-        renderData: RenderDataLayoutInterface,
-        requestOptions: RequestOptionsInterface,
-        registry: any,
-        next: Function
-      ) {
-        if (registry.assets !== MixinsAppService.LOAD_STATUS_COMPLETE) {
-          return MixinsAppService.LOAD_STATUS_WAIT;
-        }
-
-        this.services.components.loadLayoutRenderData(
-          renderData,
-          requestOptions,
-          next
-        );
-
-        return MixinsAppService.LOAD_STATUS_STOP;
-      },
-    },
-
-    page: {
-      loadPageRenderData(page: Page, registry: any, next: Function) {
-        // Wait for page loading.
-        if (
-          registry.pages !== MixinsAppService.LOAD_STATUS_COMPLETE ||
-          registry.assets !== MixinsAppService.LOAD_STATUS_COMPLETE
-        ) {
-          return MixinsAppService.LOAD_STATUS_WAIT;
-        }
-
-        this.services.components.loadPageRenderData(page, next);
-
-        return MixinsAppService.LOAD_STATUS_STOP;
-      },
-    },
-  },
-
-  service: ComponentsService,
-};

@@ -1,7 +1,6 @@
-import MixinInterface from '../interfaces/MixinInterface';
 import AppService from '../class/AppService';
 
-export class EventsService extends AppService {
+export default class EventsService extends AppService {
   forget(name, callback, el = window.document) {
     el.removeEventListener(name, callback);
   }
@@ -18,9 +17,3 @@ export class EventsService extends AppService {
     );
   }
 }
-
-export const MixinEvents: MixinInterface = {
-  name: 'events',
-
-  service: EventsService,
-};

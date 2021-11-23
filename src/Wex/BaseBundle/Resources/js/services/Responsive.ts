@@ -1,14 +1,42 @@
-import { MixinAssets } from './Assets';
-import { MixinEvents } from './Events';
-import { MixinQueues } from './Queues';
-import MixinInterface from '../interfaces/MixinInterface';
+import AssetsService from './Assets';
+import EventsService from './Events';
+import QueuesService from './Queues';
 import AppService from '../class/AppService';
 import MixinsAppService from '../class/MixinsAppService';
 import AssetsInterface from '../interfaces/AssetInterface';
 
-export class ResponsiveService extends AppService {
+export default class ResponsiveService extends AppService {
+  dependencies: [AssetsService, EventsService, QueuesService];
+
   public responsiveSizeCurrent: string;
+
   public responsiveSizePrevious: string;
+
+  registerHooks() {
+    return {
+      app: {
+        init(registry: any) {
+          if (registry.assets === MixinsAppService.LOAD_STATUS_COMPLETE) {
+            let responsiveService = this.services.responsive;
+
+            this.services.assets.updateFilters.push(
+              responsiveService.updateFilters.bind(responsiveService)
+            );
+
+            window.addEventListener('resize', () =>
+              responsiveService.updateResponsive(true)
+            );
+
+            responsiveService.updateResponsive(false);
+
+            return MixinsAppService.LOAD_STATUS_COMPLETE;
+          }
+
+          return MixinsAppService.LOAD_STATUS_WAIT;
+        },
+      },
+    };
+  }
 
   updateResponsive(updateAssets: boolean, complete?: Function) {
     let current = this.detectSize();
@@ -82,35 +110,3 @@ export class ResponsiveService extends AppService {
     }
   }
 }
-
-export const MixinResponsive: MixinInterface = {
-  name: 'responsive',
-
-  dependencies: [MixinAssets, MixinEvents, MixinQueues],
-
-  hooks: {
-    app: {
-      init(registry: any) {
-        if (registry.assets === MixinsAppService.LOAD_STATUS_COMPLETE) {
-          let responsiveService = this.services.responsive;
-
-          this.services.assets.updateFilters.push(
-            responsiveService.updateFilters.bind(responsiveService)
-          );
-
-          window.addEventListener('resize', () =>
-            responsiveService.updateResponsive(true)
-          );
-
-          responsiveService.updateResponsive(false);
-
-          return MixinsAppService.LOAD_STATUS_COMPLETE;
-        }
-
-        return MixinsAppService.LOAD_STATUS_WAIT;
-      },
-    },
-  },
-
-  service: ResponsiveService,
-};

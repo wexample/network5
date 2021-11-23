@@ -3,15 +3,20 @@ import App from './App';
 export default class AppService {
   public app: App;
   public services: any = {};
+  public name: string;
+  public static dependencies: typeof AppService[] = [];
 
   constructor(app: App) {
     this.app = app;
     this.services = this.app.services;
+    this.name = this.app.buildServiceName(this.constructor.name);
   }
 
-  registerServices(services: string[]) {
-    services.forEach((name) => {
-      this.services[name] = this.app.services[name];
-    });
-  }
+  registerHooks():{app?:{},page?:{}} {
+    return {};
+  };
+
+  registerMethods() {
+    return {};
+  };
 }

@@ -1,9 +1,9 @@
 import App from '../../../src/Wex/BaseBundle/Resources/js/class/App';
-import MixinInterface from '../../../src/Wex/BaseBundle/Resources/js/interfaces/MixinInterface';
-import { MixinComponents } from '../../../src/Wex/BaseBundle/Resources/js/mixins/Components';
+import AppService from "../../../src/Wex/BaseBundle/Resources/js/class/AppService";
+import DebugService from "../../../src/Wex/BaseBundle/Resources/js/services/Debug";
 
 export default class extends App {
-  getMixins(): MixinInterface[] {
-    return [...super.getMixins(), ...[MixinComponents]];
+  getMixins(): typeof AppService[] {
+    return super.getServices().concat([DebugService]);
   }
 }

@@ -1,12 +1,12 @@
 import PageResponsiveDisplay from './PageResponsiveDisplay';
 import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
-import MixinInterface from '../interfaces/MixinInterface';
 import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
 import RenderNode from './RenderNode';
 import PageHandlerComponent from './PageHandlerComponent';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 import RequestOptionsPageInterface from '../interfaces/RequestOptionsPageInterface';
+import AppService from "./AppService";
 
 export default class extends RenderNode {
   public elOverlay: HTMLElement;
@@ -30,7 +30,7 @@ export default class extends RenderNode {
     return 'page';
   }
 
-  getPageLevelMixins(): MixinInterface[] {
+  getPageLevelMixins(): typeof AppService[] {
     return [];
   }
 
@@ -56,7 +56,7 @@ export default class extends RenderNode {
   init(complete?: Function) {
     this.ready(complete);
 
-    this.app.loadAndInitMixins(this.getPageLevelMixins(), () => {
+    this.app.loadAndInitServices(this.getPageLevelMixins(), () => {
       this.services.mixins.invokeUntilComplete(
         'loadPageRenderData',
         'page',

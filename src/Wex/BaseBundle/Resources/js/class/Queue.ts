@@ -1,4 +1,4 @@
-import { QueuesService } from '../mixins/Queues';
+import QueuesService from '../services/Queues';
 import AppChild from './AppChild';
 import ServiceRegistryAppInterface from '../interfaces/ServiceRegistryAppInterface';
 

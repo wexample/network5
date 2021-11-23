@@ -1,9 +1,8 @@
-import MixinInterface from '../interfaces/MixinInterface';
 import MixinsAppService from '../class/MixinsAppService';
 import AppService from '../class/AppService';
 import AssetsInterface from '../interfaces/AssetInterface';
 
-export class ThemeService extends AppService {
+export default class ThemeService extends AppService {
   public static THEME_DARK: string = 'dark';
 
   public static THEME_DEFAULT: string = 'default';
@@ -17,6 +16,28 @@ export class ThemeService extends AppService {
   activeTheme: string = ThemeService.THEME_DEFAULT;
   colorSchemes: string[] = [ThemeService.THEME_DARK, ThemeService.THEME_LIGHT];
   userHasForced?: null;
+
+  registerHooks() {
+    return {
+      app: {
+        init(registry: any) {
+          if (registry.assets === MixinsAppService.LOAD_STATUS_COMPLETE) {
+            let themeService = this.services.theme;
+
+            this.app.services.assets.updateFilters.push(
+              themeService.assetUpdateFilter.bind(themeService)
+            );
+
+            themeService.activateListeners();
+
+            return MixinsAppService.LOAD_STATUS_COMPLETE;
+          }
+
+          return MixinsAppService.LOAD_STATUS_WAIT;
+        },
+      },
+    }
+  }
 
   activateListeners() {
     this.colorSchemes.forEach((theme) => {
@@ -100,29 +121,3 @@ export class ThemeService extends AppService {
     }
   }
 }
-
-export const MixinTheme: MixinInterface = {
-  name: 'theme',
-
-  hooks: {
-    app: {
-      init(registry: any) {
-        if (registry.assets === MixinsAppService.LOAD_STATUS_COMPLETE) {
-          let themeService = this.services.theme;
-
-          this.app.services.assets.updateFilters.push(
-            themeService.assetUpdateFilter.bind(themeService)
-          );
-
-          themeService.activateListeners();
-
-          return MixinsAppService.LOAD_STATUS_COMPLETE;
-        }
-
-        return MixinsAppService.LOAD_STATUS_WAIT;
-      },
-    },
-  },
-
-  service: ThemeService,
-};

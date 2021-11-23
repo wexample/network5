@@ -1,9 +1,21 @@
-import MixinInterface from '../interfaces/MixinInterface';
 import AppService from '../class/AppService';
 import { format as StringFormat } from '../helpers/String';
 
-export class LocaleService extends AppService {
-  transDomains: object = {};
+export default class LocaleService extends AppService {
+  public transDomains: object = {};
+
+  registerMethods() {
+    return {
+      page: {
+        trans(string = '', args = {}) {
+          return this.app.locale.trans(string, args, this.translations.domains, {
+            ...this.app.layout.renderData.translations.catalog,
+            ...this.translations.catalog,
+          });
+        },
+      },
+    };
+  }
 
   trans(
     string = '',
@@ -34,20 +46,3 @@ export class LocaleService extends AppService {
     return StringFormat(catalog[stringWithDomain] || string, args);
   }
 }
-
-export const MixinLocale: MixinInterface = {
-  name: 'locale',
-
-  service: LocaleService,
-
-  methods: {
-    page: {
-      trans(string = '', args = {}) {
-        return this.app.locale.trans(string, args, this.translations.domains, {
-          ...this.app.layout.renderData.translations.catalog,
-          ...this.translations.catalog,
-        });
-      },
-    },
-  },
-};

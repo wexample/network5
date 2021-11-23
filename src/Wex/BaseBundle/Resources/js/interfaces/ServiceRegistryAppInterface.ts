@@ -1,12 +1,12 @@
-import { AssetsService } from '../mixins/Assets';
-import { MixinService } from '../mixins/Mixins';
-import { PagesService } from '../mixins/Pages';
-import { ResponsiveService } from '../mixins/Responsive';
-import { ThemeService } from '../mixins/Theme';
+import AssetsService from '../services/Assets';
+import MixinsService from '../services/Mixins';
+import PagesService from '../services/Pages';
+import ResponsiveService from '../services/Responsive';
+import ThemeService from '../services/Theme';
 
 export default interface ServiceRegistryAppInterface {
   assets?: AssetsService;
-  mixins?: MixinService;
+  mixins?: MixinsService;
   pages?: PagesService;
   responsive?: ResponsiveService;
   theme?: ThemeService;

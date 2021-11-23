@@ -1,9 +1,8 @@
-import MixinInterface from '../interfaces/MixinInterface';
 import AppService from '../class/AppService';
 import MixinsAppService from '../class/MixinsAppService';
-import { shallowCopy as arrayShallowCopy } from '../helpers/Arrays';
 
-export class MixinService extends AppService {
+export default class MixinsService extends AppService {
+
   /**
    * Execute a hook until all ext do not return false.
    * Useful to manage order when processing : an ext can wait for
@@ -25,13 +24,13 @@ export class MixinService extends AppService {
     args = [],
     callback,
     timeoutLimit: number = 2000,
-    mixins: MixinInterface[] = null
+    mixins: AppService[] = null
   ) {
     let registry: { [key: string]: string } = {};
-    mixins = mixins || (arrayShallowCopy(this.app.mixins) as MixinInterface[]);
+    mixins = mixins || (Object.values(this.app.services) as AppService[]);
     let loops: number = 0;
     let loopsLimit: number = 100;
-    let errorTrace: MixinInterface[] = [];
+    let errorTrace: AppService[] = [];
     let currentName: string = 'startup';
 
     let timeout = setTimeout(() => {
@@ -39,10 +38,11 @@ export class MixinService extends AppService {
     }, timeoutLimit);
 
     let step = () => {
-      let mixin: MixinInterface = mixins.shift() as MixinInterface;
+      let mixin: AppService = mixins.shift() as AppService;
 
       if (mixin) {
         currentName = mixin.name;
+        let hooks = mixin.registerHooks();
 
         if (loops++ > loopsLimit) {
           console.error(errorTrace);
@@ -60,9 +60,9 @@ export class MixinService extends AppService {
           step();
         };
 
-        if (mixin.hooks && mixin.hooks[group] && mixin.hooks[group][method]) {
+        if (hooks && hooks[group] && hooks[group][method]) {
           let argsLocal = args.concat([registry, next]);
-          registry[currentName] = mixin.hooks[group][method].apply(
+          registry[currentName] = hooks[group][method].apply(
             this,
             argsLocal
           );
@@ -90,9 +90,3 @@ export class MixinService extends AppService {
     step();
   }
 }
-
-export const MixinMixins: MixinInterface = {
-  name: 'mixins',
-
-  service: MixinService,
-};

@@ -1,13 +1,13 @@
 import Queue from '../class/Queue';
-import MixinInterface from '../interfaces/MixinInterface';
 import MixinsAppService from '../class/MixinsAppService';
 
 import { deleteItem as ArrayDeleteItem } from '../helpers/Arrays';
 import { shallowCopy as ArrayShallowCopy } from '../helpers/Arrays';
 import { uniqueId as StringUniqueId } from '../helpers/String';
 
-export class QueuesService extends MixinsAppService {
-  queues: object = {};
+export default class QueuesService extends MixinsAppService {
+  public queues: object = {};
+  protected service: QueuesService;
 
   afterAllQueues(queues, complete) {
     let originalList = ArrayShallowCopy(queues);
@@ -46,9 +46,3 @@ export class QueuesService extends MixinsAppService {
     return this.queues[queueName];
   }
 }
-
-export const MixinQueues: MixinInterface = {
-  name: 'queues',
-
-  service: QueuesService,
-};

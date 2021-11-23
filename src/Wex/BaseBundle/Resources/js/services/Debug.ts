@@ -1,18 +1,27 @@
-import MixinInterface from '../interfaces/MixinInterface';
 import AppService from '../class/AppService';
-import { ComponentsService } from './Components';
+import ComponentsService from './Components';
 import RenderNode from '../class/RenderNode';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
-import { RenderNodeService } from './RenderNodeService';
-import { PagesService } from './Pages';
+import RenderNodeService from './RenderNodeService';
+import PagesService from './Pages';
 import Variables from '../helpers/Variables';
 import DebugRenderNode from '../class/Debug/DebugRenderNode';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 
-export class DebugService extends AppService {
+export default class DebugService extends AppService {
   public debugRenderNodes: any = {};
   public elDebugHelpers: HTMLElement;
   public elDebugHelpersGlobal: HTMLElement;
+
+  registerHooks() {
+    return {
+      app: {
+        init() {
+          this.app.services.debug.init();
+        },
+      },
+    };
+  }
 
   init() {
     this.createEl();
@@ -71,17 +80,3 @@ export class DebugService extends AppService {
     })
   }
 }
-
-export const MixinDebug: MixinInterface = {
-  name: 'debug',
-
-  service: DebugService,
-
-  hooks: {
-    app: {
-      init() {
-        this.app.services.debug.init();
-      },
-    },
-  },
-};

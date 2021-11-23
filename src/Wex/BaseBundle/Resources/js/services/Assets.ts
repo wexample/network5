@@ -1,24 +1,50 @@
-import { MixinQueues } from './Queues';
+import QueuesService from './Queues';
 import AssetsCollectionInterface from '../interfaces/AssetsCollectionInterface';
-import MixinInterface from '../interfaces/MixinInterface';
 import Queue from '../class/Queue';
 import AppService from '../class/AppService';
 import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 import MixinsAppService from '../class/MixinsAppService';
-import Page from '../class/Page';
 import AssetsInterface from '../interfaces/AssetInterface';
 import RenderNode from '../class/RenderNode';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 
-export class AssetsService extends AppService {
+export default class AssetsService extends AppService {
   public static UPDATE_FILTER_ACCEPT = 'accept';
 
   public static UPDATE_FILTER_REJECT = 'reject';
 
-  public assetsRegistry: any = { css: {}, js: {} };
+  public assetsRegistry: any = {css: {}, js: {}};
   public queue: Queue;
   public jsAssetsPending: object = {};
   public updateFilters: Function[] = [];
+  public static dependencies: typeof AppService[] = [QueuesService];
+
+  registerHooks() {
+    return {
+      app: {
+        init() {
+          // Only single queue for assets, for now.
+          this.app.services.assets.queue =
+            this.app.services.queues.create('assets-loading');
+        },
+
+        loadRenderData(
+          renderData: RenderDataLayoutInterface,
+          requestOptions: RequestOptionsInterface,
+          registry: any,
+          next: Function
+        ) {
+          // Load only layout assets.
+          this.app.services.assets.updateAssetsCollection(
+            renderData.assets,
+            next
+          );
+
+          return MixinsAppService.LOAD_STATUS_STOP;
+        },
+      },
+    };
+  }
 
   appendAsset(asset, callback: Function = null) {
     let queue: Queue = this.queue;
@@ -240,36 +266,3 @@ export class AssetsService extends AppService {
     }
   }
 }
-
-export const MixinAssets: MixinInterface = {
-  name: 'assets',
-
-  dependencies: [MixinQueues],
-
-  hooks: {
-    app: {
-      init() {
-        // Only single queue for assets, for now.
-        this.app.services.assets.queue =
-          this.app.services.queues.create('assets-loading');
-      },
-
-      loadRenderData(
-        renderData: RenderDataLayoutInterface,
-        requestOptions: RequestOptionsInterface,
-        registry: any,
-        next: Function
-      ) {
-        // Load only layout assets.
-        this.app.services.assets.updateAssetsCollection(
-          renderData.assets,
-          next
-        );
-
-        return MixinsAppService.LOAD_STATUS_STOP;
-      },
-    },
-  },
-
-  service: AssetsService,
-};

@@ -1,11 +1,32 @@
 import RequestOptionsAdaptiveInterface from '../interfaces/RequestOptionsAdaptiveInterface';
-import MixinInterface from '../interfaces/MixinInterface';
 import AppService from '../class/AppService';
 import MixinsAppService from '../class/MixinsAppService';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import ComponentsService from "./Components";
 
-export class AdaptiveService extends AppService {
+export default class AdaptiveService extends AppService {
+  public static dependencies: typeof AppService[] = [ComponentsService]
+
+  registerHooks() {
+    return {
+      app: {
+        loadRenderData(
+          renderData: RenderDataInterface,
+          requestOptions: RequestOptionsInterface,
+          registry
+        ) {
+          // Expect all assets to be loaded before triggering events.
+          if (registry.components === MixinsAppService.LOAD_STATUS_COMPLETE) {
+            // TODO Events...
+            return MixinsAppService.LOAD_STATUS_COMPLETE;
+          }
+          return MixinsAppService.LOAD_STATUS_WAIT;
+        },
+      },
+    }
+  }
+
   get(path, requestOptions: RequestOptionsAdaptiveInterface): Promise<any> {
     return window
       .fetch(path, {
@@ -32,26 +53,3 @@ export class AdaptiveService extends AppService {
       });
   }
 }
-
-export const MixinAdaptive: MixinInterface = {
-  name: 'adaptive',
-
-  hooks: {
-    app: {
-      loadRenderData(
-        renderData: RenderDataInterface,
-        requestOptions: RequestOptionsInterface,
-        registry
-      ) {
-        // Expect all assets to be loaded before triggering events.
-        if (registry.components === MixinsAppService.LOAD_STATUS_COMPLETE) {
-          // TODO Events...
-          return MixinsAppService.LOAD_STATUS_COMPLETE;
-        }
-        return MixinsAppService.LOAD_STATUS_WAIT;
-      },
-    },
-  },
-
-  service: AdaptiveService,
-};

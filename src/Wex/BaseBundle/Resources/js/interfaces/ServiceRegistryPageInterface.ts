@@ -1,8 +1,8 @@
 import ServiceRegistryAppInterface from './ServiceRegistryAppInterface';
-import { EventsService } from '../mixins/Events';
-import { PromptService } from '../mixins/Prompts';
-import { AdaptiveService } from '../mixins/Adaptive';
-import { ComponentsService } from '../mixins/Components';
+import EventsService from '../services/Events';
+import PromptService from '../services/Prompts';
+import AdaptiveService from '../services/Adaptive';
+import ComponentsService from '../services/Components';
 
 export interface ServiceRegistryPageInterface
   extends ServiceRegistryAppInterface {

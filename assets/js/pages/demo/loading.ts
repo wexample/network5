@@ -1,12 +1,10 @@
 import Page from '../../../../src/Wex/BaseBundle/Resources/js/class/Page';
 import UnitTest from '../../../../src/Wex/BaseBundle/Resources/js/class/UnitTest';
 import AssetBundleInterface from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/AssetBundleInterface';
-import {
-  MixinModals,
-  ModalsService,
-} from '../../../../src/Wex/BaseBundle/Resources/js/mixins/Modals';
+import ModalsService from '../../../../src/Wex/BaseBundle/Resources/js/services/Modals';
 import { ServiceRegistryPageInterface } from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistryPageInterface';
 import { traceRenderNodes as debugTraceRenderNodes } from '../../../../src/Wex/BaseBundle/Resources/js/helpers/Debug';
+import AppService from "../../../../src/Wex/BaseBundle/Resources/js/class/AppService";
 
 interface ServiceRegistryPageCurrentInterface
   extends ServiceRegistryPageInterface {
@@ -20,8 +18,8 @@ const bundle: AssetBundleInterface = {
     services: ServiceRegistryPageCurrentInterface;
     unitTest: UnitTest;
 
-    getPageLevelMixins() {
-      return [MixinModals];
+    getPageLevelMixins(): typeof AppService[] {
+      return [ModalsService];
     }
 
     mounted() {
