@@ -16,6 +16,15 @@ class VueExtension extends AbstractExtension
 
     public array $renderedTemplates = [];
 
+    protected array $includedHtml = [];
+
+    public function __construct(
+        private ComponentsExtension $componentsExtension
+    )
+    {
+
+    }
+
     public function getFunctions(): array
     {
         return [
@@ -42,9 +51,9 @@ class VueExtension extends AbstractExtension
 
     /**
      * @param Environment $env
-     * @param string      $path
-     * @param array|null  $options
-     * @param array|null  $twigContext
+     * @param string $path
+     * @param array|null $options
+     * @param array|null $twigContext
      *
      * @return string
      *
@@ -55,7 +64,8 @@ class VueExtension extends AbstractExtension
         string $path,
         ?array $options = [],
         ?array $twigContext = []
-    ): string {
+    ): string
+    {
         return $this->vueRender(
             $env,
             $path,
@@ -74,8 +84,11 @@ class VueExtension extends AbstractExtension
         ?array $attributes = [],
         ?array $twigContext = [],
         ?bool $root = false
-    ): string {
+    ): string
+    {
         $vueComName = $this->createVueComName($path);
+        $this->componentsExtension->comLoadAssets($path);
+
         $pathTemplate = $path.self::TEMPLATE_FILE_EXTENSION;
 
         $vueComId = $vueComName.'-'.md5(random_int(0, mt_getrandmax()).microtime());
@@ -151,11 +164,11 @@ class VueExtension extends AbstractExtension
 
             // Use reference to identify sub folders length.
             $templatePath = count(
-                explode(
+                    explode(
                         FileHelper::FOLDER_SEPARATOR,
                         WexBaseBundle::BUNDLE_PATH_TEMPLATES
                     )
-            ) - 1;
+                ) - 1;
 
             // Remove sub folders.
             $exp = array_slice($exp, $templatePath);
@@ -182,5 +195,29 @@ class VueExtension extends AbstractExtension
     {
         // Add vue js templates.
         return implode('', $this->renderedTemplates);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function vueInclude(
+        Environment $env,
+        string $path,
+        ?array $attributes = [],
+        ?array $twigContext = []
+    ): string
+    {
+        // Register template.
+        $output =
+            $this->vueRender(
+                $env,
+                $path,
+                $attributes,
+                $twigContext
+            );
+
+        $this->includedHtml[] = $output;
+
+        return $output;
     }
 }

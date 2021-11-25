@@ -203,11 +203,16 @@ export default class extends AsyncConstructor {
 
   /**
    * @param classRegistryName
+   * @param bundled
    */
-  getBundleClassDefinition(classRegistryName: string): any | null {
+  getBundleClassDefinition(classRegistryName: string, bundled: boolean = false): any | null {
     let bundle = this.bundles.classes[classRegistryName];
 
-    return bundle ? bundle.definition : null;
+    if (bundled) {
+      return bundle ? bundle.definition : null;
+    }
+
+    return bundle;
   }
 
   addLib(name: string, object: any) {

@@ -1,13 +1,26 @@
 import Component from '../class/Component';
+import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
+import RenderDataComponentInterface from "../interfaces/RenderDataComponentInterface";
 
 export default {
   bundleGroup: 'component',
 
   definition: class extends Component {
-    init(complete?: Function) {
-      super.init(complete);
+    loadRenderData(
+      renderData: RenderDataComponentInterface,
+      requestOptions: RequestOptionsInterface
+    ) {
+      super.loadRenderData(
+        renderData,
+        requestOptions
+      );
 
-      console.log('Vue components loaded');
+      let vueApp = this.app.services['vue'].createVueAppForComponent(
+        renderData.options.path,
+        this.el
+      );
+
+      vueApp.mount(this.el);
     }
-  },
+  }
 };

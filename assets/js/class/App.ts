@@ -14,3 +14,13 @@ export default class extends App {
     ];
   }
 }
+
+// TODO On en est pas ici du tout.
+//      On avance sur l'initialisation des vues, et donc :
+//      > détécter les assets, les charger comme les autres
+//      > Trouver la class qui leur correspond et l'instancier
+//      > A noter qu'on a créé un moyer récement de charger juste une vue via l'api (system_vue_entity_load)
+//        et qu'il faut soit garder le système, soit l'étendre à d'autres composants.
+//      > On peut aussi peut être différencier API de l'AJAX
+//        - API => API Platform, liste d'assets, etc
+//        - AJAX => Requètes variables, composants JS, actions success / fails
