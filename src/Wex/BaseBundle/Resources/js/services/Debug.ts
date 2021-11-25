@@ -28,6 +28,7 @@ export default class DebugService extends AppService {
     this.addTrackers();
 
     window.addEventListener('resize', () => this.update());
+    window.addEventListener('scroll', () => this.update(), true);
   }
 
   createEl() {
