@@ -20,12 +20,10 @@ export default class DebugRenderNode extends AppChild {
       debugRenderNode: DebugRenderNode
     ) {
       return function () {
-        debugRenderNode.el.parentNode.removeChild(debugRenderNode.el);
+        debugRenderNode.el.remove();
 
         if (debugRenderNode.renderNode.getRenderNodeType() === Variables.PAGE) {
-          // debugRenderNode.elDebugHelpers.parentNode.removeChild(
-          //   debugRenderNode.elDebugHelpers
-          // );
+          // debugRenderNode.elDebugHelpers.remove();
         }
 
         methodOriginal.apply(renderNode, arguments);

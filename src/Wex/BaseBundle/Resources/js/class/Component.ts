@@ -62,6 +62,6 @@ export default abstract class Component extends RenderNode {
 
     this.deactivateListeners();
 
-    this.el.parentNode.removeChild(this.el);
+    this.el.remove();
   }
 }

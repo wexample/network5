@@ -167,7 +167,7 @@ export default class ComponentsService extends RenderNodeService {
 
       if (removePlaceHolder) {
         // Remove placeholder tag as it may interact with CSS or JS selectors.
-        elPlaceholder.parentNode.removeChild(elPlaceholder);
+        elPlaceholder.remove();
       }
 
       this.createRenderNode(el, renderData, requestOptions, () => {

@@ -113,7 +113,7 @@ export default class AssetsService extends AppService {
 
       if (asset.el) {
         // Remove from document.
-        asset.el.parentNode.removeChild(asset.el);
+        asset.el.remove();
         asset.el = null;
       }
     };
