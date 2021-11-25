@@ -41,7 +41,7 @@ export default abstract class RenderNodeService extends AppService {
     complete?: Function
   ) {
     this.services.assets.updateAssetsCollection(renderData.assets, () => {
-      let classDefinition = this.app.getBundleClassDefinition(renderData.name);
+      let classDefinition = this.app.getBundleClassDefinition(renderData.name, true);
 
       complete && complete(classDefinition);
     });

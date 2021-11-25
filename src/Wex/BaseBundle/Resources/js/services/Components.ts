@@ -97,10 +97,7 @@ export default class ComponentsService extends RenderNodeService {
   ) {
     if (renderData.templates) {
       // Append html for global components.
-      this.elLayoutComponents.insertAdjacentHTML(
-        'beforeend',
-        renderData.templates
-      );
+      this.elLayoutComponents.innerHTML += renderData.templates;
     }
 
     if (renderData.components) {

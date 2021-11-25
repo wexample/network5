@@ -132,7 +132,8 @@ export default class extends RenderNode {
     if (previous !== current) {
       if (displays[current] === undefined) {
         let display = this.app.getBundleClassDefinition(
-          `${this.name}-${current}`
+          `${this.name}-${current}`,
+          true
         );
 
         displays[current] = display ? new display(this) : null;
