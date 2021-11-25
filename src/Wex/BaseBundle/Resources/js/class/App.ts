@@ -53,21 +53,24 @@ export default class extends AsyncConstructor {
       this.layout = new LayoutInitial(this);
       this.layout.el = doc.getElementById('layout');
 
-      this.loadAndInitServices(this.getServices(), () => {
-        this.addLibraries(this.lib);
+      this
+        .loadAndInitServices(this.getServices())
+        .then(() => {
+          this.addLibraries(this.lib);
 
-        // The main functionalities are ready.
-        this.hasCoreLoaded = true;
+          // The main functionalities are ready.
+          this.hasCoreLoaded = true;
 
-        this.loadRenderData(this.layout.renderData, {}, () => {
-          // Display page content.
-          this.layout.el.classList.remove('layout-loading');
-          // Execute ready callbacks.
-          this.readyComplete();
-          // Launch constructor argument callback.
-          readyCallback && readyCallback.apply(this);
+          return this
+            .loadRenderData(this.layout.renderData)
+            .then(() => {
+              // Display page content.
+              this.layout.el.classList.remove('layout-loading');
+              // Execute ready callbacks.
+              this.readyComplete();
+            })
+            .then(readyCallback);
         });
-      });
     };
 
     let readyState = doc.readyState;
@@ -81,24 +84,20 @@ export default class extends AsyncConstructor {
     }
   }
 
-  loadRenderData(
+  async loadRenderData(
     renderData: RenderDataInterface,
-    requestOptions: RequestOptionsInterface,
-    complete?: Function
-  ) {
-    this.services.mixins.invokeUntilComplete(
+    requestOptions: RequestOptionsInterface = {}
+  ): Promise<any> {
+    return this.services.mixins.invokeUntilComplete(
       'loadRenderData',
       'app',
-      [renderData, requestOptions],
-      () => {
-        // Execute ready callbacks.
-        this.readyComplete();
-        // Display page content.
-        this.layout.el.classList.remove('layout-loading');
-        // Launch constructor argument callback.
-        complete && complete.apply(this);
-      }
-    );
+      [renderData, requestOptions]
+    ).then(() => {
+      // Execute ready callbacks.
+      this.readyComplete();
+      // Display page content.
+      this.layout.el.classList.remove('layout-loading');
+    });
   }
 
   buildServiceName(serviceName: string): string {
@@ -136,15 +135,14 @@ export default class extends AsyncConstructor {
     return instances;
   }
 
-  loadAndInitServices(ServicesDefinitions: typeof AppService[], complete) {
+  loadAndInitServices(ServicesDefinitions: typeof AppService[]): Promise<any> {
     let services = this.loadServices(ServicesDefinitions);
 
     // Init mixins.
-    this.services.mixins.invokeUntilComplete(
+    return this.services.mixins.invokeUntilComplete(
       'init',
       'app',
       [],
-      complete,
       undefined,
       services
     );
