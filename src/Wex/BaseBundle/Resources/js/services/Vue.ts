@@ -49,6 +49,10 @@ export default class VueService extends AppService {
     };
   }
 
+  createApp(config) {
+    return createApp(config);
+  }
+
   createComName(path) {
     return path.split('/').join('-').toLowerCase();
   }
@@ -58,7 +62,7 @@ export default class VueService extends AppService {
       path
     );
 
-    let app = createApp(component);
+    let app = this.createApp(component);
 
     Object.entries(this.componentRegistered)
       .forEach((data) => {

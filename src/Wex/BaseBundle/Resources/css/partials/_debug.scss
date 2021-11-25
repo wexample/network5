@@ -7,6 +7,15 @@
   pointer-events: none;
   opacity: 0.1;
 
+  .debug-info {
+    display: inline-block;
+    color: black;
+    padding: .1rem .3rem;
+    box-sizing: border-box;
+    border-radius: 0 0 .2rem 0;
+    font-size: .8rem;
+  }
+
   &.focus {
     opacity: 1;
   }

@@ -2,6 +2,7 @@ import AppChild from '../AppChild';
 import RenderNode from '../RenderNode';
 import DebugService from '../../services/Debug';
 import Variables from '../../helpers/Variables';
+import VueService from "../../services/Vue";
 
 export default class DebugRenderNode extends AppChild {
   public borderColors: any = {
@@ -41,7 +42,7 @@ export default class DebugRenderNode extends AppChild {
         renderNode.forEachChildRenderNode((childRenderNode) => {
           debugRenderNode.service.debugRenderNodes[
             childRenderNode.getId()
-          ].focus();
+            ].focus();
         });
 
         methodOriginal.apply(renderNode, arguments);
@@ -59,7 +60,7 @@ export default class DebugRenderNode extends AppChild {
         renderNode.forEachChildRenderNode((childRenderNode) => {
           debugRenderNode.service.debugRenderNodes[
             childRenderNode.getId()
-          ].blur();
+            ].blur();
         });
 
         methodOriginal.apply(renderNode, arguments);
@@ -74,6 +75,24 @@ export default class DebugRenderNode extends AppChild {
     this.service = this.app.services['debug'] as DebugService;
 
     this.createEl();
+
+    let vueService = this.services['vue'] as VueService;
+    vueService.createApp({
+      props: {
+        renderNode: {
+          type: Object,
+          default: this.renderNode
+        }
+      },
+
+      methods: {
+        renderDebugInfo() {
+          return [
+            `Name : ${this.renderNode.renderData ? this.renderNode.renderData.name : 'n/a'}`,
+          ].join('<br>')
+        }
+      }
+    }).mount(this.el);
 
     if (this.renderNode.getRenderNodeType() === Variables.PAGE) {
       this.createElDebugHelpers();
@@ -124,6 +143,7 @@ export default class DebugRenderNode extends AppChild {
     this.el = document.createElement('div');
     this.el.classList.add('debug-render-node');
     this.el.style.borderColor = this.getBorderColor();
+    this.el.innerHTML = `<div class="debug-info" style="background-color:${this.getBorderColor()}" v-html="renderDebugInfo()"></div>`;
     this.service.elDebugHelpers.appendChild(this.el);
 
     this.renderNode.ready(() => {

@@ -19,7 +19,7 @@ export default {
     ) {
       super.loadRenderData(renderData, requestOptions);
 
-      this.group = renderData.options.group;
+      this.group = this.renderData.options.group;
 
       this.el.querySelectorAll('a.tab-internal').forEach((elTab) => {
         if (this.isCurrentPageTab(elTab)) {
