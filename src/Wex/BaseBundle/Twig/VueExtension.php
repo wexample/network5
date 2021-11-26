@@ -9,6 +9,17 @@ use App\Wex\BaseBundle\WexBaseBundle;
 use Exception;
 use Twig\Environment;
 use Twig\TwigFunction;
+use function array_shift;
+use function array_slice;
+use function count;
+use function explode;
+use function implode;
+use function md5;
+use function microtime;
+use function mt_getrandmax;
+use function random_int;
+use function str_replace;
+use function strtolower;
 
 class VueExtension extends AbstractExtension
 {
@@ -48,12 +59,7 @@ class VueExtension extends AbstractExtension
     }
 
     /**
-     * @param Environment $env
-     * @param string      $path
-     * @param array|null  $options
-     * @param array|null  $twigContext
      *
-     * @return string
      *
      * @throws Exception
      */
