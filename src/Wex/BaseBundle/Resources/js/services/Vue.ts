@@ -49,8 +49,8 @@ export default class VueService extends AppService {
     };
   }
 
-  createApp(config) {
-    return createApp(config);
+  createApp(config, options: any = {}) {
+    return createApp(config, options);
   }
 
   createComName(path) {

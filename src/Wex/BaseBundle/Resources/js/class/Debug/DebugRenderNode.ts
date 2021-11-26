@@ -3,8 +3,8 @@ import RenderNode from '../RenderNode';
 import DebugService from '../../services/Debug';
 import Variables from '../../helpers/Variables';
 import VueService from "../../services/Vue";
-import RenderDataInterface from "../../interfaces/RenderDataInterface";
-import RequestOptionsInterface from "../../interfaces/RequestOptionsInterface";
+import DebugRenderNodeInfo from "./DebugRenderNodeInfo";
+import DebugRenderNodeOverlay from "./DebugRenderNodeOverlay";
 
 export default class DebugRenderNode extends AppChild {
   public borderColors: any = {
@@ -15,76 +15,8 @@ export default class DebugRenderNode extends AppChild {
   public el: HTMLElement;
   public elDebugHelpers: HTMLElement;
   public renderNode: RenderNode;
-  protected service: DebugService;
-  protected renderNodeDebugOverlay = {
-    exit: function (
-      methodOriginal: Function,
-      renderNode: RenderNode,
-      debugRenderNode: DebugRenderNode
-    ) {
-      return function () {
-        debugRenderNode.el.remove();
-
-        if (debugRenderNode.renderNode.getRenderNodeType() === Variables.PAGE) {
-          // debugRenderNode.elDebugHelpers.remove();
-        }
-
-        methodOriginal.apply(renderNode, arguments);
-      };
-    },
-
-    focus: function (
-      methodOriginal: Function,
-      renderNode: RenderNode,
-      debugRenderNode: DebugRenderNode
-    ) {
-      return function () {
-        debugRenderNode.focus();
-
-        renderNode.forEachChildRenderNode((childRenderNode) => {
-          debugRenderNode.service.debugRenderNodes[
-            childRenderNode.getId()
-            ].focus();
-        });
-
-        methodOriginal.apply(renderNode, arguments);
-      };
-    },
-
-    blur: function (
-      methodOriginal: Function,
-      renderNode: RenderNode,
-      debugRenderNode: DebugRenderNode
-    ) {
-      return function () {
-        debugRenderNode.blur();
-
-        renderNode.forEachChildRenderNode((childRenderNode) => {
-          debugRenderNode.service.debugRenderNodes[
-            childRenderNode.getId()
-            ].blur();
-        });
-
-        methodOriginal.apply(renderNode, arguments);
-      };
-    },
-
-    loadRenderData(
-      methodOriginal: Function,
-      renderNode: RenderNode,
-      debugRenderNode: DebugRenderNode
-    ) {
-      return function (
-        renderData: RenderDataInterface,
-        requestOptions: RequestOptionsInterface
-      ) {
-        debugRenderNode.vueInfo.$.props.name
-          = renderData.name;
-
-        return methodOriginal.apply(renderNode, arguments);
-      }
-    }
-  };
+  public service: DebugService;
+  protected renderNodeDebugOverlay = DebugRenderNodeOverlay;
   public vueInfo: any;
 
   constructor(renderNode) {
@@ -96,22 +28,9 @@ export default class DebugRenderNode extends AppChild {
     this.createEl();
 
     let vueService = this.services['vue'] as VueService;
-    this.vueInfo = vueService.createApp({
-      props: {
-        name:String,
-        renderNode: {
-          type: Object,
-          default: this.renderNode
-        }
-      },
-
-      methods: {
-        renderDebugInfo() {
-          return [
-            `Name : ${this.name}`,
-          ].join('<br>')
-        }
-      }
+    this.vueInfo = vueService.createApp(DebugRenderNodeInfo, {
+      renderNode: renderNode,
+      debugRenderNode: this
     }).mount(this.el);
 
     if (this.renderNode.getRenderNodeType() === Variables.PAGE) {
@@ -163,7 +82,7 @@ export default class DebugRenderNode extends AppChild {
     this.el = document.createElement('div');
     this.el.classList.add('debug-render-node');
     this.el.style.borderColor = this.getBorderColor();
-    this.el.innerHTML = `<div class="debug-info" style="background-color:${this.getBorderColor()}" v-html="renderDebugInfo()"></div>`;
+    this.el.innerHTML = `<div class="debug-info" v-bind:style=styleObject() v-html="renderDebugInfo()"></div>`;
     this.service.elDebugHelpers.appendChild(this.el);
 
     this.renderNode.ready(() => {
