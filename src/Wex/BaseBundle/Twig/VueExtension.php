@@ -20,9 +20,7 @@ class VueExtension extends AbstractExtension
 
     public function __construct(
         private ComponentsExtension $componentsExtension
-    )
-    {
-
+    ) {
     }
 
     public function getFunctions(): array
@@ -51,9 +49,9 @@ class VueExtension extends AbstractExtension
 
     /**
      * @param Environment $env
-     * @param string $path
-     * @param array|null $options
-     * @param array|null $twigContext
+     * @param string      $path
+     * @param array|null  $options
+     * @param array|null  $twigContext
      *
      * @return string
      *
@@ -64,8 +62,7 @@ class VueExtension extends AbstractExtension
         string $path,
         ?array $options = [],
         ?array $twigContext = []
-    ): string
-    {
+    ): string {
         return $this->vueRender(
             $env,
             $path,
@@ -84,8 +81,7 @@ class VueExtension extends AbstractExtension
         ?array $attributes = [],
         ?array $twigContext = [],
         ?bool $root = false
-    ): string
-    {
+    ): string {
         $vueComName = $this->createVueComName($path);
         $this->componentsExtension->comLoadAssets($path);
 
@@ -164,11 +160,11 @@ class VueExtension extends AbstractExtension
 
             // Use reference to identify sub folders length.
             $templatePath = count(
-                    explode(
+                explode(
                         FileHelper::FOLDER_SEPARATOR,
                         WexBaseBundle::BUNDLE_PATH_TEMPLATES
                     )
-                ) - 1;
+            ) - 1;
 
             // Remove sub folders.
             $exp = array_slice($exp, $templatePath);
@@ -205,8 +201,7 @@ class VueExtension extends AbstractExtension
         string $path,
         ?array $attributes = [],
         ?array $twigContext = []
-    ): string
-    {
+    ): string {
         // Register template.
         $output =
             $this->vueRender(

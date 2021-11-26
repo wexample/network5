@@ -60,7 +60,10 @@ export default class MixinsService extends AppService {
 
           if (hooks && hooks[group] && hooks[group][method]) {
             let argsLocal = args.concat([registry, next]);
-            registry[currentName] = hooks[group][method].apply(service, argsLocal);
+            registry[currentName] = hooks[group][method].apply(
+              service,
+              argsLocal
+            );
           }
 
           // "wait" says to retry after processing other services.
@@ -70,7 +73,9 @@ export default class MixinsService extends AppService {
             step();
           }
           // "stop" allows to let service to relaunch process itself.
-          else if (registry[currentName] !== MixinsAppService.LOAD_STATUS_STOP) {
+          else if (
+            registry[currentName] !== MixinsAppService.LOAD_STATUS_STOP
+          ) {
             next();
           }
         }

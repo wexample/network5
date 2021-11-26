@@ -1,16 +1,14 @@
-import * as Vue from 'vue'
+import * as Vue from 'vue';
 import { createApp } from 'vue/dist/vue.esm-bundler';
 
-import AppService from "../class/AppService";
-import PagesService from "./Pages";
-import MixinsAppService from "../class/MixinsAppService";
+import AppService from '../class/AppService';
+import PagesService from './Pages';
+import MixinsAppService from '../class/MixinsAppService';
 
 export default class VueService extends AppService {
   protected componentRegistered: any = {};
 
-  public static dependencies: typeof AppService[] = [
-    PagesService,
-  ]
+  public static dependencies: typeof AppService[] = [PagesService];
 
   protected globalMixin: any;
 
@@ -36,10 +34,7 @@ export default class VueService extends AppService {
               },
             };
 
-            this.app.mix(
-              this.globalMixin,
-              'vue'
-            );
+            this.app.mix(this.globalMixin, 'vue');
 
             return MixinsAppService.LOAD_STATUS_COMPLETE;
           }
@@ -58,16 +53,13 @@ export default class VueService extends AppService {
   }
 
   createVueAppForComponent(path) {
-    let component = this.initComponent(
-      path
-    );
+    let component = this.initComponent(path);
 
     let app = this.createApp(component);
 
-    Object.entries(this.componentRegistered)
-      .forEach((data) => {
-        app.component(data[0], data[1]);
-      });
+    Object.entries(this.componentRegistered).forEach((data) => {
+      app.component(data[0], data[1]);
+    });
 
     return app;
   }
@@ -102,4 +94,4 @@ export default class VueService extends AppService {
       return this.componentRegistered[className];
     }
   }
-};
+}

@@ -1,5 +1,5 @@
 // Script par of a Vue component.
-import RenderNode from "../RenderNode";
+import RenderNode from '../RenderNode';
 
 export default {
   props: {
@@ -8,26 +8,24 @@ export default {
     renderNode: RenderNode,
     renderData: {
       type: Object,
-      default: {}
+      default: {},
     },
     requestOptions: {
       type: Object,
-      default: {}
+      default: {},
     },
   },
 
   data() {
     return {
       backgroundColor: 'transparent',
-      displayBreakpoints: this.app.layout.renderData.displayBreakpoints
-    }
+      displayBreakpoints: this.app.layout.renderData.displayBreakpoints,
+    };
   },
 
   methods: {
     renderDebugInfo() {
-      return [
-        this.renderData.name,
-      ].join('<br>')
+      return [this.renderData.name].join('<br>');
     },
 
     hasResponsiveAsset(type: string, size: string): boolean {
@@ -45,13 +43,13 @@ export default {
     styleObject() {
       return {
         backgroundColor: this.debugRenderNode.getBorderColor(),
-      }
+      };
     },
 
     classObjectDisplayBreakpoint(type: string, size: string) {
       return {
-        active: this.hasResponsiveAsset(type, size)
-      }
-    }
-  }
-}
+        active: this.hasResponsiveAsset(type, size),
+      };
+    },
+  },
+};

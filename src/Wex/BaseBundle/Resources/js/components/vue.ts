@@ -1,6 +1,6 @@
 import Component from '../class/Component';
-import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
-import RenderDataComponentInterface from "../interfaces/RenderDataComponentInterface";
+import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
 
 export default {
   bundleGroup: 'component',
@@ -10,10 +10,7 @@ export default {
       renderData: RenderDataComponentInterface,
       requestOptions: RequestOptionsInterface
     ) {
-      super.loadRenderData(
-        renderData,
-        requestOptions
-      );
+      super.loadRenderData(renderData, requestOptions);
 
       let vueApp = this.app.services['vue'].createVueAppForComponent(
         renderData.options.path,
@@ -22,5 +19,5 @@ export default {
 
       vueApp.mount(this.el);
     }
-  }
+  },
 };

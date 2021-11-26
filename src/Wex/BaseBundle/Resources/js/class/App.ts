@@ -53,24 +53,21 @@ export default class extends AsyncConstructor {
       this.layout = new LayoutInitial(this);
       this.layout.el = doc.getElementById('layout');
 
-      this
-        .loadAndInitServices(this.getServices())
-        .then(() => {
-          this.addLibraries(this.lib);
+      this.loadAndInitServices(this.getServices()).then(() => {
+        this.addLibraries(this.lib);
 
-          // The main functionalities are ready.
-          this.hasCoreLoaded = true;
+        // The main functionalities are ready.
+        this.hasCoreLoaded = true;
 
-          return this
-            .loadRenderData(this.layout.renderData)
-            .then(() => {
-              // Display page content.
-              this.layout.el.classList.remove('layout-loading');
-              // Execute ready callbacks.
-              this.readyComplete();
-            })
-            .then(readyCallback);
-        });
+        return this.loadRenderData(this.layout.renderData)
+          .then(() => {
+            // Display page content.
+            this.layout.el.classList.remove('layout-loading');
+            // Execute ready callbacks.
+            this.readyComplete();
+          })
+          .then(readyCallback);
+      });
     };
 
     let readyState = doc.readyState;
@@ -88,16 +85,17 @@ export default class extends AsyncConstructor {
     renderData: RenderDataInterface,
     requestOptions: RequestOptionsInterface = {}
   ): Promise<any> {
-    return this.services.mixins.invokeUntilComplete(
-      'loadRenderData',
-      'app',
-      [renderData, requestOptions]
-    ).then(() => {
-      // Execute ready callbacks.
-      this.readyComplete();
-      // Display page content.
-      this.layout.el.classList.remove('layout-loading');
-    });
+    return this.services.mixins
+      .invokeUntilComplete('loadRenderData', 'app', [
+        renderData,
+        requestOptions,
+      ])
+      .then(() => {
+        // Execute ready callbacks.
+        this.readyComplete();
+        // Display page content.
+        this.layout.el.classList.remove('layout-loading');
+      });
   }
 
   buildServiceName(serviceName: string): string {
@@ -205,7 +203,10 @@ export default class extends AsyncConstructor {
    * @param classRegistryName
    * @param bundled
    */
-  getBundleClassDefinition(classRegistryName: string, bundled: boolean = false): any | null {
+  getBundleClassDefinition(
+    classRegistryName: string,
+    bundled: boolean = false
+  ): any | null {
     let bundle = this.bundles.classes[classRegistryName];
 
     if (bundled) {

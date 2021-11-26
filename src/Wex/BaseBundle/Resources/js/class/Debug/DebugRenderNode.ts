@@ -2,9 +2,9 @@ import AppChild from '../AppChild';
 import RenderNode from '../RenderNode';
 import DebugService from '../../services/Debug';
 import Variables from '../../helpers/Variables';
-import VueService from "../../services/Vue";
-import DebugRenderNodeInfo from "./DebugRenderNodeInfo";
-import DebugRenderNodeOverlay from "./DebugRenderNodeOverlay";
+import VueService from '../../services/Vue';
+import DebugRenderNodeInfo from './DebugRenderNodeInfo';
+import DebugRenderNodeOverlay from './DebugRenderNodeOverlay';
 
 export default class DebugRenderNode extends AppChild {
   public borderColors: any = {
@@ -28,11 +28,13 @@ export default class DebugRenderNode extends AppChild {
     this.createEl();
 
     let vueService = this.services['vue'] as VueService;
-    this.vueInfo = vueService.createApp(DebugRenderNodeInfo, {
-      app: this.app,
-      renderNode: renderNode,
-      debugRenderNode: this
-    }).mount(this.el);
+    this.vueInfo = vueService
+      .createApp(DebugRenderNodeInfo, {
+        app: this.app,
+        renderNode: renderNode,
+        debugRenderNode: this,
+      })
+      .mount(this.el);
 
     if (this.renderNode.getRenderNodeType() === Variables.PAGE) {
       this.createElDebugHelpers();

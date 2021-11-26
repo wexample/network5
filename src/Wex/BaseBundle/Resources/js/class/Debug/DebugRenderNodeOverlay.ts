@@ -1,9 +1,9 @@
 // Script par of a Vue component.
-import RenderNode from "../RenderNode";
-import Variables from "../../helpers/Variables";
-import RenderDataInterface from "../../interfaces/RenderDataInterface";
-import RequestOptionsInterface from "../../interfaces/RequestOptionsInterface";
-import DebugRenderNode from "./DebugRenderNode";
+import RenderNode from '../RenderNode';
+import Variables from '../../helpers/Variables';
+import RenderDataInterface from '../../interfaces/RenderDataInterface';
+import RequestOptionsInterface from '../../interfaces/RequestOptionsInterface';
+import DebugRenderNode from './DebugRenderNode';
 
 // Used to be mixed with render node and track changes.
 export default {
@@ -34,7 +34,7 @@ export default {
       renderNode.forEachChildRenderNode((childRenderNode) => {
         debugRenderNode.service.debugRenderNodes[
           childRenderNode.getId()
-          ].focus();
+        ].focus();
       });
 
       methodOriginal.apply(renderNode, arguments);
@@ -52,7 +52,7 @@ export default {
       renderNode.forEachChildRenderNode((childRenderNode) => {
         debugRenderNode.service.debugRenderNodes[
           childRenderNode.getId()
-          ].blur();
+        ].blur();
       });
 
       methodOriginal.apply(renderNode, arguments);
@@ -72,6 +72,6 @@ export default {
       debugRenderNode.vueInfo.$.props.requestOptions = requestOptions;
 
       return methodOriginal.apply(renderNode, arguments);
-    }
-  }
-}
+    };
+  },
+};

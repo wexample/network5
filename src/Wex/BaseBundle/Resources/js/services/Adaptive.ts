@@ -45,11 +45,9 @@ export default class AdaptiveService extends AppService {
       })
       .then((response: RenderDataInterface) => {
         // Wait render data loading to continue.
-        return this.app
-          .loadRenderData(response, requestOptions)
-          .then(() => {
-            return response;
-          });
+        return this.app.loadRenderData(response, requestOptions).then(() => {
+          return response;
+        });
       });
   }
 }
