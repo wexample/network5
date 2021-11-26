@@ -8,6 +8,10 @@
   opacity: 0.1;
   overflow: hidden;
 
+  &:hover {
+    overflow: initial;
+  }
+
   .debug-info {
     display: inline-block;
     color: black;
