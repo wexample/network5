@@ -6,6 +6,7 @@
   box-sizing: border-box;
   pointer-events: none;
   opacity: 0.1;
+  overflow: hidden;
 
   .debug-info {
     display: inline-block;
@@ -14,6 +15,8 @@
     box-sizing: border-box;
     border-radius: 0 0 .2rem 0;
     font-size: .8rem;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   &.focus {

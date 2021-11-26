@@ -3,6 +3,8 @@ import RenderNode from '../RenderNode';
 import DebugService from '../../services/Debug';
 import Variables from '../../helpers/Variables';
 import VueService from "../../services/Vue";
+import RenderDataInterface from "../../interfaces/RenderDataInterface";
+import RequestOptionsInterface from "../../interfaces/RequestOptionsInterface";
 
 export default class DebugRenderNode extends AppChild {
   public borderColors: any = {
@@ -66,7 +68,24 @@ export default class DebugRenderNode extends AppChild {
         methodOriginal.apply(renderNode, arguments);
       };
     },
+
+    loadRenderData(
+      methodOriginal: Function,
+      renderNode: RenderNode,
+      debugRenderNode: DebugRenderNode
+    ) {
+      return function (
+        renderData: RenderDataInterface,
+        requestOptions: RequestOptionsInterface
+      ) {
+        debugRenderNode.vueInfo.$.props.name
+          = renderData.name;
+
+        return methodOriginal.apply(renderNode, arguments);
+      }
+    }
   };
+  public vueInfo: any;
 
   constructor(renderNode) {
     super(renderNode.app);
@@ -77,8 +96,9 @@ export default class DebugRenderNode extends AppChild {
     this.createEl();
 
     let vueService = this.services['vue'] as VueService;
-    vueService.createApp({
+    this.vueInfo = vueService.createApp({
       props: {
+        name:String,
         renderNode: {
           type: Object,
           default: this.renderNode
@@ -88,7 +108,7 @@ export default class DebugRenderNode extends AppChild {
       methods: {
         renderDebugInfo() {
           return [
-            `Name : ${this.renderNode.renderData ? this.renderNode.renderData.name : 'n/a'}`,
+            `Name : ${this.name}`,
           ].join('<br>')
         }
       }
