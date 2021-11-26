@@ -68,8 +68,8 @@ export default {
       renderData: RenderDataInterface,
       requestOptions: RequestOptionsInterface
     ) {
-      debugRenderNode.vueInfo.$.props.name
-        = renderData.name;
+      debugRenderNode.vueInfo.$.props.renderData = renderData;
+      debugRenderNode.vueInfo.$.props.requestOptions = requestOptions;
 
       return methodOriginal.apply(renderNode, arguments);
     }

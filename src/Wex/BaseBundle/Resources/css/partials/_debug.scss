@@ -17,6 +17,30 @@
     font-size: .8rem;
     white-space: nowrap;
     overflow: hidden;
+    pointer-events: initial;
+
+    .display-breakpoints {
+      display: flex;
+      margin: 0 0 .3rem;
+
+      .line-title {
+        width: 2rem;
+      }
+
+      & > div {
+        opacity: .6;
+        color: black;
+        margin-right: 0.2rem;
+        padding: 0 0.2rem;
+        border-radius: 0.2rem;
+
+        &.active {
+          background: white;
+          color: black;
+          opacity: .9;
+        }
+      }
+    }
   }
 
   &.focus {

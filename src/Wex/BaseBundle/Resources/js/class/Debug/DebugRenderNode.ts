@@ -29,6 +29,7 @@ export default class DebugRenderNode extends AppChild {
 
     let vueService = this.services['vue'] as VueService;
     this.vueInfo = vueService.createApp(DebugRenderNodeInfo, {
+      app: this.app,
       renderNode: renderNode,
       debugRenderNode: this
     }).mount(this.el);
@@ -82,7 +83,19 @@ export default class DebugRenderNode extends AppChild {
     this.el = document.createElement('div');
     this.el.classList.add('debug-render-node');
     this.el.style.borderColor = this.getBorderColor();
-    this.el.innerHTML = `<div class="debug-info" v-bind:style=styleObject() v-html="renderDebugInfo()"></div>`;
+    this.el.innerHTML = `
+    <div class="debug-info" v-bind:style=styleObject()>
+        <div v-html="renderDebugInfo()"></div>
+        <div class="display-breakpoints">
+            <div class="line-title">CSS</div>    
+            <div v-for="breakpoint, name in displayBreakpoints" v-bind:class="classObjectDisplayBreakpoint('css', name)">{{ name }}</div>
+        </div>
+        <div class="display-breakpoints">
+            <div class="line-title">JS</div>    
+            <div v-for="breakpoint, name in displayBreakpoints" v-bind:class="classObjectDisplayBreakpoint('js', name)">{{ name }}</div>
+        </div>
+    </div>`;
+
     this.service.elDebugHelpers.appendChild(this.el);
 
     this.renderNode.ready(() => {
