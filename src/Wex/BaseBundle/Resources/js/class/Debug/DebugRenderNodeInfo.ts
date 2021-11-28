@@ -1,6 +1,8 @@
 // Script par of a Vue component.
 import RenderNode from '../RenderNode';
 import { h } from "vue";
+import Page from "../Page";
+import ThemeService from "../../services/Theme";
 
 export default {
   props: {
@@ -25,17 +27,21 @@ export default {
   },
 
   render() {
+    let renderLineTitle = (title) => {
+      return h(
+        'div',
+        {
+          class: 'line-title'
+        },
+        title
+      );
+    }
+
     let renderResponsive = (type) => {
       return h('div', {
-        class: 'display-breakpoints',
+        class: ['debug-info-line', 'display-breakpoints'],
       }, [
-        h(
-          'div',
-          {
-            class: 'line-title'
-          },
-          type.toUpperCase()
-        ),
+        renderLineTitle(type.toUpperCase()),
         Object.keys(this.app.layout.renderData.displayBreakpoints).map((size) => {
           return h('div', {
             class: {
@@ -47,6 +53,28 @@ export default {
       ]);
     }
 
+    let renderPage = () => {
+      if (this.renderNode instanceof Page) {
+        return h(
+          'div',
+          {
+            class: 'debug-info-line'
+          },
+          [
+            renderLineTitle('COL.S'),
+            ThemeService.THEMES.map((theme) => {
+              return h('div', {
+                class: {
+                  active: this.app.services.theme.activeTheme === theme,
+                  available: this.hasThemeAsset('css', theme),
+                }
+              }, theme.toUpperCase());
+            })
+          ]
+        )
+      }
+    }
+
     return h(
       'div',
       {
@@ -55,6 +83,7 @@ export default {
       },
       [
         h('div', {}, this.renderDebugInfo()),
+        renderPage(),
         renderResponsive('css'),
         renderResponsive('js')
       ]
@@ -76,6 +105,19 @@ export default {
       }
 
       return false;
+    },
+
+    hasThemeAsset(type: string, scheme: string) {
+      if (this.renderData.assets) {
+        for (let asset of this.renderData.assets[type]) {
+          // TODO Context is wrong and always true.
+          if (asset.theme === scheme) {
+            return true;
+          }
+        }
+      }
+
+      return true;
     },
 
     styleObject() {
