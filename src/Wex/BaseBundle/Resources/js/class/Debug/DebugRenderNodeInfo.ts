@@ -45,6 +45,19 @@ export default {
         })
       ]);
     }
+
+    return h(
+      'div',
+      {
+        class: 'debug-info',
+        style: this.styleObject()
+      },
+      [
+        h('div', {}, this.renderDebugInfo()),
+        renderResponsive('css'),
+        renderResponsive('js')
+      ]
+    );
   },
 
   methods: {
