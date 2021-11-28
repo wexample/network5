@@ -10,6 +10,13 @@ export default class ThemeService extends AppService {
   public static THEME_LIGHT: string = 'light';
 
   public static THEME_PRINT: string = 'print';
+  
+  public static THEMES: string[] = [
+    ThemeService.THEME_DARK,
+    ThemeService.THEME_DEFAULT,
+    ThemeService.THEME_LIGHT,
+    ThemeService.THEME_PRINT,
+  ];
 
   activeColorScheme?: string = ThemeService.THEME_DEFAULT;
   activePrint: boolean = false;
