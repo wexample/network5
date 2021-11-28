@@ -99,6 +99,8 @@ export default class DebugRenderNode extends AppChild {
   }
 
   update() {
+    this.vueInfo.$forceUpdate();
+
     let rect = this.renderNode.el.getBoundingClientRect();
 
     Object.assign(this.el.style, {

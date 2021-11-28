@@ -39,7 +39,8 @@ export default {
         Object.keys(this.app.layout.renderData.displayBreakpoints).map((size) => {
           return h('div', {
             class: {
-              active: this.hasResponsiveAsset(type, size)
+              active: this.app.services.responsive.responsiveSizeCurrent === size,
+              available: this.hasResponsiveAsset(type, size),
             },
           }, size.toUpperCase())
         })
