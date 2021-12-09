@@ -1,11 +1,10 @@
 <script>
-import { ResponsiveServiceEvents } from "../services/Responsive";
-import { Attribute } from "../helpers/Dom";
-import { shallowCopy as ArrayShallowCopy } from "../helpers/Arrays";
-import { AssetsServiceType } from "../services/Assets";
+import { ResponsiveServiceEvents } from '../services/Responsive';
+import { Attribute } from '../helpers/Dom';
+import { shallowCopy as ArrayShallowCopy } from '../helpers/Arrays';
+import { AssetsServiceType } from '../services/Assets';
 
 export default {
-
   data() {
     return {
       assets: {
@@ -18,13 +17,13 @@ export default {
         js: {},
       },
       onChangeResponsiveSizeProxy: this.onChangeResponsiveSize.bind(this),
-    }
+    };
   },
 
   mounted() {
     this.app.services.events.listen(
-        ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
-        this.onChangeResponsiveSizeProxy
+      ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
+      this.onChangeResponsiveSizeProxy
     );
 
     this.onChangeResponsiveSize();
@@ -32,8 +31,8 @@ export default {
 
   unmounted() {
     this.app.services.events.forget(
-        ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
-        this.onChangeResponsiveSizeProxy
+      ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
+      this.onChangeResponsiveSizeProxy
     );
   },
 
@@ -46,14 +45,11 @@ export default {
     getAssetsList() {
       let list = [];
 
-      [
-        AssetsServiceType.CSS,
-        AssetsServiceType.JS,
-      ].forEach((type) => {
+      [AssetsServiceType.CSS, AssetsServiceType.JS].forEach((type) => {
         if (this.listFilter === null || this.listFilter === type) {
           list = [...list, ...this.getAssetsTypeList(type)];
         }
-      })
+      });
 
       return list;
     },
@@ -82,7 +78,7 @@ export default {
         let href = el.getAttribute(Attribute.HREF);
         this.loadedPaths.css[href] = href;
       });
-    }
-  }
+    },
+  },
 };
 </script>

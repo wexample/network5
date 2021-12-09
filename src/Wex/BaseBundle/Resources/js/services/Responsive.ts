@@ -55,10 +55,13 @@ export default class ResponsiveService extends AppService {
           // Now change page class.
           this.updateResponsiveLayoutClass();
 
-          this.services.events.trigger(ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE, {
-            current: current,
-            previous: this.responsiveSizePrevious,
-          });
+          this.services.events.trigger(
+            ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
+            {
+              current: current,
+              previous: this.responsiveSizePrevious,
+            }
+          );
 
           complete && complete();
         });

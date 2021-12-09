@@ -6,7 +6,6 @@ use App\Wex\BaseBundle\Helper\DomHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\WexBaseBundle;
-use Twig\TwigFilter;
 use function array_shift;
 use function array_slice;
 use function count;
@@ -20,6 +19,7 @@ use function random_int;
 use function str_replace;
 use function strtolower;
 use Twig\Environment;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class VueExtension extends AbstractExtension
@@ -45,8 +45,7 @@ class VueExtension extends AbstractExtension
 
     public function __construct(
         private ComponentsExtension $componentsExtension
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array
@@ -81,8 +80,7 @@ class VueExtension extends AbstractExtension
         string $path,
         ?array $options = [],
         ?array $twigContext = []
-    ): string
-    {
+    ): string {
         return $this->vueRender(
             $env,
             $path,
@@ -101,8 +99,7 @@ class VueExtension extends AbstractExtension
         ?array $attributes = [],
         ?array $twigContext = [],
         ?bool $root = false
-    ): string
-    {
+    ): string {
         $vueComName = $this->createVueComName($path);
         $this->componentsExtension->comLoadAssets($path);
 
@@ -181,11 +178,11 @@ class VueExtension extends AbstractExtension
 
             // Use reference to identify sub folders length.
             $templatePath = count(
-                    explode(
+                explode(
                         FileHelper::FOLDER_SEPARATOR,
                         WexBaseBundle::BUNDLE_PATH_TEMPLATES
                     )
-                ) - 1;
+            ) - 1;
 
             // Remove sub folders.
             $exp = array_slice($exp, $templatePath);
@@ -222,8 +219,7 @@ class VueExtension extends AbstractExtension
         string $path,
         ?array $attributes = [],
         ?array $twigContext = []
-    ): string
-    {
+    ): string {
         // Register template.
         $output =
             $this->vueRender(

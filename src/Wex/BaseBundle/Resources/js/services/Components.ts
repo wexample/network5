@@ -17,9 +17,7 @@ export default class ComponentsService extends RenderNodeService {
   elLayoutComponents: HTMLElement;
   pageHandlerRegistry: { [key: string]: PageHandlerComponent } = {};
 
-  public static dependencies: typeof AppService[] = [
-    PromptService
-  ];
+  public static dependencies: typeof AppService[] = [PromptService];
 
   constructor(app: App) {
     super(app);

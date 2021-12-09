@@ -20,7 +20,7 @@ export default class AssetsService extends AppService {
 
   public static UPDATE_FILTER_REJECT = 'reject';
 
-  public assetsRegistry: any = {css: {}, js: {}};
+  public assetsRegistry: any = { css: {}, js: {} };
   public queue: Queue;
   public jsAssetsPending: object = {};
   public updateFilters: Function[] = [];
