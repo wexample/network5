@@ -3,6 +3,7 @@ import UnitTest from '../../../../src/Wex/BaseBundle/Resources/js/class/UnitTest
 import AssetBundleInterface from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/AssetBundleInterface';
 import QueuesService from '../../../../src/Wex/BaseBundle/Resources/js/services/Queues';
 import { ServiceRegistryPageInterface } from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistryPageInterface';
+import Events from '../../../../src/Wex/BaseBundle/Resources/js/helpers/Events';
 
 interface ServiceRegistryPageCurrentInterface
   extends ServiceRegistryPageInterface {
@@ -25,7 +26,7 @@ const bundle: AssetBundleInterface = {
       this.refreshLoadedAssetsList();
 
       document.querySelectorAll('.demo-button-switch-theme').forEach((el) => {
-        el.addEventListener('click', () => {
+        el.addEventListener(Events.CLICK, () => {
           this.services.theme.setTheme(el.getAttribute('data-theme'), true);
         });
       });

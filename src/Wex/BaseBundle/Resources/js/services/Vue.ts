@@ -69,7 +69,7 @@ export default class VueService extends AppService {
       let vueClassDefinition = this.app.getBundleClassDefinition(className);
 
       if (!vueClassDefinition) {
-        this.services.prompts.systemError(
+        this.services.prompt.systemError(
           'page_message.error.vue_missing',
           {},
           {

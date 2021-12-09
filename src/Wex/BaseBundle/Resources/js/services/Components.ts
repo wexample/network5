@@ -17,7 +17,9 @@ export default class ComponentsService extends RenderNodeService {
   elLayoutComponents: HTMLElement;
   pageHandlerRegistry: { [key: string]: PageHandlerComponent } = {};
 
-  public static dependencies: typeof AppService[] = [PromptService];
+  public static dependencies: typeof AppService[] = [
+    PromptService
+  ];
 
   constructor(app: App) {
     super(app);
@@ -73,7 +75,7 @@ export default class ComponentsService extends RenderNodeService {
   ): RenderNode | null {
     // Prevent multiple alerts for the same component.
     if (!classDefinition) {
-      this.services.prompts.systemError(
+      this.services.prompt.systemError(
         'page_message.error.com_missing',
         {},
         {

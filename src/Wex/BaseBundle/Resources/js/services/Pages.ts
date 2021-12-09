@@ -84,7 +84,7 @@ export default class PagesService extends RenderNodeService {
     }
 
     if (!el) {
-      let promptService = this.services.prompts;
+      let promptService = this.services.prompt;
 
       promptService.systemError('page_message.error.page_missing_el');
       return;

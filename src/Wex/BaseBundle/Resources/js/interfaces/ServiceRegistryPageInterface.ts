@@ -8,6 +8,6 @@ export interface ServiceRegistryPageInterface
   extends ServiceRegistryAppInterface {
   adaptive: AdaptiveService;
   events: EventsService;
-  prompts: PromptService;
+  prompt: PromptService;
   components: ComponentsService;
 }
