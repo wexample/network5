@@ -2,6 +2,12 @@ $dark-gray: #2f2f36;
 $medium-gray: lighten($dark-gray, 50);
 $light-gray: lighten($medium-gray, 25);
 
+// TODO Improve colors notation.
+$color-error: #c40914;
+$color-info: #0e5bce;
+$color-success: #158d28;
+$color-warn: #ecae0d;
+
 $selector-title-all: 'h1, h2, h3, h4, h5, h6';
 
 @mixin full-parent-size {

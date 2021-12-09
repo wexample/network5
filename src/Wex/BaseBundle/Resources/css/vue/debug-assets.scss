@@ -1,3 +1,6 @@
+@use '../partials/pills';
+@import '../mixins/global';
+
 .debug-assets {
   display: flex;
 
@@ -7,6 +10,41 @@
   }
 
   .debug-details {
+    .assets-table {
+      td {
+        padding: 0 .2rem;
 
+        &.asset-type .pill {
+          @extend .pill;
+
+          background: white;
+          text-align: center;
+        }
+
+        &.asset-activation .tip {
+          width: 10px;
+          height: 10px;
+          border-radius: 10px;
+          background: $dark-gray;
+        }
+
+        &.asset-path {
+          opacity: .6;
+          font-weight: normal;
+        }
+      }
+
+      tr.asset-active td {
+        &.asset-activation .tip {
+          background: $color-success;
+        }
+
+        &.asset-path {
+          opacity: 1;
+          font-weight: bold;
+          overflow: hidden;
+        }
+      }
+    }
   }
 }
