@@ -24,10 +24,28 @@ export default {
     return {
       backgroundColor: 'transparent',
       displayBreakpoints: this.app.layout.renderData.displayBreakpoints,
+      opened: false,
     };
   },
 
   render() {
+    let elOpener = h(
+      TagName.A,
+      {
+        class: `debug-info debug-info-${this.opened ? 'opened' : 'closed'}`,
+        style: this.styleObject(),
+        href: 'javascript:void(0)',
+        onClick: () => {
+          this.opened = !this.opened;
+        },
+      },
+      this.opened ? '-' : '+'
+    );
+
+    if (!this.opened) {
+      return elOpener;
+    }
+
     let renderLineTitle = (title) => {
       return h(
         TagName.DIV,
@@ -99,6 +117,7 @@ export default {
         style: this.styleObject(),
       },
       [
+        elOpener,
         h(TagName.DIV, {}, this.renderDebugInfo()),
         renderPage(),
         renderResponsive('css'),

@@ -1,4 +1,6 @@
 export class TagName {
+  public static A: string = 'a';
+
   public static DIV: string = 'div';
 
   public static LINK: string = 'link';
@@ -42,7 +44,7 @@ export function findScrollParent(element, includeHidden) {
   let overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
 
   if (style.position === 'fixed') return document.body;
-  for (let parent = element; (parent = parent.parentElement); ) {
+  for (let parent = element; (parent = parent.parentElement);) {
     style = getComputedStyle(parent);
     if (excludeStaticParent && style.position === 'static') {
       continue;
