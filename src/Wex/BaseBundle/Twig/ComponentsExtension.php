@@ -3,6 +3,7 @@
 namespace App\Wex\BaseBundle\Twig;
 
 use App\Wex\BaseBundle\Helper\RenderingHelper;
+use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Component;
 use App\Wex\BaseBundle\Rendering\ComponentContext;
@@ -164,22 +165,20 @@ class ComponentsExtension extends AbstractExtension
      * @throws Exception
      */
     public function comRenderHtml(
-        Environment $twig,
+        Environment $env,
         $name,
         $options = []
     ): ?string {
-        $search = [
-            // Search local.
-            $name.TemplateExtension::TEMPLATE_FILE_EXTENSION,
-            // Search in base bundle.
-            WexBaseBundle::BUNDLE_PATH_TEMPLATES.$name.TemplateExtension::TEMPLATE_FILE_EXTENSION,
-        ];
+        $loader = $env->getLoader();
+        $search = TemplateHelper::buildTemplateInheritanceStack(
+            $name
+        );
 
         try
         {
             foreach ($search as $templatePath)
             {
-                if ($twig->getLoader()->exists($templatePath))
+                if ($loader->exists($templatePath))
                 {
                     $this->translator->setDomain(
                         Translator::DOMAIN_TYPE_COMPONENT,
@@ -189,7 +188,7 @@ class ComponentsExtension extends AbstractExtension
 
                     $options['com_options'] = $options;
 
-                    $output = $twig->render(
+                    $output = $env->render(
                         $templatePath,
                         $options
                     );
