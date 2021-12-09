@@ -1,5 +1,6 @@
 @use '../partials/pills';
 @import '../mixins/global';
+@import '../mixins/tables';
 
 .debug-assets {
   display: flex;
@@ -10,6 +11,8 @@
   }
 
   .debug-details {
+    flex: 1;
+
     .assets-table {
       td {
         padding: 0 .2rem;
@@ -31,6 +34,7 @@
         &.asset-path {
           opacity: .6;
           font-weight: normal;
+          @include table-cell-text-ellipsis;
         }
       }
 
@@ -42,7 +46,6 @@
         &.asset-path {
           opacity: 1;
           font-weight: bold;
-          overflow: hidden;
         }
       }
     }
