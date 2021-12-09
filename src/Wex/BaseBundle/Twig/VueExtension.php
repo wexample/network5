@@ -6,6 +6,7 @@ use App\Wex\BaseBundle\Helper\DomHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\WexBaseBundle;
+use Twig\TwigFilter;
 use function array_shift;
 use function array_slice;
 use function count;
@@ -29,9 +30,23 @@ class VueExtension extends AbstractExtension
 
     protected array $includedHtml = [];
 
+    public function getFilters()
+    {
+        return [
+            new TwigFilter(
+                'vue_key',
+                [
+                    $this,
+                    'vueKey',
+                ]
+            ),
+        ];
+    }
+
     public function __construct(
         private ComponentsExtension $componentsExtension
-    ) {
+    )
+    {
     }
 
     public function getFunctions(): array
@@ -66,7 +81,8 @@ class VueExtension extends AbstractExtension
         string $path,
         ?array $options = [],
         ?array $twigContext = []
-    ): string {
+    ): string
+    {
         return $this->vueRender(
             $env,
             $path,
@@ -85,7 +101,8 @@ class VueExtension extends AbstractExtension
         ?array $attributes = [],
         ?array $twigContext = [],
         ?bool $root = false
-    ): string {
+    ): string
+    {
         $vueComName = $this->createVueComName($path);
         $this->componentsExtension->comLoadAssets($path);
 
@@ -164,11 +181,11 @@ class VueExtension extends AbstractExtension
 
             // Use reference to identify sub folders length.
             $templatePath = count(
-                explode(
-                    FileHelper::FOLDER_SEPARATOR,
-                    WexBaseBundle::BUNDLE_PATH_TEMPLATES
-                )
-            ) - 1;
+                    explode(
+                        FileHelper::FOLDER_SEPARATOR,
+                        WexBaseBundle::BUNDLE_PATH_TEMPLATES
+                    )
+                ) - 1;
 
             // Remove sub folders.
             $exp = array_slice($exp, $templatePath);
@@ -205,7 +222,8 @@ class VueExtension extends AbstractExtension
         string $path,
         ?array $attributes = [],
         ?array $twigContext = []
-    ): string {
+    ): string
+    {
         // Register template.
         $output =
             $this->vueRender(
@@ -218,5 +236,10 @@ class VueExtension extends AbstractExtension
         $this->includedHtml[] = $output;
 
         return $output;
+    }
+
+    public function vueKey(string $key, ?string $filters = null): string
+    {
+        return '{{ '.$key.($filters ? ' | '.$filters : '').' }}';
     }
 }

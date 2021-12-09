@@ -23,7 +23,7 @@ export default class VueService extends AppService {
           ) {
             this.app.addLib('vue', Vue);
 
-            let app = this;
+            let app = this.app;
             this.globalMixin = {
               props: {
                 app: {
@@ -81,6 +81,10 @@ export default class VueService extends AppService {
         let id = `vue-template-${comName}`;
 
         vueClassDefinition.template = document.getElementById(id);
+
+        vueClassDefinition.mixins = (vueClassDefinition.mixins || []).concat([
+          this.globalMixin,
+        ]);
 
         if (!vueClassDefinition.template) {
           throw new Error(

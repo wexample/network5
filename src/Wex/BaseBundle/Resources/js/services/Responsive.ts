@@ -6,6 +6,10 @@ import MixinsAppService from '../class/MixinsAppService';
 import AssetsInterface from '../interfaces/AssetInterface';
 import Events from '../helpers/Events';
 
+export class ResponsiveServiceEvents {
+  public static RESPONSIVE_CHANGE_SIZE: string = 'responsive-change-size';
+}
+
 export default class ResponsiveService extends AppService {
   dependencies: [AssetsService, EventsService, QueuesService];
 
@@ -51,7 +55,7 @@ export default class ResponsiveService extends AppService {
           // Now change page class.
           this.updateResponsiveLayoutClass();
 
-          this.services.events.trigger('responsive-change-size', {
+          this.services.events.trigger(ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE, {
             current: current,
             previous: this.responsiveSizePrevious,
           });

@@ -53,24 +53,6 @@
         {{ ('@page::resources.body_' ~ (layout_use_js ? '' : 'no_') ~ 'js') | trans | raw }}
     </div>
     {% if layout_use_js %}
-        <div class="blocks">
-            <div class="block theme-light">
-                <ul id="loaded-assets-list-css"></ul>
-            </div>
-            <div class="block theme-light">
-                <ul id="loaded-assets-list-js"></ul>
-            </div>
-        </div>
-        <div class="block">
-            {{ '@page::resources.body_available' | trans | raw }}
-        </div>
-        <div class="blocks">
-            <div class="block theme-light">
-                <ul id="loaded-assets-list-css-available"></ul>
-            </div>
-            <div class="block theme-light">
-                <ul id="loaded-assets-list-js-available"></ul>
-            </div>
-        </div>
+        {{ vue('vue/debug-assets') }}
     {% endif %}
 {%- endblock -%}

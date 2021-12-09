@@ -23,8 +23,6 @@ const bundle: AssetBundleInterface = {
       this.testQueues();
       this.testVariables();
 
-      this.refreshLoadedAssetsList();
-
       document.querySelectorAll('.demo-button-switch-theme').forEach((el) => {
         el.addEventListener(Events.CLICK, () => {
           this.services.theme.setTheme(el.getAttribute('data-theme'), true);
@@ -45,60 +43,10 @@ const bundle: AssetBundleInterface = {
       document
         .querySelector(`.display-breakpoint-${current}`)
         .classList.add('display-breakpoint-current');
-
-      this.refreshLoadedAssetsList();
     }
 
     updateLayoutTheme(theme) {
       super.updateLayoutTheme(theme);
-
-      this.refreshLoadedAssetsList();
-    }
-
-    refreshLoadedAssetsList() {
-      let list;
-
-      list = [];
-      // Base loaded assets
-      document.querySelectorAll('link[rel=stylesheet]').forEach((el) => {
-        list.push(el.getAttribute('href'));
-      });
-
-      this.refreshLoadedAssetsTypeList('css', list);
-
-      list = [];
-      // Base loaded assets
-      document.querySelectorAll('script').forEach((el) => {
-        let src = el.getAttribute('src');
-        if (src !== null) {
-          list.push(src);
-        }
-      });
-      this.refreshLoadedAssetsTypeList('js', list);
-
-      this.refreshAvailableAssets('css');
-      this.refreshAvailableAssets('js');
-    }
-
-    protected refreshAvailableAssets(type) {
-      let layoutData = this.app.layout.renderData;
-      let list = [];
-
-      layoutData.assets[type].map((asset) => list.push(asset.path));
-      layoutData.page.assets[type].map((asset) => list.push(asset.path));
-
-      this.refreshLoadedAssetsTypeList(`${type}-available`, list);
-    }
-
-    refreshLoadedAssetsTypeList(type: string, list: string[]) {
-      let el = document.getElementById(`loaded-assets-list-${type}`);
-      let output = '';
-
-      list.forEach((item) => {
-        output += `<li>${item}</li>`;
-      });
-
-      el.innerHTML = output;
     }
 
     testQueues() {
