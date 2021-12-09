@@ -6,12 +6,10 @@ use App\Wex\BaseBundle\Helper\DomHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\WexBaseBundle;
-use Exception;
-use Twig\Environment;
-use Twig\TwigFunction;
 use function array_shift;
 use function array_slice;
 use function count;
+use Exception;
 use function explode;
 use function implode;
 use function md5;
@@ -20,6 +18,8 @@ use function mt_getrandmax;
 use function random_int;
 use function str_replace;
 use function strtolower;
+use Twig\Environment;
+use Twig\TwigFunction;
 
 class VueExtension extends AbstractExtension
 {
@@ -59,8 +59,6 @@ class VueExtension extends AbstractExtension
     }
 
     /**
-     *
-     *
      * @throws Exception
      */
     public function vue(
@@ -167,9 +165,9 @@ class VueExtension extends AbstractExtension
             // Use reference to identify sub folders length.
             $templatePath = count(
                 explode(
-                        FileHelper::FOLDER_SEPARATOR,
-                        WexBaseBundle::BUNDLE_PATH_TEMPLATES
-                    )
+                    FileHelper::FOLDER_SEPARATOR,
+                    WexBaseBundle::BUNDLE_PATH_TEMPLATES
+                )
             ) - 1;
 
             // Remove sub folders.
