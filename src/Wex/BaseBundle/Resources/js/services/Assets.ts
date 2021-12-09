@@ -7,13 +7,14 @@ import MixinsAppService from '../class/MixinsAppService';
 import AssetsInterface from '../interfaces/AssetInterface';
 import RenderNode from '../class/RenderNode';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import { Attribute, AttributeValue, TagName } from "../helpers/Dom";
 
 export default class AssetsService extends AppService {
   public static UPDATE_FILTER_ACCEPT = 'accept';
 
   public static UPDATE_FILTER_REJECT = 'reject';
 
-  public assetsRegistry: any = { css: {}, js: {} };
+  public assetsRegistry: any = {css: {}, js: {}};
   public queue: Queue;
   public jsAssetsPending: object = {};
   public updateFilters: Function[] = [];
@@ -142,8 +143,8 @@ export default class AssetsService extends AppService {
   }
 
   addScript(src) {
-    let el = document.createElement('script');
-    el.src = src;
+    let el = document.createElement(TagName.SCRIPT);
+    el.setAttribute(Attribute.SRC, src);
 
     document.head.appendChild(el);
     return el;
@@ -151,15 +152,15 @@ export default class AssetsService extends AppService {
 
   addStyle(href) {
     let el = this.createStyleLinkElement();
-    el.href = href;
+    el.setAttribute(Attribute.HREF, href);
 
     document.head.appendChild(el);
     return el;
   }
 
   createStyleLinkElement() {
-    let el = document.createElement('link');
-    el.setAttribute('rel', 'stylesheet');
+    let el = document.createElement(TagName.LINK);
+    el.setAttribute(Attribute.REL, AttributeValue.STYLESHEET);
     return el;
   }
 

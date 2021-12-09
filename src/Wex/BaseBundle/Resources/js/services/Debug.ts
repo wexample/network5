@@ -7,6 +7,8 @@ import PagesService from './Pages';
 import Variables from '../helpers/Variables';
 import DebugRenderNode from '../class/Debug/DebugRenderNode';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import { TagName } from "../helpers/Dom";
+import Events from "../helpers/Events";
 
 export default class DebugService extends AppService {
   public debugRenderNodes: any = {};
@@ -27,15 +29,15 @@ export default class DebugService extends AppService {
     this.createEl();
     this.addTrackers();
 
-    window.addEventListener('resize', () => this.update());
-    window.addEventListener('scroll', () => this.update(), true);
+    window.addEventListener(Events.RESIZE, () => this.update());
+    window.addEventListener(Events.SCROLL, () => this.update(), true);
   }
 
   createEl() {
-    this.elDebugHelpers = document.createElement('div');
+    this.elDebugHelpers = document.createElement(TagName.DIV);
     this.elDebugHelpers.setAttribute(Variables.ID, 'layout-debug-helpers');
 
-    this.elDebugHelpersGlobal = document.createElement('div');
+    this.elDebugHelpersGlobal = document.createElement(TagName.DIV);
     this.elDebugHelpers.appendChild(this.elDebugHelpersGlobal);
 
     this.app.layout.el.appendChild(this.elDebugHelpers);

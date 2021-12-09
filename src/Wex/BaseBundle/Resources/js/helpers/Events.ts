@@ -8,4 +8,8 @@ export default abstract class {
   public static MOUSEUP = 'mouseup';
 
   public static MOUSEDOWN = 'mousedown';
+
+  public static RESIZE = 'resize';
+
+  public static SCROLL = 'scroll';
 }

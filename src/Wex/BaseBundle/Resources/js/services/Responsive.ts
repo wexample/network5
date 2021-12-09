@@ -4,6 +4,7 @@ import QueuesService from './Queues';
 import AppService from '../class/AppService';
 import MixinsAppService from '../class/MixinsAppService';
 import AssetsInterface from '../interfaces/AssetInterface';
+import Events from "../helpers/Events";
 
 export default class ResponsiveService extends AppService {
   dependencies: [AssetsService, EventsService, QueuesService];
@@ -23,7 +24,7 @@ export default class ResponsiveService extends AppService {
               responsiveService.updateFilters.bind(responsiveService)
             );
 
-            window.addEventListener('resize', () =>
+            window.addEventListener(Events.RESIZE, () =>
               responsiveService.updateResponsive(true)
             );
 

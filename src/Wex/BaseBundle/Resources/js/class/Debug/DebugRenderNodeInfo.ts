@@ -3,6 +3,7 @@ import RenderNode from '../RenderNode';
 import { h } from "vue";
 import Page from "../Page";
 import ThemeService from "../../services/Theme";
+import { TagName } from "../../helpers/Dom";
 
 export default {
   props: {
@@ -29,7 +30,7 @@ export default {
   render() {
     let renderLineTitle = (title) => {
       return h(
-        'div',
+        TagName.DIV,
         {
           class: 'line-title'
         },
@@ -38,12 +39,12 @@ export default {
     }
 
     let renderResponsive = (type) => {
-      return h('div', {
+      return h(TagName.DIV, {
         class: ['debug-info-line', 'display-breakpoints'],
       }, [
         renderLineTitle(type.toUpperCase()),
         Object.keys(this.app.layout.renderData.displayBreakpoints).map((size) => {
-          return h('div', {
+          return h(TagName.DIV, {
             class: {
               active: this.app.services.responsive.responsiveSizeCurrent === size,
               available: this.hasResponsiveAsset(type, size),
@@ -56,14 +57,14 @@ export default {
     let renderPage = () => {
       if (this.renderNode instanceof Page) {
         return h(
-          'div',
+          TagName.DIV,
           {
             class: 'debug-info-line'
           },
           [
             renderLineTitle('COL.S'),
             ThemeService.THEMES.map((theme) => {
-              return h('div', {
+              return h(TagName.DIV, {
                 class: {
                   active: this.app.services.theme.activeTheme === theme,
                   available: this.hasThemeAsset('css', theme),
@@ -76,13 +77,13 @@ export default {
     }
 
     return h(
-      'div',
+      TagName.DIV,
       {
         class: 'debug-info',
         style: this.styleObject()
       },
       [
-        h('div', {}, this.renderDebugInfo()),
+        h(TagName.DIV, {}, this.renderDebugInfo()),
         renderPage(),
         renderResponsive('css'),
         renderResponsive('js')

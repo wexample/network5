@@ -5,6 +5,7 @@ import Variables from '../../helpers/Variables';
 import VueService from '../../services/Vue';
 import DebugRenderNodeInfo from './DebugRenderNodeInfo';
 import DebugRenderNodeOverlay from './DebugRenderNodeOverlay';
+import { Attribute, TagName } from "../../helpers/Dom";
 
 export default class DebugRenderNode extends AppChild {
   public borderColors: any = {
@@ -82,19 +83,19 @@ export default class DebugRenderNode extends AppChild {
   }
 
   createEl() {
-    this.el = document.createElement('div');
+    this.el = document.createElement(TagName.DIV);
     this.el.classList.add('debug-render-node');
     this.el.style.borderColor = this.getBorderColor();
 
     this.service.elDebugHelpers.appendChild(this.el);
 
     this.renderNode.ready(() => {
-      this.el.setAttribute('id', `debug-${this.renderNode.getId()}`);
+      this.el.setAttribute(Attribute.ID, `debug-${this.renderNode.getId()}`);
     });
   }
 
   createElDebugHelpers() {
-    this.elDebugHelpers = document.createElement('div');
+    this.elDebugHelpers = document.createElement(TagName.DIV);
     this.service.elDebugHelpers.appendChild(this.elDebugHelpers);
   }
 

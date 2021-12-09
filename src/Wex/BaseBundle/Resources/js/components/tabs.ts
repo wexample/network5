@@ -4,6 +4,7 @@ import { hashParamSet as locationHashParamSet } from '../helpers/Location';
 import { parseUrl as locationParseUrl } from '../helpers/Location';
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import { Attribute } from "../helpers/Dom";
 
 export default {
   bundleGroup: 'component',
@@ -61,7 +62,7 @@ export default {
     }
 
     isCurrentPageTab(elTab) {
-      let path = locationParseUrl(elTab.getAttribute('href')).pathname;
+      let path = locationParseUrl(elTab.getAttribute(Attribute.HREF)).pathname;
       return path === '/' || path === window.location.pathname;
     }
 

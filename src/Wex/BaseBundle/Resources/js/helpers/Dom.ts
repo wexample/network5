@@ -1,3 +1,25 @@
+export class TagName {
+  public static DIV: string = 'div'
+
+  public static LINK: string = 'link'
+
+  public static SCRIPT: string = 'script'
+}
+
+export class Attribute {
+  public static HREF: string = 'href'
+
+  public static ID: string = 'id'
+
+  public static REL: string = 'rel'
+
+  public static SRC: string = 'src'
+}
+
+export class AttributeValue {
+  public static STYLESHEET: string = 'stylesheet'
+}
+
 export function findPreviousNode(el) {
   // Search for previous non text node.
   do {
@@ -20,7 +42,7 @@ export function findScrollParent(element, includeHidden) {
   let overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
 
   if (style.position === 'fixed') return document.body;
-  for (let parent = element; (parent = parent.parentElement); ) {
+  for (let parent = element; (parent = parent.parentElement);) {
     style = getComputedStyle(parent);
     if (excludeStaticParent && style.position === 'static') {
       continue;
