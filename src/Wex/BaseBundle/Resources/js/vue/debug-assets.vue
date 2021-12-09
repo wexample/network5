@@ -1,12 +1,13 @@
 <script>
 import { ResponsiveServiceEvents } from '../services/Responsive';
-import { Attribute } from '../helpers/Dom';
+import { Attribute, AttributeValue, TagName } from '../helpers/Dom';
 import { shallowCopy as ArrayShallowCopy } from '../helpers/Arrays';
 import { AssetsServiceType } from '../services/Assets';
 
 export default {
   data() {
     return {
+      allAssets:[],
       assets: {
         css: [],
         js: [],
@@ -22,8 +23,8 @@ export default {
 
   mounted() {
     this.app.services.events.listen(
-      ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
-      this.onChangeResponsiveSizeProxy
+        ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
+        this.onChangeResponsiveSizeProxy
     );
 
     this.onChangeResponsiveSize();
@@ -31,18 +32,19 @@ export default {
 
   unmounted() {
     this.app.services.events.forget(
-      ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
-      this.onChangeResponsiveSizeProxy
+        ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
+        this.onChangeResponsiveSizeProxy
     );
   },
 
   methods: {
     onChangeResponsiveSize() {
+      this.updateAssetsList();
       this.updateAssetsJs();
       this.updateAssetsCss();
     },
 
-    getAssetsList() {
+    updateAssetsList() {
       let list = [];
 
       [AssetsServiceType.CSS, AssetsServiceType.JS].forEach((type) => {
@@ -51,7 +53,7 @@ export default {
         }
       });
 
-      return list;
+      this.allAssets = list;
     },
 
     getAssetsTypeList(type) {
@@ -60,7 +62,7 @@ export default {
 
     updateAssetsJs() {
       // Base loaded assets
-      document.querySelectorAll('script').forEach((el) => {
+      document.querySelectorAll(TagName.SCRIPT).forEach((el) => {
         let src = el.getAttribute(Attribute.SRC);
 
         // Avoid inline scripts.
@@ -74,10 +76,13 @@ export default {
       let list = [];
 
       // Base loaded assets
-      document.querySelectorAll('link[rel=stylesheet]').forEach((el) => {
-        let href = el.getAttribute(Attribute.HREF);
-        this.loadedPaths.css[href] = href;
-      });
+      document
+          .querySelectorAll(`${TagName.LINK}[${Attribute.REL}=${AttributeValue.STYLESHEET}]`)
+          .forEach((el) => {
+
+            let href = el.getAttribute(Attribute.HREF);
+            this.loadedPaths.css[href] = href;
+          });
     },
   },
 };

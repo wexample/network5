@@ -2,7 +2,7 @@
 <div class="debug-explorer"></div>
 <div class="debug-details">
   <table class="assets-table">
-    <tr v-for="asset in getAssetsList()" :class="asset.active ? 'asset-active' : 'asset-inactive'">
+    <tr v-for="asset in allAssets" :class="asset.active ? 'asset-active' : 'asset-inactive'">
       <td class="asset-type">
         <div class="pill">{{ 'asset.type' | vue_key }}</div>
       </td>
