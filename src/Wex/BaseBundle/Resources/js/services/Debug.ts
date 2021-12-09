@@ -7,8 +7,8 @@ import PagesService from './Pages';
 import Variables from '../helpers/Variables';
 import DebugRenderNode from '../class/Debug/DebugRenderNode';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
-import { TagName } from "../helpers/Dom";
-import Events from "../helpers/Events";
+import { TagName } from '../helpers/Dom';
+import Events from '../helpers/Events';
 
 export default class DebugService extends AppService {
   public debugRenderNodes: any = {};

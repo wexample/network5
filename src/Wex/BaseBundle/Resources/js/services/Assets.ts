@@ -7,14 +7,14 @@ import MixinsAppService from '../class/MixinsAppService';
 import AssetsInterface from '../interfaces/AssetInterface';
 import RenderNode from '../class/RenderNode';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
-import { Attribute, AttributeValue, TagName } from "../helpers/Dom";
+import { Attribute, AttributeValue, TagName } from '../helpers/Dom';
 
 export default class AssetsService extends AppService {
   public static UPDATE_FILTER_ACCEPT = 'accept';
 
   public static UPDATE_FILTER_REJECT = 'reject';
 
-  public assetsRegistry: any = {css: {}, js: {}};
+  public assetsRegistry: any = { css: {}, js: {} };
   public queue: Queue;
   public jsAssetsPending: object = {};
   public updateFilters: Function[] = [];

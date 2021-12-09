@@ -4,7 +4,7 @@ import QueuesService from './Queues';
 import AppService from '../class/AppService';
 import MixinsAppService from '../class/MixinsAppService';
 import AssetsInterface from '../interfaces/AssetInterface';
-import Events from "../helpers/Events";
+import Events from '../helpers/Events';
 
 export default class ResponsiveService extends AppService {
   dependencies: [AssetsService, EventsService, QueuesService];

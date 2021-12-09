@@ -4,7 +4,7 @@ import { hashParamSet as locationHashParamSet } from '../helpers/Location';
 import { parseUrl as locationParseUrl } from '../helpers/Location';
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
-import { Attribute } from "../helpers/Dom";
+import { Attribute } from '../helpers/Dom';
 
 export default {
   bundleGroup: 'component',
