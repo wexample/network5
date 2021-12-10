@@ -5,7 +5,7 @@
 
   &.selected {
     & > .explorer-item-label {
-      background: rgba($color-info, .5);
+      background: rgba($color-info, 0.5);
     }
   }
 
@@ -14,11 +14,11 @@
     width: 100%;
 
     .explorer-item-icon {
-      padding: .2rem;
+      padding: 0.2rem;
     }
 
     .explorer-item-name {
-      padding: .2rem;
+      padding: 0.2rem;
     }
   }
 }

@@ -1,10 +1,9 @@
 <script>
-
 export default {
   data() {
     return {
-      selectedItem: null
-    }
+      selectedItem: null,
+    };
   },
 
   methods: {
@@ -20,7 +19,7 @@ export default {
     deselectItem(item) {
       item.selected = false;
       this.selectedItem = null;
-    }
-  }
+    },
+  },
 };
 </script>

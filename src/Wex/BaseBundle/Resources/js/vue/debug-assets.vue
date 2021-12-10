@@ -6,7 +6,7 @@ import { AssetsServiceType } from '../services/Assets';
 import Explorer from './explorer';
 
 export default {
-  extends:Explorer,
+  extends: Explorer,
 
   components: {
     'explorer-item': 'vue/explorer-item',
@@ -31,8 +31,8 @@ export default {
 
   mounted() {
     this.app.services.events.listen(
-        ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
-        this.onChangeResponsiveSizeProxy
+      ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
+      this.onChangeResponsiveSizeProxy
     );
 
     this.onChangeResponsiveSize();
@@ -40,8 +40,8 @@ export default {
 
   unmounted() {
     this.app.services.events.forget(
-        ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
-        this.onChangeResponsiveSizeProxy
+      ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
+      this.onChangeResponsiveSizeProxy
     );
   },
 
@@ -86,12 +86,13 @@ export default {
 
       // Base loaded assets
       document
-          .querySelectorAll(`${TagName.LINK}[${Attribute.REL}=${AttributeValue.STYLESHEET}]`)
-          .forEach((el) => {
-
-            let href = el.getAttribute(Attribute.HREF);
-            this.loadedPaths.css[href] = href;
-          });
+        .querySelectorAll(
+          `${TagName.LINK}[${Attribute.REL}=${AttributeValue.STYLESHEET}]`
+        )
+        .forEach((el) => {
+          let href = el.getAttribute(Attribute.HREF);
+          this.loadedPaths.css[href] = href;
+        });
     },
 
     updateExplorerItems() {
@@ -99,15 +100,15 @@ export default {
         {
           type: 'layout',
           object: this.app.layout,
-        }
+        },
       ];
 
       this.explorerItems = items;
     },
 
     shortenAssetPath(asset) {
-      return asset.path.replace(/^(\/build\/)/, "");
-    }
+      return asset.path.replace(/^(\/build\/)/, '');
+    },
   },
 };
 </script>

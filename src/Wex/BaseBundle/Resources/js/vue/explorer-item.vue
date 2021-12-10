@@ -4,7 +4,7 @@ export default {
     increment: Number,
     object: Object,
     type: String,
-    root: Object
+    root: Object,
   },
 
   components: {
@@ -13,7 +13,7 @@ export default {
 
   data() {
     return {
-      selected: false
+      selected: false,
     };
   },
 
@@ -23,10 +23,13 @@ export default {
     },
 
     getItemIcon() {
-      return 'fa-' + {
-        'layout': 'columns',
-        'page': 'file',
-      }[this.type];
+      return (
+        'fa-' +
+        {
+          layout: 'columns',
+          page: 'file',
+        }[this.type]
+      );
     },
 
     getChildren() {
@@ -34,9 +37,9 @@ export default {
         return [
           {
             type: 'page',
-            object: this.object.page
-          }
-        ]
+            object: this.object.page,
+          },
+        ];
       }
 
       return [];
@@ -48,7 +51,7 @@ export default {
 
     deselect() {
       this.root.deselectItem(this);
-    }
-  }
+    },
+  },
 };
 </script>

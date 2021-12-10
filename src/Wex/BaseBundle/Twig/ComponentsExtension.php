@@ -9,7 +9,6 @@ use App\Wex\BaseBundle\Rendering\Component;
 use App\Wex\BaseBundle\Rendering\ComponentContext;
 use App\Wex\BaseBundle\Service\RenderingService;
 use App\Wex\BaseBundle\Translation\Translator;
-use App\Wex\BaseBundle\WexBaseBundle;
 use function array_merge;
 use function array_pop;
 use function end;

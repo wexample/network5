@@ -10,8 +10,7 @@ class TemplateHelper
     public static function buildTemplateInheritanceStack(
         string $relativePath,
         string $templateExtension = TemplateExtension::TEMPLATE_FILE_EXTENSION
-    ): array
-    {
+    ): array {
         return [
             // Search local.
             $relativePath.$templateExtension,

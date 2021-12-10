@@ -15,7 +15,7 @@
 
     .assets-table {
       td {
-        padding: 0 .2rem;
+        padding: 0 0.2rem;
 
         &.asset-type .pill {
           @extend .pill;
@@ -31,7 +31,7 @@
         }
 
         &.asset-path {
-          opacity: .6;
+          opacity: 0.6;
           font-weight: normal;
           @include table-cell-text-ellipsis;
         }
