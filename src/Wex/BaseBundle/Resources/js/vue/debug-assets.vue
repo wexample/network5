@@ -4,12 +4,13 @@ import { Attribute, AttributeValue, TagName } from '../helpers/Dom';
 import { shallowCopy as ArrayShallowCopy } from '../helpers/Arrays';
 import { AssetsServiceType } from '../services/Assets';
 import Explorer from './explorer';
+import { ComponentsServiceEvents } from "../services/Components";
 
 export default {
   extends: Explorer,
 
   components: {
-    'explorer-item': 'vue/explorer-item',
+    'explorer-item': 'vue/debug-assets-explorer-item',
   },
 
   data() {
@@ -19,7 +20,6 @@ export default {
         css: [],
         js: [],
       },
-      explorerItems: [],
       listFilter: null,
       loadedPaths: {
         css: {},
@@ -59,7 +59,6 @@ export default {
     },
 
     update() {
-      this.updateExplorerItems();
       this.updateAssetsList();
       this.updateAssetsJs();
       this.updateAssetsCss();
@@ -107,17 +106,6 @@ export default {
             let href = el.getAttribute(Attribute.HREF);
             this.loadedPaths.css[href] = href;
           });
-    },
-
-    updateExplorerItems() {
-      let items = [
-        {
-          type: 'layout',
-          object: this.app.layout,
-        },
-      ];
-
-      this.explorerItems = items;
     },
 
     shortenAssetPath(asset) {

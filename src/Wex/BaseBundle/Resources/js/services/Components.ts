@@ -13,6 +13,10 @@ import RenderDataInterface from '../interfaces/RenderDataInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 import AppService from '../class/AppService';
 
+export class ComponentsServiceEvents {
+  public static CREATE_COMPONENT: string = 'create-component';
+}
+
 export default class ComponentsService extends RenderNodeService {
   elLayoutComponents: HTMLElement;
   pageHandlerRegistry: { [key: string]: PageHandlerComponent } = {};
@@ -161,6 +165,10 @@ export default class ComponentsService extends RenderNodeService {
 
       this.createRenderNode(el, renderData, requestOptions, (component) => {
         renderNode.components.push(component);
+
+        this.services.events.trigger(ComponentsServiceEvents.CREATE_COMPONENT, {
+          component: component,
+        });
 
         if (--counter === 0) {
           complete && complete();

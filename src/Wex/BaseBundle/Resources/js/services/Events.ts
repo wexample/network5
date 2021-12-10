@@ -6,7 +6,11 @@ export default class EventsService extends AppService {
   }
 
   listen(name, callback, el = window.document) {
-    el.addEventListener(name, callback);
+    if (Array.isArray(name)) {
+      name.forEach((subName) => el.addEventListener(subName, callback))
+    } else {
+      el.addEventListener(name, callback);
+    }
   }
 
   trigger(name, data, el = window.document) {
