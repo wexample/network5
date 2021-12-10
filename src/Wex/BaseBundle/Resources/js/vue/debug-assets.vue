@@ -5,6 +5,10 @@ import { shallowCopy as ArrayShallowCopy } from '../helpers/Arrays';
 import { AssetsServiceType } from '../services/Assets';
 
 export default {
+  components: {
+    'explorer-item': 'vue/debug-assets-explorer-item',
+  },
+
   data() {
     return {
       allAssets: [],
@@ -12,6 +16,7 @@ export default {
         css: [],
         js: [],
       },
+      explorerItems: [],
       listFilter: null,
       loadedPaths: {
         css: {},
@@ -39,6 +44,7 @@ export default {
 
   methods: {
     onChangeResponsiveSize() {
+      this.updateExplorerItems();
       this.updateAssetsList();
       this.updateAssetsJs();
       this.updateAssetsCss();
@@ -83,6 +89,17 @@ export default {
             let href = el.getAttribute(Attribute.HREF);
             this.loadedPaths.css[href] = href;
           });
+    },
+
+    updateExplorerItems() {
+      let items = [
+        {
+          type: 'layout',
+          object: this.app.layout,
+        }
+      ];
+
+      this.explorerItems = items;
     },
 
     shortenAssetPath(asset) {

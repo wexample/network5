@@ -7,6 +7,9 @@ use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\WexBaseBundle;
+use Symfony\Component\ExpressionLanguage\SyntaxError;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
 use function array_shift;
 use function array_slice;
 use function count;
@@ -58,6 +61,17 @@ class VueExtension extends AbstractExtension
                 [
                     $this,
                     'vue',
+                ],
+                [
+                    self::FUNCTION_OPTION_NEEDS_ENVIRONMENT => true,
+                    self::FUNCTION_OPTION_IS_SAFE => [self::FUNCTION_OPTION_HTML],
+                ]
+            ),
+            new TwigFunction(
+                'vue_require',
+                [
+                    $this,
+                    'vueRequire',
                 ],
                 [
                     self::FUNCTION_OPTION_NEEDS_ENVIRONMENT => true,
@@ -232,6 +246,25 @@ class VueExtension extends AbstractExtension
     {
         // Add vue js templates.
         return implode('', $this->renderedTemplates);
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError|Exception
+     */
+    public function vueRequire(
+        Environment $env,
+        string $path,
+        ?array $options = []
+    ): void
+    {
+        // Same behavior but no output tag.
+        $this->vueInclude(
+            $env,
+            $path,
+            $options
+        );
     }
 
     /**

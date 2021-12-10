@@ -1,6 +1,5 @@
 import * as Vue from 'vue';
 import { createApp } from 'vue/dist/vue.esm-bundler';
-
 import AppService from '../class/AppService';
 import PagesService from './Pages';
 import MixinsAppService from '../class/MixinsAppService';
@@ -52,6 +51,36 @@ export default class VueService extends AppService {
     return path.split('/').join('-').toLowerCase();
   }
 
+  inherit(vueComponent) {
+    let componentsFinal = vueComponent.components || {};
+    let extend = {components: {}};
+
+    if (vueComponent.extends) {
+      extend = this.inherit(vueComponent.extends);
+    }
+
+    let componentsStrings = {
+      ...extend.components,
+      ...componentsFinal,
+    };
+
+    // Convert initial strings to initialized component.
+    Object.entries(componentsStrings).forEach((data) => {
+      let key = data[0];
+
+      // Prevent to initialize already converted object.
+      if (typeof data[1] === 'string' && !this.componentRegistered[key]) {
+        // Mark as true to prevent inheritance recursion.
+        this.componentRegistered[key] = true;
+
+        vueComponent.components[key] = this.initComponent(data[1]);
+      }
+    });
+
+    return vueComponent;
+
+  }
+
   createVueAppForComponent(path) {
     let component = this.initComponent(path);
 
@@ -91,6 +120,8 @@ export default class VueService extends AppService {
             `Unable to load vue component as template item #${id} has not been found.`
           );
         }
+
+        this.inherit(vueClassDefinition);
 
         this.componentRegistered[className] = vueClassDefinition;
       }
