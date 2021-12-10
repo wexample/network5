@@ -159,7 +159,9 @@ export default class ComponentsService extends RenderNodeService {
         elPlaceholder.remove();
       }
 
-      this.createRenderNode(el, renderData, requestOptions, () => {
+      this.createRenderNode(el, renderData, requestOptions, (component) => {
+        renderNode.components.push(component);
+
         if (--counter === 0) {
           complete && complete();
         }

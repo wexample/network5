@@ -43,10 +43,11 @@ export default {
         ];
       } else if (this.type === 'page') {
         let children = [];
-        this.object.renderData.components.forEach((component) => {
+
+        this.object.components.forEach((component) => {
           children.push({
             type: 'component',
-            object: {renderData: component}
+            object: component
           })
         });
 
