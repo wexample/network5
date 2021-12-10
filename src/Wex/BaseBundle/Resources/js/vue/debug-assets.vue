@@ -26,12 +26,16 @@ export default {
         js: {},
       },
       onChangeResponsiveSizeProxy: this.onChangeResponsiveSize.bind(this),
+      updateEvents: [
+        ComponentsServiceEvents.CREATE_COMPONENT,
+        ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
+      ]
     };
   },
 
   mounted() {
     this.app.services.events.listen(
-        ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
+        this.updateEvents,
         this.onChangeResponsiveSizeProxy
     );
 
@@ -40,7 +44,7 @@ export default {
 
   unmounted() {
     this.app.services.events.forget(
-        ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
+        this.updateEvents,
         this.onChangeResponsiveSizeProxy
     );
   },
@@ -59,6 +63,7 @@ export default {
     },
 
     update() {
+      this.updateTime = (new Date()).getTime();
       this.updateAssetsList();
       this.updateAssetsJs();
       this.updateAssetsCss();

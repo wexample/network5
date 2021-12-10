@@ -2,14 +2,38 @@ import AppService from '../class/AppService';
 
 export default class EventsService extends AppService {
   forget(name, callback, el = window.document) {
-    el.removeEventListener(name, callback);
+    this.applyEvents(
+      'remove',
+      name,
+      callback,
+      el
+    );
   }
 
   listen(name, callback, el = window.document) {
-    if (Array.isArray(name)) {
-      name.forEach((subName) => el.addEventListener(subName, callback))
+    this.applyEvents(
+      'add',
+      name,
+      callback,
+      el
+    );
+  }
+
+  /**
+   * Execute addEventListener or removeEventListener for string callback name or an array of names.
+   *
+   * @param callbackName
+   * @param eventName
+   * @param callback
+   * @param el
+   */
+  applyEvents(callbackName: string, eventName, callback, el = window.document) {
+    callbackName += 'EventListener';
+
+    if (Array.isArray(eventName)) {
+      eventName.forEach((subName) => el[callbackName](subName, callback))
     } else {
-      el.addEventListener(name, callback);
+      el[callbackName](eventName, callback);
     }
   }
 

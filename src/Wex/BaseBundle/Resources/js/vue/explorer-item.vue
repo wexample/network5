@@ -4,6 +4,10 @@ export default {
     increment: Number,
     object: Object,
     root: Object,
+    updateTime: {
+      required: false,
+      type: Number
+    }
   },
 
   components: {
