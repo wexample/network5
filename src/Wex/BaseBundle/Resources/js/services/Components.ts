@@ -101,37 +101,29 @@ export default class ComponentsService extends RenderNodeService {
     }
 
     if (renderData.components) {
-      this.createComponents(
-        renderData.components,
+      this.createChildComponents(
+        this.app.layout,
         requestOptions,
-        this.app.layout.el,
         complete
       );
     }
   }
 
   loadPageRenderData(page: Page, complete?: Function) {
-    let requestOptions: RequestOptionsInterface = {
-      ...page.requestOptions,
-      ...{
-        parentRenderNode: page,
-      },
-    };
-
-    this.createComponents(
-      page.renderData.components,
-      requestOptions,
-      page.el,
+    this.createChildComponents(
+      page,
+      page.requestOptions,
       complete
     );
   }
 
-  createComponents(
-    components: RenderDataComponentInterface[],
+  createChildComponents(
+    renderNode: RenderNode,
     requestOptions: RequestOptionsInterface,
-    elContext: HTMLElement,
     complete?: Function
   ) {
+    let components = renderNode.renderData.components;
+
     if (!components.length) {
       complete && complete();
       return;
@@ -143,7 +135,7 @@ export default class ComponentsService extends RenderNodeService {
       counter++;
 
       let el: HTMLElement;
-      let elPlaceholder = elContext.querySelector(
+      let elPlaceholder = renderNode.el.querySelector(
         '.' + renderData.id
       ) as HTMLElement;
       let removePlaceHolder = true;
