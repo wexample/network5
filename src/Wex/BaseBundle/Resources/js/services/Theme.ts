@@ -2,6 +2,10 @@ import MixinsAppService from '../class/MixinsAppService';
 import AppService from '../class/AppService';
 import AssetsInterface from '../interfaces/AssetInterface';
 
+export class ThemeServiceEvents {
+  public static THEME_CHANGE: string = 'theme-change';
+}
+
 export default class ThemeService extends AppService {
   public static THEME_DARK: string = 'dark';
 
@@ -101,7 +105,7 @@ export default class ThemeService extends AppService {
     classList.add(`theme-${this.activeTheme}`);
 
     let callback = () => {
-      this.services.events.trigger('theme-change', {
+      this.services.events.trigger(ThemeServiceEvents.THEME_CHANGE, {
         theme: theme,
       });
       complete && complete();

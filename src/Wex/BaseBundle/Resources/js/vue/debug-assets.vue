@@ -5,6 +5,7 @@ import { shallowCopy as ArrayShallowCopy } from '../helpers/Arrays';
 import { AssetsServiceType } from '../services/Assets';
 import Explorer from './explorer';
 import { ComponentsServiceEvents } from "../services/Components";
+import { ThemeServiceEvents } from "../services/Theme";
 
 export default {
   extends: Explorer,
@@ -29,6 +30,7 @@ export default {
       updateEvents: [
         ComponentsServiceEvents.CREATE_COMPONENT,
         ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
+        ThemeServiceEvents.THEME_CHANGE,
       ],
       updateTime: 0
     };

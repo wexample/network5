@@ -7,6 +7,8 @@ import RenderDataInterface from '../interfaces/RenderDataInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 import RequestOptionsPageInterface from '../interfaces/RequestOptionsPageInterface';
 import AppService from './AppService';
+import { ThemeServiceEvents } from "../services/Theme";
+import { ResponsiveServiceEvents } from "../services/Responsive";
 
 export default class extends RenderNode {
   public elOverlay: HTMLElement;
@@ -50,7 +52,7 @@ export default class extends RenderNode {
 
     this.elOverlay = this.el.querySelector('.page-overlay');
 
-    this.vars = { ...this.vars, ...this.renderData.vars };
+    this.vars = {...this.vars, ...this.renderData.vars};
   }
 
   init(complete?: Function) {
@@ -98,19 +100,19 @@ export default class extends RenderNode {
       this.onChangeResponsiveSizeProxy
     );
 
-    this.services.events.listen('theme-change', this.onChangeThemeProxy);
+    this.services.events.listen(ThemeServiceEvents.THEME_CHANGE, this.onChangeThemeProxy);
   }
 
   protected deactivateListeners(): void {
     super.deactivateListeners();
 
     this.services.events.forget(
-      'responsive-change-size',
+      ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
       this.onChangeResponsiveSizeProxy
     );
 
     this.services.events.forget(
-      'theme-change',
+      ThemeServiceEvents.THEME_CHANGE,
       this.onChangeResponsiveSizeProxy
     );
   }
