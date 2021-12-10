@@ -1,0 +1,20 @@
+<div class="explorer-item" :class="selected ? 'selected' : ''">
+<div class="explorer-item-label" v-on:click.prevent="select()">
+  <div class="explorer-item-indent" v-for="index in increment">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+  <div class="explorer-item-icon">
+    <i class="fas" :class="getItemIcon()"></i>
+  </div>
+  <div class="explorer-item-name">
+    {{ 'getItemName()' | vue_key }}
+  </div>
+</div>
+<div class="explorer-item-children">
+  <explorer-item
+      :increment="this.increment + 1"
+      :object="children.object"
+      :root="this.root"
+      :type="children.type"
+      v-for="children in getChildren()"
+  ></explorer-item>
+</div>
+</div>

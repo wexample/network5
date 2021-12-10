@@ -66,14 +66,13 @@ export default class VueService extends AppService {
 
     // Convert initial strings to initialized component.
     Object.entries(componentsStrings).forEach((data) => {
-      let key = data[0];
-
       // Prevent to initialize already converted object.
-      if (typeof data[1] === 'string' && !this.componentRegistered[key]) {
-        // Mark as true to prevent inheritance recursion.
-        this.componentRegistered[key] = true;
-
-        vueComponent.components[key] = this.initComponent(data[1]);
+      if (typeof data[1] === 'string') {
+        if (!this.componentRegistered[data[1]]) {
+          vueComponent.components[data[0]] = this.initComponent(data[1]);
+        } else {
+          vueComponent.components[data[0]] = this.componentRegistered[data[1]];
+        }
       }
     });
 
@@ -121,9 +120,9 @@ export default class VueService extends AppService {
           );
         }
 
-        this.inherit(vueClassDefinition);
-
         this.componentRegistered[className] = vueClassDefinition;
+
+        this.inherit(vueClassDefinition);
       }
 
       return this.componentRegistered[className];

@@ -3,10 +3,13 @@ import { ResponsiveServiceEvents } from '../services/Responsive';
 import { Attribute, AttributeValue, TagName } from '../helpers/Dom';
 import { shallowCopy as ArrayShallowCopy } from '../helpers/Arrays';
 import { AssetsServiceType } from '../services/Assets';
+import Explorer from './explorer';
 
 export default {
+  extends:Explorer,
+
   components: {
-    'explorer-item': 'vue/debug-assets-explorer-item',
+    'explorer-item': 'vue/explorer-item',
   },
 
   data() {

@@ -1,11 +1,16 @@
 {% block vue_require %}
-{{- vue_require('vue/debug-assets-explorer-item') -}}
+{{- vue_require('vue/explorer-item') -}}
 {% endblock %}
 
 {% block component %}
 <div class="debug-assets">
 <div class="debug-explorer">
-  <explorer-item type="layout" :object="app.layout"/>
+  <explorer-item
+      :increment="0"
+      :object="app.layout"
+      :root="this"
+      type="layout"
+  />
 </div>
 <div class="debug-details">
   <table class="assets-table">
