@@ -21,6 +21,7 @@
           @extend .pill;
 
           background: transparent;
+          text-align: center;
         }
 
         &.asset-activation .tip {
@@ -40,7 +41,6 @@
       tr.asset-active td {
         &.asset-type .pill {
           background: $medium-gray;
-          text-align: center;
           color: black;
         }
 

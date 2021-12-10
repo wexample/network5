@@ -24,11 +24,12 @@ export default {
 
     getItemIcon() {
       return (
-        'fa-' +
-        {
-          layout: 'columns',
-          page: 'file',
-        }[this.type]
+          'fa-' +
+          {
+            component: 'cube',
+            layout: 'columns',
+            page: 'file',
+          }[this.type]
       );
     },
 
@@ -40,6 +41,16 @@ export default {
             object: this.object.page,
           },
         ];
+      } else if (this.type === 'page') {
+        let children = [];
+        this.object.renderData.components.forEach((component) => {
+          children.push({
+            type: 'component',
+            object: {renderData: component}
+          })
+        });
+
+        return children;
       }
 
       return [];
