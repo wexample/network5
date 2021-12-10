@@ -7,7 +7,7 @@ import { AssetsServiceType } from '../services/Assets';
 export default {
   data() {
     return {
-      allAssets:[],
+      allAssets: [],
       assets: {
         css: [],
         js: [],
@@ -84,6 +84,10 @@ export default {
             this.loadedPaths.css[href] = href;
           });
     },
+
+    shortenAssetPath(asset) {
+      return asset.path.replace(/^(\/build\/)/, "");
+    }
   },
 };
 </script>
