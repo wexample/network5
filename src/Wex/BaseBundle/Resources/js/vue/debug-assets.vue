@@ -29,7 +29,8 @@ export default {
       updateEvents: [
         ComponentsServiceEvents.CREATE_COMPONENT,
         ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
-      ]
+      ],
+      updateTime: 0
     };
   },
 
