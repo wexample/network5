@@ -31,8 +31,8 @@ export default {
 
   mounted() {
     this.app.services.events.listen(
-      ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
-      this.onChangeResponsiveSizeProxy
+        ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
+        this.onChangeResponsiveSizeProxy
     );
 
     this.onChangeResponsiveSize();
@@ -40,17 +40,35 @@ export default {
 
   unmounted() {
     this.app.services.events.forget(
-      ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
-      this.onChangeResponsiveSizeProxy
+        ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
+        this.onChangeResponsiveSizeProxy
     );
   },
 
   methods: {
+    getAssetsTypeList(type) {
+      if (this.selectedItem) {
+        return ArrayShallowCopy(this.selectedItem.object.renderData.assets[type]);
+      }
+
+      return [];
+    },
+
     onChangeResponsiveSize() {
+      this.update();
+    },
+
+    update() {
       this.updateExplorerItems();
       this.updateAssetsList();
       this.updateAssetsJs();
       this.updateAssetsCss();
+    },
+
+    selectItem() {
+      Explorer.methods.selectItem.apply(this, arguments);
+
+      this.update();
     },
 
     updateAssetsList() {
@@ -63,10 +81,6 @@ export default {
       });
 
       this.allAssets = list;
-    },
-
-    getAssetsTypeList(type) {
-      return ArrayShallowCopy(this.app.layout.renderData.assets[type]);
     },
 
     updateAssetsJs() {
@@ -86,13 +100,13 @@ export default {
 
       // Base loaded assets
       document
-        .querySelectorAll(
-          `${TagName.LINK}[${Attribute.REL}=${AttributeValue.STYLESHEET}]`
-        )
-        .forEach((el) => {
-          let href = el.getAttribute(Attribute.HREF);
-          this.loadedPaths.css[href] = href;
-        });
+          .querySelectorAll(
+              `${TagName.LINK}[${Attribute.REL}=${AttributeValue.STYLESHEET}]`
+          )
+          .forEach((el) => {
+            let href = el.getAttribute(Attribute.HREF);
+            this.loadedPaths.css[href] = href;
+          });
     },
 
     updateExplorerItems() {
