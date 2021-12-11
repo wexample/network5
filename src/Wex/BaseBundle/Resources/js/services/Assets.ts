@@ -89,6 +89,9 @@ export default class AssetsService extends AppService {
             // Stops queue unit class has been loaded.
             return Queue.EXEC_STOP;
           }
+          else {
+            this.setAssetLoaded(asset);
+          }
         } else {
           asset.el = this.addStyle(asset.path);
           this.setAssetLoaded(asset);

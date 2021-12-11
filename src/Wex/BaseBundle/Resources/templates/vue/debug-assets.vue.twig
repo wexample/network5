@@ -15,7 +15,7 @@
 </div>
 <div class="debug-details">
   <table class="assets-table">
-    <tr v-for="asset in allAssets" :class="asset.active ? 'asset-active' : 'asset-inactive'">
+    <tr v-for="asset in allAssets" :class="buildCssAsset(asset)">
       <td class="asset-activation">
         <div class="tip">
         </div>

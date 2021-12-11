@@ -39,8 +39,8 @@ export default {
 
   mounted() {
     this.app.services.events.listen(
-      this.updateEvents,
-      this.onChangeResponsiveSizeProxy
+        this.updateEvents,
+        this.onChangeResponsiveSizeProxy
     );
 
     this.onChangeResponsiveSize();
@@ -48,16 +48,24 @@ export default {
 
   unmounted() {
     this.app.services.events.forget(
-      this.updateEvents,
-      this.onChangeResponsiveSizeProxy
+        this.updateEvents,
+        this.onChangeResponsiveSizeProxy
     );
   },
 
   methods: {
+    buildCssAsset(asset) {
+      return {
+        'asset-active': asset.active,
+        'asset-loaded': asset.loaded,
+        'asset-rendered': asset.rendered,
+      }
+    },
+
     getAssetsTypeList(type) {
       if (this.selectedItem) {
         return ArrayShallowCopy(
-          this.selectedItem.object.renderData.assets[type]
+            this.selectedItem.object.renderData.assets[type]
         );
       }
 
@@ -115,13 +123,13 @@ export default {
 
       // Base loaded assets
       document
-        .querySelectorAll(
-          `${TagName.LINK}[${Attribute.REL}=${AttributeValue.STYLESHEET}]`
-        )
-        .forEach((el) => {
-          let href = el.getAttribute(Attribute.HREF);
-          this.loadedPaths.css[href] = href;
-        });
+          .querySelectorAll(
+              `${TagName.LINK}[${Attribute.REL}=${AttributeValue.STYLESHEET}]`
+          )
+          .forEach((el) => {
+            let href = el.getAttribute(Attribute.HREF);
+            this.loadedPaths.css[href] = href;
+          });
     },
 
     shortenAssetPath(asset) {

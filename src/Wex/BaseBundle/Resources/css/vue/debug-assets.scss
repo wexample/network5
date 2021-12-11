@@ -39,6 +39,12 @@
       }
 
       tr.asset-active td {
+        &.asset-activation .tip {
+          background: $color-warn;
+        }
+      }
+
+      tr.asset-active.asset-loaded td {
         &.asset-type .pill {
           background: $medium-gray;
           color: black;
