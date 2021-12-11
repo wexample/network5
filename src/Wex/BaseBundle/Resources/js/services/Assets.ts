@@ -253,8 +253,8 @@ export default class AssetsService extends AppService {
         // Asset has already been loaded,
         // so it's local status may have been update,
         // so we always prefer local version.
-        if (assetsRegistry[type][asset.name]) {
-          asset = assetsRegistry[type][asset.name];
+        if (assetsRegistry[type][asset.id]) {
+          asset = assetsRegistry[type][asset.id];
         }
 
         toLoad[type] = toLoad[type] || [];
@@ -264,7 +264,7 @@ export default class AssetsService extends AppService {
           if (!asset.active) {
             hasChange = true;
             toLoad[type].push(asset);
-            assetsRegistry[type][asset.name] = asset;
+            assetsRegistry[type][asset.id] = asset;
           }
         } else {
           if (asset.active) {

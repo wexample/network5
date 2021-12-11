@@ -59,8 +59,6 @@ class Asset
 
     public string $media = 'screen';
 
-    public string $name;
-
     public bool $preload = false;
 
     public string $preloadType;
@@ -76,8 +74,6 @@ class Asset
     #[NoReturn]
     public function __construct(public string $path, public string $renderContext)
     {
-        $this->name = $this->createName($path);
-
         $info = pathinfo($this->path);
         $this->type = $info['extension'];
 
@@ -89,22 +85,6 @@ class Asset
             '/'.AssetsExtension::DIR_BUILD.
                 $this->type.'/'
         );
-    }
-
-    /**
-     * Create a name which can be used as a dom id.
-     */
-    protected function createName(string $path): string
-    {
-        return VariableHelper::ASSETS
-            .'-'.str_replace(
-                ['/', '.'],
-                '-',
-                ltrim(
-                    $path,
-                    '/'
-                )
-            );
     }
 
     /**
