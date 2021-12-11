@@ -36,16 +36,6 @@ Encore
   // enables hashed filenames (e.g. app.abc123.css)
   .enableVersioning(isProd)
 
-  .configureBabel((config) => {
-    config.plugins.push('@babel/plugin-proposal-class-properties');
-  })
-
-  // enables @babel/preset-env polyfills
-  .configureBabelPresetEnv((config) => {
-    config.useBuiltIns = 'usage';
-    config.corejs = 3;
-  })
-
   // Load VueJs.
   .enableVueLoader(() => {}, { runtimeCompilerBuild: false })
   .addPlugin(
@@ -68,9 +58,6 @@ Encore
   // uncomment to get integrity="..." attributes on your script & link tags
   // requires WebpackEncoreBundle 1.4 or higher
   .enableIntegrityHashes(isProd);
-
-// uncomment if you're having problems with a jQuery plugin
-//.autoProvidejQuery()
 
 // uncomment if you use API Platform Admin (composer req api-admin)
 //.enableReactPreset()
