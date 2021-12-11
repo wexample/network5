@@ -66,13 +66,27 @@ class Asset
 
     public ?string $theme = null;
 
-    public ?string $type = null;
+    public string $type;
+
+    public int $filesize;
+
+    public string $path;
 
     #[NoReturn]
-    public function __construct(public string $path, public string $renderContext)
+    public function __construct(
+        string $path,
+        public string $renderContext,
+        string $basePath
+    )
     {
-        $info = pathinfo($this->path);
+        $this->filesize = filesize($path);
+        $info = pathinfo($path);
         $this->type = $info['extension'];
+
+        $this->path = '/' . PathHelper::relativeTo(
+            $path,
+            $basePath
+        );
 
         // Remove the base part before build/{type}/ folder.
         $pathWithoutExt = dirname($this->path).'/'.$info['filename'];

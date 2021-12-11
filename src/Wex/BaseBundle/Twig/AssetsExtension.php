@@ -386,8 +386,9 @@ class AssetsExtension extends AbstractExtension
         if (!isset($this->assetsLoaded[$pathRelative]))
         {
             $asset = new Asset(
-                $this->manifest[$pathRelativeToPublic],
-                $renderContext
+                realpath($this->pathPublic . $this->manifest[$pathRelativeToPublic]),
+                $renderContext,
+                $this->pathPublic
             );
 
             $this->assetsLoaded[$pathRelative] = $asset;

@@ -7,6 +7,7 @@ import Explorer from './explorer';
 import { ComponentsServiceEvents } from '../services/Components';
 import { ThemeServiceEvents } from '../services/Theme';
 import { EventsServiceEvents } from '../services/Events';
+import { formatBytes } from "../helpers/Number";
 
 export default {
   extends: Explorer,
@@ -60,6 +61,10 @@ export default {
         'asset-loaded': asset.loaded,
         'asset-rendered': asset.rendered,
       }
+    },
+
+    formatSize(size) {
+      return formatBytes(size);
     },
 
     getAssetsTypeList(type) {
@@ -119,8 +124,6 @@ export default {
     },
 
     updateAssetsCss() {
-      let list = [];
-
       // Base loaded assets
       document
           .querySelectorAll(

@@ -26,6 +26,9 @@
       <td class="asset-type">
         <div class="fa" :class="'fa-' + (asset.rendered ? 'hdd' : 'clock')"></div>
       </td>
+      <td class="asset-size">
+        {{ 'formatSize(asset.filesize)' | vue_key }}
+      </td>
       <td class="asset-path">
         <div class="table-td-ellipsis-wrapper">
           {{ 'shortenAssetPath(asset)' | vue_key() }}
