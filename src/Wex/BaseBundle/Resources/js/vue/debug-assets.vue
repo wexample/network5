@@ -6,6 +6,7 @@ import { AssetsServiceType } from '../services/Assets';
 import Explorer from './explorer';
 import { ComponentsServiceEvents } from "../services/Components";
 import { ThemeServiceEvents } from "../services/Theme";
+import { EventsServiceEvents } from "../services/Events";
 
 export default {
   extends: Explorer,
@@ -70,6 +71,11 @@ export default {
       this.updateAssetsList();
       this.updateAssetsJs();
       this.updateAssetsCss();
+
+      // Ask for display refresh.
+      this.$nextTick(() => {
+        this.app.services.events.trigger(EventsServiceEvents.DISPLAY_CHANGED);
+      });
     },
 
     selectItem() {

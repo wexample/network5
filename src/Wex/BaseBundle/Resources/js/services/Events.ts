@@ -1,5 +1,9 @@
 import AppService from '../class/AppService';
 
+export class EventsServiceEvents {
+  public static DISPLAY_CHANGED: string = 'display-changed';
+}
+
 export default class EventsService extends AppService {
   forget(name, callback, el = window.document) {
     this.applyEvents(
@@ -37,7 +41,7 @@ export default class EventsService extends AppService {
     }
   }
 
-  trigger(name, data, el = window.document) {
+  trigger(name, data: any = {}, el = window.document) {
     el.dispatchEvent(
       new CustomEvent(name, {
         detail: data,

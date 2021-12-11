@@ -4,9 +4,25 @@ import Variables from '../../helpers/Variables';
 import RenderDataInterface from '../../interfaces/RenderDataInterface';
 import RequestOptionsInterface from '../../interfaces/RequestOptionsInterface';
 import DebugRenderNode from './DebugRenderNode';
+import { EventsServiceEvents } from "../../services/Events";
 
 // Used to be mixed with render node and track changes.
 export default {
+  init: function (
+    methodOriginal: Function,
+    renderNode: RenderNode,
+    debugRenderNode: DebugRenderNode
+  ) {
+    return function () {
+      this.app.services.events.listen(
+        EventsServiceEvents.DISPLAY_CHANGED,
+        debugRenderNode.updateProxy
+      );
+
+      methodOriginal.apply(renderNode, arguments);
+    };
+  },
+
   exit: function (
     methodOriginal: Function,
     renderNode: RenderNode,
@@ -15,8 +31,13 @@ export default {
     return function () {
       debugRenderNode.el.remove();
 
+      this.app.services.events.forget(
+        EventsServiceEvents.DISPLAY_CHANGED,
+        debugRenderNode.updateProxy
+      );
+
       if (debugRenderNode.renderNode.getRenderNodeType() === Variables.PAGE) {
-        // debugRenderNode.elDebugHelpers.remove();
+        // TODO ? debugRenderNode.elDebugHelpers.remove();
       }
 
       methodOriginal.apply(renderNode, arguments);

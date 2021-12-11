@@ -1,5 +1,4 @@
 import AssetsService from './Assets';
-import EventsService from './Events';
 import QueuesService from './Queues';
 import AppService from '../class/AppService';
 import MixinsAppService from '../class/MixinsAppService';
@@ -11,7 +10,7 @@ export class ResponsiveServiceEvents {
 }
 
 export default class ResponsiveService extends AppService {
-  dependencies: [AssetsService, EventsService, QueuesService];
+  dependencies: [AssetsService, QueuesService];
 
   public responsiveSizeCurrent: string;
 

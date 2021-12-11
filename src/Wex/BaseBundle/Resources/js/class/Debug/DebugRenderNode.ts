@@ -19,6 +19,7 @@ export default class DebugRenderNode extends AppChild {
   public service: DebugService;
   protected renderNodeDebugOverlay = DebugRenderNodeOverlay;
   public vueInfo: any;
+  public updateProxy: Function;
 
   constructor(renderNode) {
     super(renderNode.app);
@@ -43,13 +44,14 @@ export default class DebugRenderNode extends AppChild {
 
     this.addTrackers();
 
+    this.updateProxy = this.update.bind(this);
+
     // After app loaded.
     renderNode.ready(() => {
       this.service.debugRenderNodes[this.renderNode.getId()] = this;
+
       // Wait rendering complete.
-      setTimeout(() => {
-        this.update();
-      }, 100);
+      setTimeout(this.updateProxy, 100);
     });
   }
 
