@@ -23,6 +23,9 @@
       <td class="asset-type">
         <div class="pill">{{ 'asset.type' | vue_key }}</div>
       </td>
+      <td class="asset-type">
+        <div class="fa" :class="'fa-' + (asset.loaded ? 'download' : 'clock')"></div>
+      </td>
       <td class="asset-path">
         <div class="table-td-ellipsis-wrapper">
           {{ 'shortenAssetPath(asset)' | vue_key() }}
