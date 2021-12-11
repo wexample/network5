@@ -105,7 +105,8 @@ export default class ComponentsService extends RenderNodeService {
     }
 
     if (renderData.components) {
-      this.createChildComponents(
+      this.createRenderDataComponents(
+        renderData,
         this.app.layout,
         requestOptions,
         complete
@@ -114,19 +115,21 @@ export default class ComponentsService extends RenderNodeService {
   }
 
   loadPageRenderData(page: Page, complete?: Function) {
-    this.createChildComponents(
+    this.createRenderDataComponents(
+      page.renderData,
       page,
       page.requestOptions,
       complete
     );
   }
 
-  createChildComponents(
+  createRenderDataComponents(
+    renderData: RenderDataInterface,
     renderNode: RenderNode,
     requestOptions: RequestOptionsInterface,
     complete?: Function
   ) {
-    let components = renderNode.renderData.components;
+    let components = renderData.components;
 
     if (!components.length) {
       complete && complete();
