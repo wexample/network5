@@ -16,7 +16,7 @@ import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 import AsyncConstructor from './AsyncConstructor';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 import AppService from './AppService';
-import EventsService from "../services/Events";
+import EventsService from '../services/Events';
 
 export default class extends AsyncConstructor {
   public bundles: any;

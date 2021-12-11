@@ -21,12 +21,12 @@ export default {
 
     getItemIcon() {
       return (
-          'fa-' +
-          {
-            component: 'cube',
-            layout: 'columns',
-            page: 'file',
-          }[this.type]
+        'fa-' +
+        {
+          component: 'cube',
+          layout: 'columns',
+          page: 'file',
+        }[this.type]
       );
     },
 
@@ -44,15 +44,15 @@ export default {
         this.object.components.forEach((component) => {
           children.push({
             type: 'component',
-            object: component
-          })
+            object: component,
+          });
         });
 
         return children;
       }
 
       return [];
-    }
+    },
   },
 };
 </script>

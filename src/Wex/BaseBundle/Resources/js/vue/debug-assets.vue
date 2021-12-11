@@ -4,9 +4,9 @@ import { Attribute, AttributeValue, TagName } from '../helpers/Dom';
 import { shallowCopy as ArrayShallowCopy } from '../helpers/Arrays';
 import { AssetsServiceType } from '../services/Assets';
 import Explorer from './explorer';
-import { ComponentsServiceEvents } from "../services/Components";
-import { ThemeServiceEvents } from "../services/Theme";
-import { EventsServiceEvents } from "../services/Events";
+import { ComponentsServiceEvents } from '../services/Components';
+import { ThemeServiceEvents } from '../services/Theme';
+import { EventsServiceEvents } from '../services/Events';
 
 export default {
   extends: Explorer,
@@ -33,14 +33,14 @@ export default {
         ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
         ThemeServiceEvents.THEME_CHANGE,
       ],
-      updateTime: 0
+      updateTime: 0,
     };
   },
 
   mounted() {
     this.app.services.events.listen(
-        this.updateEvents,
-        this.onChangeResponsiveSizeProxy
+      this.updateEvents,
+      this.onChangeResponsiveSizeProxy
     );
 
     this.onChangeResponsiveSize();
@@ -48,15 +48,17 @@ export default {
 
   unmounted() {
     this.app.services.events.forget(
-        this.updateEvents,
-        this.onChangeResponsiveSizeProxy
+      this.updateEvents,
+      this.onChangeResponsiveSizeProxy
     );
   },
 
   methods: {
     getAssetsTypeList(type) {
       if (this.selectedItem) {
-        return ArrayShallowCopy(this.selectedItem.object.renderData.assets[type]);
+        return ArrayShallowCopy(
+          this.selectedItem.object.renderData.assets[type]
+        );
       }
 
       return [];
@@ -67,7 +69,7 @@ export default {
     },
 
     update() {
-      this.updateTime = (new Date()).getTime();
+      this.updateTime = new Date().getTime();
       this.updateAssetsList();
       this.updateAssetsJs();
       this.updateAssetsCss();
@@ -113,13 +115,13 @@ export default {
 
       // Base loaded assets
       document
-          .querySelectorAll(
-              `${TagName.LINK}[${Attribute.REL}=${AttributeValue.STYLESHEET}]`
-          )
-          .forEach((el) => {
-            let href = el.getAttribute(Attribute.HREF);
-            this.loadedPaths.css[href] = href;
-          });
+        .querySelectorAll(
+          `${TagName.LINK}[${Attribute.REL}=${AttributeValue.STYLESHEET}]`
+        )
+        .forEach((el) => {
+          let href = el.getAttribute(Attribute.HREF);
+          this.loadedPaths.css[href] = href;
+        });
     },
 
     shortenAssetPath(asset) {

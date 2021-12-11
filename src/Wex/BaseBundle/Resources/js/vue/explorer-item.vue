@@ -6,8 +6,8 @@ export default {
     root: Object,
     updateTime: {
       required: false,
-      type: Number
-    }
+      type: Number,
+    },
   },
 
   components: {
@@ -26,7 +26,7 @@ export default {
     },
 
     getItemIcon() {
-      return 'fa-square'
+      return 'fa-square';
     },
 
     getChildren() {

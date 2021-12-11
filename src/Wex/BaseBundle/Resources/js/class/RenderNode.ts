@@ -2,7 +2,7 @@ import RenderDataInterface from '../interfaces/RenderDataInterface';
 import AppChild from './AppChild';
 import App from './App';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
-import Component from "./Component";
+import Component from './Component';
 
 export default abstract class RenderNode extends AppChild {
   public childRenderNodes: { [key: string]: RenderNode } = {};

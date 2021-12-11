@@ -6,21 +6,11 @@ export class EventsServiceEvents {
 
 export default class EventsService extends AppService {
   forget(name, callback, el = window.document) {
-    this.applyEvents(
-      'remove',
-      name,
-      callback,
-      el
-    );
+    this.applyEvents('remove', name, callback, el);
   }
 
   listen(name, callback, el = window.document) {
-    this.applyEvents(
-      'add',
-      name,
-      callback,
-      el
-    );
+    this.applyEvents('add', name, callback, el);
   }
 
   /**
@@ -35,7 +25,7 @@ export default class EventsService extends AppService {
     callbackName += 'EventListener';
 
     if (Array.isArray(eventName)) {
-      eventName.forEach((subName) => el[callbackName](subName, callback))
+      eventName.forEach((subName) => el[callbackName](subName, callback));
     } else {
       el[callbackName](eventName, callback);
     }

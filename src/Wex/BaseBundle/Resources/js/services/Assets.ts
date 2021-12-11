@@ -20,7 +20,7 @@ export default class AssetsService extends AppService {
 
   public static UPDATE_FILTER_REJECT = 'reject';
 
-  public assetsRegistry: any = {css: {}, js: {}};
+  public assetsRegistry: any = { css: {}, js: {} };
   public queue: Queue;
   public jsAssetsPending: object = {};
   public updateFilters: Function[] = [];
@@ -53,8 +53,7 @@ export default class AssetsService extends AppService {
 
   appInit() {
     // Only single queue for assets.
-    this.queue =
-      this.services.queues.create('assets-loading');
+    this.queue = this.services.queues.create('assets-loading');
 
     // Wait for all render node tree to be properly set.
     this.app.ready(() => {
@@ -213,8 +212,8 @@ export default class AssetsService extends AppService {
     // For main node.
     this.enqueueAssetsUpdate(queue, renderNode.renderData.assets);
     // For child nodes.
-    renderNode.forEachChildRenderNode(
-      (renderNode) => this.enqueueRenderNodeAssetsUpdate(queue, renderNode)
+    renderNode.forEachChildRenderNode((renderNode) =>
+      this.enqueueRenderNodeAssetsUpdate(queue, renderNode)
     );
   }
 
@@ -245,10 +244,6 @@ export default class AssetsService extends AppService {
       assetsCollection,
       (asset: AssetsInterface) => {
         let type = asset.type;
-
-        if (asset.rendered) {
-
-        }
 
         // Asset has already been loaded,
         // so it's local status may have been update,
