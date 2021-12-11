@@ -5,7 +5,7 @@ import { shallowCopy as ArrayShallowCopy } from '../helpers/Arrays';
 import { AssetsServiceType } from '../services/Assets';
 import Explorer from './explorer';
 import { ComponentsServiceEvents } from '../services/Components';
-import { ThemeServiceEvents } from '../services/Theme';
+import ThemeService, { ThemeServiceEvents } from '../services/Theme';
 import { EventsServiceEvents } from '../services/Events';
 import { formatBytes } from "../helpers/Number";
 
@@ -55,6 +55,26 @@ export default {
   },
 
   methods: {
+    assetLog(asset) {
+      console.log(asset);
+    },
+
+    buildColorSchemeIcon(asset) {
+      if (asset.theme === ThemeService.THEME_LIGHT) {
+        return 'moon';
+      }
+
+      if (asset.theme === ThemeService.THEME_DARK) {
+        return 'sun';
+      }
+
+      if (asset.theme === ThemeService.THEME_PRINT) {
+        return 'print';
+      }
+
+      return 'infinity';
+    },
+
     buildCssAsset(asset) {
       return {
         'asset-active': asset.active,
