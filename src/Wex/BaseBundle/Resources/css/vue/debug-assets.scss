@@ -2,6 +2,9 @@
 @import '../mixins/global';
 @import '../mixins/tables';
 
+$color-css: #ff8000;
+$color-js: #7100ff;
+
 .debug-assets {
   display: flex;
 
@@ -15,14 +18,8 @@
 
     .assets-table {
       td {
+        opacity: .6;
         padding: 0 0.2rem;
-
-        &.asset-type .pill {
-          @extend .pill;
-
-          background: transparent;
-          text-align: center;
-        }
 
         &.asset-activation .tip {
           width: 10px;
@@ -31,18 +28,27 @@
           background: $dark-gray;
         }
 
+        &.asset-type-js {
+          color: $color-js;
+        }
+
+        &.asset-type-css {
+          color: $color-css;
+        }
+
         &.asset-size {
           white-space: nowrap;
           font-size: 0.7rem;
         }
 
+        &.asset-color-scheme,
         &.asset-responsive,
-        &.asset-color-scheme {
+        &.asset-type,
+        {
           text-align: center;
         }
 
         &.asset-path {
-          opacity: 0.6;
           font-weight: normal;
           @include table-cell-text-ellipsis;
         }
@@ -55,17 +61,13 @@
       }
 
       tr.asset-active.asset-loaded td {
-        &.asset-type .pill {
-          background: $medium-gray;
-          color: black;
-        }
+        opacity: 1;
 
         &.asset-activation .tip {
           background: $color-success;
         }
 
         &.asset-path {
-          opacity: 1;
           font-weight: bold;
         }
       }

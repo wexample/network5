@@ -20,10 +20,10 @@
         <div class="tip">
         </div>
       </td>
-      <td class="asset-type">
-        <div class="pill">{{ 'asset.type' | vue_key }}</div>
+      <td class="asset-type" :class="`asset-type-${asset.type}`">
+        {{ 'asset.type' | vue_key }}
       </td>
-      <td class="asset-type">
+      <td class="asset-rendered">
         <div class="fa" :class="'fa-' + (asset.rendered ? 'hdd' : 'clock')"></div>
       </td>
       <td class="asset-size">
