@@ -80,7 +80,7 @@ class Asset
         $this->id = PathHelper::relativeTo(
             $pathWithoutExt,
             '/'.AssetsExtension::DIR_BUILD.
-                $this->type.'/'
+            $this->type.'/'
         );
     }
 
@@ -99,6 +99,11 @@ class Asset
 
     public function getIsAvailable(bool $useJs): bool
     {
+        if ($this->rendered)
+        {
+            return false;
+        }
+
         if ($this->type === static::EXTENSION_JS)
         {
             return $useJs && !$this->responsive;
