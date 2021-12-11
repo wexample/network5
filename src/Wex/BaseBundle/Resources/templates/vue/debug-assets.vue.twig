@@ -24,7 +24,7 @@
         {{ 'asset.type' | vue_key }}
       </td>
       <td class="asset-rendered">
-        <div class="fa" :class="'fa-' + (asset.rendered ? 'hdd' : 'clock')"></div>
+        {{ icon('fa:clock') }}
       </td>
       <td class="asset-size">
         {{ 'formatSize(asset.filesize)' | vue_key }}

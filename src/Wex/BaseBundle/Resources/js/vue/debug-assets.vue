@@ -8,8 +8,6 @@ import { ComponentsServiceEvents } from '../services/Components';
 import ThemeService, { ThemeServiceEvents } from '../services/Theme';
 import { EventsServiceEvents } from '../services/Events';
 import { formatBytes } from "../helpers/Number";
-import { icon as faIcon, library as faLibrary } from '@fortawesome/fontawesome-svg-core'
-import { faMoon, faPrint, faStarOfLife, faSun } from '@fortawesome/free-solid-svg-icons'
 
 export default {
   extends: Explorer,
@@ -41,13 +39,6 @@ export default {
   },
 
   mounted() {
-    faLibrary.add(
-        faMoon,
-        faPrint,
-        faStarOfLife,
-        faSun
-    );
-
     this.app.services.events.listen(
         this.updateEvents,
         this.onChangeResponsiveSizeProxy
@@ -69,21 +60,19 @@ export default {
     },
 
     buildColorSchemeIcon(asset) {
-      let icon = faStarOfLife;
-
       if (asset.theme === ThemeService.THEME_LIGHT) {
-        icon = faMoon;
+        return 'moon';
       }
 
       if (asset.theme === ThemeService.THEME_DARK) {
-        icon = faSun;
+        return 'sun';
       }
 
       if (asset.theme === ThemeService.THEME_PRINT) {
-        icon = faPrint;
+        return 'print';
       }
 
-      return faIcon(icon).html;
+      return 'start-of-life';
     },
 
     buildCssAsset(asset) {

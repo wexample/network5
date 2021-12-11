@@ -9,11 +9,16 @@ import DebugRenderNode from '../class/Debug/DebugRenderNode';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 import { TagName } from '../helpers/Dom';
 import Events from '../helpers/Events';
+import IconsService from "./Icons";
 
 export default class DebugService extends AppService {
   public debugRenderNodes: any = {};
   public elDebugHelpers: HTMLElement;
   public elDebugHelpersGlobal: HTMLElement;
+
+  public static dependencies: typeof AppService[] = [
+    IconsService
+  ];
 
   registerHooks() {
     return {

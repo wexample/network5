@@ -13,4 +13,6 @@ class FileHelper
     public const FILE_EXTENSION_YML = 'yml';
 
     public const FILE_EXTENSION_VUE = 'vue';
+
+    public const FILE_EXTENSION_SVG = 'svg';
 }

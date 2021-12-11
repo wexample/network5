@@ -11,6 +11,11 @@
     font-size: 80%;
     padding: 10%;
   }
+
+  svg {
+    width: 1rem;
+    fill: currentColor;
+  }
 }
 
 // Allow to use font awesome icons in materialize input fields.

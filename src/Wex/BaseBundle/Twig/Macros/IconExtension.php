@@ -3,8 +3,10 @@
 namespace App\Wex\BaseBundle\Twig\Macros;
 
 use App\Wex\BaseBundle\Helper\DomHelper;
+use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Twig\AbstractExtension;
+use App\Wex\BaseBundle\Twig\ComponentsExtension;
 use function explode;
 use function file_get_contents;
 use function json_decode;
@@ -32,12 +34,20 @@ class IconExtension extends AbstractExtension
 
     protected stdClass $icons;
 
+    private string $pathSvgFa;
+
+    private array $iconsTemplates;
+
     public function __construct(
-        KernelInterface $kernel
-    ) {
+        KernelInterface $kernel,
+        protected ComponentsExtension $componentsExtension
+    )
+    {
         $pathBundle = $kernel
             ->getBundle('WexBaseBundle')
             ->getPath();
+
+        $this->pathSvgFa = $pathBundle.'/Resources/fonts/fontawesome/svgs/regular/';
 
         $this->icons = (object) [
             self::ICONS_LIBRARY_FA => json_decode(
@@ -69,7 +79,8 @@ class IconExtension extends AbstractExtension
         string $name,
         string $class = '',
         string $tagName = 'i'
-    ): string {
+    ): string
+    {
         $type = null;
 
         if (str_contains($name, self::LIBRARY_SEPARATOR))
@@ -93,14 +104,25 @@ class IconExtension extends AbstractExtension
         // Font Awesome.
         if (self::ICONS_LIBRARY_FA === $type || (null === $type && isset($this->icons->fa->$name)))
         {
+            if (!isset($this->iconsTemplates[$name]))
+            {
+                $this->iconsTemplates[$name] = file_get_contents(
+                    $this->pathSvgFa.$name.'.'.FileHelper::FILE_EXTENSION_SVG
+                );
+            }
+
+            // TODO Finish
             return DomHelper::buildTag(
                 $tagName,
                 [
                     VariableHelper::CLASS_VAR => $class,
-            ],
-                DomHelper::buildTag('i', [
-                    VariableHelper::CLASS_VAR => 'fa fa-'.$name,
-                ])
+                ],
+                $this->componentsExtension->comInitParent(
+                    'icon',
+                    [
+                        'name' => $name
+                    ]
+                )
             );
         }
 
