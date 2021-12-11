@@ -36,10 +36,6 @@ export default {
         debugRenderNode.updateProxy
       );
 
-      if (debugRenderNode.renderNode.getRenderNodeType() === Variables.PAGE) {
-        debugRenderNode.elDebugHelpers.remove();
-      }
-
       methodOriginal.apply(renderNode, arguments);
     };
   },

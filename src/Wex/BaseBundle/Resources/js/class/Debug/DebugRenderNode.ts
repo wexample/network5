@@ -6,6 +6,7 @@ import VueService from '../../services/Vue';
 import DebugRenderNodeInfo from './DebugRenderNodeInfo';
 import DebugRenderNodeOverlay from './DebugRenderNodeOverlay';
 import { Attribute, TagName } from '../../helpers/Dom';
+import { EventsServiceEvents } from "../../services/Events";
 
 export default class DebugRenderNode extends AppChild {
   public borderColors: any = {
@@ -14,7 +15,6 @@ export default class DebugRenderNode extends AppChild {
     layout: 'red',
   };
   public el: HTMLElement;
-  public elDebugHelpers: HTMLElement;
   public renderNode: RenderNode;
   public service: DebugService;
   protected renderNodeDebugOverlay = DebugRenderNodeOverlay;
@@ -37,10 +37,6 @@ export default class DebugRenderNode extends AppChild {
         debugRenderNode: this,
       })
       .mount(this.el);
-
-    if (this.renderNode.getRenderNodeType() === Variables.PAGE) {
-      this.createElDebugHelpers();
-    }
 
     this.addTrackers();
 
@@ -94,11 +90,6 @@ export default class DebugRenderNode extends AppChild {
     this.renderNode.ready(() => {
       this.el.setAttribute(Attribute.ID, `debug-${this.renderNode.getId()}`);
     });
-  }
-
-  createElDebugHelpers() {
-    this.elDebugHelpers = document.createElement(TagName.DIV);
-    this.service.elDebugHelpers.appendChild(this.elDebugHelpers);
   }
 
   update() {
