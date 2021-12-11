@@ -37,7 +37,7 @@ export default {
       );
 
       if (debugRenderNode.renderNode.getRenderNodeType() === Variables.PAGE) {
-        // TODO ? debugRenderNode.elDebugHelpers.remove();
+        debugRenderNode.elDebugHelpers.remove();
       }
 
       methodOriginal.apply(renderNode, arguments);
@@ -55,7 +55,7 @@ export default {
       renderNode.forEachChildRenderNode((childRenderNode) => {
         debugRenderNode.service.debugRenderNodes[
           childRenderNode.getId()
-        ].focus();
+          ].focus();
       });
 
       methodOriginal.apply(renderNode, arguments);
@@ -73,7 +73,7 @@ export default {
       renderNode.forEachChildRenderNode((childRenderNode) => {
         debugRenderNode.service.debugRenderNodes[
           childRenderNode.getId()
-        ].blur();
+          ].blur();
       });
 
       methodOriginal.apply(renderNode, arguments);
