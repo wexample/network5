@@ -3,13 +3,10 @@
 namespace App\Wex\BaseBundle\Rendering;
 
 use App\Wex\BaseBundle\Helper\PathHelper;
-use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Twig\AssetsExtension;
 use function dirname;
 use JetBrains\PhpStorm\NoReturn;
-use function ltrim;
 use function pathinfo;
-use function str_replace;
 
 class Asset
 {
