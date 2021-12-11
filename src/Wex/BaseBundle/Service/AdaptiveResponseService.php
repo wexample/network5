@@ -177,7 +177,7 @@ class AdaptiveResponseService
 
         return $templateExtension->templateBuildAjaxRenderData(
             $env,
-            $templateExtension->templateNameFromPath($this->getView()),
+            $templateExtension->pageNameFromPath($this->getView()),
             $body
         );
     }

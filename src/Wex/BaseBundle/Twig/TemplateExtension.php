@@ -43,10 +43,10 @@ class TemplateExtension extends AbstractExtension
     {
         return [
             new TwigFunction(
-                'template_name_from_path',
+                'page_name_from_path',
                 [
                     $this,
-                    'templateNameFromPath',
+                    'pageNameFromPath',
                 ]
             ),
             new TwigFunction(
@@ -226,7 +226,7 @@ class TemplateExtension extends AbstractExtension
         return $renderData;
     }
 
-    public function templateNameFromPath(string $templatePath): string
+    public function pageNameFromPath(string $templatePath): string
     {
         // Define template name.
         $ext = TemplateExtension::TEMPLATE_FILE_EXTENSION;

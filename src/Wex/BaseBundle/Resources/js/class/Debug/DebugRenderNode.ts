@@ -1,12 +1,10 @@
 import AppChild from '../AppChild';
 import RenderNode from '../RenderNode';
 import DebugService from '../../services/Debug';
-import Variables from '../../helpers/Variables';
 import VueService from '../../services/Vue';
 import DebugRenderNodeInfo from './DebugRenderNodeInfo';
 import DebugRenderNodeOverlay from './DebugRenderNodeOverlay';
 import { Attribute, TagName } from '../../helpers/Dom';
-import { EventsServiceEvents } from "../../services/Events";
 
 export default class DebugRenderNode extends AppChild {
   public borderColors: any = {
@@ -47,7 +45,7 @@ export default class DebugRenderNode extends AppChild {
       this.service.debugRenderNodes[this.renderNode.getId()] = this;
 
       // Wait rendering complete.
-      setTimeout(this.updateProxy, 100);
+      setTimeout(this.updateProxy, 200);
     });
   }
 

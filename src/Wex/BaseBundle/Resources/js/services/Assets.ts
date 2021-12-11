@@ -20,7 +20,7 @@ export default class AssetsService extends AppService {
 
   public static UPDATE_FILTER_REJECT = 'reject';
 
-  public assetsRegistry: any = { css: {}, js: {} };
+  public assetsRegistry: any = {css: {}, js: {}};
   public queue: Queue;
   public jsAssetsPending: object = {};
   public updateFilters: Function[] = [];
@@ -30,9 +30,7 @@ export default class AssetsService extends AppService {
     return {
       app: {
         init() {
-          // Only single queue for assets, for now.
-          this.app.services.assets.queue =
-            this.app.services.queues.create('assets-loading');
+          this.app.services.assets.appInit();
         },
 
         loadRenderData(
@@ -51,6 +49,12 @@ export default class AssetsService extends AppService {
         },
       },
     };
+  }
+
+  appInit() {
+    // Only single queue for assets.
+    this.queue =
+      this.services.queues.create('assets-loading');
   }
 
   appendAsset(asset, callback: Function = null) {

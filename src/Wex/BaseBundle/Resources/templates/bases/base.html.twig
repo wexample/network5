@@ -5,12 +5,12 @@
 {%- set layout_name = layout_name|default(null) -%}
 {%- set layout_use_js = (layout_use_js is defined ? layout_use_js : true) -%}
 {%- set layout_theme = layout_theme|default('default') -%}
-{%- set template_name = template_name_from_path(template_path) -%}
+{%- set page_name = page_name_from_path(page_path) -%}
 
 {%- block template_base -%}
     {%- block template_config -%}
         {{- assets_init_layout(layout_name, layout_use_js) -}}
-        {{- assets_init_template(template_name, layout_use_js) -}}
-        {{- translation_set_domain_from_path('page', template_path) -}}
+        {{- assets_init_page(page_name, layout_use_js) -}}
+        {{- translation_set_domain_from_path('page', page_path) -}}
     {%- endblock -%}
 {%- endblock -%}

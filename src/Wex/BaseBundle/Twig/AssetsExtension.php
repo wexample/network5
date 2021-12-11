@@ -94,10 +94,10 @@ class AssetsExtension extends AbstractExtension
                 ]
             ),
             new TwigFunction(
-                'assets_init_template',
+                'assets_init_page',
                 [
                     $this,
-                    'assetsInitTemplate',
+                    'assetsInitPage',
                 ]
             ),
             new TwigFunction(
@@ -226,7 +226,7 @@ class AssetsExtension extends AbstractExtension
         );
     }
 
-    public function assetsInitTemplate(
+    public function assetsInitPage(
         string $templateName,
         bool $useJs
     ) {

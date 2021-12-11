@@ -19,7 +19,6 @@ import AppService from './AppService';
 import EventsService from "../services/Events";
 
 export default class extends AsyncConstructor {
-  public bootJsBuffer: string[] = [];
   public bundles: any;
   public hasCoreLoaded: boolean = false;
   public layout: LayoutInitial = null;

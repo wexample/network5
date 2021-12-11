@@ -48,7 +48,7 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
     ): Response {
         // Add global variables for rendering.
         $parameters['layout_use_js'] ??= $this->templateUseJs;
-        $parameters['template_path'] = $view;
+        $parameters['page_path'] = $view;
         $parameters['request_uri'] ??= $this->requestUri;
 
         return parent::render(

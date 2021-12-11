@@ -13,7 +13,7 @@ breakpoints:
 
 infos:
   layout_name: Layout
-  template_name: Template
+  page_name: Template
 
 resources:
   title: Ressources
