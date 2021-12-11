@@ -29,6 +29,8 @@
       <td class="asset-size">
         {{ 'formatSize(asset.filesize)' | vue_key }}
       </td>
+      <td class="asset-responsive" v-html="asset.responsive || '-'">
+      </td>
       <td class="asset-path">
         <div class="table-td-ellipsis-wrapper">
           {{ 'shortenAssetPath(asset)' | vue_key() }}
