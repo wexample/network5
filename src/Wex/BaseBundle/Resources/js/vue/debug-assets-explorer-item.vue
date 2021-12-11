@@ -18,7 +18,8 @@ export default {
   },
 
   mounted() {
-    faLibrary.add(faCube,
+    faLibrary.add(
+        faCube,
         faFile,
         faColumns,
         faVuejs
@@ -31,20 +32,20 @@ export default {
     },
 
     renderItemIcon() {
-      let options;
+      let icon;
 
       if (this.object.renderData.name === 'components/vue') {
-        options = faVuejs;
+        icon = faVuejs;
       } else {
 
-        options = {
+        icon = {
           component: faCube,
           layout: faColumns,
           page: faFile,
         }[this.type];
       }
 
-      return faIcon(options).html;
+      return faIcon(icon).html;
     },
 
     getChildren() {
