@@ -55,6 +55,18 @@ export default class AssetsService extends AppService {
     // Only single queue for assets.
     this.queue =
       this.services.queues.create('assets-loading');
+
+    // Wait for all render node tree to be properly set.
+    this.app.ready(() => {
+      // Mark all initially rendered assets in layout as loaded.
+      this.app.layout.forEachRenderNode((renderNode: RenderNode) => {
+        this.forEachAssetInCollection(renderNode.renderData.assets, (asset) => {
+          if (asset.rendered) {
+            this.setAssetLoaded(asset);
+          }
+        });
+      });
+    });
   }
 
   appendAsset(asset, callback: Function = null) {
@@ -201,9 +213,9 @@ export default class AssetsService extends AppService {
     // For main node.
     this.enqueueAssetsUpdate(queue, renderNode.renderData.assets);
     // For child nodes.
-    renderNode.forEachChildRenderNode((renderNode) => {
-      this.enqueueRenderNodeAssetsUpdate(queue, renderNode);
-    });
+    renderNode.forEachChildRenderNode(
+      (renderNode) => this.enqueueRenderNodeAssetsUpdate(queue, renderNode)
+    );
   }
 
   updateAssets(complete?: Function) {
@@ -233,6 +245,10 @@ export default class AssetsService extends AppService {
       assetsCollection,
       (asset: AssetsInterface) => {
         let type = asset.type;
+
+        if (asset.rendered) {
+
+        }
 
         // Asset has already been loaded,
         // so it's local status may have been update,

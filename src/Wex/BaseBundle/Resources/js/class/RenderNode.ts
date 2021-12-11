@@ -60,6 +60,12 @@ export default abstract class RenderNode extends AppChild {
     );
   }
 
+  forEachRenderNode(callback?: Function) {
+    callback(this);
+
+    this.forEachChildRenderNode(callback);
+  }
+
   public focus() {
     this.focused = true;
     this.activateListeners();
