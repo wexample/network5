@@ -1,6 +1,7 @@
 {%- extends adaptive_response_rendering_base_path() -%}
 
-{%- block page_body -%}
+{%- block layout -%}
+    {{ parent() }}
     <div class="page-overlay"></div>
     <div class="page-overlay-full"></div>
 {%- endblock -%}
