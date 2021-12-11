@@ -3,22 +3,11 @@
 namespace App\Wex\BaseBundle\Twig;
 
 use App\Wex\BaseBundle\Helper\DomHelper;
-use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\TemplateHelper;
-use App\Wex\BaseBundle\WexBaseBundle;
-use function array_shift;
-use function array_slice;
-use function count;
+use App\Wex\BaseBundle\Rendering\VueComponent;
 use Exception;
-use function explode;
 use function implode;
-use function md5;
-use function microtime;
-use function mt_getrandmax;
-use function random_int;
-use function str_replace;
-use function strtolower;
 use Symfony\Component\ExpressionLanguage\SyntaxError;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -30,11 +19,15 @@ class VueExtension extends AbstractExtension
 {
     public const TEMPLATE_FILE_EXTENSION = '.vue.twig';
 
-    public array $renderedTemplates = [];
+    public ?string $contextCurrent;
 
     protected array $includedHtml = [];
 
-    public function getFilters()
+    public array $renderedTemplates = [];
+
+    public array $rootComponents = [];
+
+    public function getFilters(): array
     {
         return [
             new TwigFilter(
@@ -48,8 +41,10 @@ class VueExtension extends AbstractExtension
     }
 
     public function __construct(
-        private ComponentsExtension $componentsExtension
-    ) {
+        private ComponentsExtension $componentsExtension,
+        private AssetsExtension $assetsExtension
+    )
+    {
     }
 
     public function getFunctions(): array
@@ -95,7 +90,8 @@ class VueExtension extends AbstractExtension
         string $path,
         ?array $options = [],
         ?array $twigContext = []
-    ): string {
+    ): string
+    {
         return $this->vueRender(
             $env,
             $path,
@@ -114,9 +110,12 @@ class VueExtension extends AbstractExtension
         ?array $attributes = [],
         ?array $twigContext = [],
         ?bool $root = false
-    ): string {
-        $vueComName = $this->createVueComName($path);
-        $this->componentsExtension->comLoadAssets($path);
+    ): string
+    {
+        // TODO Move more logic in class.
+        $vue = new VueComponent($path);
+
+        // Search for template.
         $loader = $env->getLoader();
         $pathTemplate = null;
         $locations = TemplateHelper::buildTemplateInheritanceStack(
@@ -137,48 +136,56 @@ class VueExtension extends AbstractExtension
             throw new Exception('Unable to find vue template, searched in '.implode(',', $locations));
         }
 
-        $vueComId = $vueComName.'-'.md5(random_int(0, mt_getrandmax()).microtime());
-
         $attributes['class'] ??= '';
-        $attributes['class'] .= ' '.$vueComId;
+        $attributes['class'] .= ' '.$vue->id;
 
         $context = [
             'path' => $path,
-            'vueComId' => $vueComId,
-            'vueComName' => $vueComName,
+            'vueComId' => $vue->id,
+            'vueComName' => $vue->name,
             'attrs' => $attributes,
         ];
 
         $outputBody = '';
         if ($root)
         {
-            /** @var ComponentsExtension $comExt */
-            $comExt = $env
-                ->getExtension(ComponentsExtension::class);
+            $rootComponent = $this
+                ->componentsExtension
+                ->registerComponent(
+                    'components/vue',
+                    ComponentsExtension::INIT_MODE_PARENT,
+                    $context
+                );
 
-            $outputBody = $comExt->comInitParent(
-                'components/vue',
-                $context
-            );
+            $this->rootComponents[$vue->name] = $rootComponent;
+
+            $outputBody = $rootComponent->renderTag();
+        } else
+        {
+            $rootComponent = $this->rootComponents[$this->contextCurrent];
         }
 
-        if (!isset($this->renderedTemplates[$vueComName]))
-        {
-            /** @var ComponentsExtension $comExt */
-            $comExt = $env->getExtension(
-                ComponentsExtension::class
+        $this
+            ->assetsExtension
+            ->assetsDetect(
+                $path,
+                RenderingHelper::CONTEXT_COMPONENT,
+                $rootComponent->assets
             );
 
-            $comExt->comSetContext(
+        if (!isset($this->renderedTemplates[$vue->name]))
+        {
+            $this->contextCurrent = $vue->name;
+            $this->componentsExtension->comSetContext(
                 RenderingHelper::CONTEXT_VUE,
-                $vueComName
+                $vue->name
             );
 
             $template = DomHelper::buildTag(
                 'template',
                 [
                     'class' => 'vue vue-loading',
-                    'id' => 'vue-template-'.$vueComName,
+                    'id' => 'vue-template-'.$vue->name,
                 ],
                 $env->render(
                     $pathTemplate,
@@ -186,54 +193,18 @@ class VueExtension extends AbstractExtension
                 )
             );
 
-            $comExt->comRevertContext();
+            $this->componentsExtension->comRevertContext();
 
-            $this->renderedTemplates[$vueComName] = $template;
+            $this->contextCurrent = null;
+            $this->renderedTemplates[$vue->name] = $template;
         }
 
         return DomHelper::buildTag(
-            $vueComName,
+            $vue->name,
             [
-                'class' => $vueComId,
+                'class' => $vue->id,
             ],
             $outputBody
-        );
-    }
-
-    public function createVueComName(string $path): string
-    {
-        if (WexBaseBundle::BUNDLE_PATH_ALIAS_PREFIX === $path[0])
-        {
-            $exp = explode(FileHelper::FOLDER_SEPARATOR, $path);
-            // Get relevant path.
-            array_shift($exp);
-
-            // Use reference to identify sub folders length.
-            $templatePath = count(
-                explode(
-                        FileHelper::FOLDER_SEPARATOR,
-                        WexBaseBundle::BUNDLE_PATH_TEMPLATES
-                    )
-            ) - 1;
-
-            // Remove sub folders.
-            $exp = array_slice($exp, $templatePath);
-            // We have a new base path to find tag name.
-            $path = implode(FileHelper::FOLDER_SEPARATOR, $exp);
-        }
-
-        return str_replace(
-            WexBaseBundle::BUNDLE_PATH_ALIAS_PREFIX,
-            '',
-            strtolower(
-                implode(
-                    '-',
-                    explode(
-                        FileHelper::FOLDER_SEPARATOR,
-                        $path
-                    )
-                )
-            )
         );
     }
 
@@ -252,7 +223,8 @@ class VueExtension extends AbstractExtension
         Environment $env,
         string $path,
         ?array $options = []
-    ): void {
+    ): void
+    {
         // Same behavior but no output tag.
         $this->vueInclude(
             $env,
@@ -269,7 +241,8 @@ class VueExtension extends AbstractExtension
         string $path,
         ?array $attributes = [],
         ?array $twigContext = []
-    ): string {
+    ): string
+    {
         // Register template.
         $output =
             $this->vueRender(

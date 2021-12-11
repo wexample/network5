@@ -44,7 +44,8 @@ class ComponentsExtension extends AbstractExtension
         private AssetsExtension $assetsExtension,
         private RenderingService $renderingService,
         private Translator $translator,
-    ) {
+    )
+    {
         $this->comSetContext(
             RenderingHelper::CONTEXT_LAYOUT,
             null
@@ -54,7 +55,8 @@ class ComponentsExtension extends AbstractExtension
     public function comSetContext(
         string $renderingContext,
         ?string $name,
-    ) {
+    )
+    {
         $this->contextsStack[] = new ComponentContext(
             $renderingContext,
             $name ?: VariableHelper::DEFAULT,
@@ -154,7 +156,8 @@ class ComponentsExtension extends AbstractExtension
         Environment $twig,
         string $name,
         array $options = []
-    ): string {
+    ): string
+    {
         $html = $this->comRenderHtml($twig, $name, $options);
 
         return $html.$this->comInitPrevious($name, $options);
@@ -167,7 +170,8 @@ class ComponentsExtension extends AbstractExtension
         Environment $env,
         $name,
         $options = []
-    ): ?string {
+    ): ?string
+    {
         $loader = $env->getLoader();
         $search = TemplateHelper::buildTemplateInheritanceStack(
             $name
@@ -201,8 +205,7 @@ class ComponentsExtension extends AbstractExtension
             }
 
             return null;
-        }
-        catch (Exception $exception)
+        } catch (Exception $exception)
         {
             throw new Exception('Error during rendering component '.$name.' : '.$exception->getMessage(), $exception->getCode(), $exception);
         }
@@ -238,10 +241,11 @@ class ComponentsExtension extends AbstractExtension
     public function registerComponent(
         string $name,
         string $initMode,
-        array $options
-    ): Component {
+        array $options = []
+    ): Component
+    {
         // Using an object allow continuing edit properties after save.
-        $entry = new Component(
+        $component = new Component(
             $name,
             $initMode,
             $this->getContext(),
@@ -249,22 +253,23 @@ class ComponentsExtension extends AbstractExtension
             $options
         );
 
-        $this->components[] = $entry;
+        $this->components[] = $component;
 
-        $entry->assets = $this->comLoadAssets(
-            $name
+        $this->comLoadAssets(
+            $component
         );
 
-        return $entry;
+        return $component;
     }
 
-    public function comLoadAssets(string $name): array
+    public function comLoadAssets(Component $component): array
     {
         return $this
             ->assetsExtension
             ->assetsDetect(
-                $name,
-                RenderingHelper::CONTEXT_COMPONENT
+                $component->name,
+                RenderingHelper::CONTEXT_COMPONENT,
+                $component->assets
             );
     }
 
@@ -274,7 +279,8 @@ class ComponentsExtension extends AbstractExtension
     public function comInitClass(
         string $name,
         array $options = []
-    ): string {
+    ): string
+    {
         $component = $this->registerComponent(
             $name,
             self::INIT_MODE_CLASS,

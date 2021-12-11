@@ -71,7 +71,8 @@ class AssetsExtension extends AbstractExtension
      */
     public function __construct(
         KernelInterface $kernel
-    ) {
+    )
+    {
         $this->pathProject = $kernel->getProjectDir().'/';
         $this->pathPublic = $this->pathProject.self::DIR_PUBLIC;
         $this->pathBuild = $this->pathPublic.self::DIR_BUILD;
@@ -183,10 +184,22 @@ class AssetsExtension extends AbstractExtension
         }
     }
 
+    public function mergeCollections(
+        array $collectionA,
+        array $collectionB
+    ): array
+    {
+        return array_merge_recursive(
+            $collectionA,
+            $collectionB
+        );
+    }
+
     public function assetsInitLayout(
         ?string $layoutName,
         bool $useJs,
-    ) {
+    )
+    {
         $layoutName = $layoutName ?: TemplateExtension::LAYOUT_NAME_DEFAULT;
         $backEndAssets = $this->assets;
         $this->assets = self::ASSETS_DEFAULT_EMPTY;
@@ -229,7 +242,8 @@ class AssetsExtension extends AbstractExtension
     public function assetsInitPage(
         string $templateName,
         bool $useJs
-    ) {
+    )
+    {
         $assets = $this->assetsDetect(
             $templateName,
             RenderingHelper::CONTEXT_PAGE
@@ -267,21 +281,24 @@ class AssetsExtension extends AbstractExtension
 
     public function assetsDetect(
         string $templateName,
-        string $context
-    ): array {
-        $output = [];
-
+        string $context,
+        array &$collection = []
+    ): array
+    {
         foreach (Asset::ASSETS_EXTENSIONS as $ext)
         {
-            $output[$ext] = $this->assetsDetectForType(
-                $templateName,
-                $ext,
-                $context,
-                true
+            $collection[$ext] = array_merge(
+                $collection[$ext] ?? [],
+                $this->assetsDetectForType(
+                    $templateName,
+                    $ext,
+                    $context,
+                    true
+                )
             );
         }
 
-        return $output;
+        return $collection;
     }
 
     /**
@@ -292,7 +309,8 @@ class AssetsExtension extends AbstractExtension
         string $ext,
         string $context,
         bool $searchTheme
-    ): array {
+    ): array
+    {
         $assetPathFull = $ext.'/'.$assetPath.'.'.$ext;
         $output = [];
 
@@ -376,7 +394,8 @@ class AssetsExtension extends AbstractExtension
     public function addAsset(
         string $pathRelative,
         string $renderContext
-    ): ?Asset {
+    ): ?Asset
+    {
         $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
         if (!isset($this->manifest[$pathRelativeToPublic]))
         {
@@ -386,14 +405,13 @@ class AssetsExtension extends AbstractExtension
         if (!isset($this->assetsLoaded[$pathRelative]))
         {
             $asset = new Asset(
-                realpath($this->pathPublic . $this->manifest[$pathRelativeToPublic]),
+                realpath($this->pathPublic.$this->manifest[$pathRelativeToPublic]),
                 $renderContext,
                 $this->pathPublic
             );
 
             $this->assetsLoaded[$pathRelative] = $asset;
-        }
-        else
+        } else
         {
             $asset = $this->assetsLoaded[$pathRelative];
         }
