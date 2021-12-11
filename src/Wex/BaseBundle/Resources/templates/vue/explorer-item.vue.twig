@@ -1,8 +1,7 @@
 <div class="explorer-item" :class="selected ? 'selected' : ''">
 <div class="explorer-item-label" v-on:click.prevent="select()">
   <div class="explorer-item-indent" v-for="index in increment">&nbsp;&nbsp;&nbsp;&nbsp;</div>
-  <div class="explorer-item-icon">
-    <i class="fas" :class="getItemIcon()"></i>
+  <div class="explorer-item-icon" v-html="renderItemIcon()">
   </div>
   <div class="explorer-item-name">
     {{ 'getItemName()' | vue_key }}
