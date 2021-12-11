@@ -21,37 +21,34 @@ export default {
 
     getItemIcon() {
       return (
-        'fa-' +
-        {
-          component: 'cube',
-          layout: 'columns',
-          page: 'file',
-        }[this.type]
+          'fa-' +
+          {
+            component: 'cube',
+            layout: 'columns',
+            page: 'file',
+          }[this.type]
       );
     },
 
     getChildren() {
+      let children = [];
+
       if (this.type === 'layout') {
-        return [
-          {
-            type: 'page',
-            object: this.object.page,
-          },
-        ];
-      } else if (this.type === 'page') {
-        let children = [];
-
-        this.object.components.forEach((component) => {
-          children.push({
-            type: 'component',
-            object: component,
-          });
-        });
-
-        return children;
+        children.push(
+            {
+              type: 'page',
+              object: this.object.page,
+            });
       }
 
-      return [];
+      this.object.components.forEach((component) => {
+        children.push({
+          type: 'component',
+          object: component,
+        });
+      });
+
+      return children;
     },
   },
 };
