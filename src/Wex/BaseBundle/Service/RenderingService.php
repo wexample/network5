@@ -2,6 +2,7 @@
 
 namespace App\Wex\BaseBundle\Service;
 
+use App\Wex\BaseBundle\Controller\AbstractController;
 use function uniqid;
 
 class RenderingService
@@ -25,5 +26,17 @@ class RenderingService
     public function getRenderRequestId(): string
     {
         return $this->currentRequestId;
+    }
+
+    public function renderPrepare(
+        AbstractController $controller,
+        string $view,
+        array &$parameters
+    )
+    {
+        // Add global variables for rendering.
+        $parameters['layout_use_js'] ??= $controller->templateUseJs;
+        $parameters['page_path'] = $view;
+        $parameters['request_uri'] ??= $controller->requestUri;
     }
 }

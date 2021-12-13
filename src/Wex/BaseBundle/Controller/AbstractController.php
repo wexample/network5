@@ -5,6 +5,7 @@ namespace App\Wex\BaseBundle\Controller;
 use App\Wex\BaseBundle\Controller\Interfaces\AdaptiveResponseControllerInterface;
 use App\Wex\BaseBundle\Controller\Traits\AdaptiveResponseControllerTrait;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
+use App\Wex\BaseBundle\Service\RenderingService;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -12,14 +13,17 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
 {
     /* Set methods for adaptive rendering. */
     use AdaptiveResponseControllerTrait;
-    protected bool $templateUseJs;
 
-    protected string $requestUri;
+    public bool $templateUseJs;
+
+    public string $requestUri;
 
     public function __construct(
         protected AdaptiveResponseService $adaptiveResponse,
-        protected Environment $twigEnvironment
-    ) {
+        protected Environment $twigEnvironment,
+        protected RenderingService $renderingService
+    )
+    {
         $this->adaptiveResponse->setController($this);
     }
 
@@ -32,7 +36,8 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         string $view,
         array $parameters = [],
         Response $response = null
-    ): ?Response {
+    ): ?Response
+    {
         return $this->render($view, $parameters, $response);
     }
 
@@ -46,10 +51,11 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         array $parameters = [],
         Response $response = null
     ): Response {
-        // Add global variables for rendering.
-        $parameters['layout_use_js'] ??= $this->templateUseJs;
-        $parameters['page_path'] = $view;
-        $parameters['request_uri'] ??= $this->requestUri;
+        $this->renderingService->renderPrepare(
+            $this,
+            $view,
+            $parameters
+        );
 
         return parent::render(
             $view,

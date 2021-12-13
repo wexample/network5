@@ -5,6 +5,7 @@ namespace App\Wex\BaseBundle\Controller;
 use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
+use App\Wex\BaseBundle\Service\RenderingService;
 use App\Wex\BaseBundle\Twig\TemplateExtension;
 use function is_null;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -25,10 +26,13 @@ abstract class AbstractPagesController extends AbstractController
         protected AdaptiveResponseService $adaptiveResponse,
         protected Environment $twigEnvironment,
         protected RequestStack $requestStack,
-    ) {
+        protected RenderingService $renderingService
+    )
+    {
         parent::__construct(
             $adaptiveResponse,
-            $twigEnvironment
+            $twigEnvironment,
+            $renderingService
         );
 
         $mainRequest = $this->requestStack->getMainRequest();
