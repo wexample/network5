@@ -5,7 +5,7 @@ namespace App\Wex\BaseBundle\Twig;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
-use App\Wex\BaseBundle\Rendering\Component;
+use App\Wex\BaseBundle\Rendering\RenderDataComponent;
 use App\Wex\BaseBundle\Rendering\ComponentContext;
 use App\Wex\BaseBundle\Service\RenderingService;
 use App\Wex\BaseBundle\Translation\Translator;
@@ -215,7 +215,7 @@ class ComponentsExtension extends AbstractExtension
     public function buildRenderData(string $renderContext): array
     {
         $data = [];
-        /** @var Component $component */
+        /** @var RenderDataComponent $component */
         foreach ($this->components as $component)
         {
             if ($component->context->renderContext === $renderContext)
@@ -242,10 +242,10 @@ class ComponentsExtension extends AbstractExtension
         string $name,
         string $initMode,
         array $options = []
-    ): Component
+    ): RenderDataComponent
     {
         // Using an object allow continuing edit properties after save.
-        $component = new Component(
+        $component = new RenderDataComponent(
             $name,
             $initMode,
             $this->getContext(),
@@ -262,7 +262,7 @@ class ComponentsExtension extends AbstractExtension
         return $component;
     }
 
-    public function comLoadAssets(Component $component): array
+    public function comLoadAssets(RenderDataComponent $component): array
     {
         return $this
             ->assetsExtension
@@ -312,7 +312,7 @@ class ComponentsExtension extends AbstractExtension
     {
         $output = '';
 
-        /** @var Component $component */
+        /** @var RenderDataComponent $component */
         foreach ($this->components as $component)
         {
             if (ComponentsExtension::INIT_MODE_LAYOUT === $component->initMode)
@@ -353,7 +353,7 @@ class ComponentsExtension extends AbstractExtension
         return $renderExtension->renderTagAttributes($attributes);
     }
 
-    public function comInitLayout(string $name, array $options = []): Component
+    public function comInitLayout(string $name, array $options = []): RenderDataComponent
     {
         return $this->registerComponent(
             $name,
