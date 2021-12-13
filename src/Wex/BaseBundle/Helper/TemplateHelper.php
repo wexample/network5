@@ -2,14 +2,15 @@
 
 namespace App\Wex\BaseBundle\Helper;
 
-use App\Wex\BaseBundle\Twig\TemplateExtension;
 use App\Wex\BaseBundle\WexBaseBundle;
 
 class TemplateHelper
 {
+    public const TEMPLATE_FILE_EXTENSION = '.html.twig';
+
     public static function buildTemplateInheritanceStack(
         string $relativePath,
-        string $templateExtension = TemplateExtension::TEMPLATE_FILE_EXTENSION
+        string $templateExtension = self::TEMPLATE_FILE_EXTENSION
     ): array {
         return [
             // Search local.

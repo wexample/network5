@@ -3,6 +3,7 @@
 namespace App\Wex\BaseBundle\Twig;
 
 use App\Wex\BaseBundle\Helper\RenderingHelper;
+use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\RenderDataAjax;
 use App\Wex\BaseBundle\Rendering\RenderDataInitialLayout;
@@ -21,8 +22,6 @@ use Twig\TwigFunction;
 
 class TemplateExtension extends AbstractExtension
 {
-    public const TEMPLATE_FILE_EXTENSION = '.html.twig';
-
     public const LAYOUT_NAME_DEFAULT = VariableHelper::DEFAULT;
 
     public const RENDERING_BASE_NAME_DEFAULT = VariableHelper::DEFAULT;
@@ -230,7 +229,7 @@ class TemplateExtension extends AbstractExtension
     public function pageNameFromPath(string $templatePath): string
     {
         // Define template name.
-        $ext = TemplateExtension::TEMPLATE_FILE_EXTENSION;
+        $ext = TemplateHelper::TEMPLATE_FILE_EXTENSION;
 
         // Path have extension.
         if (str_ends_with($templatePath, $ext))
@@ -238,7 +237,7 @@ class TemplateExtension extends AbstractExtension
             return substr(
                 $templatePath,
                 0,
-                -strlen(TemplateExtension::TEMPLATE_FILE_EXTENSION)
+                -strlen(TemplateHelper::TEMPLATE_FILE_EXTENSION)
             );
         }
 

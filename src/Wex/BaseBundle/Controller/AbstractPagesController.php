@@ -3,10 +3,10 @@
 namespace App\Wex\BaseBundle\Controller;
 
 use App\Wex\BaseBundle\Helper\FileHelper;
+use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use App\Wex\BaseBundle\Service\RenderingService;
-use App\Wex\BaseBundle\Twig\TemplateExtension;
 use function is_null;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,14 +43,15 @@ abstract class AbstractPagesController extends AbstractController
 
     public function buildTemplatePath(string $view): string
     {
-        return self::RESOURCES_DIR.$this->viewPathPrefix.$view.TemplateExtension::TEMPLATE_FILE_EXTENSION;
+        return self::RESOURCES_DIR.$this->viewPathPrefix.$view.TemplateHelper::TEMPLATE_FILE_EXTENSION;
     }
 
     protected function renderPage(
         string $view,
         array $parameters = [],
         Response $response = null
-    ): Response {
+    ): Response
+    {
         $templatePath = $this->buildTemplatePath($view);
 
         return $this->render(

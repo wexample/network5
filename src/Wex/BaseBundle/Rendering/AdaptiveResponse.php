@@ -2,9 +2,9 @@
 
 namespace App\Wex\BaseBundle\Rendering;
 
+use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
-use App\Wex\BaseBundle\Twig\TemplateExtension;
 use App\Wex\BaseBundle\WexBaseBundle;
 use function in_array;
 use function is_null;
@@ -41,7 +41,7 @@ class AdaptiveResponse
         return self::BASES_MAIN_DIR
             .$this->getOutputType($context)
             .'/'.$this->getRenderingBaseNameFromRequest($request)
-            .TemplateExtension::TEMPLATE_FILE_EXTENSION;
+            .TemplateHelper::TEMPLATE_FILE_EXTENSION;
     }
 
     public function getRenderingBaseNameFromRequest(Request $request): string
