@@ -20,10 +20,6 @@ use Twig\TwigFunction;
 
 class AssetsExtension extends AbstractExtension
 {
-    public const DIR_PUBLIC = 'public/';
-
-    public const DIR_BUILD = 'build/';
-
     public const FILE_MANIFEST = 'manifest.json';
 
     /**
@@ -52,8 +48,8 @@ class AssetsExtension extends AbstractExtension
     )
     {
         $this->pathProject = $kernel->getProjectDir().'/';
-        $this->pathPublic = $this->pathProject.self::DIR_PUBLIC;
-        $this->pathBuild = $this->pathPublic.self::DIR_BUILD;
+        $this->pathPublic = $this->pathProject.AssetsService::DIR_PUBLIC;
+        $this->pathBuild = $this->pathPublic.AssetsService::DIR_BUILD;
         $this->manifest = json_decode(
             file_get_contents(
                 $this->pathBuild.self::FILE_MANIFEST
@@ -375,7 +371,7 @@ class AssetsExtension extends AbstractExtension
         string $renderContext
     ): ?Asset
     {
-        $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
+        $pathRelativeToPublic = AssetsService::DIR_BUILD.$pathRelative;
         if (!isset($this->manifest[$pathRelativeToPublic]))
         {
             return null;

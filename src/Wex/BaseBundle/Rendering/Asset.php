@@ -3,7 +3,7 @@
 namespace App\Wex\BaseBundle\Rendering;
 
 use App\Wex\BaseBundle\Helper\PathHelper;
-use App\Wex\BaseBundle\Twig\AssetsExtension;
+use App\Wex\BaseBundle\Service\AssetsService;
 use function dirname;
 use JetBrains\PhpStorm\NoReturn;
 use function pathinfo;
@@ -93,7 +93,7 @@ class Asset
 
         $this->id = PathHelper::relativeTo(
             $pathWithoutExt,
-            '/'.AssetsExtension::DIR_BUILD.
+            '/'.AssetsService::DIR_BUILD.
             $this->type.'/'
         );
     }
