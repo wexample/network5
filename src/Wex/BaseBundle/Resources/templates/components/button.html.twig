@@ -1,4 +1,4 @@
-<button {{ com_render_tag_attributes({class: 'mdc-button mdc-button--raised button button-full-width'}) }}>
+<button {{ component_render_tag_attributes({class: 'mdc-button mdc-button--raised button button-full-width'}) }}>
     <span class="mdc-button__ripple"></span>
     {{ (icon is defined ? icon(icon) : '') | raw }}
     <span class="mdc-button__label">{{ text }}</span>

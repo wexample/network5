@@ -1,7 +1,7 @@
 {%- set page_title_default = '@page::page_title' -%}
 {%- set page_title = page_title|default(page_title_default) -%}
-{%- set template_head_title_args = template_head_title_args|default({}) -%}
-{%- set template_head_title = template_head_title|default(page_title) -%}
+{%- set document_head_title_args = document_head_title_args|default({}) -%}
+{%- set document_head_title = document_head_title|default(page_title) -%}
 {%- set layout_name = layout_name|default(null) -%}
 {%- set layout_use_js = (layout_use_js is defined ? layout_use_js : true) -%}
 {%- set layout_theme = layout_theme|default('default') -%}
@@ -9,8 +9,8 @@
 
 {%- block template_base -%}
     {%- block template_config -%}
-        {{- assets_init_layout(layout_name, layout_use_js) -}}
-        {{- assets_init_page(page_name, layout_use_js) -}}
+        {{- layout_init(layout_name, layout_theme, layout_use_js) -}}
+        {{- page_init(page_name, layout_use_js) -}}
         {{- translation_set_domain_from_path('page', page_path) -}}
     {%- endblock -%}
 {%- endblock -%}

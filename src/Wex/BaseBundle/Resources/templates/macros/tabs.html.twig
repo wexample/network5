@@ -1,6 +1,6 @@
 {% macro start(group = 'default', class = '') %}
 <ul class="tabs tabs-{{ group }} {{ class }}">
-    {{ com_init_parent('components/tabs', {group:group}) }}
+    {{ component_init_parent('components/tabs', {group:group}) }}
     {% endmacro %}
 
     {% macro end() %}
@@ -12,6 +12,6 @@
         {{ render_tag('a', {
             class: 'tab tab-internal' ~ (route_is_current(route, routeParameters) ? ' active' : ''),
             href: url(route, routeParameters),
-        }, ((translation_build_domain_from_path(template_build_path_from_route(route)) ~ '::page_title') | trans)) }}
+        }, ((translation_build_domain_from_path(page_name_from_route(route)) ~ '::page_title') | trans)) }}
     </li>
 {% endmacro %}

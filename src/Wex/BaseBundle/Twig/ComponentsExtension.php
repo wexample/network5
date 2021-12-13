@@ -88,14 +88,14 @@ class ComponentsExtension extends AbstractExtension
                 ]
             ),
             new TwigFunction(
-                'com_init_class',
+                'component_init_class',
                 [
                     $this,
                     'comInitClass',
                 ]
             ),
             new TwigFunction(
-                'com_init_parent',
+                'component_init_parent',
                 [
                     $this,
                     'comInitParent',
@@ -103,7 +103,7 @@ class ComponentsExtension extends AbstractExtension
                 [self::FUNCTION_OPTION_IS_SAFE => self::FUNCTION_OPTION_IS_SAFE_VALUE_HTML]
             ),
             new TwigFunction(
-                'com_init_previous',
+                'component_init_previous',
                 [
                     $this,
                     'comInitPrevious',
@@ -111,7 +111,7 @@ class ComponentsExtension extends AbstractExtension
                 [self::FUNCTION_OPTION_IS_SAFE => self::FUNCTION_OPTION_IS_SAFE_VALUE_HTML]
             ),
             new TwigFunction(
-                'com_render_tag_attributes',
+                'component_render_tag_attributes',
                 [
                     $this,
                     'comRenderTagAttributes',
@@ -123,7 +123,7 @@ class ComponentsExtension extends AbstractExtension
                 ]
             ),
             new TwigFunction(
-                'com_render_layout',
+                'component_render_layout',
                 [
                     $this,
                     'comRenderLayout',
@@ -133,14 +133,14 @@ class ComponentsExtension extends AbstractExtension
                 ]
             ),
             new TwigFunction(
-                'com_set_context',
+                'render_set_context',
                 [
                     $this,
                     'comSetContext',
                 ]
             ),
             new TwigFunction(
-                'com_revert_context',
+                'render_revert_context',
                 [
                     $this,
                     'comRevertContext',

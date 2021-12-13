@@ -5,11 +5,11 @@
     <h3>{{ '@page::components.init.parent.title' | trans }}</h3>
     <div class="block">
         {{ '@page::components.init.parent.body' | trans }}
-        {{ com_init_parent('components/demo-init') }}
+        {{ component_init_parent('components/demo-init') }}
     </div>
     <div class="block">
         &lt;div class="it-will-be-component-element"&gt;<br>
-        &nbsp;&nbsp;{{ '{{ com_init_parent(\'components/demo-init\') }}' }}<br>
+        &nbsp;&nbsp;{{ '{{ component_init_parent(\'components/demo-init\') }}' }}<br>
         &nbsp;&nbsp;...<br>
         &lt;/div&gt;
     </div>
@@ -17,17 +17,17 @@
     <div class="block">
         {{ '@page::components.init.previous.body' | trans }}
     </div>
-    {{ com_init_previous('components/demo-init') }}
+    {{ component_init_previous('components/demo-init') }}
     <div class="block">
         &lt;div class="it-will-be-component-element"&gt;...&lt;/div&gt;<br>
-        {{ '{{ com_init_previous(\'components/demo-init\') }}' }}<br>
+        {{ '{{ component_init_previous(\'components/demo-init\') }}' }}<br>
     </div>
 
     <h3>{{ '@page::components.init.class.title' | trans }}</h3>
-    <div class="block {{ com_init_class('components/demo-init') }}">
+    <div class="block {{ component_init_class('components/demo-init') }}">
         {{ '@page::components.init.class.body' | trans }}
     </div>
     <div class="block">
-        &lt;div class="it-will-be-component-element {{ '{{ com_init_class(\'components/demo-init\') }}' }}"&gt;...&lt;/div&gt;
+        &lt;div class="it-will-be-component-element {{ '{{ component_init_class(\'components/demo-init\') }}' }}"&gt;...&lt;/div&gt;
     </div>
 {%- endblock -%}

@@ -51,7 +51,7 @@ class TemplateExtension extends AbstractExtension
                 ]
             ),
             new TwigFunction(
-                'template_build_initial_layout_render_data',
+                'layout_render_initial_data',
                 [
                     $this,
                     'templateBuildInitialLayoutRenderData',
@@ -61,7 +61,7 @@ class TemplateExtension extends AbstractExtension
                 ]
             ),
             new TwigFunction(
-                'template_build_path_from_route',
+                'page_name_from_route',
                 [$this, 'templateBuildPathFromRoute']
             ),
         ];

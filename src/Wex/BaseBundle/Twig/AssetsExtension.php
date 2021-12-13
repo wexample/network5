@@ -80,14 +80,14 @@ class AssetsExtension extends AbstractExtension
     {
         return [
             new TwigFunction(
-                'assets_init_layout',
+                'layout_init',
                 [
                     $this,
                     'assetsInitLayout',
                 ]
             ),
             new TwigFunction(
-                'assets_init_page',
+                'page_init',
                 [
                     $this,
                     'assetsInitPage',
@@ -189,6 +189,7 @@ class AssetsExtension extends AbstractExtension
 
     public function assetsInitLayout(
         ?string $layoutName,
+        ?string $layoutTheme,
         bool $useJs,
     )
     {
