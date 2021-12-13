@@ -19,7 +19,7 @@ export default class AdaptiveService extends AppService {
           // Expect all assets to be loaded before triggering events.
           if (registry.components === MixinsAppService.LOAD_STATUS_COMPLETE) {
             // TODO Events...
-            return MixinsAppService.LOAD_STATUS_COMPLETE;
+            return;
           }
           return MixinsAppService.LOAD_STATUS_WAIT;
         },

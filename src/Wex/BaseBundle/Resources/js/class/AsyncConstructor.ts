@@ -6,24 +6,24 @@ export default abstract class {
     setTimeout(callback);
   }
 
-  ready(callback) {
+  async ready(callback: Function) {
     if (this.isReady) {
-      callback();
+      await callback();
     } else {
       this.readyCallbacks.push(callback);
     }
   }
 
-  readyComplete(...args: any[]) {
+  async readyComplete(...args: any[]) {
     this.isReady = true;
     // Launch callbacks.
-    this.async(() => this.callbacks(this.readyCallbacks, args));
+    await this.callbacks(this.readyCallbacks, args);
   }
 
   /**
    * Execute an array of callbacks functions.
    */
-  callbacks(callbacksArray, args = [], thisArg = null) {
+  async callbacks(callbacksArray, args = [], thisArg = null) {
     let method = args ? 'apply' : 'call';
     let callback = null;
 
@@ -32,7 +32,7 @@ export default abstract class {
         throw 'Trying to execute undefined callback.';
       }
 
-      callback[method](thisArg || this, args);
+      await callback[method](thisArg || this, args);
     }
   }
 }

@@ -12,10 +12,12 @@ export default {
     ) {
       super.loadRenderData(renderData, requestOptions);
 
-      let vueApp = this.app.services['vue'].createVueAppForComponent(
-        renderData.options.path,
-        this.el
-      );
+      let vueApp = this.app.services['vue']
+        .createVueAppForComponent(
+          renderData.options.path,
+          renderData,
+          requestOptions
+        );
 
       vueApp.mount(this.el);
     }

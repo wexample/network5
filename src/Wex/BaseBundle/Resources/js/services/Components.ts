@@ -32,28 +32,24 @@ export default class ComponentsService extends RenderNodeService {
   registerHooks() {
     return {
       app: {
-        loadRenderData(
+        async loadRenderData(
           renderData: RenderDataLayoutInterface,
           requestOptions: RequestOptionsInterface,
-          registry: any,
-          next: Function
+          registry: any
         ) {
           if (registry.assets !== MixinsAppService.LOAD_STATUS_COMPLETE) {
             return MixinsAppService.LOAD_STATUS_WAIT;
           }
 
-          this.services.components.loadLayoutRenderData(
+          await this.services.components.loadLayoutRenderData(
             renderData,
-            requestOptions,
-            next
+            requestOptions
           );
-
-          return MixinsAppService.LOAD_STATUS_STOP;
         },
       },
 
       page: {
-        loadPageRenderData(page: Page, registry: any, next: Function) {
+        async loadPageRenderData(page: Page, registry: any) {
           // Wait for page loading.
           if (
             registry.pages !== MixinsAppService.LOAD_STATUS_COMPLETE ||
@@ -62,9 +58,7 @@ export default class ComponentsService extends RenderNodeService {
             return MixinsAppService.LOAD_STATUS_WAIT;
           }
 
-          this.services.components.loadPageRenderData(page, next);
-
-          return MixinsAppService.LOAD_STATUS_STOP;
+          await this.services.components.loadPageRenderData(page);
         },
       },
     };
@@ -94,10 +88,9 @@ export default class ComponentsService extends RenderNodeService {
     }
   }
 
-  loadLayoutRenderData(
+  async loadLayoutRenderData(
     renderData: RenderDataLayoutInterface,
     requestOptions: RequestOptionsInterface,
-    complete?: Function
   ) {
     if (renderData.templates) {
       // Append html for global components.
@@ -105,49 +98,37 @@ export default class ComponentsService extends RenderNodeService {
     }
 
     if (renderData.components) {
-      this.createRenderDataComponents(
+      await this.createRenderDataComponents(
         renderData,
         this.app.layout,
-        requestOptions,
-        complete
+        requestOptions
       );
     }
   }
 
-  loadPageRenderData(page: Page, complete?: Function) {
-    this.createRenderDataComponents(
+  async loadPageRenderData(page: Page) {
+    await this.createRenderDataComponents(
       page.renderData,
       page,
-      page.requestOptions,
-      complete
+      page.requestOptions
     );
   }
 
-  createRenderDataComponents(
+  async createRenderDataComponents(
     renderData: RenderDataInterface,
     renderNode: RenderNode,
-    requestOptions: RequestOptionsInterface,
-    complete?: Function
+    requestOptions: RequestOptionsInterface
   ) {
     let components = renderData.components;
 
-    if (!components.length) {
-      complete && complete();
-      return;
-    }
-
-    let counter: number = 0;
-
-    components.forEach((renderData: RenderDataComponentInterface) => {
-      counter++;
-
+    for (const renderDataComponent of components) {
       let el: HTMLElement;
       let elPlaceholder = renderNode.el.querySelector(
-        '.' + renderData.id
+        '.' + renderDataComponent.id
       ) as HTMLElement;
       let removePlaceHolder = true;
 
-      switch (renderData.initMode) {
+      switch (renderDataComponent.initMode) {
         case Component.INIT_MODE_CLASS:
           el = elPlaceholder;
           removePlaceHolder = false;
@@ -166,17 +147,13 @@ export default class ComponentsService extends RenderNodeService {
         elPlaceholder.remove();
       }
 
-      this.createRenderNode(el, renderData, requestOptions, (component) => {
-        renderNode.components.push(component);
+      let component = await this.createRenderNode(el, renderDataComponent, requestOptions) as Component;
 
-        this.services.events.trigger(ComponentsServiceEvents.CREATE_COMPONENT, {
-          component: component,
-        });
+      renderNode.components.push(component);
 
-        if (--counter === 0) {
-          complete && complete();
-        }
+      this.services.events.trigger(ComponentsServiceEvents.CREATE_COMPONENT, {
+        component: component,
       });
-    });
+    }
   }
 }

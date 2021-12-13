@@ -3,10 +3,8 @@ import AssetsCollectionInterface from '../interfaces/AssetsCollectionInterface';
 import Queue from '../class/Queue';
 import AppService from '../class/AppService';
 import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
-import MixinsAppService from '../class/MixinsAppService';
 import AssetsInterface from '../interfaces/AssetInterface';
 import RenderNode from '../class/RenderNode';
-import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 import { Attribute, AttributeValue, TagName } from '../helpers/Dom';
 
 export class AssetsServiceType {
@@ -20,7 +18,7 @@ export default class AssetsService extends AppService {
 
   public static UPDATE_FILTER_REJECT = 'reject';
 
-  public assetsRegistry: any = { css: {}, js: {} };
+  public assetsRegistry: any = {css: {}, js: {}};
   public queue: Queue;
   public jsAssetsPending: object = {};
   public updateFilters: Function[] = [];
@@ -33,19 +31,13 @@ export default class AssetsService extends AppService {
           this.app.services.assets.appInit();
         },
 
-        loadRenderData(
-          renderData: RenderDataLayoutInterface,
-          requestOptions: RequestOptionsInterface,
-          registry: any,
-          next: Function
+        async loadRenderData(
+          renderData: RenderDataLayoutInterface
         ) {
           // Load only layout assets.
-          this.app.services.assets.updateAssetsCollection(
-            renderData.assets,
-            next
+          await this.app.services.assets.updateAssetsCollection(
+            renderData.assets
           );
-
-          return MixinsAppService.LOAD_STATUS_STOP;
         },
       },
     };
@@ -88,8 +80,7 @@ export default class AssetsService extends AppService {
 
             // Stops queue unit class has been loaded.
             return Queue.EXEC_STOP;
-          }
-          else {
+          } else {
             this.setAssetLoaded(asset);
           }
         } else {
@@ -205,9 +196,10 @@ export default class AssetsService extends AppService {
     queue: Queue,
     assetsCollection: AssetsCollectionInterface
   ) {
-    queue.add((next: Function) => {
-      this.updateAssetsCollection(assetsCollection, next);
-      return Queue.EXEC_STOP;
+    queue.add(async (next: Function) => {
+      await this.updateAssetsCollection(assetsCollection);
+
+      next();
     });
   }
 
@@ -220,7 +212,7 @@ export default class AssetsService extends AppService {
     );
   }
 
-  updateAssets(complete?: Function) {
+  async updateAssets(complete?: Function) {
     // Only single queue for assets, for now.
     let queue = this.services.queues.create() as Queue;
     queue.isAsync = true;
@@ -234,9 +226,8 @@ export default class AssetsService extends AppService {
     queue.start();
   }
 
-  updateAssetsCollection(
+  public async updateAssetsCollection(
     assetsCollection: AssetsCollectionInterface,
-    complete?: Function
   ) {
     let toLoad = {};
     let toUnload = {};
@@ -281,13 +272,7 @@ export default class AssetsService extends AppService {
       // Remove old ones.
       let queueUnLoad = assetsService.removeAssets(toUnload);
 
-      if (complete) {
-        this.services.queues.afterAllQueues([queueLoad, queueUnLoad], () => {
-          complete();
-        });
-      }
-    } else {
-      complete && this.app.async(complete);
+      await this.services.queues.afterAllQueues([queueLoad, queueUnLoad]);
     }
   }
 }

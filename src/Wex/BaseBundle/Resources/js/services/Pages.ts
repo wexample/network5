@@ -22,7 +22,7 @@ export default class PagesService extends RenderNodeService {
   registerHooks() {
     return {
       app: {
-        loadRenderData(
+        async loadRenderData(
           renderData: RenderDataLayoutInterface,
           requestOptions: RequestOptionsInterface,
           registry: any,
@@ -34,27 +34,24 @@ export default class PagesService extends RenderNodeService {
             registry.locale === MixinsAppService.LOAD_STATUS_COMPLETE
           ) {
             if (renderData.page) {
-              this.services.pages.createPage(
+              await this.services.pages.createPage(
                 renderData.page,
                 requestOptions,
                 next
               );
-
-              return MixinsAppService.LOAD_STATUS_STOP;
-            } else {
-              return MixinsAppService.LOAD_STATUS_COMPLETE;
             }
+            return;
           }
+
           return MixinsAppService.LOAD_STATUS_WAIT;
         },
       },
     };
   }
 
-  createPage(
+  async createPage(
     renderData: RenderDataPageInterface,
     requestOptions: RequestOptionsInterface,
-    complete?: Function
   ) {
     let el;
 
@@ -73,7 +70,7 @@ export default class PagesService extends RenderNodeService {
 
       delete this.services.components.pageHandlerRegistry[
         renderData.renderRequestId
-      ];
+        ];
 
       pageHandler.renderPageEl(renderData);
       el = pageHandler.getPageEl();
@@ -88,7 +85,7 @@ export default class PagesService extends RenderNodeService {
       return;
     }
 
-    this.createRenderNode(el, renderData, requestOptions, complete);
+    await this.createRenderNode(el, renderData, requestOptions);
   }
 
   createRenderNodeInstance(

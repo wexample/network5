@@ -9,29 +9,32 @@ export default class QueuesService extends MixinsAppService {
   public queues: object = {};
   protected service: QueuesService;
 
-  afterAllQueues(queues, complete) {
-    let originalList = ArrayShallowCopy(queues);
-    let hasRunningQueue = false;
+  public async afterAllQueues(queues): Promise<any> {
+    return new Promise(async (resolve) => {
 
-    queues.forEach((queue: Queue) => {
-      if (queue.started) {
-        hasRunningQueue = true;
+      let originalList = ArrayShallowCopy(queues);
+      let hasRunningQueue = false;
 
-        queue.then(() => {
-          ArrayDeleteItem(queues, queue);
+      queues.forEach((queue: Queue) => {
+        if (queue.started) {
+          hasRunningQueue = true;
 
-          if (!queues.length) {
-            queue.then(() => {
-              complete(originalList);
-            });
-          }
-        });
+          queue.then(() => {
+            ArrayDeleteItem(queues, queue);
+
+            if (!queues.length) {
+              queue.then(() => {
+                resolve(originalList);
+              });
+            }
+          });
+        }
+      });
+
+      if (!hasRunningQueue) {
+        resolve(originalList);
       }
     });
-
-    if (!hasRunningQueue) {
-      this.app.async(() => complete(originalList));
-    }
   }
 
   create(queueName: string = null) {

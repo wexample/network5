@@ -9,23 +9,24 @@ export default abstract class RenderNodeService extends AppService {
   pages: {};
   services: ServiceRegistryPageInterface;
 
-  createRenderNode(
+  async createRenderNode(
     el: HTMLElement,
     renderData: RenderDataInterface,
-    requestOptions: RequestOptionsInterface,
-    complete?: Function
-  ) {
-    this.prepareRenderNodeDefinition(renderData, (classDefinition) => {
-      let instance = this.createRenderNodeInstance(
-        el,
-        renderData,
-        classDefinition
-      );
+    requestOptions: RequestOptionsInterface
+  ): Promise<RenderNode> {
+    let classDefinition = await this.prepareRenderNodeDefinition(renderData);
 
-      instance.loadRenderData(renderData, requestOptions);
+    let instance = this.createRenderNodeInstance(
+      el,
+      renderData,
+      classDefinition
+    );
 
-      instance.init(complete);
-    });
+    instance.loadRenderData(renderData, requestOptions);
+
+    await instance.init();
+
+    return instance;
   }
 
   createRenderNodeInstance(
@@ -36,18 +37,15 @@ export default abstract class RenderNodeService extends AppService {
     return new classDefinition(this.app, el);
   }
 
-  prepareRenderNodeDefinition(
-    renderData: RenderDataInterface,
-    complete?: Function
+  async prepareRenderNodeDefinition(
+    renderData: RenderDataInterface
   ) {
-    this.services.assets.updateAssetsCollection(renderData.assets, () => {
-      let classDefinition = this.app.getBundleClassDefinition(
-        renderData.name,
-        true
-      );
+    await this.services.assets.updateAssetsCollection(renderData.assets);
 
-      complete && complete(classDefinition);
-    });
+    return this.app.getBundleClassDefinition(
+      renderData.name,
+      true
+    );
   }
 
   get(path: string, options: RequestOptionsPageInterface): Promise<any> {

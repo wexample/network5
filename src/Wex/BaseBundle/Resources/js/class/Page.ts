@@ -52,34 +52,37 @@ export default class extends RenderNode {
 
     this.elOverlay = this.el.querySelector('.page-overlay');
 
-    this.vars = { ...this.vars, ...this.renderData.vars };
+    this.vars = {...this.vars, ...this.renderData.vars};
   }
 
-  init(complete?: Function) {
-    // Enqueue.
-    this.ready(complete);
+  async init() {
+    await this.app.loadAndInitServices(
+      this.getPageLevelMixins()
+    );
 
-    return this.app.loadAndInitServices(this.getPageLevelMixins()).then(() => {
-      return this.services.mixins
-        .invokeUntilComplete('loadPageRenderData', 'page', [this])
-        .then(() => {
-          if (this.renderData.pageHandler) {
-            this.renderData.pageHandler.setPage(this);
-          }
+    await this.services.mixins
+      .invokeUntilComplete(
+        'loadPageRenderData',
+        'page',
+        [this]
+      );
 
-          this.updateCurrentResponsiveDisplay();
 
-          this.updateLayoutTheme(this.services.theme.activeTheme);
+    if (this.renderData.pageHandler) {
+      this.renderData.pageHandler.setPage(this);
+    }
 
-          this.activateListeners();
+    this.updateCurrentResponsiveDisplay();
 
-          this.focus();
+    this.updateLayoutTheme(this.services.theme.activeTheme);
 
-          this.mounted();
+    this.activateListeners();
 
-          this.readyComplete(this);
-        });
-    });
+    this.focus();
+
+    this.mounted();
+
+    await this.readyComplete(this);
   }
 
   public focus() {

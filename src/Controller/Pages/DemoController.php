@@ -4,6 +4,7 @@ namespace App\Controller\Pages;
 
 use App\Wex\BaseBundle\Controller\AbstractPagesController;
 use App\Wex\BaseBundle\Helper\VariableHelper;
+use App\Wex\BaseBundle\Service\AssetsService;
 use App\Wex\BaseBundle\Twig\AssetsExtension;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +23,7 @@ class DemoController extends AbstractPagesController
         return $this->renderPage(
             VariableHelper::ASSETS,
             [
-                'displayBreakpoints' => AssetsExtension::DISPLAY_BREAKPOINTS,
+                'displayBreakpoints' => AssetsService::DISPLAY_BREAKPOINTS,
             ]
         );
     }

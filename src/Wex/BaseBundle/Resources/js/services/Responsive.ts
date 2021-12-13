@@ -19,7 +19,7 @@ export default class ResponsiveService extends AppService {
   registerHooks() {
     return {
       app: {
-        init(registry: any) {
+        async init(registry: any) {
           if (registry.assets === MixinsAppService.LOAD_STATUS_COMPLETE) {
             let responsiveService = this.services.responsive;
 
@@ -27,13 +27,13 @@ export default class ResponsiveService extends AppService {
               responsiveService.updateFilters.bind(responsiveService)
             );
 
-            window.addEventListener(Events.RESIZE, () =>
-              responsiveService.updateResponsive(true)
+            window.addEventListener(Events.RESIZE, async () =>
+              await responsiveService.updateResponsive(true)
             );
 
-            responsiveService.updateResponsive(false);
+            await responsiveService.updateResponsive(false);
 
-            return MixinsAppService.LOAD_STATUS_COMPLETE;
+            return;
           }
 
           return MixinsAppService.LOAD_STATUS_WAIT;
@@ -42,7 +42,7 @@ export default class ResponsiveService extends AppService {
     };
   }
 
-  updateResponsive(updateAssets: boolean, complete?: Function) {
+  async updateResponsive(updateAssets: boolean) {
     let current = this.detectSize();
 
     if (current !== this.responsiveSizeCurrent) {
@@ -50,23 +50,18 @@ export default class ResponsiveService extends AppService {
       this.responsiveSizeCurrent = current;
 
       if (updateAssets) {
-        this.services.assets.updateAssets(() => {
-          // Now change page class.
-          this.updateResponsiveLayoutClass();
+        await this.services.assets.updateAssets();
+        // Now change page class.
+        this.updateResponsiveLayoutClass();
 
-          this.services.events.trigger(
-            ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
-            {
-              current: current,
-              previous: this.responsiveSizePrevious,
-            }
-          );
-
-          complete && complete();
-        });
+        this.services.events.trigger(
+          ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
+          {
+            current: current,
+            previous: this.responsiveSizePrevious,
+          }
+        );
       }
-    } else {
-      complete && complete();
     }
   }
 

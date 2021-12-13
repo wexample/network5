@@ -6,6 +6,7 @@ use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
+use App\Wex\BaseBundle\Service\AssetsService;
 use function array_merge_recursive;
 use function array_reverse;
 use function basename;
@@ -23,15 +24,6 @@ class AssetsExtension extends AbstractExtension
     public const DIR_BUILD = 'build/';
 
     public const FILE_MANIFEST = 'manifest.json';
-
-    public const DISPLAY_BREAKPOINTS = [
-        'xs' => 0,
-        's' => 576,
-        'm' => 768,
-        'l' => 992,
-        'xl' => 1200,
-        'xxl' => 1400,
-    ];
 
     public const THEME_DARK = 'dark';
 
@@ -325,7 +317,7 @@ class AssetsExtension extends AbstractExtension
         // Add responsive assets.
 
         $breakpointsReverted = array_reverse(
-            self::DISPLAY_BREAKPOINTS
+            AssetsService::DISPLAY_BREAKPOINTS
         );
         $maxWidth = null;
 

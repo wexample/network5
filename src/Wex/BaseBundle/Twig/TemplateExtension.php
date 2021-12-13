@@ -8,6 +8,7 @@ use App\Wex\BaseBundle\Rendering\RenderDataAjax;
 use App\Wex\BaseBundle\Rendering\RenderDataInitialLayout;
 use App\Wex\BaseBundle\Rendering\RenderDataLayout;
 use App\Wex\BaseBundle\Rendering\RenderDataPage;
+use App\Wex\BaseBundle\Service\AssetsService;
 use App\Wex\BaseBundle\Service\RenderingService;
 use App\Wex\BaseBundle\Service\TemplateService;
 use Exception;
@@ -96,7 +97,7 @@ class TemplateExtension extends AbstractExtension
             RenderingHelper::CONTEXT_LAYOUT
         );
 
-        $renderData->displayBreakpoints = AssetsExtension::DISPLAY_BREAKPOINTS;
+        $renderData->displayBreakpoints = AssetsService::DISPLAY_BREAKPOINTS;
         $renderData->env = $this->kernel->getEnvironment();
         $renderData->theme = $layoutTheme;
 

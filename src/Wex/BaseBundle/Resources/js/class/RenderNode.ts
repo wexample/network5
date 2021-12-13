@@ -19,9 +19,8 @@ export default abstract class RenderNode extends AppChild {
     this.el = el;
   }
 
-  public init(complete?: Function) {
-    this.ready(complete);
-    this.readyComplete(this);
+  public async init() {
+    await this.readyComplete(this);
   }
 
   public exit() {

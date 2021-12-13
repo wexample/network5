@@ -3,6 +3,8 @@ import { createApp } from 'vue/dist/vue.esm-bundler';
 import AppService from '../class/AppService';
 import PagesService from './Pages';
 import MixinsAppService from '../class/MixinsAppService';
+import RenderDataComponentInterface from "../interfaces/RenderDataComponentInterface";
+import RequestOptionsInterface from "../interfaces/RequestOptionsInterface";
 
 export default class VueService extends AppService {
   protected componentRegistered: any = {};
@@ -35,7 +37,7 @@ export default class VueService extends AppService {
 
             this.app.mix(this.globalMixin, 'vue');
 
-            return MixinsAppService.LOAD_STATUS_COMPLETE;
+            return;
           }
           return MixinsAppService.LOAD_STATUS_WAIT;
         },
@@ -53,7 +55,7 @@ export default class VueService extends AppService {
 
   inherit(vueComponent) {
     let componentsFinal = vueComponent.components || {};
-    let extend = { components: {} };
+    let extend = {components: {}};
 
     if (vueComponent.extends) {
       extend = this.inherit(vueComponent.extends);
@@ -79,10 +81,17 @@ export default class VueService extends AppService {
     return vueComponent;
   }
 
-  createVueAppForComponent(path) {
+  createVueAppForComponent(
+    path,
+    renderData: RenderDataComponentInterface,
+    requestOptions: RequestOptionsInterface
+  ) {
     let component = this.initComponent(path);
 
-    let app = this.createApp(component);
+    let app = this.createApp(component, {
+      renderData:renderData,
+      requestOptions:requestOptions,
+    });
 
     Object.entries(this.componentRegistered).forEach((data) => {
       app.component(data[0], data[1]);

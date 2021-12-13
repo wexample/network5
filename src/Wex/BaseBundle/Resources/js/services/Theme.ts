@@ -41,7 +41,7 @@ export default class ThemeService extends AppService {
 
             themeService.activateListeners();
 
-            return MixinsAppService.LOAD_STATUS_COMPLETE;
+            return;
           }
 
           return MixinsAppService.LOAD_STATUS_WAIT;
@@ -54,19 +54,19 @@ export default class ThemeService extends AppService {
     this.colorSchemes.forEach((theme) => {
       window
         .matchMedia(`(prefers-color-scheme: ${theme})`)
-        .addEventListener('change', (e) => {
+        .addEventListener('change', async (e) => {
           if (e.matches) {
             this.activeColorScheme = theme;
           } else {
             this.activeColorScheme = ThemeService.THEME_DEFAULT;
           }
-          this.updateTheme(true);
+          await this.updateTheme(true);
         });
     });
 
-    window.matchMedia('print').addEventListener('change', (e) => {
+    window.matchMedia('print').addEventListener('change', async (e) => {
       this.activePrint = e.matches;
-      this.updateTheme(true);
+      await this.updateTheme(true);
     });
   }
 
@@ -91,7 +91,7 @@ export default class ThemeService extends AppService {
     return ThemeService.THEME_DEFAULT;
   }
 
-  setTheme(theme: string, updateAssets: boolean, complete?: Function) {
+  async setTheme(theme: string, updateAssets: boolean) {
     let classList = document.body.classList;
 
     classList.forEach((className) => {
@@ -104,25 +104,20 @@ export default class ThemeService extends AppService {
 
     classList.add(`theme-${this.activeTheme}`);
 
-    let callback = () => {
-      this.services.events.trigger(ThemeServiceEvents.THEME_CHANGE, {
-        theme: theme,
-      });
-      complete && complete();
-    };
-
     if (updateAssets) {
-      this.services.assets.updateAssets(callback);
+      await this.services.assets.updateAssets();
     }
+
+    this.services.events.trigger(ThemeServiceEvents.THEME_CHANGE, {
+      theme: theme,
+    });
   }
 
-  updateTheme(updateAssets: boolean, complete?: Function) {
+  async updateTheme(updateAssets: boolean) {
     let current = this.detectTheme();
 
     if (this.activeTheme !== current) {
-      this.setTheme(current, updateAssets, complete);
-    } else {
-      complete && complete();
+      await this.setTheme(current, updateAssets);
     }
   }
 

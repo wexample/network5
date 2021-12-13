@@ -6,7 +6,5 @@ import AppService from './AppService';
 export default class MixinsAppService extends AppService {
   public static LOAD_STATUS_COMPLETE = 'complete';
 
-  public static LOAD_STATUS_STOP = 'stop';
-
   public static LOAD_STATUS_WAIT = 'wait';
 }

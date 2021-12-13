@@ -17,15 +17,15 @@ const bundle: AssetBundleInterface = {
     services: ServiceRegistryPageCurrentInterface;
     unitTest: UnitTest;
 
-    mounted() {
+    async mounted() {
       this.unitTest = new UnitTest();
 
-      this.testQueues();
-      this.testVariables();
+      await this.testQueues();
+      await this.testVariables();
 
       document.querySelectorAll('.demo-button-switch-theme').forEach((el) => {
-        el.addEventListener(Events.CLICK, () => {
-          this.services.theme.setTheme(el.getAttribute('data-theme'), true);
+        el.addEventListener(Events.CLICK, async () => {
+          await this.services.theme.setTheme(el.getAttribute('data-theme'), true);
         });
       });
     }
@@ -49,7 +49,7 @@ const bundle: AssetBundleInterface = {
       super.updateLayoutTheme(theme);
     }
 
-    testQueues() {
+    async testQueues() {
       let test = this.unitTest;
       let queuesMixin = this.services.queues;
       let queue = queuesMixin.create('test-queue');
@@ -104,28 +104,27 @@ const bundle: AssetBundleInterface = {
 
       queue2.start();
 
-      queuesMixin.afterAllQueues([queue, queue2], () => {
+      await queuesMixin.afterAllQueues([queue, queue2]);
+      test.assertTrue(
+        !queue.started && !queue.started,
+        'All queues are complete'
+      );
+      counterTwo++;
+
+      await queuesMixin.afterAllQueues([queue, queue2]);
+
+      test.assertTrue(
+        !queue.started && !queue.started,
+        'If already complete, callback is executed immediately.'
+      );
+      counterTwo++;
+
+      queue.then(() => {
         test.assertTrue(
           !queue.started && !queue.started,
-          'All queues are complete'
+          'All new callbacks are executed'
         );
         counterTwo++;
-
-        queuesMixin.afterAllQueues([queue, queue2], () => {
-          test.assertTrue(
-            !queue.started && !queue.started,
-            'If already complete, callback is executed immediately.'
-          );
-          counterTwo++;
-
-          queue.then(() => {
-            test.assertTrue(
-              !queue.started && !queue.started,
-              'All new callbacks are executed'
-            );
-            counterTwo++;
-          });
-        });
       });
 
       setTimeout(() => {

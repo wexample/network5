@@ -42,7 +42,7 @@ export default class extends AsyncConstructor {
 
     let doc = window.document;
 
-    let run = () => {
+    let run = async () => {
       let registry: {
         bundles: any;
         layoutRenderData: RenderDataLayoutInterface;
@@ -53,21 +53,22 @@ export default class extends AsyncConstructor {
       this.layout = new LayoutInitial(this);
       this.layout.el = doc.getElementById('layout');
 
-      this.loadAndInitServices(this.getServices()).then(() => {
-        this.addLibraries(this.lib);
+      await this.loadAndInitServices(this.getServices());
 
-        // The main functionalities are ready.
-        this.hasCoreLoaded = true;
+      this.addLibraries(this.lib);
 
-        return this.loadRenderData(this.layout.renderData)
-          .then(() => {
-            // Display page content.
-            this.layout.el.classList.remove('layout-loading');
-            // Execute ready callbacks.
-            this.readyComplete();
-          })
-          .then(readyCallback);
-      });
+      // The main functionalities are ready.
+      this.hasCoreLoaded = true;
+
+      await this.loadRenderData(this.layout.renderData);
+
+      // Display page content.
+      this.layout.el.classList.remove('layout-loading');
+
+      // Execute ready callbacks.
+      await this.readyComplete();
+
+      readyCallback && await readyCallback();
     };
 
     let readyState = doc.readyState;
@@ -85,17 +86,16 @@ export default class extends AsyncConstructor {
     renderData: RenderDataInterface,
     requestOptions: RequestOptionsInterface = {}
   ): Promise<any> {
-    return this.services.mixins
+    await this.services.mixins
       .invokeUntilComplete('loadRenderData', 'app', [
         renderData,
         requestOptions,
-      ])
-      .then(() => {
-        // Execute ready callbacks.
-        this.readyComplete();
-        // Display page content.
-        this.layout.el.classList.remove('layout-loading');
-      });
+      ]);
+
+    // Execute ready callbacks.
+    await this.readyComplete();
+    // Display page content.
+    this.layout.el.classList.remove('layout-loading');
   }
 
   buildServiceName(serviceName: string): string {
@@ -134,7 +134,7 @@ export default class extends AsyncConstructor {
     return instances;
   }
 
-  loadAndInitServices(ServicesDefinitions: typeof AppService[]): Promise<any> {
+  async loadAndInitServices(ServicesDefinitions: typeof AppService[]): Promise<any> {
     let services = this.loadServices(ServicesDefinitions);
 
     // Init mixins.

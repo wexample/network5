@@ -14,80 +14,63 @@ export default class MixinsService extends AppService {
    * @param args
    * @param group
    * @param timeoutLimit
-   * @param mixins
+   * @param services
    */
   invokeUntilComplete(
     method,
     group = 'app',
     args = [],
     timeoutLimit: number = 2000,
-    mixins: AppService[] = null
+    services: AppService[] = (Object.values(this.app.services) as AppService[])
   ): Promise<any> {
-    return new Promise((resolve) => {
-      let registry: { [key: string]: string } = {};
-      mixins = mixins || (Object.values(this.app.services) as AppService[]);
+    return new Promise(async (resolve) => {
+      let errorTrace: AppService[] = [];
       let loops: number = 0;
       let loopsLimit: number = 100;
-      let errorTrace: AppService[] = [];
-      let currentName: string = 'startup';
+      let registry: { [key: string]: string } = {};
+      let service;
 
-      let timeout = setTimeout(() => {
-        throw `Mixins invocation timeout on method "${method}", stopping at "${currentName}".`;
-      }, timeoutLimit);
+      while (service = services.shift()) {
+        let timeout = setTimeout(() => {
+          throw `Mixins invocation timeout on method "${method}", stopping at "${currentName}".`;
+        }, timeoutLimit);
 
-      let step = () => {
-        let service: AppService = mixins.shift() as AppService;
+        let currentName = service.name;
+        let hooks = service.registerHooks();
 
-        if (service) {
-          currentName = service.name;
-          let hooks = service.registerHooks();
-
-          if (loops++ > loopsLimit) {
-            console.error(errorTrace);
-            console.error(registry);
-            throw (
-              `Stopping more than ${loops} recursions during services invocation ` +
-              `on method "${method}", stopping at ${currentName}, see trace below.`
-            );
-          } else if (loops > loopsLimit - 10) {
-            errorTrace.push(service);
-          }
-
-          let next = () => {
-            registry[currentName] = MixinsAppService.LOAD_STATUS_COMPLETE;
-            step();
-          };
-
-          if (hooks && hooks[group] && hooks[group][method]) {
-            let argsLocal = args.concat([registry, next]);
-            registry[currentName] = hooks[group][method].apply(
-              service,
-              argsLocal
-            );
-          }
-
-          // "wait" says to retry after processing other services.
-          if (registry[currentName] === MixinsAppService.LOAD_STATUS_WAIT) {
-            // Enqueue again.
-            mixins.push(service);
-            step();
-          }
-          // "stop" allows to let service to relaunch process itself.
-          else if (
-            registry[currentName] !== MixinsAppService.LOAD_STATUS_STOP
-          ) {
-            next();
-          }
+        if (loops++ > loopsLimit) {
+          console.error(errorTrace);
+          console.error(registry);
+          throw (
+            `Stopping more than ${loops} recursions during services invocation ` +
+            `on method "${method}", stopping at ${currentName}, see trace below.`
+          );
+        } else if (loops > loopsLimit - 10) {
+          errorTrace.push(service);
         }
-        // No more service.
-        else {
-          clearTimeout(timeout);
 
-          resolve(registry);
+        if (hooks && hooks[group] && hooks[group][method]) {
+          let argsLocal = args.concat([registry]);
+          registry[currentName] = await hooks[group][method].apply(
+            service,
+            argsLocal
+          );
         }
-      };
 
-      step();
+        if (registry[currentName] === undefined) {
+          registry[currentName] = MixinsAppService.LOAD_STATUS_COMPLETE;
+        }
+
+        // "wait" says to retry after processing other services.
+        if (registry[currentName] === MixinsAppService.LOAD_STATUS_WAIT) {
+          // Enqueue again.
+          services.push(service);
+        }
+
+        clearTimeout(timeout);
+      }
+
+      resolve(true);
     });
   }
 }
