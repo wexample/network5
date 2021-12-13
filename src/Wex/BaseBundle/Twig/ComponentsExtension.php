@@ -77,10 +77,10 @@ class ComponentsExtension extends AbstractExtension
     {
         return [
             new TwigFunction(
-                'com',
+                'component',
                 [
                     $this,
-                    'com',
+                    'component',
                 ],
                 [
                     self::FUNCTION_OPTION_IS_SAFE => self::FUNCTION_OPTION_IS_SAFE_VALUE_HTML,
@@ -152,7 +152,7 @@ class ComponentsExtension extends AbstractExtension
     /**
      * @throws Exception
      */
-    public function com(
+    public function component(
         Environment $twig,
         string $name,
         array $options = []
