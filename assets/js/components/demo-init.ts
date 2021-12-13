@@ -1,6 +1,5 @@
 import AssetBundleInterface from '../../../src/Wex/BaseBundle/Resources/js/interfaces/AssetBundleInterface';
 import Component from '../../../src/Wex/BaseBundle/Resources/js/class/Component';
-import RenderDataComponentInterface from '../../../src/Wex/BaseBundle/Resources/js/interfaces/RenderDataComponentInterface';
 
 const bundle: AssetBundleInterface = {
   bundleGroup: 'component',
