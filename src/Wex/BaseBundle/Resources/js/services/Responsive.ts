@@ -1,5 +1,4 @@
 import AssetsService from './Assets';
-import QueuesService from './Queues';
 import AppService from '../class/AppService';
 import MixinsAppService from '../class/MixinsAppService';
 import AssetsInterface from '../interfaces/AssetInterface';
@@ -10,7 +9,7 @@ export class ResponsiveServiceEvents {
 }
 
 export default class ResponsiveService extends AppService {
-  dependencies: [AssetsService, QueuesService];
+  dependencies: [AssetsService];
 
   public responsiveSizeCurrent: string;
 
@@ -50,7 +49,7 @@ export default class ResponsiveService extends AppService {
       this.responsiveSizeCurrent = current;
 
       if (updateAssets) {
-        await this.services.assets.updateAssets();
+        await this.services.assets.updateLayoutAssets();
         // Now change page class.
         this.updateResponsiveLayoutClass();
 

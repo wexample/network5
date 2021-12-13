@@ -105,7 +105,7 @@ export default class ThemeService extends AppService {
     classList.add(`theme-${this.activeTheme}`);
 
     if (updateAssets) {
-      await this.services.assets.updateAssets();
+      await this.services.assets.updateLayoutAssets();
     }
 
     this.services.events.trigger(ThemeServiceEvents.THEME_CHANGE, {

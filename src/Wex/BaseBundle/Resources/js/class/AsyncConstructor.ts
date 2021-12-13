@@ -6,9 +6,9 @@ export default abstract class {
     setTimeout(callback);
   }
 
-  async ready(callback: Function) {
+  ready(callback: Function) {
     if (this.isReady) {
-      await callback();
+      this.async(callback());
     } else {
       this.readyCallbacks.push(callback);
     }

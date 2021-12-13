@@ -22,6 +22,7 @@ export default abstract class RenderNodeService extends AppService {
       classDefinition
     );
 
+
     instance.loadRenderData(renderData, requestOptions);
 
     await instance.init();
@@ -40,7 +41,7 @@ export default abstract class RenderNodeService extends AppService {
   async prepareRenderNodeDefinition(
     renderData: RenderDataInterface
   ) {
-    await this.services.assets.updateAssetsCollection(renderData.assets);
+    await this.services.assets.loadValidAssetsInCollection(renderData.assets);
 
     return this.app.getBundleClassDefinition(
       renderData.name,

@@ -1,9 +1,7 @@
-import QueuesService from './Queues';
 import AssetsCollectionInterface from '../interfaces/AssetsCollectionInterface';
-import Queue from '../class/Queue';
 import AppService from '../class/AppService';
 import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
-import AssetsInterface from '../interfaces/AssetInterface';
+import AssetInterface from '../interfaces/AssetInterface';
 import RenderNode from '../class/RenderNode';
 import { Attribute, AttributeValue, TagName } from '../helpers/Dom';
 
@@ -18,11 +16,9 @@ export default class AssetsService extends AppService {
 
   public static UPDATE_FILTER_REJECT = 'reject';
 
-  public assetsRegistry: any = {css: {}, js: {}};
-  public queue: Queue;
-  public jsAssetsPending: object = {};
+  public assetsRegistry: AssetsCollectionInterface = this.createEmptyAssetsCollection();
+  public jsAssetsPending: { [key: string]: AssetInterface } = {};
   public updateFilters: Function[] = [];
-  public static dependencies: typeof AppService[] = [QueuesService];
 
   registerHooks() {
     return {
@@ -35,7 +31,7 @@ export default class AssetsService extends AppService {
           renderData: RenderDataLayoutInterface
         ) {
           // Load only layout assets.
-          await this.app.services.assets.updateAssetsCollection(
+          await this.app.services.assets.loadValidAssetsInCollection(
             renderData.assets
           );
         },
@@ -43,15 +39,12 @@ export default class AssetsService extends AppService {
     };
   }
 
-  appInit() {
-    // Only single queue for assets.
-    this.queue = this.services.queues.create('assets-loading');
-
+  async appInit() {
     // Wait for all render node tree to be properly set.
-    this.app.ready(() => {
+    await this.app.ready(async () => {
       // Mark all initially rendered assets in layout as loaded.
-      this.app.layout.forEachRenderNode((renderNode: RenderNode) => {
-        this.forEachAssetInCollection(renderNode.renderData.assets, (asset) => {
+      await this.app.layout.forEachRenderNode(async (renderNode: RenderNode) => {
+        await this.forEachAssetInCollection(renderNode.renderData.assets, (asset) => {
           if (asset.rendered) {
             this.setAssetLoaded(asset);
           }
@@ -60,104 +53,89 @@ export default class AssetsService extends AppService {
     });
   }
 
-  appendAsset(asset, callback: Function = null) {
-    let queue: Queue = this.queue;
+  async appendAsset(asset: AssetInterface) {
+    return new Promise(async (resolve) => {
+      asset.resolver = resolve;
 
-    // Avoid currently and already loaded.
-    if (!asset.active) {
-      // Active said that asset should be loaded,
-      // event loading is not complete or queue is terminated.
-      asset.active = true;
-      asset.queue = queue;
+      // Avoid currently and already loaded.
+      if (!asset.active) {
+        // Active said that asset should be loaded,
+        // event loading is not complete or queue is terminated.
+        asset.active = true;
 
-      queue.add(() => {
         if (asset.type === 'js') {
           // Browsers does not load twice the JS file content.
           if (!asset.rendered) {
+            this.jsAssetsPending[asset.id] = asset;
             asset.el = this.addScript(asset.path);
 
-            this.jsAssetsPending[asset.id] = asset;
-
-            // Stops queue unit class has been loaded.
-            return Queue.EXEC_STOP;
-          } else {
-            this.setAssetLoaded(asset);
+            // Javascript file will run resolve.
+            return;
           }
         } else {
-          asset.el = this.addStyle(asset.path);
-          this.setAssetLoaded(asset);
+          if (!asset.rendered) {
+            asset.el = this.addStyle(asset.path);
+          }
         }
-      });
-    }
+      }
 
-    if (callback) {
-      queue.then(callback);
-    }
-
-    return queue.start();
+      resolve(asset);
+    }).then((asset: AssetInterface) => {
+      this.setAssetLoaded(asset);
+    });
   }
 
-  forEachAssetInCollection(
+  async forEachAssetInCollection(
     assetsCollection: AssetsCollectionInterface,
     callback
   ) {
-    Object.entries(assetsCollection).forEach((data) =>
-      data[1].map((asset) => callback(asset, data[0]))
-    );
-  }
+    let asset: AssetInterface;
+    let data;
+    let entries = Object.entries(assetsCollection);
 
-  appendAssets(assetsCollection) {
-    this.forEachAssetInCollection(assetsCollection, (asset) =>
-      this.appendAsset(asset)
-    );
-
-    return this.queue;
-  }
-
-  removeAssets(assetsCollection) {
-    this.forEachAssetInCollection(assetsCollection, (asset) =>
-      this.removeAsset(asset)
-    );
-
-    return this.queue;
-  }
-
-  removeAsset(asset) {
-    let remove = () => {
-      asset.active = false;
-      asset.loaded = false;
-
-      if (asset.el) {
-        // Remove from document.
-        asset.el.remove();
-        asset.el = null;
+    for (data of entries) {
+      for (asset of data[1]) {
+        await callback(asset, data[0])
       }
-    };
-
-    if (asset.queue) {
-      asset.queue.add(remove);
-    } else {
-      remove();
     }
   }
 
-  setAssetLoaded(asset) {
+  async appendAssets(assetsCollection) {
+    await this.forEachAssetInCollection(assetsCollection, async (asset) => {
+      await this.appendAsset(asset)
+    });
+  }
+
+  async removeAssets(assetsCollection) {
+    await this.forEachAssetInCollection(assetsCollection, async (asset) =>
+      this.removeAsset(asset)
+    );
+  }
+
+  removeAsset(asset: AssetInterface) {
+    asset.active = false;
+    asset.loaded = false;
+
+    if (asset.el) {
+      // Remove from document.
+      asset.el.remove();
+      asset.el = null;
+    }
+  }
+
+  setAssetLoaded(asset: AssetInterface) {
     asset.loaded = true;
     asset.rendered = true;
-    asset.queue = null;
   }
 
   jsPendingLoaded(id) {
     let asset = this.jsAssetsPending[id];
-    let queue = asset.queue;
+    asset.resolver(asset);
 
-    this.setAssetLoaded(asset);
-
-    queue.next();
     delete this.jsAssetsPending[id];
   }
 
-  addScript(src) {
+  addScript(src: string) {
     let el = document.createElement(TagName.SCRIPT);
     el.setAttribute(Attribute.SRC, src);
 
@@ -165,7 +143,7 @@ export default class AssetsService extends AppService {
     return el;
   }
 
-  addStyle(href) {
+  addStyle(href: string) {
     let el = this.createStyleLinkElement();
     el.setAttribute(Attribute.HREF, href);
 
@@ -182,7 +160,7 @@ export default class AssetsService extends AppService {
   /**
    * By default accept to load all given assets, except any filter rejects it.
    */
-  protected updateAssetsCollectionCallFilters(asset: AssetsInterface) {
+  protected askFilterIfAssetIsValid(asset: AssetInterface) {
     for (let filter of this.updateFilters) {
       if (filter(asset) === AssetsService.UPDATE_FILTER_REJECT) {
         return false;
@@ -192,68 +170,52 @@ export default class AssetsService extends AppService {
     return true;
   }
 
-  enqueueAssetsUpdate(
-    queue: Queue,
-    assetsCollection: AssetsCollectionInterface
-  ) {
-    queue.add(async (next: Function) => {
-      await this.updateAssetsCollection(assetsCollection);
-
-      next();
-    });
-  }
-
-  enqueueRenderNodeAssetsUpdate(queue, renderNode: RenderNode) {
+  async updateRenderNodeAssets(renderNode: RenderNode) {
     // For main node.
-    this.enqueueAssetsUpdate(queue, renderNode.renderData.assets);
+    await this.loadValidAssetsInCollection(renderNode.renderData.assets);
     // For child nodes.
-    renderNode.forEachChildRenderNode((renderNode) =>
-      this.enqueueRenderNodeAssetsUpdate(queue, renderNode)
+    renderNode.forEachChildRenderNode(async (renderNode) =>
+      await this.updateRenderNodeAssets(renderNode)
     );
   }
 
-  async updateAssets(complete?: Function) {
-    // Only single queue for assets, for now.
-    let queue = this.services.queues.create() as Queue;
-    queue.isAsync = true;
-
-    this.enqueueRenderNodeAssetsUpdate(queue, this.app.layout);
-
-    queue.then(() => {
-      complete && complete();
-    });
-
-    queue.start();
+  async updateLayoutAssets() {
+    await this.updateRenderNodeAssets(this.app.layout);
   }
 
-  public async updateAssetsCollection(
+  public createEmptyAssetsCollection(): AssetsCollectionInterface {
+    return {
+      css: [],
+      js: [],
+    }
+  }
+
+  public async loadValidAssetsInCollection(
     assetsCollection: AssetsCollectionInterface,
   ) {
-    let toLoad = {};
-    let toUnload = {};
+    let toLoad = this.createEmptyAssetsCollection();
+    let toUnload = this.createEmptyAssetsCollection();
     let hasChange = false;
     let assetsRegistry = this.assetsRegistry;
 
-    this.forEachAssetInCollection(
+    await this.forEachAssetInCollection(
       assetsCollection,
-      (asset: AssetsInterface) => {
+      async (asset: AssetInterface) => {
         let type = asset.type;
 
-        // Asset has already been loaded,
-        // so it's local status may have been update,
-        // so we always prefer local version.
+        // Asset object may come from a fresh xhr load,
+        // and represent an existing but locally updated version.
+        // We always prefer local version.
         if (assetsRegistry[type][asset.id]) {
           asset = assetsRegistry[type][asset.id];
+        } else {
+          assetsRegistry[type][asset.id] = asset;
         }
 
-        toLoad[type] = toLoad[type] || [];
-        toUnload[type] = toUnload[type] || [];
-
-        if (this.updateAssetsCollectionCallFilters(asset)) {
+        if (this.askFilterIfAssetIsValid(asset)) {
           if (!asset.active) {
             hasChange = true;
             toLoad[type].push(asset);
-            assetsRegistry[type][asset.id] = asset;
           }
         } else {
           if (asset.active) {
@@ -264,15 +226,11 @@ export default class AssetsService extends AppService {
       }
     );
 
-    if (hasChange || this.queue.commands.length) {
-      let assetsService = this.services.assets;
-
+    if (hasChange) {
       // Load new assets.
-      let queueLoad = assetsService.appendAssets(toLoad);
+      await this.appendAssets(toLoad);
       // Remove old ones.
-      let queueUnLoad = assetsService.removeAssets(toUnload);
-
-      await this.services.queues.afterAllQueues([queueLoad, queueUnLoad]);
+      await this.removeAssets(toUnload);
     }
   }
 }

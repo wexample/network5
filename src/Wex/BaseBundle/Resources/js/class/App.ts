@@ -7,7 +7,6 @@ import MixinsService from '../services/Mixins';
 import PagesService from '../services/Pages';
 import ResponsiveService from '../services/Responsive';
 import ThemeService from '../services/Theme';
-import QueuesService from '../services/Queues';
 
 import { unique as arrayUnique } from '../helpers/Arrays';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
@@ -112,7 +111,6 @@ export default class extends AsyncConstructor {
       EventsService,
       MixinsService,
       PagesService,
-      QueuesService,
       ResponsiveService,
       ThemeService,
     ];

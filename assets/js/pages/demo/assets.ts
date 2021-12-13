@@ -1,13 +1,11 @@
 import Page from '../../../../src/Wex/BaseBundle/Resources/js/class/Page';
 import UnitTest from '../../../../src/Wex/BaseBundle/Resources/js/class/UnitTest';
 import AssetBundleInterface from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/AssetBundleInterface';
-import QueuesService from '../../../../src/Wex/BaseBundle/Resources/js/services/Queues';
 import { ServiceRegistryPageInterface } from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistryPageInterface';
 import Events from '../../../../src/Wex/BaseBundle/Resources/js/helpers/Events';
 
 interface ServiceRegistryPageCurrentInterface
   extends ServiceRegistryPageInterface {
-  queues: QueuesService;
 }
 
 const bundle: AssetBundleInterface = {
@@ -20,7 +18,6 @@ const bundle: AssetBundleInterface = {
     async mounted() {
       this.unitTest = new UnitTest();
 
-      await this.testQueues();
       await this.testVariables();
 
       document.querySelectorAll('.demo-button-switch-theme').forEach((el) => {
@@ -47,93 +44,6 @@ const bundle: AssetBundleInterface = {
 
     updateLayoutTheme(theme) {
       super.updateLayoutTheme(theme);
-    }
-
-    async testQueues() {
-      let test = this.unitTest;
-      let queuesMixin = this.services.queues;
-      let queue = queuesMixin.create('test-queue');
-      let counterOne = 0;
-
-      queue.add(() => {
-        test.assertTrue(queue.started, 'Queue status is started');
-
-        test.assertTrue(true);
-        counterOne++;
-      });
-
-      queue.add(() => {
-        test.assertTrue(true);
-        counterOne++;
-      });
-
-      queue.then(() => {
-        test.assertEquals(queue.commands.length, 0, 'Queue commands is empty');
-        test.assertTrue(queue.started, 'Queue status is started');
-
-        test.assertEquals(
-          counterOne,
-          2,
-          'All queue commands has been executed'
-        );
-
-        queue.reset();
-
-        test.assertNoTrue(queue.started, 'Queue status is stopped');
-        test.assertTrue(
-          queue.commands.length === 0,
-          'Queue commands list is empty'
-        );
-        test.assertTrue(
-          queue.completeCallbacks.length === 0,
-          'Queue callbacks is empty'
-        );
-
-        counterOne++;
-      });
-
-      queue.start();
-
-      let queue2 = queuesMixin.create('test-queue');
-      let counterTwo = 0;
-
-      queue2.add(() => {
-        test.assertTrue(true, 'Queue 2 is running...');
-        counterTwo++;
-      });
-
-      queue2.start();
-
-      await queuesMixin.afterAllQueues([queue, queue2]);
-      test.assertTrue(
-        !queue.started && !queue.started,
-        'All queues are complete'
-      );
-      counterTwo++;
-
-      await queuesMixin.afterAllQueues([queue, queue2]);
-
-      test.assertTrue(
-        !queue.started && !queue.started,
-        'If already complete, callback is executed immediately.'
-      );
-      counterTwo++;
-
-      queue.then(() => {
-        test.assertTrue(
-          !queue.started && !queue.started,
-          'All new callbacks are executed'
-        );
-        counterTwo++;
-      });
-
-      setTimeout(() => {
-        test.assertEquals(
-          counterOne + counterTwo,
-          7,
-          'All callbacks are executed after 1 second'
-        );
-      }, 1000);
     }
 
     testVariables() {

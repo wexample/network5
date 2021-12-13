@@ -1,6 +1,5 @@
 import MixinsAppService from '../class/MixinsAppService';
 import Page from '../class/Page';
-import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
 import PromptService from './Prompts';
 import App from '../class/App';
 import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
@@ -97,13 +96,11 @@ export default class ComponentsService extends RenderNodeService {
       this.elLayoutComponents.innerHTML += renderData.templates;
     }
 
-    if (renderData.components) {
-      await this.createRenderDataComponents(
-        renderData,
-        this.app.layout,
-        requestOptions
-      );
-    }
+    await this.createRenderDataComponents(
+      renderData,
+      this.app.layout,
+      requestOptions
+    );
   }
 
   async loadPageRenderData(page: Page) {
@@ -119,9 +116,7 @@ export default class ComponentsService extends RenderNodeService {
     renderNode: RenderNode,
     requestOptions: RequestOptionsInterface
   ) {
-    let components = renderData.components;
-
-    for (const renderDataComponent of components) {
+    for (const renderDataComponent of renderData.components) {
       let el: HTMLElement;
       let elPlaceholder = renderNode.el.querySelector(
         '.' + renderDataComponent.id

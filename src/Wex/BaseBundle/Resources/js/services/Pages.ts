@@ -25,8 +25,7 @@ export default class PagesService extends RenderNodeService {
         async loadRenderData(
           renderData: RenderDataLayoutInterface,
           requestOptions: RequestOptionsInterface,
-          registry: any,
-          next: Function
+          registry: any
         ) {
           if (
             registry.components === MixinsAppService.LOAD_STATUS_COMPLETE &&
@@ -36,8 +35,7 @@ export default class PagesService extends RenderNodeService {
             if (renderData.page) {
               await this.services.pages.createPage(
                 renderData.page,
-                requestOptions,
-                next
+                requestOptions
               );
             }
             return;
