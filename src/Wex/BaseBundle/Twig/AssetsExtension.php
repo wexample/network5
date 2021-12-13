@@ -2,6 +2,7 @@
 
 namespace App\Wex\BaseBundle\Twig;
 
+use App\Wex\BaseBundle\Helper\ColorSchemeHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
@@ -24,21 +25,6 @@ class AssetsExtension extends AbstractExtension
     public const DIR_BUILD = 'build/';
 
     public const FILE_MANIFEST = 'manifest.json';
-
-    public const THEME_DARK = 'dark';
-
-    public const THEME_LIGHT = 'light';
-
-    public const THEME_PRINT = 'print';
-
-    public const THEME_DEFAULT = 'default';
-
-    public const THEMES = [
-        self::THEME_DARK,
-        self::THEME_DEFAULT,
-        self::THEME_LIGHT,
-        self::THEME_PRINT,
-    ];
 
     /**
      * @var array|Asset[][]
@@ -350,7 +336,7 @@ class AssetsExtension extends AbstractExtension
             // Add themes assets.
             $basename = basename($assetPath);
             $dirname = dirname($assetPath);
-            foreach (self::THEMES as $themeName)
+            foreach (ColorSchemeHelper::SCHEMES as $themeName)
             {
                 // Theme's version should be place in :
                 // themes/[dark|light|...]/same/path
