@@ -6,6 +6,7 @@ use App\Wex\BaseBundle\Helper\DomHelper;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Rendering\VueComponent;
+use App\Wex\BaseBundle\Service\RenderingService;
 use Exception;
 use function implode;
 use Symfony\Component\ExpressionLanguage\SyntaxError;
@@ -41,6 +42,7 @@ class VueExtension extends AbstractExtension
     }
 
     public function __construct(
+        protected RenderingService $renderingService,
         private ComponentsExtension $componentsExtension,
         private AssetsExtension $assetsExtension
     )
@@ -176,7 +178,7 @@ class VueExtension extends AbstractExtension
         if (!isset($this->renderedTemplates[$vue->name]))
         {
             $this->contextCurrent = $vue->name;
-            $this->componentsExtension->comSetContext(
+            $this->renderingService->setContext(
                 RenderingHelper::CONTEXT_VUE,
                 $vue->name
             );
@@ -193,7 +195,7 @@ class VueExtension extends AbstractExtension
                 )
             );
 
-            $this->componentsExtension->comRevertContext();
+            $this->renderingService->revertContext();
 
             $this->contextCurrent = null;
             $this->renderedTemplates[$vue->name] = $template;

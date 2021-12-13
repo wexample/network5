@@ -56,7 +56,10 @@ class AdaptiveResponseService
 
     private ?AdaptiveResponse $currentResponse = null;
 
-    public function __construct(private RequestStack $requestStack)
+    public function __construct(
+        private RequestStack $requestStack,
+        private RenderingService $renderingService
+    )
     {
     }
 
@@ -92,7 +95,7 @@ class AdaptiveResponseService
                     ComponentsExtension::class
                 );
 
-                $comExt->comSetContext(
+                $this->renderingService->setContext(
                     RenderingHelper::CONTEXT_AJAX,
                     null
                 );
@@ -195,7 +198,8 @@ class AdaptiveResponseService
     public function setView(
         string $view,
         $parameters = null
-    ): self {
+    ): self
+    {
         $this->view = $view;
 
         if ($parameters)
@@ -270,7 +274,8 @@ class AdaptiveResponseService
 
     public function setController(
         AbstractController $controller
-    ): self {
+    ): self
+    {
         $this->currentController = $controller;
 
         return $this;

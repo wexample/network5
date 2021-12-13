@@ -117,7 +117,7 @@ class IconExtension extends AbstractExtension
                 [
                     VariableHelper::CLASS_VAR => $class,
                 ],
-                $this->componentsExtension->comInitParent(
+                $this->componentsExtension->componentInitParent(
                     'icon',
                     [
                         'name' => $name

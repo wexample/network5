@@ -80,7 +80,7 @@ class TemplateExtension extends AbstractExtension
             ComponentsExtension::class
         );
 
-        $renderData = new RenderDataInitialLayout();
+        $renderData = $this->renderingService->layoutInitialData;
 
         $renderData->merge(
             $this->templateBuildLayoutRenderData($env, $pageTemplateName)
@@ -97,8 +97,7 @@ class TemplateExtension extends AbstractExtension
         );
 
         $renderData->displayBreakpoints = AssetsService::DISPLAY_BREAKPOINTS;
-        $renderData->env = $this->kernel->getEnvironment();
-        $renderData->theme = $layoutTheme;
+        $renderData->colorScheme = $layoutTheme;
 
         return $renderData;
     }
@@ -120,7 +119,7 @@ class TemplateExtension extends AbstractExtension
             ComponentsExtension::class
         );
 
-        $templates = $comExtension->comRenderLayout($env);
+        $templates = $comExtension->componentRenderLayout($env);
 
         $renderData = new RenderDataAjax();
 

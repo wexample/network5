@@ -4,6 +4,11 @@ namespace App\Wex\BaseBundle\Service;
 
 use App\Wex\BaseBundle\Controller\AbstractController;
 use App\Wex\BaseBundle\Helper\ColorSchemeHelper;
+use App\Wex\BaseBundle\Helper\RenderingHelper;
+use App\Wex\BaseBundle\Helper\VariableHelper;
+use App\Wex\BaseBundle\Rendering\ComponentContext;
+use App\Wex\BaseBundle\Rendering\RenderDataInitialLayout;
+use Symfony\Component\HttpKernel\KernelInterface;
 use function uniqid;
 
 class RenderingService
@@ -12,9 +17,37 @@ class RenderingService
 
     protected string $currentRequestId;
 
-    public function __construct()
+    public RenderDataInitialLayout $layoutInitialData;
+
+    protected array $contextsStack;
+
+    public function __construct(
+        protected KernelInterface $kernel,
+        protected AssetsService $assetsService
+    )
     {
         $this->createRenderRequestId();
+    }
+
+    public function setContext(
+        string $renderingContext,
+        ?string $name,
+    )
+    {
+        $this->contextsStack[] = new ComponentContext(
+            $renderingContext,
+            $name ?: VariableHelper::DEFAULT,
+        );
+    }
+
+    public function getContext(): ComponentContext
+    {
+        return end($this->contextsStack);
+    }
+
+    public function revertContext(): void
+    {
+        array_pop($this->contextsStack);
     }
 
     public function createRenderRequestId(): string
@@ -35,6 +68,11 @@ class RenderingService
         array &$parameters
     )
     {
+        $this->setContext(
+            RenderingHelper::CONTEXT_LAYOUT,
+            null
+        );
+
         // Add global variables for rendering.
         $parameters =
             [
@@ -48,5 +86,9 @@ class RenderingService
                 'request_uri' => $controller->requestUri,
                 'render_request_id' => $this->getRenderRequestId(),
             ] + $parameters;
+
+        $this->layoutInitialData = new RenderDataInitialLayout(
+            $this->kernel->getEnvironment()
+        );
     }
 }

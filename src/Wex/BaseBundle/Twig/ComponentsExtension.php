@@ -46,31 +46,6 @@ class ComponentsExtension extends AbstractExtension
         private Translator $translator,
     )
     {
-        $this->comSetContext(
-            RenderingHelper::CONTEXT_LAYOUT,
-            null
-        );
-    }
-
-    public function comSetContext(
-        string $renderingContext,
-        ?string $name,
-    )
-    {
-        $this->contextsStack[] = new ComponentContext(
-            $renderingContext,
-            $name ?: VariableHelper::DEFAULT,
-        );
-    }
-
-    public function getContext(): ComponentContext
-    {
-        return end($this->contextsStack);
-    }
-
-    public function comRevertContext(): void
-    {
-        array_pop($this->contextsStack);
     }
 
     public function getFunctions(): array
@@ -91,14 +66,14 @@ class ComponentsExtension extends AbstractExtension
                 'component_init_class',
                 [
                     $this,
-                    'comInitClass',
+                    'componentInitClass',
                 ]
             ),
             new TwigFunction(
                 'component_init_parent',
                 [
                     $this,
-                    'comInitParent',
+                    'componentInitParent',
                 ],
                 [self::FUNCTION_OPTION_IS_SAFE => self::FUNCTION_OPTION_IS_SAFE_VALUE_HTML]
             ),
@@ -106,7 +81,7 @@ class ComponentsExtension extends AbstractExtension
                 'component_init_previous',
                 [
                     $this,
-                    'comInitPrevious',
+                    'componentInitPrevious',
                 ],
                 [self::FUNCTION_OPTION_IS_SAFE => self::FUNCTION_OPTION_IS_SAFE_VALUE_HTML]
             ),
@@ -114,7 +89,7 @@ class ComponentsExtension extends AbstractExtension
                 'component_render_tag_attributes',
                 [
                     $this,
-                    'comRenderTagAttributes',
+                    'componentRenderTagAttributes',
                 ],
                 [
                     self::FUNCTION_OPTION_IS_SAFE => self::FUNCTION_OPTION_IS_SAFE_VALUE_HTML,
@@ -126,24 +101,10 @@ class ComponentsExtension extends AbstractExtension
                 'component_render_layout',
                 [
                     $this,
-                    'comRenderLayout',
+                    'componentRenderLayout',
                 ],
                 [
                     self::FUNCTION_OPTION_NEEDS_ENVIRONMENT => true,
-                ]
-            ),
-            new TwigFunction(
-                'render_set_context',
-                [
-                    $this,
-                    'comSetContext',
-                ]
-            ),
-            new TwigFunction(
-                'render_revert_context',
-                [
-                    $this,
-                    'comRevertContext',
                 ]
             ),
         ];
@@ -160,7 +121,7 @@ class ComponentsExtension extends AbstractExtension
     {
         $html = $this->comRenderHtml($twig, $name, $options);
 
-        return $html.$this->comInitPrevious($name, $options);
+        return $html.$this->componentInitPrevious($name, $options);
     }
 
     /**
@@ -227,7 +188,7 @@ class ComponentsExtension extends AbstractExtension
         return $data;
     }
 
-    public function comInitPrevious(string $name, array $options = []): string
+    public function componentInitPrevious(string $name, array $options = []): string
     {
         $component = $this->registerComponent(
             $name,
@@ -248,7 +209,7 @@ class ComponentsExtension extends AbstractExtension
         $component = new RenderDataComponent(
             $name,
             $initMode,
-            $this->getContext(),
+            $this->renderingService->getContext(),
             $this->renderingService->getRenderRequestId(),
             $options
         );
@@ -276,7 +237,7 @@ class ComponentsExtension extends AbstractExtension
     /**
      * Init a components and provide a class name to retrieve dom element.
      */
-    public function comInitClass(
+    public function componentInitClass(
         string $name,
         array $options = []
     ): string
@@ -294,7 +255,7 @@ class ComponentsExtension extends AbstractExtension
      * Add component to the global page requirements.
      * It adds components assets to page assets.
      */
-    public function comInitParent(string $name, array $options = []): string
+    public function componentInitParent(string $name, array $options = []): string
     {
         $component = $this->registerComponent(
             $name,
@@ -308,7 +269,7 @@ class ComponentsExtension extends AbstractExtension
     /**
      * @throws Exception
      */
-    public function comRenderLayout(Environment $twig): string
+    public function componentRenderLayout(Environment $twig): string
     {
         $output = '';
 
@@ -335,7 +296,7 @@ class ComponentsExtension extends AbstractExtension
         return $output;
     }
 
-    public function comRenderTagAttributes(Environment $env, array $context, array $defaults = []): string
+    public function componentRenderTagAttributes(Environment $env, array $context, array $defaults = []): string
     {
         $options = $context['com_options'];
         $class = trim(($defaults[VariableHelper::CLASS_VAR] ?? '').' '.($options[VariableHelper::CLASS_VAR] ?? ''));
