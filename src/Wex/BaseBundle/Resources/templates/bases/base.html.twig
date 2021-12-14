@@ -3,7 +3,7 @@
 {%- block template_base -%}
     {%- block template_config -%}
         {{- layout_init(layout_name, layout_theme, layout_use_js) -}}
-        {{- page_init(page_name, layout_use_js) -}}
+        {{- page_init(page_name) -}}
         {{- translation_set_domain_from_path('page', page_path) -}}
     {%- endblock -%}
 {%- endblock -%}

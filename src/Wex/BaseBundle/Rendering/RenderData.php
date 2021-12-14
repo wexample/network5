@@ -28,4 +28,9 @@ class RenderData extends JsonResource
         $this->renderRequestId = $renderRequestId;
         $this->name = $name;
     }
+
+    public function getAssetsName(): string
+    {
+        return $this->name;
+    }
 }

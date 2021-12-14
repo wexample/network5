@@ -2,7 +2,11 @@
 
 namespace App\Wex\BaseBundle\Service;
 
+use App\Wex\BaseBundle\Helper\ColorSchemeHelper;
+use App\Wex\BaseBundle\Helper\FileHelper;
+use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class AssetsService
 {
@@ -28,4 +32,228 @@ class AssetsService
     public const DIR_PUBLIC = 'public/';
 
     public const FILE_MANIFEST = 'manifest.json';
+
+    private array $assets = self::ASSETS_DEFAULT_EMPTY;
+
+    private string $pathProject;
+
+    private string $pathBuild;
+
+    private array $manifest;
+
+    private string $pathPublic;
+
+    public function __construct(
+        KernelInterface $kernel
+    )
+    {
+        $this->pathProject = $kernel->getProjectDir().'/';
+        $this->pathPublic = $this->pathProject.self::DIR_PUBLIC;
+        $this->pathBuild = $this->pathPublic.self::DIR_BUILD;
+        $this->manifest = json_decode(
+            file_get_contents(
+                $this->pathBuild.self::FILE_MANIFEST
+            ),
+            JSON_OBJECT_AS_ARRAY
+        );
+    }
+
+    public function assetsDetect(
+        string $pageName,
+        string $context,
+        array &$collection = []
+    ): array
+    {
+        foreach (Asset::ASSETS_EXTENSIONS as $ext)
+        {
+            $collection[$ext] = array_merge(
+                $collection[$ext] ?? [],
+                $this->assetsDetectForType(
+                    $pageName,
+                    $ext,
+                    $context,
+                    true
+                )
+            );
+        }
+
+        return $collection;
+    }
+
+    /**
+     * Return all assets for a given type, including suffixes like -s, -l, etc.
+     */
+    public function assetsDetectForType(
+        string $pageName,
+        string $ext,
+        string $context,
+        bool $searchTheme
+    ): array
+    {
+        $assetPathFull = $ext.'/'.$pageName.'.'.$ext;
+        $output = [];
+
+        if ($asset = $this->addAsset(
+            $assetPathFull,
+            $context
+        ))
+        {
+            $output[] = $asset;
+        }
+
+        // Add responsive assets.
+
+        $breakpointsReverted = array_reverse(
+            self::DISPLAY_BREAKPOINTS
+        );
+        $maxWidth = null;
+
+        foreach ($breakpointsReverted as $breakpointName => $minWidth)
+        {
+            $assetPathFull = implode(
+                FileHelper::FOLDER_SEPARATOR,
+                [
+                    $ext,
+                    $pageName.'-'.$breakpointName.'.'.$ext,
+                ]
+            );
+
+            if ($asset = $this->addAsset($assetPathFull, $context))
+            {
+                $asset->responsive = $breakpointName;
+                $asset->media = 'screen and (min-width:'.$minWidth.'px)'.
+                    ($maxWidth ? ' and (max-width:'.$maxWidth.'px)' : '');
+
+                $output[] = $asset;
+            }
+
+            $maxWidth = $minWidth;
+        }
+
+        // Prevent infinite loops.
+        if ($searchTheme)
+        {
+            // Add themes assets.
+            $basename = basename($pageName);
+            $dirname = dirname($pageName);
+            foreach (ColorSchemeHelper::SCHEMES as $themeName)
+            {
+                // Theme's version should be place in :
+                // themes/[dark|light|...]/same/path
+                $themePageName = implode(
+                    FileHelper::FOLDER_SEPARATOR,
+                    [
+                        VariableHelper::PLURAL_THEME,
+                        $themeName,
+                        $dirname,
+                        $basename,
+                    ]
+                );
+
+                $assets = $this->assetsDetectForType(
+                    $themePageName,
+                    $ext,
+                    $context,
+                    false
+                );
+
+                foreach ($assets as $asset)
+                {
+                    $asset->theme = $themeName;
+                    $output[] = $asset;
+                }
+            }
+        }
+
+        return $output;
+    }
+
+    protected array $assetsLoaded = [];
+
+    public function addAsset(
+        string $pathRelative,
+        string $renderContext
+    ): ?Asset
+    {
+        $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
+        if (!isset($this->manifest[$pathRelativeToPublic]))
+        {
+            return null;
+        }
+
+        if (!isset($this->assetsLoaded[$pathRelative]))
+        {
+            $asset = new Asset(
+                realpath($this->pathPublic.$this->manifest[$pathRelativeToPublic]),
+                $renderContext,
+                $this->pathPublic
+            );
+
+            $this->assetsLoaded[$pathRelative] = $asset;
+        } else
+        {
+            $asset = $this->assetsLoaded[$pathRelative];
+        }
+
+        $this->assets[$asset->type][] = $asset;
+
+        return $this->assetsLoaded[$pathRelative];
+    }
+
+    public function assetsPreload(array $assets, bool $useJs)
+    {
+        /** @var Asset $asset */
+        foreach ($assets as $asset)
+        {
+            if ($this->assetsIsAvailable($asset, $useJs))
+            {
+                $asset->preload = true;
+            }
+        }
+    }
+
+    public function assetsIsAvailable(Asset $asset, bool $useJs): bool
+    {
+        // When using JS, we manage responsive
+        // and extra theme style outside page rendering flow.
+        return !((!$useJs) || $asset->responsive || $asset->theme);
+    }
+
+    public function assetsPreloadList(string $ext): array
+    {
+        $assets = $this->assets[$ext];
+        $output = [];
+
+        /** @var Asset $asset */
+        foreach ($assets as $asset)
+        {
+            if ($asset->preload)
+            {
+                $output[] = $asset;
+            }
+        }
+
+        return $output;
+    }
+
+    public function assetsFiltered(string $context, string $filterType = null): array
+    {
+        $filtered = self::ASSETS_DEFAULT_EMPTY;
+
+        foreach ($this->assets as $type => $group)
+        {
+            if (!$filterType || $filterType === $type)
+            {
+                foreach ($group as $asset)
+                {
+                    if ($asset->renderContext === $context)
+                    {
+                        $filtered[$type][] = $asset;
+                    }
+                }
+            }
+        }
+
+        return $filtered;
+    }
 }

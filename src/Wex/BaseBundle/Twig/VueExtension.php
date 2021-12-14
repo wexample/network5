@@ -6,6 +6,7 @@ use App\Wex\BaseBundle\Helper\DomHelper;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Rendering\VueComponent;
+use App\Wex\BaseBundle\Service\AssetsService;
 use App\Wex\BaseBundle\Service\RenderingService;
 use Exception;
 use function implode;
@@ -42,9 +43,9 @@ class VueExtension extends AbstractExtension
     }
 
     public function __construct(
+        private AssetsService $assetsService,
         protected RenderingService $renderingService,
         private ComponentsExtension $componentsExtension,
-        private AssetsExtension $assetsExtension
     )
     {
     }
@@ -168,7 +169,7 @@ class VueExtension extends AbstractExtension
         }
 
         $this
-            ->assetsExtension
+            ->assetsService
             ->assetsDetect(
                 $path,
                 RenderingHelper::CONTEXT_COMPONENT,

@@ -33,7 +33,7 @@ class TemplateExtension extends AbstractExtension
     protected const VAR_TRANSLATIONS_DOMAIN_SEPARATOR = VariableHelper::TRANSLATIONS.'DomainSeparator';
 
     public function __construct(
-        private KernelInterface $kernel,
+        protected AssetsService $assetsService,
         private RenderingService $renderingService,
         private TemplateService $templateService
     ) {
@@ -50,56 +50,10 @@ class TemplateExtension extends AbstractExtension
                 ]
             ),
             new TwigFunction(
-                'layout_render_initial_data',
-                [
-                    $this,
-                    'templateBuildInitialLayoutRenderData',
-                ],
-                [
-                    self::FUNCTION_OPTION_NEEDS_ENVIRONMENT => true,
-                ]
-            ),
-            new TwigFunction(
                 'page_name_from_route',
                 [$this, 'templateBuildPathFromRoute']
             ),
         ];
-    }
-
-    public function templateBuildInitialLayoutRenderData(
-        Environment $env,
-        string $pageTemplateName,
-        string $layoutTheme
-    ): RenderDataInitialLayout {
-        /** @var AssetsExtension $assetsExtension */
-        $assetsExtension = $env->getExtension(
-            AssetsExtension::class
-        );
-        /** @var ComponentsExtension $comExtension */
-        $comExtension = $env->getExtension(
-            ComponentsExtension::class
-        );
-
-        $renderData = $this->renderingService->layoutInitialData;
-
-        $renderData->merge(
-            $this->templateBuildLayoutRenderData($env, $pageTemplateName)
-        );
-
-        $renderData->page->isLayoutPage = true;
-
-        $renderData->assets = $assetsExtension->assetsFiltered(
-            RenderingHelper::CONTEXT_LAYOUT
-        );
-
-        $renderData->components = $comExtension->buildRenderData(
-            RenderingHelper::CONTEXT_LAYOUT
-        );
-
-        $renderData->displayBreakpoints = AssetsService::DISPLAY_BREAKPOINTS;
-        $renderData->colorScheme = $layoutTheme;
-
-        return $renderData;
     }
 
     /**
@@ -110,10 +64,6 @@ class TemplateExtension extends AbstractExtension
         string $pageTemplateName,
         string $body
     ): RenderDataAjax {
-        /** @var AssetsExtension $assetsExtension */
-        $assetsExtension = $env->getExtension(
-            AssetsExtension::class
-        );
         /** @var ComponentsExtension $comExtension */
         $comExtension = $env->getExtension(
             ComponentsExtension::class
@@ -130,7 +80,7 @@ class TemplateExtension extends AbstractExtension
         $renderData->page->body =
             $body;
         $renderData->assets =
-            $assetsExtension->assetsFiltered(RenderingHelper::CONTEXT_AJAX);
+            $this->assetsService->assetsFiltered(RenderingHelper::CONTEXT_AJAX);
         $renderData->components =
             $comExtension->buildRenderData(RenderingHelper::CONTEXT_AJAX);
         $renderData->templates = $templates;
@@ -139,13 +89,10 @@ class TemplateExtension extends AbstractExtension
     }
 
     public function templateBuildPageRenderData(
+        RenderDataPage $renderData,
         Environment $env,
         string $pageName
     ): RenderDataPage {
-        /** @var AssetsExtension $assetsExtension */
-        $assetsExtension = $env->getExtension(
-            AssetsExtension::class
-        );
         /** @var ComponentsExtension $comExtension */
         $comExtension = $env->getExtension(
             ComponentsExtension::class
@@ -159,10 +106,8 @@ class TemplateExtension extends AbstractExtension
             JsExtension::class
         );
 
-        $renderData = new RenderDataPage();
-
         $renderData->assets =
-            $assetsExtension->assetsFiltered(
+            $this->assetsService->assetsFiltered(
                 RenderingHelper::CONTEXT_PAGE
             );
         $renderData->components =
@@ -209,11 +154,10 @@ class TemplateExtension extends AbstractExtension
 
         $renderData->page = $pageTemplateName
             ? $this->templateBuildPageRenderData(
+                $renderData->page,
                 $env,
                 $pageTemplateName
             ) : null;
-
-        $renderData->renderRequestId = $this->renderingService->getRenderRequestId();
 
         $renderData->translations = $translationExtension->buildRenderData();
 

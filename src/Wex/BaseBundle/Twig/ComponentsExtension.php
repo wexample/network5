@@ -6,12 +6,10 @@ use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\RenderDataComponent;
-use App\Wex\BaseBundle\Rendering\ComponentContext;
+use App\Wex\BaseBundle\Service\AssetsService;
 use App\Wex\BaseBundle\Service\RenderingService;
 use App\Wex\BaseBundle\Translation\Translator;
 use function array_merge;
-use function array_pop;
-use function end;
 use Exception;
 use JetBrains\PhpStorm\Pure;
 use function trim;
@@ -41,7 +39,7 @@ class ComponentsExtension extends AbstractExtension
     protected array $components = [];
 
     public function __construct(
-        private AssetsExtension $assetsExtension,
+        private AssetsService $assetsService,
         private RenderingService $renderingService,
         private Translator $translator,
     )
@@ -226,7 +224,7 @@ class ComponentsExtension extends AbstractExtension
     public function comLoadAssets(RenderDataComponent $component): array
     {
         return $this
-            ->assetsExtension
+            ->assetsService
             ->assetsDetect(
                 $component->name,
                 RenderingHelper::CONTEXT_COMPONENT,
