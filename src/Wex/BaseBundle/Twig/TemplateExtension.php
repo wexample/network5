@@ -115,8 +115,6 @@ class TemplateExtension extends AbstractExtension
             $comExtension->buildRenderData(
                 RenderingHelper::CONTEXT_PAGE
             );
-        $renderData->renderRequestId =
-            $this->renderingService->getRenderRequestId();
         $renderData->translations =
             $translationExtension->buildRenderData();
         $renderData->vars =
