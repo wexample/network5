@@ -65,7 +65,8 @@ class LayoutExtension extends AbstractExtension
         Environment $env,
         string $pageTemplateName,
         string $layoutTheme
-    ): RenderDataInitialLayout {
+    ): RenderDataInitialLayout
+    {
         /** @var ComponentsExtension $comExtension */
         $comExtension = $env->getExtension(
             ComponentsExtension::class
@@ -73,11 +74,11 @@ class LayoutExtension extends AbstractExtension
 
         $renderData = $this->renderingService->layoutInitialData;
 
-        $tempAssets = $renderData->assets;
-        $renderData->merge(
-            $this->templateExtension->templateBuildLayoutRenderData($env, $pageTemplateName)
+        $this->templateExtension->templateBuildLayoutRenderData(
+            $renderData,
+            $env,
+            $pageTemplateName
         );
-        $renderData->assets = $tempAssets;
 
         $renderData->page->isLayoutPage = true;
 

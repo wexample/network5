@@ -36,7 +36,8 @@ class TemplateExtension extends AbstractExtension
         protected AssetsService $assetsService,
         private RenderingService $renderingService,
         private TemplateService $templateService
-    ) {
+    )
+    {
     }
 
     public function getFunctions(): array
@@ -63,7 +64,8 @@ class TemplateExtension extends AbstractExtension
         Environment $env,
         string $pageTemplateName,
         string $body
-    ): RenderDataAjax {
+    ): RenderDataAjax
+    {
         /** @var ComponentsExtension $comExtension */
         $comExtension = $env->getExtension(
             ComponentsExtension::class
@@ -73,9 +75,8 @@ class TemplateExtension extends AbstractExtension
 
         $renderData = new RenderDataAjax();
 
-        $renderData->merge(
-            $this->templateBuildLayoutRenderData($env, $pageTemplateName)
-        );
+        $this->templateBuildLayoutRenderData($renderData
+            , $env, $pageTemplateName);
 
         $renderData->page->body =
             $body;
@@ -90,9 +91,9 @@ class TemplateExtension extends AbstractExtension
 
     public function templateBuildPageRenderData(
         RenderDataPage $renderData,
-        Environment $env,
-        string $pageName
-    ): RenderDataPage {
+        Environment $env
+    ): RenderDataPage
+    {
         /** @var ComponentsExtension $comExtension */
         $comExtension = $env->getExtension(
             ComponentsExtension::class
@@ -106,18 +107,10 @@ class TemplateExtension extends AbstractExtension
             JsExtension::class
         );
 
-        $renderData->assets =
-            $this->assetsService->assetsFiltered(
-                RenderingHelper::CONTEXT_PAGE
-            );
         $renderData->components =
             $comExtension->buildRenderData(
                 RenderingHelper::CONTEXT_PAGE
             );
-        $renderData->name =
-            $pageName;
-        $renderData->renderRequestId =
-            $this->renderingService->getRenderRequestId();
         $renderData->translations =
             $translationExtension->buildRenderData();
         $renderData->vars =
@@ -138,9 +131,11 @@ class TemplateExtension extends AbstractExtension
     }
 
     public function templateBuildLayoutRenderData(
+        RenderDataLayout $renderData,
         Environment $env,
         string $pageTemplateName = null
-    ): RenderDataLayout {
+    ): RenderDataLayout
+    {
         /** @var JsExtension $jsExtension */
         $jsExtension = $env->getExtension(
             JsExtension::class
@@ -150,13 +145,10 @@ class TemplateExtension extends AbstractExtension
             TranslationExtension::class
         );
 
-        $renderData = new RenderDataLayout();
-
         $renderData->page = $pageTemplateName
             ? $this->templateBuildPageRenderData(
                 $renderData->page,
-                $env,
-                $pageTemplateName
+                $env
             ) : null;
 
         $renderData->translations = $translationExtension->buildRenderData();
