@@ -20,17 +20,8 @@ use Twig\TwigFunction;
 
 class AssetsExtension extends AbstractExtension
 {
-    public const FILE_MANIFEST = 'manifest.json';
 
-    /**
-     * @var array|Asset[][]
-     */
-    public const ASSETS_DEFAULT_EMPTY = [
-        Asset::EXTENSION_CSS => [],
-        Asset::EXTENSION_JS => [],
-    ];
-
-    public array $assets = self::ASSETS_DEFAULT_EMPTY;
+    public array $assets = AssetsService::ASSETS_DEFAULT_EMPTY;
 
     private string $pathProject;
 
@@ -52,7 +43,7 @@ class AssetsExtension extends AbstractExtension
         $this->pathBuild = $this->pathPublic.AssetsService::DIR_BUILD;
         $this->manifest = json_decode(
             file_get_contents(
-                $this->pathBuild.self::FILE_MANIFEST
+                $this->pathBuild.AssetsService::FILE_MANIFEST
             ),
             JSON_OBJECT_AS_ARRAY
         );
@@ -111,7 +102,7 @@ class AssetsExtension extends AbstractExtension
 
     public function assetsFiltered(string $context, string $filterType = null): array
     {
-        $filtered = self::ASSETS_DEFAULT_EMPTY;
+        $filtered = AssetsService::ASSETS_DEFAULT_EMPTY;
 
         foreach ($this->assets as $type => $group)
         {
@@ -177,7 +168,7 @@ class AssetsExtension extends AbstractExtension
     {
         $layoutName = $layoutName ?: TemplateExtension::LAYOUT_NAME_DEFAULT;
         $backEndAssets = $this->assets;
-        $this->assets = self::ASSETS_DEFAULT_EMPTY;
+        $this->assets = AssetsService::ASSETS_DEFAULT_EMPTY;
 
         $assets = $this->assetsDetect(
             'layouts/'.$layoutName.'/layout',

@@ -12,20 +12,20 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AdaptiveResponse
 {
-    public const JSON_LAYOUT_MODAL = VariableHelper::MODAL;
+    public const BASE_MODAL = VariableHelper::MODAL;
 
-    public const JSON_LAYOUT_PAGE = VariableHelper::PAGE;
+    public const BASE_PAGE = VariableHelper::PAGE;
 
-    public const LAYOUT_DEFAULT = VariableHelper::DEFAULT;
+    public const BASE_DEFAULT = VariableHelper::DEFAULT;
 
     public const OUTPUT_TYPE_RESPONSE_HTML = VariableHelper::HTML;
 
     public const OUTPUT_TYPE_RESPONSE_JSON = VariableHelper::JSON;
 
-    protected array $allowedLayouts = [
-        self::JSON_LAYOUT_MODAL,
-        self::JSON_LAYOUT_PAGE,
-        self::LAYOUT_DEFAULT,
+    protected array $allowedBases = [
+        self::BASE_MODAL,
+        self::BASE_PAGE,
+        self::BASE_DEFAULT,
     ];
 
     public const BASES_MAIN_DIR = WexBaseBundle::BUNDLE_PATH_TEMPLATES.'bases/';
@@ -53,14 +53,14 @@ class AdaptiveResponse
         if (is_null($layout) && $request->isXmlHttpRequest())
         {
             // Use modal as default ajax layout, but might be configurable.
-            $layout = self::JSON_LAYOUT_MODAL;
+            $layout = self::BASE_MODAL;
         }
 
-        if (in_array($layout, $this->allowedLayouts))
+        if (in_array($layout, $this->allowedBases))
         {
             return $layout;
         }
 
-        return self::LAYOUT_DEFAULT;
+        return self::BASE_DEFAULT;
     }
 }

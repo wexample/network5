@@ -2,11 +2,11 @@
 
 namespace App\Wex\BaseBundle\Rendering;
 
+use App\Wex\BaseBundle\Service\AssetsService;
+
 class RenderData extends JsonResource
 {
-    public array $assets = [];
-
-    public string $context;
+    public array $assets = AssetsService::ASSETS_DEFAULT_EMPTY;
 
     public array $components = [];
 
@@ -17,4 +17,15 @@ class RenderData extends JsonResource
     public array $translations = [];
 
     public array $vars;
+
+    public string $name;
+
+    public function init(
+        string $renderRequestId,
+        string $name,
+    )
+    {
+        $this->renderRequestId = $renderRequestId;
+        $this->name = $name;
+    }
 }

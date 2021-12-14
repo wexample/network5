@@ -10,13 +10,13 @@ class TemplateHelper
 
     public static function buildTemplateInheritanceStack(
         string $relativePath,
-        string $templateExtension = self::TEMPLATE_FILE_EXTENSION
+        string $pageExtension = self::TEMPLATE_FILE_EXTENSION
     ): array {
         return [
             // Search local.
-            $relativePath.$templateExtension,
+            $relativePath.$pageExtension,
             // Search in base bundle.
-            WexBaseBundle::BUNDLE_PATH_TEMPLATES.$relativePath.$templateExtension,
+            WexBaseBundle::BUNDLE_PATH_TEMPLATES.$relativePath.$pageExtension,
         ];
     }
 }

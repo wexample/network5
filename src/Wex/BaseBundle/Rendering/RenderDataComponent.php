@@ -6,7 +6,7 @@ use App\Wex\BaseBundle\Helper\DomHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use function uniqid;
 
-class RenderDataComponent
+class RenderDataComponent extends RenderData
 {
     protected const VAR_INIT_MODE = 'initMode';
 
@@ -18,7 +18,7 @@ class RenderDataComponent
         public string $name,
         public string $initMode,
         public ComponentContext $context,
-        public $renderRequestId,
+        public string $renderRequestId,
         public array $options = []
     ) {
         $this->id = 'com-'.uniqid();
