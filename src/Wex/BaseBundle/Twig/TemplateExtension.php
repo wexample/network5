@@ -6,17 +6,16 @@ use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\RenderDataAjax;
-use App\Wex\BaseBundle\Rendering\RenderDataInitialLayout;
 use App\Wex\BaseBundle\Rendering\RenderDataLayout;
 use App\Wex\BaseBundle\Rendering\RenderDataPage;
 use App\Wex\BaseBundle\Service\AssetsService;
+use App\Wex\BaseBundle\Service\JsService;
 use App\Wex\BaseBundle\Service\RenderingService;
 use App\Wex\BaseBundle\Service\TemplateService;
 use Exception;
 use function str_ends_with;
 use function strlen;
 use function substr;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\Environment;
 use Twig\TwigFunction;
 
@@ -35,7 +34,8 @@ class TemplateExtension extends AbstractExtension
     public function __construct(
         protected AssetsService $assetsService,
         private RenderingService $renderingService,
-        private TemplateService $templateService
+        private TemplateService $templateService,
+        private JsService $jsService
     ) {
     }
 
@@ -118,8 +118,8 @@ class TemplateExtension extends AbstractExtension
         $renderData->translations =
             $translationExtension->buildRenderData();
         $renderData->vars =
-            $jsExtension->jsVarsGet(
-                JsExtension::VARS_GROUP_PAGE
+            $this->jsService->jsVarsGet(
+                JsService::VARS_GROUP_PAGE
             );
 
         return $renderData;
@@ -140,10 +140,6 @@ class TemplateExtension extends AbstractExtension
         string $pageTemplateName = null
     ): RenderDataLayout
     {
-        /** @var JsExtension $jsExtension */
-        $jsExtension = $env->getExtension(
-            JsExtension::class
-        );
         /** @var TranslationExtension $translationExtension */
         $translationExtension = $env->getExtension(
             TranslationExtension::class
@@ -158,9 +154,9 @@ class TemplateExtension extends AbstractExtension
 
         $renderData->translations = $translationExtension->buildRenderData();
 
-        $renderData->vars = $jsExtension
+        $renderData->vars = $this->jsService
             ->jsVarsGet(
-                JsExtension::VARS_GROUP_GLOBAL
+                JsService::VARS_GROUP_GLOBAL
             );
 
         return $renderData;
