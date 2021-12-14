@@ -73,7 +73,7 @@ export default class AssetsService extends AppService {
             return;
           }
         } else {
-          if (!asset.rendered) {
+          if (!asset.loaded) {
             asset.el = this.addStyle(asset.path);
           }
         }
