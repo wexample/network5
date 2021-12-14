@@ -36,8 +36,7 @@ class TemplateExtension extends AbstractExtension
         protected AssetsService $assetsService,
         private RenderingService $renderingService,
         private TemplateService $templateService
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array
@@ -91,9 +90,9 @@ class TemplateExtension extends AbstractExtension
 
     public function templateBuildPageRenderData(
         RenderDataPage $renderData,
-        Environment $env
-    ): RenderDataPage
-    {
+        Environment $env,
+        string $pageName
+    ): RenderDataPage {
         /** @var ComponentsExtension $comExtension */
         $comExtension = $env->getExtension(
             ComponentsExtension::class
@@ -107,10 +106,17 @@ class TemplateExtension extends AbstractExtension
             JsExtension::class
         );
 
+        $renderData->init(
+            $this->renderingService->getRenderRequestId(),
+            $pageName
+        );
+
         $renderData->components =
             $comExtension->buildRenderData(
                 RenderingHelper::CONTEXT_PAGE
             );
+        $renderData->renderRequestId =
+            $this->renderingService->getRenderRequestId();
         $renderData->translations =
             $translationExtension->buildRenderData();
         $renderData->vars =
@@ -148,7 +154,8 @@ class TemplateExtension extends AbstractExtension
         $renderData->page = $pageTemplateName
             ? $this->templateBuildPageRenderData(
                 $renderData->page,
-                $env
+                $env,
+                $pageTemplateName
             ) : null;
 
         $renderData->translations = $translationExtension->buildRenderData();
