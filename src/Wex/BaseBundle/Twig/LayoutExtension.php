@@ -62,9 +62,7 @@ class LayoutExtension extends AbstractExtension
     }
 
     public function templateBuildInitialLayoutRenderData(
-        Environment $env,
-        string $pageTemplateName,
-        string $layoutTheme
+        Environment $env
     ): RenderDataInitialLayout
     {
         /** @var ComponentsExtension $comExtension */
@@ -77,7 +75,7 @@ class LayoutExtension extends AbstractExtension
         $this->templateExtension->templateBuildLayoutRenderData(
             $renderData,
             $env,
-            $pageTemplateName
+            $renderData->page->name
         );
 
         $renderData->page->isLayoutPage = true;
@@ -87,7 +85,6 @@ class LayoutExtension extends AbstractExtension
         );
 
         $renderData->displayBreakpoints = AssetsService::DISPLAY_BREAKPOINTS;
-        $renderData->colorScheme = $layoutTheme;
 
         return $renderData;
     }
