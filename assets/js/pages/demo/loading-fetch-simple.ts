@@ -4,8 +4,7 @@ import ModalsService from '../../../../src/Wex/BaseBundle/Resources/js/services/
 import { PageInterface } from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistry/PageInterface';
 import AppService from '../../../../src/Wex/BaseBundle/Resources/js/class/AppService';
 
-interface ServiceRegistryPageCurrentInterface
-  extends PageInterface {
+interface ServiceRegistryPageCurrentInterface extends PageInterface {
   modals: ModalsService;
 }
 

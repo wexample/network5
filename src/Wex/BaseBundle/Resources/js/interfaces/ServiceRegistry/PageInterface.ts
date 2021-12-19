@@ -4,8 +4,7 @@ import PromptService from '../../services/PromptsService';
 import AdaptiveService from '../../services/AdaptiveService';
 import ComponentsService from '../../services/ComponentsService';
 
-export interface PageInterface
-  extends AppInterface {
+export interface PageInterface extends AppInterface {
   adaptive: AdaptiveService;
   events: EventsService;
   prompt: PromptService;
