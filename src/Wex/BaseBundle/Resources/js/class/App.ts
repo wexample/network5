@@ -1,6 +1,6 @@
 import Page from './Page';
 
-import ServiceRegistryAppInterface from '../interfaces/ServiceRegistryAppInterface';
+import AppInterface from '../interfaces/ServiceRegistry/AppInterface';
 
 import AssetsService from '../services/AssetsService';
 import EventsService from '../services/EventsService';
@@ -25,7 +25,7 @@ export default class extends AsyncConstructor {
   public mixins: typeof AppService[] = [];
   public elLayout: HTMLElement;
   public lib: object = {};
-  public services: ServiceRegistryAppInterface = {};
+  public services: AppInterface = {};
 
   constructor(readyCallback?: any | Function, globalName = 'app') {
     super();

@@ -1,6 +1,6 @@
 import PageResponsiveDisplay from './PageResponsiveDisplay';
 import RenderDataPageInterface from '../interfaces/RenderData/PageInterface';
-import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
+import { PageInterface as ServiceRegistryPageInterface } from '../interfaces/ServiceRegistry/PageInterface';
 import RenderNode from './RenderNode';
 import PageHandlerComponent from './PageHandlerComponent';
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';

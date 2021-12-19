@@ -1,7 +1,7 @@
 import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 import PageInterface from '../interfaces/RenderData/PageInterface';
 import Component from './Component';
-import { ServiceRegistryComponentInterface } from '../interfaces/ServiceRegistryComponentInterface';
+import { ComponentInterface as ServiceRegistryComponentInterface } from '../interfaces/ServiceRegistry/ComponentInterface';
 import Page from './Page';
 import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 

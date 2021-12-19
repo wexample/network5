@@ -4,7 +4,7 @@ import MixinsAppService from '../class/MixinsAppService';
 import RenderDataPageInterface from '../interfaces/RenderData/PageInterface';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import RequestOptionsPageInterface from '../interfaces/RequestOptions/PageInterface';
-import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
+import { PageInterface as ServiceRegistryPageInterface} from '../interfaces/ServiceRegistry/PageInterface';
 import RenderNodeService from './RenderNodeService';
 import Page from '../class/Page';
 import RenderNode from '../class/RenderNode';

@@ -1,10 +1,10 @@
 import App from './App';
-import ServiceRegistryAppInterface from '../interfaces/ServiceRegistryAppInterface';
+import AppInterface from '../interfaces/ServiceRegistry/AppInterface';
 import AsyncConstructor from './AsyncConstructor';
 
 export default class extends AsyncConstructor {
   protected readonly app: App;
-  protected readonly services: ServiceRegistryAppInterface;
+  protected readonly services: AppInterface;
 
   constructor(app: App) {
     super();

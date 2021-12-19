@@ -1,6 +1,6 @@
 import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 import Events from '../helpers/Events';
-import { ServiceRegistryComponentInterface } from '../interfaces/ServiceRegistryComponentInterface';
+import { ComponentInterface as ServiceRegistryComponentInterface } from '../interfaces/ServiceRegistry/ComponentInterface';
 import RenderNode from './RenderNode';
 
 export default abstract class Component extends RenderNode {

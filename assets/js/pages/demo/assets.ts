@@ -1,10 +1,10 @@
 import Page from '../../../../src/Wex/BaseBundle/Resources/js/class/Page';
 import UnitTest from '../../../../src/Wex/BaseBundle/Resources/js/class/UnitTest';
-import { ServiceRegistryPageInterface } from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistryPageInterface';
+import { PageInterface } from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistry/PageInterface';
 import Events from '../../../../src/Wex/BaseBundle/Resources/js/helpers/Events';
 
 interface ServiceRegistryPageCurrentInterface
-  extends ServiceRegistryPageInterface {}
+  extends PageInterface {}
 
 export default class extends Page {
   services: ServiceRegistryPageCurrentInterface;

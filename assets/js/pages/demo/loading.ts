@@ -1,11 +1,11 @@
 import Page from '../../../../src/Wex/BaseBundle/Resources/js/class/Page';
 import UnitTest from '../../../../src/Wex/BaseBundle/Resources/js/class/UnitTest';
 import ModalsService from '../../../../src/Wex/BaseBundle/Resources/js/services/ModalsService';
-import { ServiceRegistryPageInterface } from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistryPageInterface';
+import { PageInterface } from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistry/PageInterface';
 import AppService from '../../../../src/Wex/BaseBundle/Resources/js/class/AppService';
 
 interface ServiceRegistryPageCurrentInterface
-  extends ServiceRegistryPageInterface {
+  extends PageInterface {
   modals: ModalsService;
 }
 
