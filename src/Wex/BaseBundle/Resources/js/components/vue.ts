@@ -1,5 +1,5 @@
 import Component from '../class/Component';
-import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 
 export default class extends Component {

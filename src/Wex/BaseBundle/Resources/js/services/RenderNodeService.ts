@@ -1,9 +1,9 @@
 import AppService from '../class/AppService';
-import RequestOptionsPageInterface from '../interfaces/RequestOptionsPageInterface';
+import PageInterface from '../interfaces/RequestOptions/PageInterface';
 import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import RenderNode from '../class/RenderNode';
-import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 
 export default abstract class RenderNodeService extends AppService {
   pages: {};
@@ -42,7 +42,7 @@ export default abstract class RenderNodeService extends AppService {
     return this.app.getBundleClassDefinition(renderData.name, true);
   }
 
-  get(path: string, options: RequestOptionsPageInterface): Promise<any> {
+  get(path: string, options: PageInterface): Promise<any> {
     return this.services.adaptive.get(path, options);
   }
 }

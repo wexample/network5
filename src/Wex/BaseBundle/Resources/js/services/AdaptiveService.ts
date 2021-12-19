@@ -1,8 +1,8 @@
-import RequestOptionsAdaptiveInterface from '../interfaces/RequestOptionsAdaptiveInterface';
+import AdaptiveInterface from '../interfaces/RequestOptions/AdaptiveInterface';
 import AppService from '../class/AppService';
 import MixinsAppService from '../class/MixinsAppService';
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
-import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 import ComponentsService from './ComponentsService';
 
 export default class AdaptiveService extends AppService {
@@ -27,7 +27,7 @@ export default class AdaptiveService extends AppService {
     };
   }
 
-  get(path, requestOptions: RequestOptionsAdaptiveInterface): Promise<any> {
+  get(path, requestOptions: AdaptiveInterface): Promise<any> {
     return window
       .fetch(path, {
         ...{

@@ -1,5 +1,5 @@
 import AppService from '../class/AppService';
-import RequestOptionsModalInterface from '../interfaces/RequestOptionsModalInterface';
+import ModalInterface from '../interfaces/RequestOptions/ModalInterface';
 import PagesService from './PagesService';
 
 export default class ModalsService extends AppService {
@@ -10,7 +10,7 @@ export default class ModalsService extends AppService {
 
   get(
     path: string,
-    requestOptions: RequestOptionsModalInterface = {}
+    requestOptions: ModalInterface = {}
   ): Promise<any> {
     requestOptions.layout = requestOptions.layout || 'modal';
     requestOptions.parentRenderNode = this.app.layout.pageFocused;

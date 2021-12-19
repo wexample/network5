@@ -6,7 +6,7 @@ import RenderNodeService from './RenderNodeService';
 import PagesService from './PagesService';
 import Variables from '../helpers/Variables';
 import DebugRenderNode from '../class/Debug/DebugRenderNode';
-import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 import { TagName } from '../helpers/Dom';
 import Events from '../helpers/Events';
 import IconsService from './IconsService';

@@ -4,7 +4,7 @@ import AppService from '../class/AppService';
 import PagesService from './PagesService';
 import MixinsAppService from '../class/MixinsAppService';
 import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
-import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 
 export default class VueService extends AppService {
   protected componentRegistered: any = {};

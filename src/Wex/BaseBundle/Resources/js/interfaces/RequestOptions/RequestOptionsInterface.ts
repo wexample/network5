@@ -1,4 +1,4 @@
-import RenderNode from '../class/RenderNode';
+import RenderNode from '../../class/RenderNode';
 
 export default interface RequestOptionsInterface {
   headers?: any;

@@ -9,7 +9,7 @@ import RenderNodeService from './RenderNodeService';
 import RenderNode from '../class/RenderNode';
 import { findPreviousNode as DomFindPreviousNode } from '../helpers/Dom';
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
-import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 import AppService from '../class/AppService';
 
 export class ComponentsServiceEvents {

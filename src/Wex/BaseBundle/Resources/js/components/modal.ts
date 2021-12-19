@@ -7,7 +7,7 @@ import Mouse from '../helpers/Mouse';
 import Variables from '../helpers/Variables';
 import Events from '../helpers/Events';
 import RenderNode from '../class/RenderNode';
-import RequestOptionsModalInterface from '../interfaces/RequestOptionsModalInterface';
+import ModalInterface from '../interfaces/RequestOptions/ModalInterface';
 
 export default class extends PageHandlerComponent {
   public closing: boolean;
@@ -22,7 +22,7 @@ export default class extends PageHandlerComponent {
 
   loadRenderData(
     renderData: ComponentInterface,
-    requestOptions: RequestOptionsModalInterface
+    requestOptions: ModalInterface
   ) {
     super.loadRenderData(renderData, requestOptions);
 

@@ -15,7 +15,7 @@ import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import LayoutInitial from './LayoutInitial';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import AsyncConstructor from './AsyncConstructor';
-import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 import AppService from './AppService';
 
 export default class extends AsyncConstructor {

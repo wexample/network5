@@ -1,14 +1,14 @@
 import AdaptiveService from './AdaptiveService';
 import LocaleService from './LocaleService';
 import MixinsAppService from '../class/MixinsAppService';
-import PageInterface from '../interfaces/RenderData/PageInterface';
+import RenderDataPageInterface from '../interfaces/RenderData/PageInterface';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
-import RequestOptionsPageInterface from '../interfaces/RequestOptionsPageInterface';
+import RequestOptionsPageInterface from '../interfaces/RequestOptions/PageInterface';
 import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
 import RenderNodeService from './RenderNodeService';
 import Page from '../class/Page';
 import RenderNode from '../class/RenderNode';
-import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 import AppService from '../class/AppService';
 
 export default class PagesService extends RenderNodeService {
@@ -48,7 +48,7 @@ export default class PagesService extends RenderNodeService {
   }
 
   async createPage(
-    renderData: PageInterface,
+    renderData: RenderDataPageInterface,
     requestOptions: RequestOptionsInterface
   ) {
     let el;
@@ -93,7 +93,7 @@ export default class PagesService extends RenderNodeService {
 
   createRenderNodeInstance(
     el: HTMLElement,
-    renderData: PageInterface,
+    renderData: RenderDataPageInterface,
     classDefinition: any
   ): RenderNode | null {
     return super.createRenderNodeInstance(

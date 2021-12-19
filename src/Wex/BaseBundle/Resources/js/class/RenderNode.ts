@@ -1,7 +1,7 @@
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import AppChild from './AppChild';
 import App from './App';
-import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 import Component from './Component';
 import TranslationsInterface from '../interfaces/TranslationsInterface';
 

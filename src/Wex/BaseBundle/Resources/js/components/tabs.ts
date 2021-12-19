@@ -3,7 +3,7 @@ import { hashParamGet as locationHashParamGet } from '../helpers/Location';
 import { hashParamSet as locationHashParamSet } from '../helpers/Location';
 import { parseUrl as locationParseUrl } from '../helpers/Location';
 import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
-import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
+import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 import { Attribute } from '../helpers/Dom';
 
 export default class extends Component {

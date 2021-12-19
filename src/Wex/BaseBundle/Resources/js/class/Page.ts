@@ -1,11 +1,11 @@
 import PageResponsiveDisplay from './PageResponsiveDisplay';
-import PageInterface from '../interfaces/RenderData/PageInterface';
+import RenderDataPageInterface from '../interfaces/RenderData/PageInterface';
 import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
 import RenderNode from './RenderNode';
 import PageHandlerComponent from './PageHandlerComponent';
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
-import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
-import RequestOptionsPageInterface from '../interfaces/RequestOptionsPageInterface';
+import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
+import RequestOptionsPageInterface from '../interfaces/RequestOptions/PageInterface';
 import AppService from './AppService';
 import { ThemeServiceEvents } from '../services/ThemeService';
 import { ResponsiveServiceEvents } from '../services/ResponsiveService';
@@ -18,7 +18,7 @@ export default class extends RenderNode {
   protected onChangeThemeProxy: Function;
   public parentRenderNode: PageHandlerComponent;
   protected readonly responsiveDisplays: any = [];
-  public renderData: PageInterface;
+  public renderData: RenderDataPageInterface;
   public requestOptions: RequestOptionsPageInterface;
   public responsiveDisplayCurrent: PageResponsiveDisplay;
   public services: ServiceRegistryPageInterface;
