@@ -1,7 +1,7 @@
 import RenderDataInterface from './RenderDataInterface';
-import PageHandlerComponent from '../class/PageHandlerComponent';
+import PageHandlerComponent from '../../class/PageHandlerComponent';
 
-export default interface RenderDataPageInterface extends RenderDataInterface {
+export default interface PageInterface extends RenderDataInterface {
   body: string;
   components: any;
   el: HTMLElement;

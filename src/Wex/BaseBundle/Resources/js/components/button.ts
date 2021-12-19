@@ -1,11 +1,11 @@
 import Component from '../class/Component';
 import { MDCRipple } from '@material/ripple/index';
-import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
+import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 
 export default class extends Component {
   loadRenderData(
-    renderData: RenderDataComponentInterface,
+    renderData: ComponentInterface,
     requestOptions: RequestOptionsInterface
   ) {
     super.loadRenderData(renderData, requestOptions);

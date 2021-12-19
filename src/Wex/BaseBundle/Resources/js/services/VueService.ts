@@ -3,7 +3,7 @@ import { createApp } from 'vue/dist/vue.esm-bundler';
 import AppService from '../class/AppService';
 import PagesService from './PagesService';
 import MixinsAppService from '../class/MixinsAppService';
-import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
+import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 
 export default class VueService extends AppService {
@@ -83,7 +83,7 @@ export default class VueService extends AppService {
 
   createVueAppForComponent(
     path,
-    renderData: RenderDataComponentInterface,
+    renderData: ComponentInterface,
     requestOptions: RequestOptionsInterface
   ) {
     let component = this.initComponent(path);

@@ -1,7 +1,7 @@
 import RequestOptionsAdaptiveInterface from '../interfaces/RequestOptionsAdaptiveInterface';
 import AppService from '../class/AppService';
 import MixinsAppService from '../class/MixinsAppService';
-import RenderDataInterface from '../interfaces/RenderDataInterface';
+import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 import ComponentsService from './ComponentsService';
 

@@ -1,7 +1,7 @@
 import AppService from '../class/AppService';
 import RequestOptionsPageInterface from '../interfaces/RequestOptionsPageInterface';
 import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
-import RenderDataInterface from '../interfaces/RenderDataInterface';
+import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import RenderNode from '../class/RenderNode';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 

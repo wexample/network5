@@ -1,4 +1,4 @@
-import RenderDataInterface from '../interfaces/RenderDataInterface';
+import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import AppChild from './AppChild';
 import App from './App';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';

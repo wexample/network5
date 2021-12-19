@@ -11,9 +11,9 @@ import ResponsiveService from '../services/ResponsiveService';
 
 import ThemeService from '../services/ThemeService';
 import { unique as arrayUnique } from '../helpers/Arrays';
-import RenderDataInterface from '../interfaces/RenderDataInterface';
+import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import LayoutInitial from './LayoutInitial';
-import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
+import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import AsyncConstructor from './AsyncConstructor';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 import AppService from './AppService';
@@ -46,7 +46,7 @@ export default class extends AsyncConstructor {
 
       let registry: {
         bundles: any;
-        layoutRenderData: RenderDataLayoutInterface;
+        layoutRenderData: LayoutInterface;
       } = window['appRegistry'];
 
       this.bundles = registry.bundles;

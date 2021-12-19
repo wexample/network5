@@ -1,6 +1,6 @@
 import RenderDataInterface from './RenderDataInterface';
 
-export default interface RenderDataComponentInterface
+export default interface ComponentInterface
   extends RenderDataInterface {
   id: string;
   initMode: string;

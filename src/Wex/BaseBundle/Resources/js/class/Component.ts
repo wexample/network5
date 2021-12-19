@@ -1,4 +1,4 @@
-import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
+import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 import Events from '../helpers/Events';
 import { ServiceRegistryComponentInterface } from '../interfaces/ServiceRegistryComponentInterface';
 import RenderNode from './RenderNode';
@@ -6,7 +6,7 @@ import RenderNode from './RenderNode';
 export default abstract class Component extends RenderNode {
   protected listenKeyboardKey: string[] = [];
   protected onKeyUpProxy: Function;
-  public renderData: RenderDataComponentInterface;
+  public renderData: ComponentInterface;
   protected readonly services: ServiceRegistryComponentInterface;
 
   public static INIT_MODE_CLASS: string = 'class';

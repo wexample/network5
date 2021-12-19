@@ -1,5 +1,5 @@
-import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
-import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
+import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
+import PageInterface from '../interfaces/RenderData/PageInterface';
 import Page from '../class/Page';
 import PageHandlerComponent from '../class/PageHandlerComponent';
 import Keyboard from '../helpers/Keyboard';
@@ -21,7 +21,7 @@ export default class extends PageHandlerComponent {
   public opened: boolean = false;
 
   loadRenderData(
-    renderData: RenderDataComponentInterface,
+    renderData: ComponentInterface,
     requestOptions: RequestOptionsModalInterface
   ) {
     super.loadRenderData(renderData, requestOptions);
@@ -39,7 +39,7 @@ export default class extends PageHandlerComponent {
     }
   }
 
-  public renderPageEl(renderData: RenderDataPageInterface) {
+  public renderPageEl(renderData: PageInterface) {
     this.elContent.innerHTML = renderData.body;
   }
 

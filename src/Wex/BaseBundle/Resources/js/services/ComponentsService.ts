@@ -2,13 +2,13 @@ import MixinsAppService from '../class/MixinsAppService';
 import Page from '../class/Page';
 import PromptService from './PromptsService';
 import App from '../class/App';
-import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
+import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import PageHandlerComponent from '../class/PageHandlerComponent';
 import Component from '../class/Component';
 import RenderNodeService from './RenderNodeService';
 import RenderNode from '../class/RenderNode';
 import { findPreviousNode as DomFindPreviousNode } from '../helpers/Dom';
-import RenderDataInterface from '../interfaces/RenderDataInterface';
+import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 import AppService from '../class/AppService';
 
@@ -32,7 +32,7 @@ export default class ComponentsService extends RenderNodeService {
     return {
       app: {
         async loadRenderData(
-          renderData: RenderDataLayoutInterface,
+          renderData: LayoutInterface,
           requestOptions: RequestOptionsInterface,
           registry: any
         ) {
@@ -85,7 +85,7 @@ export default class ComponentsService extends RenderNodeService {
   }
 
   async loadLayoutRenderData(
-    renderData: RenderDataLayoutInterface,
+    renderData: LayoutInterface,
     requestOptions: RequestOptionsInterface
   ) {
     if (renderData.templates) {

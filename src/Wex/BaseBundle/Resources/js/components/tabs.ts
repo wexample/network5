@@ -2,7 +2,7 @@ import Component from '../class/Component';
 import { hashParamGet as locationHashParamGet } from '../helpers/Location';
 import { hashParamSet as locationHashParamSet } from '../helpers/Location';
 import { parseUrl as locationParseUrl } from '../helpers/Location';
-import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
+import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 import { Attribute } from '../helpers/Dom';
 
@@ -12,7 +12,7 @@ export default class extends Component {
   protected group: string;
 
   loadRenderData(
-    renderData: RenderDataComponentInterface,
+    renderData: ComponentInterface,
     requestOptions: RequestOptionsInterface
   ) {
     super.loadRenderData(renderData, requestOptions);

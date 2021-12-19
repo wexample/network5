@@ -1,8 +1,8 @@
 import AdaptiveService from './AdaptiveService';
 import LocaleService from './LocaleService';
 import MixinsAppService from '../class/MixinsAppService';
-import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
-import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
+import PageInterface from '../interfaces/RenderData/PageInterface';
+import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import RequestOptionsPageInterface from '../interfaces/RequestOptionsPageInterface';
 import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
 import RenderNodeService from './RenderNodeService';
@@ -23,7 +23,7 @@ export default class PagesService extends RenderNodeService {
     return {
       app: {
         async loadRenderData(
-          renderData: RenderDataLayoutInterface,
+          renderData: LayoutInterface,
           requestOptions: RequestOptionsInterface,
           registry: any
         ) {
@@ -48,7 +48,7 @@ export default class PagesService extends RenderNodeService {
   }
 
   async createPage(
-    renderData: RenderDataPageInterface,
+    renderData: PageInterface,
     requestOptions: RequestOptionsInterface
   ) {
     let el;
@@ -93,7 +93,7 @@ export default class PagesService extends RenderNodeService {
 
   createRenderNodeInstance(
     el: HTMLElement,
-    renderData: RenderDataPageInterface,
+    renderData: PageInterface,
     classDefinition: any
   ): RenderNode | null {
     return super.createRenderNodeInstance(
