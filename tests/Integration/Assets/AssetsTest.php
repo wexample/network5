@@ -32,8 +32,13 @@ class AssetsTest extends NetworkTestCase
         $pageRenderData = $layoutRenderData['page'];
 
         $this->assertTrue(
-            isset($pageRenderData['assets']['all']['css']),
+            isset($pageRenderData['assets']['css']),
             'Demo page contains a default css page.'
+        );
+
+        $this->assertNotEmpty(
+            count($pageRenderData['assets']['css']),
+            'Demo page contains some css page.'
         );
     }
 
