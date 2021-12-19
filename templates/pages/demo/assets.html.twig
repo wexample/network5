@@ -1,13 +1,18 @@
 {%- extends 'layouts/public.html.twig' -%}
 
-{%- block template_config -%}
+{%- block layout_config -%}
+    {{ parent() }}
+    {{ js_var('demoVariableLayout', 'demoVariableLayoutValue') }}
+{%- endblock -%}
+
+{%- block page_config -%}
+    {{ parent() }}
     {{ js_var('demoVariable', 'demoVariableValueOverridden') }}
     {{ js_var('demoVariable', 'demoVariableValue') }}
     {{ js_var('demoVariableBoolean', true) }}
     {{ js_var('demoVariableInteger', 123) }}
     {{ js_var('demoVariableFloat', 123.456) }}
     {{ js_var('demoVariableObject', {'key':{'key2':'value'}}) }}
-    {{ parent() }}
 {%- endblock -%}
 
 {%- block page_body -%}

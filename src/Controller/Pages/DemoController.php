@@ -60,7 +60,8 @@ class DemoController extends AbstractPagesController
     public function loadingFetchSimple(): Response
     {
         return $this
-            ->adaptiveResponse
+            ->adaptiveResponseService
+            ->createResponse($this)
             ->setView(
                 $this->buildTemplatePath('loading-fetch-simple')
             )

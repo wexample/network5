@@ -27,13 +27,13 @@ class RegistrationController extends AbstractPagesController
     public const ROUTE_APP_REGISTER = 'app_register';
 
     public function __construct(
-        AdaptiveResponseService $adaptiveResponse,
+        AdaptiveResponseService $adaptiveResponseService,
         private EmailVerifier $emailVerifier,
         Environment $twigEnvironment,
         RequestStack $requestStack,
     ) {
         parent::__construct(
-            $adaptiveResponse,
+            $adaptiveResponseService,
             $twigEnvironment,
             $requestStack
         );
@@ -78,7 +78,7 @@ class RegistrationController extends AbstractPagesController
             return $this->redirectToRoute('home');
         }
 
-        return $this->render('registration/register.html.twig', [
+        return $this->adaptiveResponseService->adaptiveRender('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }

@@ -2,12 +2,11 @@
 
 namespace App\Wex\BaseBundle\Twig;
 
-use App\Wex\BaseBundle\Helper\RenderingHelper;
+use App\Wex\BaseBundle\Helper\ColorSchemeHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
-use App\Wex\BaseBundle\Rendering\RenderDataInitialLayout;
-use App\Wex\BaseBundle\Service\AssetsService;
+use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use App\Wex\BaseBundle\Service\LayoutService;
-use App\Wex\BaseBundle\Service\RenderingService;
+use Exception;
 use Twig\Environment;
 use Twig\TwigFunction;
 
@@ -16,9 +15,8 @@ class LayoutExtension extends AbstractExtension
     public const LAYOUT_NAME_DEFAULT = VariableHelper::DEFAULT;
 
     public function __construct(
-        protected LayoutService $layoutService,
-        protected RenderingService $renderingService,
-        private TemplateExtension $templateExtension
+        private AdaptiveResponseService $adaptiveResponseService,
+        private LayoutService $layoutService,
     )
     {
     }
@@ -31,13 +29,16 @@ class LayoutExtension extends AbstractExtension
                 [
                     $this,
                     'layoutInit',
+                ],
+                [
+                    self::FUNCTION_OPTION_NEEDS_ENVIRONMENT => true,
                 ]
             ),
             new TwigFunction(
                 'layout_render_initial_data',
                 [
                     $this,
-                    'templateBuildInitialLayoutRenderData',
+                    'layoutRenderInitialData',
                 ],
                 [
                     self::FUNCTION_OPTION_NEEDS_ENVIRONMENT => true,
@@ -46,46 +47,30 @@ class LayoutExtension extends AbstractExtension
         ];
     }
 
+    /**
+     * @throws Exception
+     */
     public function layoutInit(
-        string $layoutName,
-        string $colorScheme,
-        bool $useJs,
+        Environment $twig,
+        ?string $layoutName,
+        string $colorScheme = ColorSchemeHelper::SCHEME_DEFAULT,
+        bool $useJs = true,
     ): void
     {
-        $this->layoutService->initialLayoutInit(
-            $this->renderingService->getRenderRequestId(),
-            $this->renderingService->layoutInitialData,
-            $layoutName,
+        $this->layoutService->layoutInitInitial(
+            $twig,
+            $layoutName ?: VariableHelper::DEFAULT,
             $colorScheme,
             $useJs
         );
     }
 
-    public function templateBuildInitialLayoutRenderData(
-        Environment $env
-    ): RenderDataInitialLayout
+    public function layoutRenderInitialData(): array
     {
-        /** @var ComponentsExtension $comExtension */
-        $comExtension = $env->getExtension(
-            ComponentsExtension::class
-        );
-
-        $renderData = $this->renderingService->layoutInitialData;
-
-        $this->templateExtension->templateBuildLayoutRenderData(
-            $renderData,
-            $env,
-            $renderData->page->name
-        );
-
-        $renderData->page->isLayoutPage = true;
-
-        $renderData->components = $comExtension->buildRenderData(
-            RenderingHelper::CONTEXT_LAYOUT
-        );
-
-        $renderData->displayBreakpoints = AssetsService::DISPLAY_BREAKPOINTS;
-
-        return $renderData;
+        return $this
+            ->adaptiveResponseService
+            ->renderPass
+            ->layoutRenderNode
+            ->toRenderData();
     }
 }

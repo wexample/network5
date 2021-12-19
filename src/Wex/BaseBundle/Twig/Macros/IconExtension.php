@@ -7,6 +7,7 @@ use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Twig\AbstractExtension;
 use App\Wex\BaseBundle\Twig\ComponentsExtension;
+use Twig\Environment;
 use function explode;
 use function file_get_contents;
 use function json_decode;
@@ -70,12 +71,16 @@ class IconExtension extends AbstractExtension
                     $this,
                     'icon',
                 ],
-                [self::FUNCTION_OPTION_IS_SAFE => self::FUNCTION_OPTION_IS_SAFE_VALUE_HTML]
+                [
+                    self::FUNCTION_OPTION_IS_SAFE => self::FUNCTION_OPTION_IS_SAFE_VALUE_HTML,
+                    self::FUNCTION_OPTION_NEEDS_ENVIRONMENT => true,
+                ]
             ),
         ];
     }
 
     public function icon(
+        Environment $twig,
         string $name,
         string $class = '',
         string $tagName = 'i'
@@ -111,13 +116,13 @@ class IconExtension extends AbstractExtension
                 );
             }
 
-            // TODO Finish
             return DomHelper::buildTag(
                 $tagName,
                 [
                     VariableHelper::CLASS_VAR => $class,
                 ],
                 $this->componentsExtension->componentInitParent(
+                    $twig,
                     'icon',
                     [
                         'name' => $name

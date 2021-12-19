@@ -92,6 +92,8 @@ class VariableHelper
 
     public const THEME = 'theme';
 
+    public const TEST = 'test';
+
     public const TO = 'to';
 
     public const TRANSLATIONS = 'translations';

@@ -53,7 +53,7 @@ export default class PagesService extends RenderNodeService {
   ) {
     let el;
 
-    if (renderData.isLayoutPage) {
+    if (renderData.isInitialPage) {
       el = this.app.layout.el;
       requestOptions.parentRenderNode = this.app.layout;
     } else {
@@ -83,7 +83,12 @@ export default class PagesService extends RenderNodeService {
       return;
     }
 
-    await this.createRenderNode(el, renderData, requestOptions);
+    await this.createRenderNode(
+      await this.prepareRenderNodeDefinition(renderData),
+      el,
+      renderData,
+      requestOptions
+    );
   }
 
   createRenderNodeInstance(

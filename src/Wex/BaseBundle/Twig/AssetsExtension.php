@@ -33,12 +33,12 @@ class AssetsExtension extends AbstractExtension
         ];
     }
 
-    public function assetsTypeFiltered(string $context, string $filterType = null): array
+    public function assetsTypeFiltered(string $contextType, string $assetType = null): array
     {
         return $this->assetsService->assetsFiltered(
-            $context,
-            $filterType
-        )[$filterType];
+            $contextType,
+            $assetType
+        );
     }
 
     public function assetsPreloadList(string $ext): array

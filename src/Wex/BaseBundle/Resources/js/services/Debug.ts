@@ -23,7 +23,7 @@ export default class DebugService extends AppService {
   registerHooks() {
     return {
       app: {
-        init() {
+        loadRenderData() {
           this.app.services.debug.init();
         },
       },

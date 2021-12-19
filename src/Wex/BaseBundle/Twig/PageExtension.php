@@ -2,15 +2,16 @@
 
 namespace App\Wex\BaseBundle\Twig;
 
+use App\Wex\BaseBundle\Helper\TemplateHelper;
+use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use App\Wex\BaseBundle\Service\PageService;
-use App\Wex\BaseBundle\Service\RenderingService;
 use Twig\TwigFunction;
 
 class PageExtension extends AbstractExtension
 {
     public function __construct(
+        private AdaptiveResponseService $adaptiveResponseService,
         private PageService $pageService,
-        private RenderingService $renderingService
     )
     {
     }
@@ -25,6 +26,20 @@ class PageExtension extends AbstractExtension
                     'pageInit',
                 ]
             ),
+            new TwigFunction(
+                'page_name_from_path',
+                [
+                    $this,
+                    'pageNameFromPath',
+                ]
+            ),
+            new TwigFunction(
+                'page_name_from_route',
+                [
+                    $this,
+                    'pageNameFromRoute'
+                ]
+            ),
         ];
     }
 
@@ -33,10 +48,36 @@ class PageExtension extends AbstractExtension
     )
     {
         $this->pageService->pageInit(
-            $this->renderingService->getRenderRequestId(),
-            $this->renderingService->layoutInitialData->page,
+            $this->adaptiveResponseService->renderPass->layoutRenderNode->page,
             $pageName,
-            $this->renderingService->layoutInitialData->useJs
+            $this->adaptiveResponseService->renderPass->layoutRenderNode->useJs
+        );
+    }
+
+    public function pageNameFromPath(string $templatePath): string
+    {
+        // Define template name.
+        $ext = TemplateHelper::TEMPLATE_FILE_EXTENSION;
+
+        // Path have extension.
+        if (str_ends_with($templatePath, $ext))
+        {
+            return substr(
+                $templatePath,
+                0,
+                -strlen(TemplateHelper::TEMPLATE_FILE_EXTENSION)
+            );
+        }
+
+        return $templatePath;
+    }
+
+    public function pageNameFromRoute(string $route): string
+    {
+        return $this->pageService->buildPageNameFromClassPath(
+            $this->pageService->getControllerClassPathFromRouteName(
+                $route
+            )
         );
     }
 }

@@ -5,6 +5,6 @@ export default interface RenderDataPageInterface extends RenderDataInterface {
   body: string;
   components: any;
   el: HTMLElement;
-  isLayoutPage: boolean;
+  isInitialPage: boolean;
   pageHandler: PageHandlerComponent;
 }

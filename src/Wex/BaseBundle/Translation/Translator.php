@@ -445,14 +445,14 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
 
     public function setDomainFromPath(string $name, string $path): string
     {
-        $domain = $this->buildDomainFromPath($path);
+        $domain = Translator::buildDomainFromPath($path);
 
         $this->setDomain($name, $domain);
 
         return $domain;
     }
 
-    public function buildDomainFromPath(string $path): string
+    public static function buildDomainFromPath(string $path): string
     {
         // Create translation domain.
         $info = (object) pathinfo($path);
@@ -468,30 +468,6 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
     public function setDomain(string $name, string $value): void
     {
         $this->domainsStack[$name][] = $value;
-    }
-
-    public function setDomainFromClass(
-        string $name,
-        $object,
-        $removePrefix = ''
-    ): string {
-        $exp = explode(
-            '\\',
-            substr($object::class, strlen($removePrefix))
-        );
-
-        $convertedParts = [];
-
-        foreach ($exp as $part)
-        {
-            $convertedParts[] = TextHelper::toSnake($part);
-        }
-
-        $domain = implode(self::KEYS_SEPARATOR, $convertedParts);
-
-        $this->setDomain($name, $domain);
-
-        return $domain;
     }
 
     public function revertDomain(string $name): void

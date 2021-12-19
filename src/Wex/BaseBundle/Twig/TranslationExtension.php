@@ -31,26 +31,7 @@ class TranslationExtension extends AbstractExtension
                     $this,
                     'translationBuildDomainFromPath',
                 ]
-            ),
-            new TwigFunction(
-                'translation_set_domain_from_path',
-                [
-                    $this,
-                    'translationSetDomainFromPath',
-                ]
-            ),
-        ];
-    }
-
-    #[ArrayShape([
-        VariableHelper::DOMAIN => VariableHelper::NULL.'|'.Types::STRING,
-        VariableHelper::CATALOG => Types::ARRAY,
-    ])]
-    public function buildRenderData(): array
-    {
-        return [
-            VariableHelper::DOMAIN => $this->translator->getDomain(Translator::DOMAIN_TYPE_PAGE),
-            VariableHelper::CATALOG => $this->buildCatalog($this->transJsKeys),
+            )
         ];
     }
 
@@ -93,15 +74,7 @@ class TranslationExtension extends AbstractExtension
 
     public function translationBuildDomainFromPath(string $path): string
     {
-        return $this->translator->buildDomainFromPath(
-            $path
-        );
-    }
-
-    public function translationSetDomainFromPath(string $domainName, string $path): void
-    {
-        $this->translator->setDomainFromPath(
-            $domainName,
+        return Translator::buildDomainFromPath(
             $path
         );
     }

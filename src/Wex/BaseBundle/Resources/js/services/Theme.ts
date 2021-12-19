@@ -1,6 +1,7 @@
 import MixinsAppService from '../class/MixinsAppService';
 import AppService from '../class/AppService';
 import AssetsInterface from '../interfaces/AssetInterface';
+import AssetsService from "./Assets";
 
 export class ThemeServiceEvents {
   public static THEME_CHANGE: string = 'theme-change';
@@ -123,7 +124,7 @@ export default class ThemeService extends AppService {
 
   assetUpdateFilter(asset: AssetsInterface) {
     if (asset.theme !== null && asset.theme !== this.activeTheme) {
-      return 'reject';
+      return AssetsService.UPDATE_FILTER_REJECT;
     }
   }
 }

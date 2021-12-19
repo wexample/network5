@@ -2,11 +2,11 @@
 
 namespace App\Wex\BaseBundle\Rendering;
 
-class ComponentContext
+class RenderContext
 {
     public function __construct(
-        public string $renderContext,
-        public string $name
+        public string $type,
+        public ?string $name
     ) {
     }
 }

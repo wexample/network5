@@ -25,7 +25,7 @@ export default class ComponentsService extends RenderNodeService {
   constructor(app: App) {
     super(app);
 
-    this.elLayoutComponents = document.getElementById('layout-components');
+    this.elLayoutComponents = document.getElementById('components-templates');
   }
 
   registerHooks() {
@@ -73,10 +73,7 @@ export default class ComponentsService extends RenderNodeService {
       this.services.prompt.systemError(
         'page_message.error.com_missing',
         {},
-        {
-          ':type': renderData.name,
-          ':renderData': renderData,
-        }
+        renderData
       );
     } else {
       return super.createRenderNodeInstance(
@@ -119,9 +116,17 @@ export default class ComponentsService extends RenderNodeService {
     for (const renderDataComponent of renderData.components) {
       let el: HTMLElement;
       let elPlaceholder = renderNode.el.querySelector(
-        '.' + renderDataComponent.id
+        `.${renderDataComponent.id}`
       ) as HTMLElement;
       let removePlaceHolder = true;
+
+      if (!elPlaceholder) {
+        this.services.prompt.systemError(
+          'page_message.error.com_placeholder_missing',
+          {},
+          renderDataComponent
+        );
+      }
 
       switch (renderDataComponent.initMode) {
         case Component.INIT_MODE_CLASS:
@@ -142,7 +147,12 @@ export default class ComponentsService extends RenderNodeService {
         elPlaceholder.remove();
       }
 
-      let component = await this.createRenderNode(el, renderDataComponent, requestOptions) as Component;
+      let component = await this.createRenderNode(
+        await this.prepareRenderNodeDefinition(renderDataComponent),
+        el,
+        renderDataComponent,
+        requestOptions
+      ) as Component;
 
       renderNode.components.push(component);
 

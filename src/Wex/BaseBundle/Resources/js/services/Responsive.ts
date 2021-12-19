@@ -18,24 +18,18 @@ export default class ResponsiveService extends AppService {
   registerHooks() {
     return {
       app: {
-        async init(registry: any) {
-          if (registry.assets === MixinsAppService.LOAD_STATUS_COMPLETE) {
-            let responsiveService = this.services.responsive;
+        async loadRenderData() {
+          let responsiveService = this.services.responsive;
 
-            this.services.assets.updateFilters.push(
-              responsiveService.updateFilters.bind(responsiveService)
-            );
+          this.services.assets.updateFilters.push(
+            responsiveService.assetUpdateFilter.bind(responsiveService)
+          );
 
-            window.addEventListener(Events.RESIZE, async () =>
-              await responsiveService.updateResponsive(true)
-            );
+          window.addEventListener(Events.RESIZE, async () =>
+            await responsiveService.updateResponsive(true)
+          );
 
-            await responsiveService.updateResponsive(false);
-
-            return;
-          }
-
-          return MixinsAppService.LOAD_STATUS_WAIT;
+          await responsiveService.updateResponsive(false);
         },
       },
     };
@@ -102,7 +96,7 @@ export default class ResponsiveService extends AppService {
     )[0];
   }
 
-  updateFilters(asset: AssetsInterface) {
+  assetUpdateFilter(asset: AssetsInterface) {
     if (
       asset.responsive !== null &&
       asset.responsive !== this.responsiveSizeCurrent

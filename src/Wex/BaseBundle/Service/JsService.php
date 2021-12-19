@@ -25,7 +25,8 @@ class JsService
      * CommonExtension constructor.
      */
     public function __construct(
-        private NormalizerInterface $normalizer
+        private NormalizerInterface $normalizer,
+        private AdaptiveResponseService $adaptiveResponseService
     ) {
     }
 
@@ -35,9 +36,12 @@ class JsService
     public function jsVar(
         string $name,
         mixed $value,
-        string $context = RenderingHelper::CONTEXT_PAGE
     ): void {
-        $this->jsVars[$context][$name] = $this->serializeValue($value);
+        $this
+            ->adaptiveResponseService
+            ->renderPass
+            ->getCurrentContextRenderNode()
+            ->vars[$name] = $this->serializeValue($value);
     }
 
     public function jsVarExists(
@@ -45,11 +49,6 @@ class JsService
         string $context = RenderingHelper::CONTEXT_PAGE
     ): bool {
         return isset($this->jsVars[$context][$name]);
-    }
-
-    public function jsVarsGet(string $group): array
-    {
-        return $this->jsVars[$group];
     }
 
     /**

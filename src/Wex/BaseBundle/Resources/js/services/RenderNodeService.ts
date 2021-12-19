@@ -10,18 +10,16 @@ export default abstract class RenderNodeService extends AppService {
   services: ServiceRegistryPageInterface;
 
   async createRenderNode(
+    classDefinition: any,
     el: HTMLElement,
     renderData: RenderDataInterface,
     requestOptions: RequestOptionsInterface
   ): Promise<RenderNode> {
-    let classDefinition = await this.prepareRenderNodeDefinition(renderData);
-
     let instance = this.createRenderNodeInstance(
       el,
       renderData,
       classDefinition
     );
-
 
     instance.loadRenderData(renderData, requestOptions);
 

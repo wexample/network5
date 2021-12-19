@@ -2,8 +2,7 @@
 
 namespace App\Wex\BaseBundle\Service;
 
-use App\Wex\BaseBundle\Helper\RenderingHelper;
-use App\Wex\BaseBundle\Rendering\RenderData;
+use App\Wex\BaseBundle\Rendering\RenderNode\RenderNode;
 
 abstract class RenderNodeService
 {
@@ -13,26 +12,24 @@ abstract class RenderNodeService
     {
     }
 
-    public function initRenderData(
-        string $renderRequestId,
-        RenderData $renderData,
+    public function initRenderNode(
+        RenderNode $renderNode,
         string $name,
         string $useJs
     )
     {
-        $renderData->init(
-            $renderRequestId,
+        $renderNode->init(
             $name
         );
 
         $this->assetsService->assetsDetect(
-            $renderData->getAssetsName(),
-            RenderingHelper::CONTEXT_PAGE,
-            $renderData->assets
+            $renderNode->getAssetsName(),
+            $renderNode,
+            $renderNode->assets
         );
 
         $this->assetsService->assetsPreload(
-            $renderData->assets['css'],
+            $renderNode->assets['css'],
             $useJs
         );
     }

@@ -3,12 +3,13 @@
 namespace App\Wex\BaseBundle\Rendering;
 
 use App\Wex\BaseBundle\Helper\PathHelper;
+use App\Wex\BaseBundle\Rendering\RenderNode\RenderNode;
 use App\Wex\BaseBundle\Service\AssetsService;
 use function dirname;
 use JetBrains\PhpStorm\NoReturn;
 use function pathinfo;
 
-class Asset
+class Asset extends RenderDataGenerator
 {
     public const EXTENSION_CSS = 'css';
 
@@ -56,9 +57,9 @@ class Asset
 
     public string $media = 'screen';
 
-    public bool $preload = false;
+    public string $path;
 
-    public string $preloadType;
+    public bool $preload = false;
 
     public bool $rendered = false;
 
@@ -70,12 +71,10 @@ class Asset
 
     public int $filesize;
 
-    public string $path;
-
     #[NoReturn]
     public function __construct(
         string $path,
-        public string $renderContext,
+        public RenderNode $renderData,
         string $basePath
     )
     {
@@ -145,5 +144,20 @@ class Asset
     public function setRendered(bool $bool = true)
     {
         $this->rendered = $bool;
+    }
+
+    public function toRenderData(): array
+    {
+        return $this->serializeVariables([
+            'filesize',
+            'id',
+            'media',
+            'path',
+            'preload',
+            'rendered',
+            'responsive',
+            'theme',
+            'type',
+        ]);
     }
 }

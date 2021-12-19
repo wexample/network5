@@ -3,6 +3,7 @@ import Page from './Page';
 import ServiceRegistryAppInterface from '../interfaces/ServiceRegistryAppInterface';
 
 import AssetsService from '../services/Assets';
+import LayoutsService from "../services/Layouts";
 import MixinsService from '../services/Mixins';
 import PagesService from '../services/Pages';
 import ResponsiveService from '../services/Responsive';
@@ -21,7 +22,6 @@ export default class extends AsyncConstructor {
   public bundles: any;
   public hasCoreLoaded: boolean = false;
   public layout: LayoutInitial = null;
-  public layoutRenderData: RenderDataLayoutInterface = null;
   public mixins: typeof AppService[] = [];
   public elLayout: HTMLElement;
   public lib: object = {};
@@ -42,17 +42,21 @@ export default class extends AsyncConstructor {
     let doc = window.document;
 
     let run = async () => {
+      await this.loadAndInitServices(this.getServices());
+
       let registry: {
         bundles: any;
         layoutRenderData: RenderDataLayoutInterface;
       } = window['appRegistry'];
-      this.bundles = registry.bundles;
-      this.layoutRenderData =
-        registry.layoutRenderData as RenderDataLayoutInterface;
-      this.layout = new LayoutInitial(this);
-      this.layout.el = doc.getElementById('layout');
 
-      await this.loadAndInitServices(this.getServices());
+      this.bundles = registry.bundles;
+
+      this.layout = await this.services.layouts.createRenderNode(
+        LayoutInitial,
+        doc.getElementById('layout'),
+        registry.layoutRenderData,
+        {}
+      ) as LayoutInitial;
 
       this.addLibraries(this.lib);
 
@@ -109,6 +113,7 @@ export default class extends AsyncConstructor {
     return [
       AssetsService,
       EventsService,
+      LayoutsService,
       MixinsService,
       PagesService,
       ResponsiveService,

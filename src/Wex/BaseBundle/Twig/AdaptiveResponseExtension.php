@@ -2,7 +2,6 @@
 
 namespace App\Wex\BaseBundle\Twig;
 
-use App\Wex\BaseBundle\Rendering\AdaptiveResponse;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\TwigFunction;
@@ -18,14 +17,23 @@ class AdaptiveResponseExtension extends AbstractExtension
     ) {
     }
 
-    protected function getCurrentResponse(): AdaptiveResponse
-    {
-        return $this->adaptiveResponseService->getCurrentResponse();
-    }
-
     public function getFunctions(): array
     {
         return [
+            new TwigFunction(
+                'adaptive_response_revert_context',
+                [
+                    $this,
+                    'adaptiveResponseRevertContext',
+                ]
+            ),
+            new TwigFunction(
+                'adaptive_response_set_context',
+                [
+                    $this,
+                    'adaptiveResponseSetContext',
+                ]
+            ),
             new TwigFunction(
                 'adaptive_response_rendering_base_path',
                 [
@@ -36,7 +44,6 @@ class AdaptiveResponseExtension extends AbstractExtension
                     self::FUNCTION_OPTION_NEEDS_CONTEXT => true,
                 ]
             ),
-
             new TwigFunction(
                 'adaptive_rendering_base',
                 [
@@ -54,15 +61,38 @@ class AdaptiveResponseExtension extends AbstractExtension
     public function adaptiveResponseRenderingBasePath(array $context): string
     {
         return $this
-            ->getCurrentResponse()
-            ->getRenderingBasePath(
-                $context,
-                $this->requestStack->getMainRequest()
-            );
+            ->adaptiveResponseService
+            ->getResponse()
+            ->getRenderingBasePath($context);
     }
 
     public function adaptiveRenderingBase(): string
     {
-        return $this->adaptiveResponseService->detectRenderingBase();
+        return $this
+            ->adaptiveResponseService
+            ->getResponse()
+            ->getRenderingBase();
+    }
+
+    public function adaptiveResponseSetContext(
+        string $renderNodeType,
+        ?string $renderNodeName,
+    )
+    {
+        $this
+            ->adaptiveResponseService
+            ->renderPass
+            ->setCurrentContextRenderNodeByTypeAndName(
+                $renderNodeType,
+                $renderNodeName
+            );
+    }
+
+    public function adaptiveResponseRevertContext()
+    {
+        $this
+            ->adaptiveResponseService
+            ->renderPass
+            ->revertCurrentContextRenderNode();
     }
 }

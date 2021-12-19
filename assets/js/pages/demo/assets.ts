@@ -50,6 +50,12 @@ const bundle: AssetBundleInterface = {
       let test = this.unitTest;
 
       test.assertEquals(
+        this.app.layout.vars.demoVariableLayout,
+        'demoVariableLayoutValue',
+        'Variable has proper value'
+      );
+
+      test.assertEquals(
         this.app.layout.page.vars.demoVariable,
         'demoVariableValue',
         'Variable has proper value'

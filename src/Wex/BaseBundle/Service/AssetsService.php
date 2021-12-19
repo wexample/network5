@@ -6,6 +6,7 @@ use App\Wex\BaseBundle\Helper\ColorSchemeHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
+use App\Wex\BaseBundle\Rendering\RenderNode\RenderNode;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class AssetsService
@@ -44,7 +45,8 @@ class AssetsService
     private string $pathPublic;
 
     public function __construct(
-        KernelInterface $kernel
+        KernelInterface $kernel,
+        private AdaptiveResponseService $adaptiveResponseService
     )
     {
         $this->pathProject = $kernel->getProjectDir().'/';
@@ -59,8 +61,8 @@ class AssetsService
     }
 
     public function assetsDetect(
-        string $pageName,
-        string $context,
+        string $path,
+        RenderNode $context,
         array &$collection = []
     ): array
     {
@@ -69,7 +71,7 @@ class AssetsService
             $collection[$ext] = array_merge(
                 $collection[$ext] ?? [],
                 $this->assetsDetectForType(
-                    $pageName,
+                    $path,
                     $ext,
                     $context,
                     true
@@ -86,7 +88,7 @@ class AssetsService
     public function assetsDetectForType(
         string $pageName,
         string $ext,
-        string $context,
+        RenderNode $renderNode,
         bool $searchTheme
     ): array
     {
@@ -95,7 +97,7 @@ class AssetsService
 
         if ($asset = $this->addAsset(
             $assetPathFull,
-            $context
+            $renderNode
         ))
         {
             $output[] = $asset;
@@ -118,7 +120,7 @@ class AssetsService
                 ]
             );
 
-            if ($asset = $this->addAsset($assetPathFull, $context))
+            if ($asset = $this->addAsset($assetPathFull, $renderNode))
             {
                 $asset->responsive = $breakpointName;
                 $asset->media = 'screen and (min-width:'.$minWidth.'px)'.
@@ -153,10 +155,11 @@ class AssetsService
                 $assets = $this->assetsDetectForType(
                     $themePageName,
                     $ext,
-                    $context,
+                    $renderNode,
                     false
                 );
 
+                /** @var Asset $asset */
                 foreach ($assets as $asset)
                 {
                     $asset->theme = $themeName;
@@ -172,7 +175,7 @@ class AssetsService
 
     public function addAsset(
         string $pathRelative,
-        string $renderContext
+        RenderNode $renderNode
     ): ?Asset
     {
         $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
@@ -185,7 +188,7 @@ class AssetsService
         {
             $asset = new Asset(
                 realpath($this->pathPublic.$this->manifest[$pathRelativeToPublic]),
-                $renderContext,
+                $renderNode,
                 $this->pathPublic
             );
 
@@ -236,24 +239,23 @@ class AssetsService
         return $output;
     }
 
-    public function assetsFiltered(string $context, string $filterType = null): array
+    public function assetsFiltered(string $contextType, string $assetType = null): array
     {
-        $filtered = self::ASSETS_DEFAULT_EMPTY;
+        $registry = $this->adaptiveResponseService->renderPass->registry;
+        $assets = [];
 
-        foreach ($this->assets as $type => $group)
+        /** @var RenderNode $renderNode */
+        foreach ($registry[$contextType] as $renderNode)
         {
-            if (!$filterType || $filterType === $type)
+            foreach ($renderNode->assets as $asset)
             {
-                foreach ($group as $asset)
-                {
-                    if ($asset->renderContext === $context)
-                    {
-                        $filtered[$type][] = $asset;
-                    }
-                }
+                $assets = array_merge(
+                    $assets,
+                    $renderNode->assets[$assetType]
+                );
             }
         }
 
-        return $filtered;
+        return $assets;
     }
 }

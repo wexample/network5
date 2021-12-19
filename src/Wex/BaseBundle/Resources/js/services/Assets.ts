@@ -161,7 +161,9 @@ export default class AssetsService extends AppService {
    * By default accept to load all given assets, except any filter rejects it.
    */
   protected askFilterIfAssetIsValid(asset: AssetInterface) {
-    for (let filter of this.updateFilters) {
+    let filter: Function;
+
+    for (filter of this.updateFilters) {
       if (filter(asset) === AssetsService.UPDATE_FILTER_REJECT) {
         return false;
       }

@@ -6,11 +6,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class WexBaseBundle extends Bundle
 {
-    public const BUNDLE_PATH_ALIAS_PREFIX = '@';
+    public const WEX_BUNDLE_PATH_ALIAS = Helper\TemplateHelper::BUNDLE_PATH_ALIAS_PREFIX.'WexBaseBundle/';
 
-    public const BUNDLE_PATH_ALIAS = self::BUNDLE_PATH_ALIAS_PREFIX.'WexBaseBundle/';
-
-    public const BUNDLE_PATH_RESOURCES = self::BUNDLE_PATH_ALIAS.'Resources/';
-
-    public const BUNDLE_PATH_TEMPLATES = self::BUNDLE_PATH_RESOURCES.'templates/';
+    public const WEX_BUNDLE_PATH_TEMPLATES = self::WEX_BUNDLE_PATH_ALIAS.Helper\TemplateHelper::BUNDLE_PATH_RESOURCES.'templates/';
 }

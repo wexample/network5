@@ -12,7 +12,7 @@ import { ResponsiveServiceEvents } from '../services/Responsive';
 
 export default class extends RenderNode {
   public elOverlay: HTMLElement;
-  public isLayoutPage: boolean;
+  public isInitialPage: boolean;
   public name: string;
   protected onChangeResponsiveSizeProxy: Function;
   protected onChangeThemeProxy: Function;
@@ -21,7 +21,6 @@ export default class extends RenderNode {
   public renderData: RenderDataPageInterface;
   public requestOptions: RequestOptionsPageInterface;
   public responsiveDisplayCurrent: PageResponsiveDisplay;
-  public vars: any;
   public services: ServiceRegistryPageInterface;
 
   public getId(): string {
@@ -42,17 +41,15 @@ export default class extends RenderNode {
   ) {
     super.loadRenderData(renderData, requestOptions);
 
-    this.isLayoutPage = this.renderData.isLayoutPage;
+    this.isInitialPage = this.renderData.isInitialPage;
     this.name = this.renderData.name;
     this.requestOptions = requestOptions;
 
-    if (this.isLayoutPage) {
+    if (this.isInitialPage) {
       this.app.layout.page = this;
     }
 
     this.elOverlay = this.el.querySelector('.page-overlay');
-
-    this.vars = {...this.vars, ...this.renderData.vars};
   }
 
   async init() {
@@ -66,7 +63,6 @@ export default class extends RenderNode {
         'page',
         [this]
       );
-
 
     if (this.renderData.pageHandler) {
       this.renderData.pageHandler.setPage(this);

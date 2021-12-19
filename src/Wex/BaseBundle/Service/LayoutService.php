@@ -2,52 +2,71 @@
 
 namespace App\Wex\BaseBundle\Service;
 
-use App\Wex\BaseBundle\Helper\RenderingHelper;
+use App\Wex\BaseBundle\Rendering\AdaptiveResponse;
 use App\Wex\BaseBundle\Rendering\Asset;
-use App\Wex\BaseBundle\Rendering\RenderDataInitialLayout;
-use App\Wex\BaseBundle\Rendering\RenderDataLayout;
+use App\Wex\BaseBundle\Rendering\RenderNode\LayoutRenderNode;
+use Exception;
+use JetBrains\PhpStorm\Pure;
+use Twig\Environment;
 
 class LayoutService extends RenderNodeService
 {
-    public function initialLayoutInit(
-        string $renderRequestId,
-        RenderDataInitialLayout $layoutRenderData,
+    #[Pure]
+    public function __construct(
+        protected AdaptiveResponseService $adaptiveResponseService,
+        protected AssetsService $assetsService,
+        protected ComponentService $componentService
+    )
+    {
+        parent::__construct(
+            $assetsService
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function layoutInitInitial(
+        Environment $twig,
         string $layoutName,
         string $colorScheme,
         bool $useJs
     )
     {
-        $layoutRenderData->colorScheme = $colorScheme;
+        $renderPass = $this->adaptiveResponseService->renderPass;
+
+        $renderPass->layoutRenderNode->colorScheme = $colorScheme;
 
         $this->layoutInit(
-            $renderRequestId,
-            $layoutRenderData,
+            $twig,
+            $renderPass->layoutRenderNode,
             $layoutName,
             $useJs
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function layoutInit(
-        string $renderRequestId,
-        RenderDataLayout $layoutRenderData,
+        Environment $twig,
+        LayoutRenderNode $layoutRenderNode,
         string $layoutName,
         bool $useJs
     )
     {
-        $layoutRenderData->name = $layoutName;
-        $layoutRenderData->useJs = $useJs;
-        $backEndAssets = $layoutRenderData->assets;
-        $layoutRenderData->assets = AssetsService::ASSETS_DEFAULT_EMPTY;
+        $layoutRenderNode->name = $layoutName;
+        $layoutRenderNode->useJs = $useJs;
+        $backEndAssets = $layoutRenderNode->assets;
 
-        $this->initRenderData(
-            $renderRequestId,
-            $layoutRenderData,
+        $this->initRenderNode(
+            $layoutRenderNode,
             $layoutName,
             $useJs
         );
 
         // No main js found.
-        if (empty($layoutRenderData->assets[Asset::EXTENSION_JS]))
+        if (empty($layoutRenderNode->assets[Asset::EXTENSION_JS]))
         {
             // Try to load default js file.
             // Do not preload JS as it is configured
@@ -55,19 +74,34 @@ class LayoutService extends RenderNodeService
             $this->assetsService->assetsDetectForType(
                 'layouts/default/layout',
                 Asset::EXTENSION_JS,
-                RenderingHelper::CONTEXT_LAYOUT,
+                $layoutRenderNode,
                 true
             );
         }
 
-        $layoutRenderData->assets[Asset::EXTENSION_JS] = array_merge(
-            $layoutRenderData->assets[Asset::EXTENSION_JS],
+        $layoutRenderNode->assets[Asset::EXTENSION_JS] = array_merge(
+            $layoutRenderNode->assets[Asset::EXTENSION_JS],
             $backEndAssets[Asset::EXTENSION_JS]
         );
 
-        $layoutRenderData->assets[Asset::EXTENSION_CSS] = array_merge(
-            $layoutRenderData->assets[Asset::EXTENSION_CSS],
+        $layoutRenderNode->assets[Asset::EXTENSION_CSS] = array_merge(
+            $layoutRenderNode->assets[Asset::EXTENSION_CSS],
             $backEndAssets[Asset::EXTENSION_CSS]
         );
+
+        $this->adaptiveResponseService->renderPass->setCurrentContextRenderNode(
+            $layoutRenderNode
+        );
+
+        if ($this->adaptiveResponseService->getResponse()->getRenderingBase() === AdaptiveResponse::BASE_MODAL)
+        {
+            $this->componentService->componentInitLayout(
+                $twig,
+                ComponentService::COMPONENT_NAME_MODAL,
+                [
+                    'adaptiveResponseBodyDestination' => true,
+                ]
+            );
+        }
     }
 }

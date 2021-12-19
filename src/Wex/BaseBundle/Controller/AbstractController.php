@@ -5,7 +5,6 @@ namespace App\Wex\BaseBundle\Controller;
 use App\Wex\BaseBundle\Controller\Interfaces\AdaptiveResponseControllerInterface;
 use App\Wex\BaseBundle\Controller\Traits\AdaptiveResponseControllerTrait;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
-use App\Wex\BaseBundle\Service\RenderingService;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -19,12 +18,11 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
     public string $requestUri;
 
     public function __construct(
-        protected AdaptiveResponseService $adaptiveResponse,
-        protected Environment $twigEnvironment,
-        protected RenderingService $renderingService
+        protected AdaptiveResponseService $adaptiveResponseService,
+        protected Environment $twigEnvironment
     )
     {
-        $this->adaptiveResponse->setController($this);
+        $adaptiveResponseService->setController($this);
     }
 
     /**
@@ -38,7 +36,11 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         Response $response = null
     ): ?Response
     {
-        return $this->render($view, $parameters, $response);
+        return $this->render(
+            $view,
+            $parameters,
+            $response
+        );
     }
 
     public function getTwigEnvironment(): Environment
@@ -46,13 +48,21 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         return $this->twigEnvironment;
     }
 
+    /**
+     * Overrides default render, adding some magic.
+     *
+     * @param string $view
+     * @param array $parameters
+     * @param Response|null $response
+     * @return Response
+     */
     protected function render(
         string $view,
         array $parameters = [],
         Response $response = null
-    ): Response {
-        $this->renderingService->renderPrepare(
-            $this,
+    ): Response
+    {
+        $this->adaptiveResponseService->renderPrepare(
             $view,
             $parameters
         );

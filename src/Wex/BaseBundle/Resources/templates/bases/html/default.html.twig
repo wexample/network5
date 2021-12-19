@@ -2,12 +2,7 @@
 
 {%- import '@WexBaseBundle/Resources/templates/macros/assets.html.twig' as macro_assets -%}
 
-{%- block template_config -%}
-    {{ parent() }}
-    {{- translation_set_domain_from_path('layout', 'layouts/' ~ layout_name) -}}
-{%- endblock -%}
-
-{%- block template_base -%}
+{%- block layout_base -%}
     {{- parent() -}}
     <!DOCTYPE html>
     <html lang="{{ app.request.locale }}">
@@ -84,19 +79,20 @@
         {%- block layout -%}
             {%- block layout_composer_html -%}
                 {%- block page -%}
-                    {{ render_set_context('page', page_name) }}
+                    {{ adaptive_response_set_context('page', page_name) }}
+                    {%- block page_config -%}{%- endblock -%}
                     <div class="page">
                         {%- block page_composer_html -%}
                             {{- block('page_body') -}}
                         {%- endblock -%}
                     </div>
-                    {{ render_revert_context() }}
+                    {{ adaptive_response_revert_context() }}
                 {%- endblock -%}
             {%- endblock -%}
         {%- endblock -%}
 
-        <div id="layout-components">
-            {{ component_render_layout() | raw }}
+        <div id="components-templates">
+            {{ component_render_templates() | raw }}
         </div>
 
         <div id="vue-templates">

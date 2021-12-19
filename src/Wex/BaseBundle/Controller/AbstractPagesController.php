@@ -6,7 +6,6 @@ use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
-use App\Wex\BaseBundle\Service\RenderingService;
 use function is_null;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,30 +19,38 @@ abstract class AbstractPagesController extends AbstractController
 
     public const NAMESPACE_PAGES = self::NAMESPACE_CONTROLLER.'Pages\\';
 
-    public const RESOURCES_DIR = VariableHelper::PLURAL_PAGE.FileHelper::FOLDER_SEPARATOR;
+    public const RESOURCES_DIR_PAGE = VariableHelper::PLURAL_PAGE.FileHelper::FOLDER_SEPARATOR;
+
+    public const BUNDLE_TEMPLATE_SEPARATOR = '::';
 
     public function __construct(
-        protected AdaptiveResponseService $adaptiveResponse,
+        protected AdaptiveResponseService $adaptiveResponseService,
         protected Environment $twigEnvironment,
-        protected RequestStack $requestStack,
-        protected RenderingService $renderingService
+        protected RequestStack $requestStack
     )
     {
         parent::__construct(
-            $adaptiveResponse,
-            $twigEnvironment,
-            $renderingService
+            $adaptiveResponseService,
+            $twigEnvironment
         );
 
         $mainRequest = $this->requestStack->getMainRequest();
 
-        $this->templateUseJs = is_null($mainRequest->get('no_js'));
         $this->requestUri = $mainRequest->getRequestUri();
     }
 
     public function buildTemplatePath(string $view): string
     {
-        return self::RESOURCES_DIR.$this->viewPathPrefix.$view.TemplateHelper::TEMPLATE_FILE_EXTENSION;
+        $base = self::RESOURCES_DIR_PAGE;
+
+        if (str_contains($view, self::BUNDLE_TEMPLATE_SEPARATOR))
+        {
+            $exp = explode(self::BUNDLE_TEMPLATE_SEPARATOR, $view);
+            $base = $exp[0].FileHelper::FOLDER_SEPARATOR.TemplateHelper::BUNDLE_PATH_TEMPLATES.$base;
+            $view = $exp[1];
+        }
+
+        return $base.$this->viewPathPrefix.$view.TemplateHelper::TEMPLATE_FILE_EXTENSION;
     }
 
     protected function renderPage(
@@ -52,10 +59,8 @@ abstract class AbstractPagesController extends AbstractController
         Response $response = null
     ): Response
     {
-        $templatePath = $this->buildTemplatePath($view);
-
-        return $this->render(
-            $templatePath,
+        return $this->adaptiveRender(
+            $this->buildTemplatePath($view),
             $parameters,
             $response
         );

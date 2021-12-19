@@ -1,5 +1,5 @@
-{% macro render_available_css(context, layout_use_js) %}
-    {% for asset in assets_type_filtered(context, 'css') %}
+{% macro render_available_css(context_type, layout_use_js) %}
+    {% for asset in assets_type_filtered(context_type, 'css') %}
         {%- if asset.isAvailable(layout_use_js) -%}
             <link rel="stylesheet" media="{{ asset.media }}"
                   href="{{ asset(asset.path) }}"/>
@@ -8,8 +8,8 @@
     {% endfor %}
 {% endmacro %}
 
-{% macro render_available_js(context) %}
-    {%- for asset in assets_type_filtered(context, 'js') -%}
+{% macro render_available_js(context_type) %}
+    {%- for asset in assets_type_filtered(context_type, 'js') -%}
         {%- if asset.isAvailable(true) -%}
             <script type="text/javascript" src="{{ asset(asset.path) }}"></script>
             {{ asset.setRendered() }}

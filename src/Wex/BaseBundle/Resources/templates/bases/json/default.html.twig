@@ -1,19 +1,19 @@
 {%- extends '@WexBaseBundle/Resources/templates/bases/base.html.twig' -%}
 
-{%- block template_base -%}
+{%- block layout_base -%}
     {{- parent() -}}
 
     <div class="layout-{{ adaptive_rendering_base() }}">
         {%- block layout -%}
             {%- block layout_composer_json -%}
                 {%- block page -%}
-                    {{ render_set_context('page', page_name) }}
+                    {{ adaptive_response_set_context('page', page_name) }}
                     {%- block page_composer_json -%}
                         {%- if block('page_body') is defined -%}
                             {{- block('page_body') -}}
                         {%- endif -%}
                     {%- endblock -%}
-                    {{ render_revert_context() }}
+                    {{ adaptive_response_revert_context() }}
                 {%- endblock -%}
             {%- endblock -%}
         {%- endblock -%}
