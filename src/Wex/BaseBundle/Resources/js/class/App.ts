@@ -214,7 +214,7 @@ export default class extends AsyncConstructor {
     let bundle = this.bundles.classes[classRegistryName];
 
     if (bundled) {
-      return bundle ? bundle.definition : null;
+      return bundle ? bundle : null;
     }
 
     return bundle;

@@ -13,7 +13,10 @@ export default abstract class RenderNode extends AppChild {
   public id: string;
   public parentRenderNode: RenderNode;
   public renderData: RenderDataInterface;
-  public translations: TranslationsInterface;
+  public translations: TranslationsInterface = {
+    domain: null,
+    catalog: {},
+  };
   public vars: any = {};
 
   constructor(app: App, el: HTMLElement = null) {
