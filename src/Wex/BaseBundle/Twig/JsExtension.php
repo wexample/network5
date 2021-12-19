@@ -42,13 +42,12 @@ class JsExtension extends AbstractExtension
      * @throws ExceptionInterface
      */
     public function jsVars(
-        array $array,
-        string $group = JsService::VARS_GROUP_PAGE
+        array $array
     ): void
     {
         foreach ($array as $name => $value)
         {
-            $this->jsService->jsVar($name, $value, $group);
+            $this->jsService->jsVar($name, $value);
         }
     }
 
@@ -61,6 +60,6 @@ class JsExtension extends AbstractExtension
         string $group = JsService::VARS_GROUP_PAGE
     ): void
     {
-        $this->jsService->jsVar($name, $value, $group);
+        $this->jsService->jsVar($name, $value);
     }
 }

@@ -15,7 +15,7 @@ class ComponentRenderNode extends RenderNode
 
     public array $assets = [];
 
-    public ?string $body;
+    public ?string $body = null;
 
     public string $id;
 

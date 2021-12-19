@@ -102,8 +102,6 @@ class AdaptiveResponse
 
     /**
      * Return detected output type if not overridden in twig.
-     * @param array $twigContext
-     * @return string
      */
     public function getOutputType(array $twigContext = []): string
     {
@@ -149,6 +147,11 @@ class AdaptiveResponse
         }
 
         return $this;
+    }
+
+    public function getParameters(): array
+    {
+        return $this->parameters;
     }
 
     public function setParameters(array $parameters): self
@@ -227,14 +230,12 @@ class AdaptiveResponse
             throw new Exception('View must be defined before adaptive rendering');
         }
 
-        $parameters = [
-            AdaptiveResponse::RENDER_PARAM_NAME_OUTPUT_TYPE => $this->detectOutputType(),
-            AdaptiveResponse::RENDER_PARAM_NAME_BASE => $this->detectOutputType(),
-        ];
-
         return $this->controller->adaptiveRender(
             $view,
-            $parameters
+            $this->getParameters() + [
+                AdaptiveResponse::RENDER_PARAM_NAME_OUTPUT_TYPE => $this->detectOutputType(),
+                AdaptiveResponse::RENDER_PARAM_NAME_BASE => $this->detectOutputType(),
+            ]
         );
     }
 }

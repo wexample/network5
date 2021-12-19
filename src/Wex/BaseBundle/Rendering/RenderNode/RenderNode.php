@@ -13,7 +13,7 @@ abstract class RenderNode extends RenderDataGenerator
 
     public array $components = [];
 
-    public ?RenderNode $parent;
+    public ?RenderNode $parent = null;
 
     public string $renderRequestId;
 

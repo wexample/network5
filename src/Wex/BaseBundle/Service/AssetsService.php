@@ -8,6 +8,14 @@ use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Rendering\RenderNode\RenderNode;
 use Symfony\Component\HttpKernel\KernelInterface;
+use function array_merge;
+use function array_reverse;
+use function basename;
+use function dirname;
+use function file_get_contents;
+use function implode;
+use function json_decode;
+use function realpath;
 
 class AssetsService
 {

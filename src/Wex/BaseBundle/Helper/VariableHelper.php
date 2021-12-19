@@ -50,6 +50,8 @@ class VariableHelper
 
     public const JSON = 'json';
 
+    public const ICON = 'icon';
+
     public const ID = 'id';
 
     public const IP = 'ip';

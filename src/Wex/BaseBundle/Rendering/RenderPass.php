@@ -8,6 +8,9 @@ use App\Wex\BaseBundle\Rendering\RenderNode\AjaxLayoutRenderNode;
 use App\Wex\BaseBundle\Rendering\RenderNode\RenderNode;
 use App\Wex\BaseBundle\Rendering\RenderNode\InitialLayoutRenderNode;
 use Symfony\Component\HttpFoundation\Request;
+use function array_pop;
+use function end;
+use function uniqid;
 
 class RenderPass
 {
@@ -118,7 +121,7 @@ class RenderPass
 
     public function getCurrentContextRenderNode(): ?RenderNode
     {
-        return !empty($this->contextRenderNodeStack) ? end($this->contextRenderNodeStack) : null;
+        return empty($this->contextRenderNodeStack) ? null : end($this->contextRenderNodeStack);
     }
 
     public function revertCurrentContextRenderNode(): void

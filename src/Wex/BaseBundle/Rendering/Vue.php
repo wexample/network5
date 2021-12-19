@@ -9,6 +9,17 @@ use App\Wex\BaseBundle\Twig\VueExtension;
 use App\Wex\BaseBundle\WexBaseBundle;
 use Exception;
 use Twig\Environment;
+use function array_shift;
+use function array_slice;
+use function count;
+use function explode;
+use function implode;
+use function md5;
+use function microtime;
+use function mt_getrandmax;
+use function random_int;
+use function str_replace;
+use function strtolower;
 
 class Vue
 {
@@ -16,13 +27,10 @@ class Vue
 
     public string $name;
 
-    public string $path;
-
     /**
      * @throws Exception
      */
-    public function __construct(string $path) {
-        $this->path = $path;
+    public function __construct(public string $path) {
         $this->name = $this->buildName($this->path);
         $this->id = $this->name.'-'.md5(random_int(0, mt_getrandmax()).microtime());
     }

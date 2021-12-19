@@ -2,6 +2,9 @@
 
 namespace App\Wex\BaseBundle\Rendering;
 
+use function is_a;
+use function is_object;
+
 abstract class RenderDataGenerator
 {
     abstract public function toRenderData(): array;

@@ -10,6 +10,9 @@ use App\Wex\BaseBundle\Rendering\RenderNode\PageRenderNode;
 use App\Wex\BaseBundle\Translation\Translator;
 use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Routing\RouterInterface;
+use function array_map;
+use function explode;
+use function implode;
 
 class PageService extends RenderNodeService
 {

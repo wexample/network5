@@ -2,6 +2,8 @@
 
 namespace App\Wex\BaseBundle\Helper;
 
+use function implode;
+
 class RenderingHelper
 {
     public const CONTEXT_COMPONENT = VariableHelper::COMPONENT;

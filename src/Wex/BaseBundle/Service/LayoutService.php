@@ -8,6 +8,7 @@ use App\Wex\BaseBundle\Rendering\RenderNode\LayoutRenderNode;
 use Exception;
 use JetBrains\PhpStorm\Pure;
 use Twig\Environment;
+use function array_merge;
 
 class LayoutService extends RenderNodeService
 {

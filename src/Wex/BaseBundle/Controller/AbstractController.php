@@ -51,10 +51,7 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
     /**
      * Overrides default render, adding some magic.
      *
-     * @param string $view
-     * @param array $parameters
      * @param Response|null $response
-     * @return Response
      */
     protected function render(
         string $view,

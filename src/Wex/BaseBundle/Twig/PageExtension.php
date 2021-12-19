@@ -6,6 +6,9 @@ use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use App\Wex\BaseBundle\Service\PageService;
 use Twig\TwigFunction;
+use function str_ends_with;
+use function strlen;
+use function substr;
 
 class PageExtension extends AbstractExtension
 {

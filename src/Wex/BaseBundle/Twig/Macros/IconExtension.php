@@ -66,10 +66,10 @@ class IconExtension extends AbstractExtension
     {
         return [
             new TwigFunction(
-                'icon',
+                VariableHelper::ICON,
                 [
                     $this,
-                    'icon',
+                    VariableHelper::ICON,
                 ],
                 [
                     self::FUNCTION_OPTION_IS_SAFE => self::FUNCTION_OPTION_IS_SAFE_VALUE_HTML,
@@ -123,7 +123,7 @@ class IconExtension extends AbstractExtension
                 ],
                 $this->componentsExtension->componentInitParent(
                     $twig,
-                    'icon',
+                    VariableHelper::ICON,
                     [
                         'name' => $name
                     ]

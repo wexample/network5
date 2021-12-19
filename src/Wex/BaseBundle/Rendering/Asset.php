@@ -7,6 +7,7 @@ use App\Wex\BaseBundle\Rendering\RenderNode\RenderNode;
 use App\Wex\BaseBundle\Service\AssetsService;
 use function dirname;
 use JetBrains\PhpStorm\NoReturn;
+use function filesize;
 use function pathinfo;
 
 class Asset extends RenderDataGenerator
