@@ -86,7 +86,7 @@ export default class ComponentsService extends RenderNodeService {
 
   async loadLayoutRenderData(
     renderData: RenderDataLayoutInterface,
-    requestOptions: RequestOptionsInterface,
+    requestOptions: RequestOptionsInterface
   ) {
     if (renderData.templates) {
       // Append html for global components.
@@ -147,12 +147,12 @@ export default class ComponentsService extends RenderNodeService {
         elPlaceholder.remove();
       }
 
-      let component = await this.createRenderNode(
+      let component = (await this.createRenderNode(
         await this.prepareRenderNodeDefinition(renderDataComponent),
         el,
         renderDataComponent,
         requestOptions
-      ) as Component;
+      )) as Component;
 
       renderNode.components.push(component);
 

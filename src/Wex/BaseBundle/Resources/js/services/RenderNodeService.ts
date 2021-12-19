@@ -36,15 +36,10 @@ export default abstract class RenderNodeService extends AppService {
     return new classDefinition(this.app, el);
   }
 
-  async prepareRenderNodeDefinition(
-    renderData: RenderDataInterface
-  ) {
+  async prepareRenderNodeDefinition(renderData: RenderDataInterface) {
     await this.services.assets.loadValidAssetsInCollection(renderData.assets);
 
-    return this.app.getBundleClassDefinition(
-      renderData.name,
-      true
-    );
+    return this.app.getBundleClassDefinition(renderData.name, true);
   }
 
   get(path: string, options: RequestOptionsPageInterface): Promise<any> {

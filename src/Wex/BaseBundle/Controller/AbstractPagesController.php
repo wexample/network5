@@ -7,10 +7,10 @@ use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use function explode;
+use function str_contains;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
-use function str_contains;
 
 abstract class AbstractPagesController extends AbstractController
 {
@@ -28,8 +28,7 @@ abstract class AbstractPagesController extends AbstractController
         protected AdaptiveResponseService $adaptiveResponseService,
         protected Environment $twigEnvironment,
         protected RequestStack $requestStack
-    )
-    {
+    ) {
         parent::__construct(
             $adaptiveResponseService,
             $twigEnvironment
@@ -58,8 +57,7 @@ abstract class AbstractPagesController extends AbstractController
         string $view,
         array $parameters = [],
         Response $response = null
-    ): Response
-    {
+    ): Response {
         return $this->adaptiveRender(
             $this->buildTemplatePath($view),
             $parameters,

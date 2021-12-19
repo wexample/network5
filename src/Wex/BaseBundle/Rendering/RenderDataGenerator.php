@@ -33,7 +33,8 @@ abstract class RenderDataGenerator
             if (!is_object($value))
             {
                 $output[$variable] = $value;
-            } elseif (is_a($value, RenderDataGenerator::class))
+            }
+            elseif (is_a($value, RenderDataGenerator::class))
             {
                 $output[$variable] = $value->toRenderData();
             }

@@ -27,14 +27,12 @@ abstract class RenderNode extends RenderDataGenerator
 
     public function __construct(
         protected RenderPass $renderPass
-    )
-    {
+    ) {
     }
 
     public function init(
         string $name,
-    )
-    {
+    ) {
         $this->parent = $this->renderPass->getCurrentContextRenderNode();
         $this->renderRequestId = $this->renderPass->getRenderRequestId();
         $this->name = $name;
@@ -86,7 +84,7 @@ abstract class RenderNode extends RenderDataGenerator
             'name' => $this->name,
             'renderRequestId' => $this->renderRequestId,
             'translations' => $this->translations,
-            'vars' => $this->vars
+            'vars' => $this->vars,
         ];
     }
 }

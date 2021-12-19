@@ -106,4 +106,4 @@ export default class extends Component {
     this.elContentCurrent = elContent;
     this.elContentCurrent.classList.add('tab-content-active');
   }
-};
+}

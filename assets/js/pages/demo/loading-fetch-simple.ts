@@ -26,4 +26,4 @@ export default class extends Page {
         this.services.modals.get('/demo/loading/fetch/simple');
       });
   }
-};
+}

@@ -6,8 +6,8 @@ use App\Wex\BaseBundle\Helper\PathHelper;
 use App\Wex\BaseBundle\Rendering\RenderNode\RenderNode;
 use App\Wex\BaseBundle\Service\AssetsService;
 use function dirname;
-use JetBrains\PhpStorm\NoReturn;
 use function filesize;
+use JetBrains\PhpStorm\NoReturn;
 use function pathinfo;
 
 class Asset extends RenderDataGenerator
@@ -77,13 +77,12 @@ class Asset extends RenderDataGenerator
         string $path,
         public RenderNode $renderData,
         string $basePath
-    )
-    {
+    ) {
         $this->filesize = filesize($path);
         $info = pathinfo($path);
         $this->type = $info['extension'];
 
-        $this->path = '/' . PathHelper::relativeTo(
+        $this->path = '/'.PathHelper::relativeTo(
             $path,
             $basePath
         );

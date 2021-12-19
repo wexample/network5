@@ -7,7 +7,7 @@ import Explorer from './explorer';
 import { ComponentsServiceEvents } from '../services/Components';
 import ThemeService, { ThemeServiceEvents } from '../services/Theme';
 import { EventsServiceEvents } from '../services/Events';
-import { formatBytes } from "../helpers/Number";
+import { formatBytes } from '../helpers/Number';
 
 export default {
   extends: Explorer,
@@ -40,8 +40,8 @@ export default {
 
   mounted() {
     this.app.services.events.listen(
-        this.updateEvents,
-        this.onChangeResponsiveSizeProxy
+      this.updateEvents,
+      this.onChangeResponsiveSizeProxy
     );
 
     this.onChangeResponsiveSize();
@@ -49,8 +49,8 @@ export default {
 
   unmounted() {
     this.app.services.events.forget(
-        this.updateEvents,
-        this.onChangeResponsiveSizeProxy
+      this.updateEvents,
+      this.onChangeResponsiveSizeProxy
     );
   },
 
@@ -80,7 +80,7 @@ export default {
         'asset-active': asset.active,
         'asset-loaded': asset.loaded,
         'asset-rendered': asset.rendered,
-      }
+      };
     },
 
     formatSize(size) {
@@ -90,7 +90,7 @@ export default {
     getAssetsTypeList(type) {
       if (this.selectedItem) {
         return ArrayShallowCopy(
-            this.selectedItem.object.renderData.assets[type]
+          this.selectedItem.object.renderData.assets[type]
         );
       }
 
@@ -146,13 +146,13 @@ export default {
     updateAssetsCss() {
       // Base loaded assets
       document
-          .querySelectorAll(
-              `${TagName.LINK}[${Attribute.REL}=${AttributeValue.STYLESHEET}]`
-          )
-          .forEach((el) => {
-            let href = el.getAttribute(Attribute.HREF);
-            this.loadedPaths.css[href] = href;
-          });
+        .querySelectorAll(
+          `${TagName.LINK}[${Attribute.REL}=${AttributeValue.STYLESHEET}]`
+        )
+        .forEach((el) => {
+          let href = el.getAttribute(Attribute.HREF);
+          this.loadedPaths.css[href] = href;
+        });
     },
 
     shortenAssetPath(asset) {

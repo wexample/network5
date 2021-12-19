@@ -16,7 +16,8 @@ export default class AssetsService extends AppService {
 
   public static UPDATE_FILTER_REJECT = 'reject';
 
-  public assetsRegistry: AssetsCollectionInterface = this.createEmptyAssetsCollection();
+  public assetsRegistry: AssetsCollectionInterface =
+    this.createEmptyAssetsCollection();
   public jsAssetsPending: { [key: string]: AssetInterface } = {};
   public updateFilters: Function[] = [];
 
@@ -27,9 +28,7 @@ export default class AssetsService extends AppService {
           this.app.services.assets.appInit();
         },
 
-        async loadRenderData(
-          renderData: RenderDataLayoutInterface
-        ) {
+        async loadRenderData(renderData: RenderDataLayoutInterface) {
           // Load only layout assets.
           await this.app.services.assets.loadValidAssetsInCollection(
             renderData.assets
@@ -43,13 +42,18 @@ export default class AssetsService extends AppService {
     // Wait for all render node tree to be properly set.
     await this.app.ready(async () => {
       // Mark all initially rendered assets in layout as loaded.
-      await this.app.layout.forEachRenderNode(async (renderNode: RenderNode) => {
-        await this.forEachAssetInCollection(renderNode.renderData.assets, (asset) => {
-          if (asset.rendered) {
-            this.setAssetLoaded(asset);
-          }
-        });
-      });
+      await this.app.layout.forEachRenderNode(
+        async (renderNode: RenderNode) => {
+          await this.forEachAssetInCollection(
+            renderNode.renderData.assets,
+            (asset) => {
+              if (asset.rendered) {
+                this.setAssetLoaded(asset);
+              }
+            }
+          );
+        }
+      );
     });
   }
 
@@ -95,14 +99,14 @@ export default class AssetsService extends AppService {
 
     for (data of entries) {
       for (asset of data[1]) {
-        await callback(asset, data[0])
+        await callback(asset, data[0]);
       }
     }
   }
 
   async appendAssets(assetsCollection) {
     await this.forEachAssetInCollection(assetsCollection, async (asset) => {
-      await this.appendAsset(asset)
+      await this.appendAsset(asset);
     });
   }
 
@@ -176,8 +180,8 @@ export default class AssetsService extends AppService {
     // For main node.
     await this.loadValidAssetsInCollection(renderNode.renderData.assets);
     // For child nodes.
-    renderNode.forEachChildRenderNode(async (renderNode) =>
-      await this.updateRenderNodeAssets(renderNode)
+    renderNode.forEachChildRenderNode(
+      async (renderNode) => await this.updateRenderNodeAssets(renderNode)
     );
   }
 
@@ -189,11 +193,11 @@ export default class AssetsService extends AppService {
     return {
       css: [],
       js: [],
-    }
+    };
   }
 
   public async loadValidAssetsInCollection(
-    assetsCollection: AssetsCollectionInterface,
+    assetsCollection: AssetsCollectionInterface
   ) {
     let toLoad = this.createEmptyAssetsCollection();
     let toUnload = this.createEmptyAssetsCollection();

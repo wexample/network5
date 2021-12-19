@@ -17,8 +17,7 @@ class LayoutExtension extends AbstractExtension
     public function __construct(
         private AdaptiveResponseService $adaptiveResponseService,
         private LayoutService $layoutService,
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array
@@ -55,8 +54,7 @@ class LayoutExtension extends AbstractExtension
         ?string $layoutName,
         string $colorScheme = ColorSchemeHelper::SCHEME_DEFAULT,
         bool $useJs = true,
-    ): void
-    {
+    ): void {
         $this->layoutService->layoutInitInitial(
             $twig,
             $layoutName ?: VariableHelper::DEFAULT,

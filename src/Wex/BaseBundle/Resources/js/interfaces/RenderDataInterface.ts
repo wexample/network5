@@ -1,6 +1,6 @@
 import AssetsCollectionInterface from './AssetsCollectionInterface';
 import RenderDataComponentInterface from './RenderDataComponentInterface';
-import TranslationsInterface from "./TranslationsInterface";
+import TranslationsInterface from './TranslationsInterface';
 
 export default interface RenderDataInterface {
   assets: AssetsCollectionInterface;

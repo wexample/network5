@@ -21,7 +21,7 @@ export default class MixinsService extends AppService {
     group = 'app',
     args = [],
     timeoutLimit: number = 2000,
-    services: AppService[] = (Object.values(this.app.services) as AppService[])
+    services: AppService[] = Object.values(this.app.services) as AppService[]
   ): Promise<any> {
     return new Promise(async (resolve) => {
       let errorTrace: AppService[] = [];
@@ -30,7 +30,7 @@ export default class MixinsService extends AppService {
       let registry: { [key: string]: string } = {};
       let service;
 
-      while (service = services.shift()) {
+      while ((service = services.shift())) {
         let timeout = setTimeout(() => {
           throw `Mixins invocation timeout on method "${method}", stopping at "${currentName}".`;
         }, timeoutLimit);

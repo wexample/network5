@@ -5,18 +5,17 @@ namespace App\Wex\BaseBundle\Twig;
 use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use App\Wex\BaseBundle\Service\PageService;
-use Twig\TwigFunction;
 use function str_ends_with;
 use function strlen;
 use function substr;
+use Twig\TwigFunction;
 
 class PageExtension extends AbstractExtension
 {
     public function __construct(
         private AdaptiveResponseService $adaptiveResponseService,
         private PageService $pageService,
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array
@@ -40,7 +39,7 @@ class PageExtension extends AbstractExtension
                 'page_name_from_route',
                 [
                     $this,
-                    'pageNameFromRoute'
+                    'pageNameFromRoute',
                 ]
             ),
         ];
@@ -48,8 +47,7 @@ class PageExtension extends AbstractExtension
 
     public function pageInit(
         string $pageName
-    )
-    {
+    ) {
         $this->pageService->pageInit(
             $this->adaptiveResponseService->renderPass->layoutRenderNode->page,
             $pageName,

@@ -8,4 +8,4 @@ export default class extends PageResponsiveDisplay {
   onResponsiveExit() {
     console.log('index l exit');
   }
-};
+}

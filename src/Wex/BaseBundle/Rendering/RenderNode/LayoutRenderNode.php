@@ -18,8 +18,7 @@ class LayoutRenderNode extends RenderNode
     public function __construct(
         protected RenderPass $renderPass,
         public bool $useJs
-    )
-    {
+    ) {
         // No render context for layout.
         parent::__construct(
             $this->renderPass
@@ -28,8 +27,7 @@ class LayoutRenderNode extends RenderNode
 
     public function init(
         string $name,
-    )
-    {
+    ) {
         parent::init(
             $name
         );

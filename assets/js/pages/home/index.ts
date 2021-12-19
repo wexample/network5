@@ -4,4 +4,4 @@ export default class extends Page {
   mounted() {
     console.log('Home init');
   }
-};
+}

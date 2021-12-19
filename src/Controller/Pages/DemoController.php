@@ -5,7 +5,6 @@ namespace App\Controller\Pages;
 use App\Wex\BaseBundle\Controller\AbstractPagesController;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Service\AssetsService;
-use App\Wex\BaseBundle\Twig\AssetsExtension;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

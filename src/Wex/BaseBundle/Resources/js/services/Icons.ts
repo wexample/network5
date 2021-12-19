@@ -1,5 +1,8 @@
 import AppService from '../class/AppService';
-import { icon as faIcon, library as faLibrary } from '@fortawesome/fontawesome-svg-core'
+import {
+  icon as faIcon,
+  library as faLibrary,
+} from '@fortawesome/fontawesome-svg-core';
 
 export default class IconsService extends AppService {
   add(icon) {

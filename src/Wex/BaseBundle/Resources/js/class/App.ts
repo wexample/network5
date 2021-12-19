@@ -3,7 +3,7 @@ import Page from './Page';
 import ServiceRegistryAppInterface from '../interfaces/ServiceRegistryAppInterface';
 
 import AssetsService from '../services/Assets';
-import LayoutsService from "../services/Layouts";
+import LayoutsService from '../services/Layouts';
 import MixinsService from '../services/Mixins';
 import PagesService from '../services/Pages';
 import ResponsiveService from '../services/Responsive';
@@ -51,12 +51,12 @@ export default class extends AsyncConstructor {
 
       this.bundles = registry.bundles;
 
-      this.layout = await this.services.layouts.createRenderNode(
+      this.layout = (await this.services.layouts.createRenderNode(
         LayoutInitial,
         doc.getElementById('layout'),
         registry.layoutRenderData,
         {}
-      ) as LayoutInitial;
+      )) as LayoutInitial;
 
       this.addLibraries(this.lib);
 
@@ -71,7 +71,7 @@ export default class extends AsyncConstructor {
       // Execute ready callbacks.
       await this.readyComplete();
 
-      readyCallback && await readyCallback();
+      readyCallback && (await readyCallback());
     };
 
     let readyState = doc.readyState;
@@ -89,11 +89,10 @@ export default class extends AsyncConstructor {
     renderData: RenderDataInterface,
     requestOptions: RequestOptionsInterface = {}
   ): Promise<any> {
-    await this.services.mixins
-      .invokeUntilComplete('loadRenderData', 'app', [
-        renderData,
-        requestOptions,
-      ]);
+    await this.services.mixins.invokeUntilComplete('loadRenderData', 'app', [
+      renderData,
+      requestOptions,
+    ]);
 
     // Execute ready callbacks.
     await this.readyComplete();
@@ -137,7 +136,9 @@ export default class extends AsyncConstructor {
     return instances;
   }
 
-  async loadAndInitServices(ServicesDefinitions: typeof AppService[]): Promise<any> {
+  async loadAndInitServices(
+    ServicesDefinitions: typeof AppService[]
+  ): Promise<any> {
     let services = this.loadServices(ServicesDefinitions);
 
     // Init mixins.

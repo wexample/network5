@@ -14,8 +14,7 @@ class JsExtension extends AbstractExtension
      */
     public function __construct(
         private JsService $jsService,
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array
@@ -43,8 +42,7 @@ class JsExtension extends AbstractExtension
      */
     public function jsVars(
         array $array
-    ): void
-    {
+    ): void {
         foreach ($array as $name => $value)
         {
             $this->jsService->jsVar($name, $value);
@@ -58,8 +56,7 @@ class JsExtension extends AbstractExtension
         string $name,
         mixed $value,
         string $group = JsService::VARS_GROUP_PAGE
-    ): void
-    {
+    ): void {
         $this->jsService->jsVar($name, $value);
     }
 }

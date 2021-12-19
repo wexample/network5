@@ -18,7 +18,7 @@ $color-js: #7100ff;
 
     .assets-table {
       td {
-        opacity: .6;
+        opacity: 0.6;
         padding: 0 0.2rem;
 
         &.asset-activation .tip {
@@ -43,8 +43,7 @@ $color-js: #7100ff;
 
         &.asset-color-scheme,
         &.asset-responsive,
-        &.asset-type,
-        {
+        &.asset-type {
           text-align: center;
         }
 

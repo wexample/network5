@@ -4,7 +4,6 @@ namespace App\Wex\BaseBundle\Translation;
 
 use App\Wex\BaseBundle\Helper\ClassHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
-use App\Wex\BaseBundle\Helper\TextHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use function array_filter;
 use function array_merge;

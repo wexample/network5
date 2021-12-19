@@ -12,4 +12,4 @@ export default class extends Component {
 
     new MDCRipple(this.el);
   }
-};
+}

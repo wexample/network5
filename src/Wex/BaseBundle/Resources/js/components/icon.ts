@@ -11,4 +11,4 @@ export default class extends Component {
 
     super.loadRenderData(renderData, requestOptions);
   }
-};
+}

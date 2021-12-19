@@ -25,8 +25,9 @@ export default class ResponsiveService extends AppService {
             responsiveService.assetUpdateFilter.bind(responsiveService)
           );
 
-          window.addEventListener(Events.RESIZE, async () =>
-            await responsiveService.updateResponsive(true)
+          window.addEventListener(
+            Events.RESIZE,
+            async () => await responsiveService.updateResponsive(true)
           );
 
           await responsiveService.updateResponsive(false);

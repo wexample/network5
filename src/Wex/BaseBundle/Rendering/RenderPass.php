@@ -5,11 +5,11 @@ namespace App\Wex\BaseBundle\Rendering;
 use App\Wex\BaseBundle\Helper\ColorSchemeHelper;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Rendering\RenderNode\AjaxLayoutRenderNode;
-use App\Wex\BaseBundle\Rendering\RenderNode\RenderNode;
 use App\Wex\BaseBundle\Rendering\RenderNode\InitialLayoutRenderNode;
-use Symfony\Component\HttpFoundation\Request;
+use App\Wex\BaseBundle\Rendering\RenderNode\RenderNode;
 use function array_pop;
 use function end;
+use Symfony\Component\HttpFoundation\Request;
 use function uniqid;
 
 class RenderPass
@@ -36,8 +36,7 @@ class RenderPass
         public AdaptiveResponse $adaptiveResponse,
         public string $view,
         public bool $useJs
-    )
-    {
+    ) {
         $this->createRenderRequestId();
 
         $this->adaptiveResponse->setRenderPass($this);
@@ -46,8 +45,7 @@ class RenderPass
     public function prepare(
         &$parameters,
         string $env,
-    )
-    {
+    ) {
         $className = InitialLayoutRenderNode::class;
 
         if ($this->adaptiveResponse->getOutputType() === AdaptiveResponse::OUTPUT_TYPE_RESPONSE_JSON)
@@ -109,8 +107,7 @@ class RenderPass
     public function setCurrentContextRenderNodeByTypeAndName(
         string $renderNodeType,
         string $renderNodeName
-    )
-    {
+    ) {
         $key = RenderingHelper::buildRenderContextKey(
             $renderNodeType,
             $renderNodeName

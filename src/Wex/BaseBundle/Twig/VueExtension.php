@@ -33,8 +33,7 @@ class VueExtension extends AbstractExtension
 
     public function __construct(
         private VueService $vueService
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array
@@ -80,8 +79,7 @@ class VueExtension extends AbstractExtension
         string $path,
         ?array $options = [],
         ?array $twigContext = []
-    ): string
-    {
+    ): string {
         return $this->vueService->vueRender(
             $env,
             $path,
@@ -106,8 +104,7 @@ class VueExtension extends AbstractExtension
         Environment $env,
         string $path,
         ?array $options = []
-    ): void
-    {
+    ): void {
         // Same behavior but no output tag.
         $this->vueInclude(
             $env,
@@ -124,8 +121,7 @@ class VueExtension extends AbstractExtension
         string $path,
         ?array $attributes = [],
         ?array $twigContext = []
-    ): string
-    {
+    ): string {
         // Register template.
         $output =
             $this->vueService->vueRender(

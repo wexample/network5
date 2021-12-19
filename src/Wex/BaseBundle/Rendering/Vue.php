@@ -7,11 +7,10 @@ use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Twig\VueExtension;
 use App\Wex\BaseBundle\WexBaseBundle;
-use Exception;
-use Twig\Environment;
 use function array_shift;
 use function array_slice;
 use function count;
+use Exception;
 use function explode;
 use function implode;
 use function md5;
@@ -20,6 +19,7 @@ use function mt_getrandmax;
 use function random_int;
 use function str_replace;
 use function strtolower;
+use Twig\Environment;
 
 class Vue
 {
@@ -30,7 +30,8 @@ class Vue
     /**
      * @throws Exception
      */
-    public function __construct(public string $path) {
+    public function __construct(public string $path)
+    {
         $this->name = $this->buildName($this->path);
         $this->id = $this->name.'-'.md5(random_int(0, mt_getrandmax()).microtime());
     }
@@ -80,11 +81,11 @@ class Vue
 
             // Use reference to identify sub folders length.
             $templatePath = count(
-                    explode(
+                explode(
                         FileHelper::FOLDER_SEPARATOR,
                         WexBaseBundle::WEX_BUNDLE_PATH_TEMPLATES
                     )
-                ) - 1;
+            ) - 1;
 
             // Remove sub folders.
             $exp = array_slice($exp, $templatePath);

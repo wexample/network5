@@ -9,8 +9,7 @@ class AssetsExtension extends AbstractExtension
 {
     public function __construct(
         protected AssetsService $assetsService,
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array

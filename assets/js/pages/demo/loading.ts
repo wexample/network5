@@ -30,10 +30,8 @@ export default class extends Page {
         }, 1000);
       });
 
-    this.el
-      .querySelector('#page-modal-show')
-      .addEventListener('click', () => {
-        this.services.modals.get('/demo/loading/fetch/simple');
-      });
+    this.el.querySelector('#page-modal-show').addEventListener('click', () => {
+      this.services.modals.get('/demo/loading/fetch/simple');
+    });
   }
-};
+}

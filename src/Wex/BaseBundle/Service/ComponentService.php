@@ -39,8 +39,7 @@ class ComponentService extends RenderNodeService
         protected AdaptiveResponseService $adaptiveResponseService,
         protected AssetsService $assetsService,
         protected Translator $translator
-    )
-    {
+    ) {
         parent::__construct($assetsService);
     }
 
@@ -50,8 +49,7 @@ class ComponentService extends RenderNodeService
     public function componentRenderHtml(
         Environment $env,
         ComponentRenderNode $component
-    ): ?string
-    {
+    ): ?string {
         $loader = $env->getLoader();
         $search = TemplateHelper::buildTemplateInheritanceStack(
             $component->name
@@ -71,23 +69,23 @@ class ComponentService extends RenderNodeService
             }
 
             return null;
-        } catch (Exception $exception)
+        }
+        catch (Exception $exception)
         {
-            throw new Exception('Error during rendering component '.$component->name
-                .' : '.$exception->getMessage(), $exception->getCode(), $exception);
+            throw new Exception('Error during rendering component '.$component->name.' : '.$exception->getMessage(), $exception->getCode(), $exception);
         }
     }
 
     /**
      * Init a components and provide a class name to retrieve dom element.
+     *
      * @throws Exception
      */
     public function componentInitClass(
         Environment $twig,
         string $name,
         array $options = []
-    ): ComponentRenderNode
-    {
+    ): ComponentRenderNode {
         return $this->registerComponent(
             $twig,
             $name,
@@ -103,8 +101,7 @@ class ComponentService extends RenderNodeService
         Environment $twig,
         string $name,
         array $options = []
-    ): ComponentRenderNode
-    {
+    ): ComponentRenderNode {
         $component = $this->registerComponent(
             $twig,
             $name,
@@ -120,14 +117,14 @@ class ComponentService extends RenderNodeService
     /**
      * Add component to the global page requirements.
      * It adds components assets to page assets.
+     *
      * @throws Exception
      */
     public function componentInitParent(
         Environment $twig,
         string $name,
         array $options = []
-    ): ComponentRenderNode
-    {
+    ): ComponentRenderNode {
         return $this->registerComponent(
             $twig,
             $name,
@@ -143,8 +140,7 @@ class ComponentService extends RenderNodeService
         Environment $twig,
         string $name,
         array $options = []
-    ): ComponentRenderNode
-    {
+    ): ComponentRenderNode {
         return $this->registerComponent(
             $twig,
             $name,
@@ -161,8 +157,7 @@ class ComponentService extends RenderNodeService
         string $name,
         string $initMode,
         array $options = []
-    ): ComponentRenderNode
-    {
+    ): ComponentRenderNode {
         // Using an object allow continuing edit properties after save.
         $component = new ComponentRenderNode(
             $this->adaptiveResponseService->renderPass,

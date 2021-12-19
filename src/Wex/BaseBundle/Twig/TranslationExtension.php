@@ -2,10 +2,7 @@
 
 namespace App\Wex\BaseBundle\Twig;
 
-use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Translation\Translator;
-use Doctrine\DBAL\Types\Types;
-use JetBrains\PhpStorm\ArrayShape;
 use function str_starts_with;
 use Twig\TwigFunction;
 
@@ -31,7 +28,7 @@ class TranslationExtension extends AbstractExtension
                     $this,
                     'translationBuildDomainFromPath',
                 ]
-            )
+            ),
         ];
     }
 

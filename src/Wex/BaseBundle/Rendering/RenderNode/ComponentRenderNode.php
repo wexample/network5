@@ -24,8 +24,7 @@ class ComponentRenderNode extends RenderNode
         protected RenderPass $renderPass,
         public string $initMode,
         public array $options = []
-    )
-    {
+    ) {
         parent::__construct(
             $this->renderPass
         );
@@ -33,7 +32,7 @@ class ComponentRenderNode extends RenderNode
         $this->id = 'com-'.uniqid();
     }
 
-    public function init(string $name,)
+    public function init(string $name, )
     {
         parent::init($name);
 
@@ -72,7 +71,7 @@ class ComponentRenderNode extends RenderNode
             + [
                 'id' => $this->id,
                 'initMode' => $this->initMode,
-                'options' => $this->options
+                'options' => $this->options,
             ];
     }
 }

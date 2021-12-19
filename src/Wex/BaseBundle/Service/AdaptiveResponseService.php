@@ -5,9 +5,9 @@ namespace App\Wex\BaseBundle\Service;
 use App\Wex\BaseBundle\Controller\AbstractController;
 use App\Wex\BaseBundle\Rendering\AdaptiveResponse;
 use App\Wex\BaseBundle\Rendering\RenderPass;
-use Symfony\Component\HttpKernel\KernelInterface;
 use function is_null;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class AdaptiveResponseService
 {
@@ -20,15 +20,13 @@ class AdaptiveResponseService
     public function __construct(
         private RequestStack $requestStack,
         private KernelInterface $kernel,
-    )
-    {
+    ) {
     }
 
     public function renderPrepare(
         string $pageName,
         array &$parameters = []
-    )
-    {
+    ) {
         // Response may be explicitly created in controller,
         // but if not we need at least one to detect layout base name.
         if (!$this->getResponse())
@@ -67,8 +65,7 @@ class AdaptiveResponseService
 
     public function setController(
         AbstractController $controller
-    ): self
-    {
+    ): self {
         $this->controller = $controller;
 
         return $this;

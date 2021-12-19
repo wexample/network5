@@ -20,8 +20,7 @@ class ComponentsExtension extends AbstractExtension
         private AdaptiveResponseService $adaptiveResponseService,
         private AssetsService $assetsService,
         protected ComponentService $componentService,
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array
@@ -92,15 +91,14 @@ class ComponentsExtension extends AbstractExtension
         Environment $twig,
         string $name,
         array $options = []
-    ): string
-    {
+    ): string {
         $component = $this->componentService->componentInitPrevious(
             $twig,
             $name,
             $options
         );
 
-        return $component->body . $component->renderTag();
+        return $component->body.$component->renderTag();
     }
 
     /**
@@ -110,8 +108,7 @@ class ComponentsExtension extends AbstractExtension
         Environment $twig,
         string $name,
         array $options = []
-    ): string
-    {
+    ): string {
         return $this->componentService->componentInitPrevious(
             $twig,
             $name,
@@ -132,14 +129,14 @@ class ComponentsExtension extends AbstractExtension
 
     /**
      * Init a components and provide a class name to retrieve dom element.
+     *
      * @throws Exception
      */
     public function componentInitClass(
         Environment $twig,
         string $name,
         array $options = []
-    ): string
-    {
+    ): string {
         return $this
             ->componentService
             ->componentInitClass(
@@ -156,8 +153,7 @@ class ComponentsExtension extends AbstractExtension
         Environment $twig,
         string $name,
         array $options = []
-    ): string
-    {
+    ): string {
         return $this
             ->componentService
             ->componentInitParent(
@@ -170,8 +166,7 @@ class ComponentsExtension extends AbstractExtension
     public function componentRenderTagAttributes(
         array $context,
         array $defaults = []
-    ): string
-    {
+    ): string {
         $class = trim(($defaults[VariableHelper::CLASS_VAR] ?? '').' '.($context[VariableHelper::CLASS_VAR] ?? ''));
 
         $attributes = array_merge([

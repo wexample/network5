@@ -71,10 +71,7 @@ export default class extends PageHandlerComponent {
   protected deactivateListeners(): void {
     super.deactivateListeners();
 
-    this.el.removeEventListener(
-      Events.MOUSEDOWN,
-      this.onMouseDownOverlayProxy
-    );
+    this.el.removeEventListener(Events.MOUSEDOWN, this.onMouseDownOverlayProxy);
     this.el.removeEventListener(Events.MOUSEUP, this.onMouseUpOverlayProxy);
 
     this.el
@@ -139,4 +136,4 @@ export default class extends PageHandlerComponent {
       this.close();
     }
   }
-};
+}

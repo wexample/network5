@@ -1,7 +1,7 @@
 import MixinsAppService from '../class/MixinsAppService';
 import AppService from '../class/AppService';
 import AssetsInterface from '../interfaces/AssetInterface';
-import AssetsService from "./Assets";
+import AssetsService from './Assets';
 
 export class ThemeServiceEvents {
   public static THEME_CHANGE: string = 'theme-change';

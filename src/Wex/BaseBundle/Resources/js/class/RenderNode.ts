@@ -3,7 +3,7 @@ import AppChild from './AppChild';
 import App from './App';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 import Component from './Component';
-import TranslationsInterface from "../interfaces/TranslationsInterface";
+import TranslationsInterface from '../interfaces/TranslationsInterface';
 
 export default abstract class RenderNode extends AppChild {
   public childRenderNodes: { [key: string]: RenderNode } = {};
@@ -49,8 +49,11 @@ export default abstract class RenderNode extends AppChild {
       requestOptions.parentRenderNode.appendChildRenderNode(this);
     }
 
-    this.translations.catalog = {...this.translations.catalog, ...this.renderData.translations.catalog};
-    this.vars = {...this.vars, ...this.renderData.vars};
+    this.translations.catalog = {
+      ...this.translations.catalog,
+      ...this.renderData.translations.catalog,
+    };
+    this.vars = { ...this.vars, ...this.renderData.vars };
   }
 
   appendChildRenderNode(renderNode: RenderNode) {

@@ -8,16 +8,14 @@ abstract class RenderNodeService
 {
     public function __construct(
         protected AssetsService $assetsService
-    )
-    {
+    ) {
     }
 
     public function initRenderNode(
         RenderNode $renderNode,
         string $name,
         string $useJs
-    )
-    {
+    ) {
         $renderNode->init(
             $name
         );

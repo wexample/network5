@@ -9,12 +9,12 @@ use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use App\Wex\BaseBundle\WexBaseBundle;
 use Exception;
-use JetBrains\PhpStorm\Pure;
 use function in_array;
 use function is_null;
+use JetBrains\PhpStorm\Pure;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class AdaptiveResponse
 {
@@ -56,8 +56,7 @@ class AdaptiveResponse
         protected Request $request,
         protected AbstractController $controller,
         protected AdaptiveResponseService $adaptiveResponseService,
-    )
-    {
+    ) {
         $this->setOutputType(
             $this->detectOutputType()
         );
@@ -137,8 +136,7 @@ class AdaptiveResponse
     public function setView(
         string $view,
         $parameters = null
-    ): self
-    {
+    ): self {
         $this->view = $view;
 
         if ($parameters)

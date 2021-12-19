@@ -7,13 +7,13 @@ use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Twig\AbstractExtension;
 use App\Wex\BaseBundle\Twig\ComponentsExtension;
-use Twig\Environment;
 use function explode;
 use function file_get_contents;
 use function json_decode;
 use stdClass;
 use function str_contains;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Twig\Environment;
 use Twig\TwigFunction;
 
 class IconExtension extends AbstractExtension
@@ -42,8 +42,7 @@ class IconExtension extends AbstractExtension
     public function __construct(
         KernelInterface $kernel,
         protected ComponentsExtension $componentsExtension
-    )
-    {
+    ) {
         $pathBundle = $kernel
             ->getBundle('WexBaseBundle')
             ->getPath();
@@ -84,8 +83,7 @@ class IconExtension extends AbstractExtension
         string $name,
         string $class = '',
         string $tagName = 'i'
-    ): string
-    {
+    ): string {
         $type = null;
 
         if (str_contains($name, self::LIBRARY_SEPARATOR))
@@ -125,7 +123,7 @@ class IconExtension extends AbstractExtension
                     $twig,
                     VariableHelper::ICON,
                     [
-                        'name' => $name
+                        'name' => $name,
                     ]
                 )
             );

@@ -5,10 +5,10 @@ namespace App\Wex\BaseBundle\Service;
 use App\Wex\BaseBundle\Rendering\AdaptiveResponse;
 use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Rendering\RenderNode\LayoutRenderNode;
+use function array_merge;
 use Exception;
 use JetBrains\PhpStorm\Pure;
 use Twig\Environment;
-use function array_merge;
 
 class LayoutService extends RenderNodeService
 {
@@ -17,8 +17,7 @@ class LayoutService extends RenderNodeService
         protected AdaptiveResponseService $adaptiveResponseService,
         protected AssetsService $assetsService,
         protected ComponentService $componentService
-    )
-    {
+    ) {
         parent::__construct(
             $assetsService
         );
@@ -32,8 +31,7 @@ class LayoutService extends RenderNodeService
         string $layoutName,
         string $colorScheme,
         bool $useJs
-    )
-    {
+    ) {
         $renderPass = $this->adaptiveResponseService->renderPass;
 
         $renderPass->layoutRenderNode->colorScheme = $colorScheme;
@@ -54,8 +52,7 @@ class LayoutService extends RenderNodeService
         LayoutRenderNode $layoutRenderNode,
         string $layoutName,
         bool $useJs
-    )
-    {
+    ) {
         $layoutRenderNode->name = $layoutName;
         $layoutRenderNode->useJs = $useJs;
         $backEndAssets = $layoutRenderNode->assets;

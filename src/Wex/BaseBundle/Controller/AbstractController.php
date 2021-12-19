@@ -20,8 +20,7 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
     public function __construct(
         protected AdaptiveResponseService $adaptiveResponseService,
         protected Environment $twigEnvironment
-    )
-    {
+    ) {
         $adaptiveResponseService->setController($this);
     }
 
@@ -34,8 +33,7 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         string $view,
         array $parameters = [],
         Response $response = null
-    ): ?Response
-    {
+    ): ?Response {
         return $this->render(
             $view,
             $parameters,
@@ -57,8 +55,7 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         string $view,
         array $parameters = [],
         Response $response = null
-    ): Response
-    {
+    ): Response {
         $this->adaptiveResponseService->renderPrepare(
             $view,
             $parameters

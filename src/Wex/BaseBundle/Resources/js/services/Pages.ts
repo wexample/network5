@@ -49,7 +49,7 @@ export default class PagesService extends RenderNodeService {
 
   async createPage(
     renderData: RenderDataPageInterface,
-    requestOptions: RequestOptionsInterface,
+    requestOptions: RequestOptionsInterface
   ) {
     let el;
 
@@ -68,7 +68,7 @@ export default class PagesService extends RenderNodeService {
 
       delete this.services.components.pageHandlerRegistry[
         renderData.renderRequestId
-        ];
+      ];
 
       pageHandler.renderPageEl(renderData);
       el = pageHandler.getPageEl();

@@ -8,11 +8,11 @@ use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\TextHelper;
 use App\Wex\BaseBundle\Rendering\RenderNode\PageRenderNode;
 use App\Wex\BaseBundle\Translation\Translator;
-use JetBrains\PhpStorm\Pure;
-use Symfony\Component\Routing\RouterInterface;
 use function array_map;
 use function explode;
 use function implode;
+use JetBrains\PhpStorm\Pure;
+use Symfony\Component\Routing\RouterInterface;
 
 class PageService extends RenderNodeService
 {
@@ -21,8 +21,7 @@ class PageService extends RenderNodeService
         protected AssetsService $assetsService,
         protected Translator $translator,
         protected RouterInterface $router
-    )
-    {
+    ) {
         parent::__construct(
             $this->assetsService
         );
@@ -32,8 +31,7 @@ class PageService extends RenderNodeService
         PageRenderNode $page,
         string $pageName,
         bool $useJs
-    )
-    {
+    ) {
         $this->initRenderNode(
             $page,
             $pageName,
@@ -80,8 +78,8 @@ class PageService extends RenderNodeService
 
         // Return joined string.
         return AbstractPagesController::RESOURCES_DIR_PAGE.implode(
-                FileHelper::FOLDER_SEPARATOR,
-                $explodeController
-            );
+            FileHelper::FOLDER_SEPARATOR,
+            $explodeController
+        );
     }
 }

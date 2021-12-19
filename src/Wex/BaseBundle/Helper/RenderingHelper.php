@@ -19,8 +19,7 @@ class RenderingHelper
     public static function buildRenderContextKey(
         string $renderContextType,
         string $renderContextName
-    ): string
-    {
+    ): string {
         return implode('@', [
             $renderContextType,
             $renderContextName,

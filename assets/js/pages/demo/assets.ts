@@ -4,8 +4,7 @@ import { ServiceRegistryPageInterface } from '../../../../src/Wex/BaseBundle/Res
 import Events from '../../../../src/Wex/BaseBundle/Resources/js/helpers/Events';
 
 interface ServiceRegistryPageCurrentInterface
-  extends ServiceRegistryPageInterface {
-}
+  extends ServiceRegistryPageInterface {}
 
 export default class extends Page {
   services: ServiceRegistryPageCurrentInterface;
@@ -77,4 +76,4 @@ export default class extends Page {
       'Variable object has proper number value'
     );
   }
-};
+}

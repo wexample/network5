@@ -77,8 +77,7 @@ class AdaptiveResponseExtension extends AbstractExtension
     public function adaptiveResponseSetContext(
         string $renderNodeType,
         ?string $renderNodeName,
-    )
-    {
+    ) {
         $this
             ->adaptiveResponseService
             ->renderPass

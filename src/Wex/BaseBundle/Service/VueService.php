@@ -18,9 +18,7 @@ class VueService
         private AdaptiveResponseService $adaptiveResponseService,
         protected AssetsService $assetsService,
         private ComponentService $componentsService,
-    )
-    {
-
+    ) {
     }
 
     /**
@@ -32,8 +30,7 @@ class VueService
         ?array $attributes = [],
         ?array $twigContext = [],
         ?bool $root = false
-    ): string
-    {
+    ): string {
         $vue = new Vue(
             $path,
         );
@@ -65,7 +62,8 @@ class VueService
             $this->rootComponents[$vue->name] = $rootComponent;
 
             $outputBody = $rootComponent->renderTag();
-        } else
+        }
+        else
         {
             $rootComponent = $this->adaptiveResponseService->renderPass->getCurrentContextRenderNode();
 
@@ -76,10 +74,7 @@ class VueService
 
             if ($rootComponent->getContextRenderNodeKey() !== $contextCurrent)
             {
-                throw new Exception(
-                    'Trying to render a non-root vue outside the vue context. Current context is '
-                    .$contextCurrent
-                );
+                throw new Exception('Trying to render a non-root vue outside the vue context. Current context is '.$contextCurrent);
             }
         }
 

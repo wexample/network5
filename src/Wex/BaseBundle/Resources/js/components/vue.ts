@@ -14,6 +14,7 @@ export default class extends Component {
         renderData.options.path,
         renderData,
         requestOptions
-      ).mount(this.el);
+      )
+      .mount(this.el);
   }
-};
+}

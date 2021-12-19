@@ -18,8 +18,7 @@ class InitialLayoutRenderNode extends LayoutRenderNode
         protected RenderPass $renderPass,
         public bool $useJs,
         protected string $env
-    )
-    {
+    ) {
         parent::__construct(
             $renderPass,
             $useJs
@@ -28,8 +27,7 @@ class InitialLayoutRenderNode extends LayoutRenderNode
 
     public function init(
         string $name,
-    )
-    {
+    ) {
         parent::init(
             $name
         );
@@ -42,7 +40,7 @@ class InitialLayoutRenderNode extends LayoutRenderNode
         return parent::toRenderData() + [
                 'colorScheme' => $this->colorScheme,
                 'displayBreakpoints' => AssetsService::DISPLAY_BREAKPOINTS,
-                'useJs' => $this->useJs
+                'useJs' => $this->useJs,
             ];
     }
 }
