@@ -2,7 +2,7 @@
 import RenderNode from '../RenderNode';
 import { h } from 'vue';
 import Page from '../Page';
-import ThemeService from '../../services/Theme';
+import ThemeService from '../../services/ThemeService';
 import { TagName } from '../../helpers/Dom';
 
 export default {

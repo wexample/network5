@@ -1,15 +1,15 @@
 import AppService from '../class/AppService';
-import ComponentsService from './Components';
+import ComponentsService from './ComponentsService';
 import RenderNode from '../class/RenderNode';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
 import RenderNodeService from './RenderNodeService';
-import PagesService from './Pages';
+import PagesService from './PagesService';
 import Variables from '../helpers/Variables';
 import DebugRenderNode from '../class/Debug/DebugRenderNode';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 import { TagName } from '../helpers/Dom';
 import Events from '../helpers/Events';
-import IconsService from './Icons';
+import IconsService from './IconsService';
 
 export default class DebugService extends AppService {
   public debugRenderNodes: any = {};

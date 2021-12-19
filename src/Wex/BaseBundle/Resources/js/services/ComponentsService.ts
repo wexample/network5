@@ -1,6 +1,6 @@
 import MixinsAppService from '../class/MixinsAppService';
 import Page from '../class/Page';
-import PromptService from './Prompts';
+import PromptService from './PromptsService';
 import App from '../class/App';
 import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 import PageHandlerComponent from '../class/PageHandlerComponent';

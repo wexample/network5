@@ -3,7 +3,7 @@ import RenderNode from '../RenderNode';
 import RenderDataInterface from '../../interfaces/RenderDataInterface';
 import RequestOptionsInterface from '../../interfaces/RequestOptionsInterface';
 import DebugRenderNode from './DebugRenderNode';
-import { EventsServiceEvents } from '../../services/Events';
+import { EventsServiceEvents } from '../../services/EventsService';
 
 // Used to be mixed with render node and track changes.
 export default {

@@ -1,12 +1,12 @@
 <script>
-import { ResponsiveServiceEvents } from '../services/Responsive';
+import { ResponsiveServiceEvents } from '../services/ResponsiveService';
 import { Attribute, AttributeValue, TagName } from '../helpers/Dom';
 import { shallowCopy as ArrayShallowCopy } from '../helpers/Arrays';
-import { AssetsServiceType } from '../services/Assets';
+import { AssetsServiceType } from '../services/AssetsService';
 import Explorer from './explorer';
-import { ComponentsServiceEvents } from '../services/Components';
-import ThemeService, { ThemeServiceEvents } from '../services/Theme';
-import { EventsServiceEvents } from '../services/Events';
+import { ComponentsServiceEvents } from '../services/ComponentsService';
+import ThemeService, { ThemeServiceEvents } from '../services/ThemeService';
+import { EventsServiceEvents } from '../services/EventsService';
 import { formatBytes } from '../helpers/Number';
 
 export default {

@@ -3,7 +3,7 @@ import AppService from '../class/AppService';
 import MixinsAppService from '../class/MixinsAppService';
 import RenderDataInterface from '../interfaces/RenderDataInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
-import ComponentsService from './Components';
+import ComponentsService from './ComponentsService';
 
 export default class AdaptiveService extends AppService {
   public static dependencies: typeof AppService[] = [ComponentsService];

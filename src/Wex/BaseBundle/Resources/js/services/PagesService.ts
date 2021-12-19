@@ -1,9 +1,9 @@
-import LocaleService from './Locale';
+import AdaptiveService from './AdaptiveService';
+import LocaleService from './LocaleService';
 import MixinsAppService from '../class/MixinsAppService';
 import RenderDataPageInterface from '../interfaces/RenderDataPageInterface';
 import RenderDataLayoutInterface from '../interfaces/RenderDataLayoutInterface';
 import RequestOptionsPageInterface from '../interfaces/RequestOptionsPageInterface';
-import AdaptiveService from './Adaptive';
 import { ServiceRegistryPageInterface } from '../interfaces/ServiceRegistryPageInterface';
 import RenderNodeService from './RenderNodeService';
 import Page from '../class/Page';

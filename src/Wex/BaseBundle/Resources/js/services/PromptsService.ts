@@ -1,5 +1,5 @@
 import AppService from '../class/AppService';
-import LocaleService from './Locale';
+import LocaleService from './LocaleService';
 
 export default class PromptService extends AppService {
   public static dependencies: typeof AppService[] = [LocaleService];

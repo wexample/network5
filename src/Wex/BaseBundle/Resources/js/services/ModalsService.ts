@@ -1,6 +1,6 @@
 import AppService from '../class/AppService';
 import RequestOptionsModalInterface from '../interfaces/RequestOptionsModalInterface';
-import PagesService from './Pages';
+import PagesService from './PagesService';
 
 export default class ModalsService extends AppService {
   public static dependencies: typeof AppService[] = [PagesService];

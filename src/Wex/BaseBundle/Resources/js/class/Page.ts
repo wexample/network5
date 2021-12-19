@@ -7,8 +7,8 @@ import RenderDataInterface from '../interfaces/RenderDataInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
 import RequestOptionsPageInterface from '../interfaces/RequestOptionsPageInterface';
 import AppService from './AppService';
-import { ThemeServiceEvents } from '../services/Theme';
-import { ResponsiveServiceEvents } from '../services/Responsive';
+import { ThemeServiceEvents } from '../services/ThemeService';
+import { ResponsiveServiceEvents } from '../services/ResponsiveService';
 
 export default class extends RenderNode {
   public elOverlay: HTMLElement;

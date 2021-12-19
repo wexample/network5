@@ -1,7 +1,7 @@
 import * as Vue from 'vue';
 import { createApp } from 'vue/dist/vue.esm-bundler';
 import AppService from '../class/AppService';
-import PagesService from './Pages';
+import PagesService from './PagesService';
 import MixinsAppService from '../class/MixinsAppService';
 import RenderDataComponentInterface from '../interfaces/RenderDataComponentInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptionsInterface';
