@@ -5,6 +5,7 @@ namespace App\Wex\BaseBundle\Translation;
 use App\Wex\BaseBundle\Helper\ClassHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
+use JetBrains\PhpStorm\Pure;
 use function array_filter;
 use function array_merge;
 use function array_pop;
@@ -81,7 +82,8 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         private array $parameters,
         KernelInterface $kernel,
         CacheInterface $cache
-    ) {
+    )
+    {
         if ($cache->hasItem(self::CACHE_KEY_TRANSLATIONS_RESOLVED))
         {
             $catalogue = $this->getCatalogue();
@@ -93,8 +95,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
             {
                 $catalogue->add($value, $domain);
             }
-        }
-        else
+        } else
         {
             $pathProject = $kernel->getProjectDir();
 
@@ -200,7 +201,8 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
     public function resolveCatalogTranslations(
         array $translations,
         string $domain
-    ): array {
+    ): array
+    {
         $translations = $this->resolveExtend($translations);
         $resolved = [];
 
@@ -252,7 +254,8 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         string $key,
         string $value,
         string $domain
-    ): array {
+    ): array
+    {
         $catalogue = $this->translator->getCatalogue();
         $all = $catalogue->all();
         $output = [];
@@ -278,8 +281,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
                     $all[$refDomain][$refKey],
                     $refDomain
                 );
-            }
-            else
+            } else
             {
                 $subTranslations = array_filter(
                     $all[$refDomain],
@@ -312,8 +314,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
                 $output[$keyDiff]
                     = $outputValue;
             }
-        }
-        else
+        } else
         {
             $output[$key] = $value;
         }
@@ -358,7 +359,8 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         string $separator = '',
         ?string $domain = null,
         ?string $locale = null
-    ): string {
+    ): string
+    {
         if (is_array($id))
         {
             $output = [];
@@ -384,7 +386,8 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         array $parameters = [],
         ?string $domain = null,
         ?string $locale = null
-    ): string {
+    ): string
+    {
         $parameters = $this->updateParameters($parameters);
         $default = $id;
 
@@ -457,10 +460,10 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         $info = (object) pathinfo($path);
 
         return str_replace(
-            '/',
-            self::KEYS_SEPARATOR,
-            $info->dirname
-        ).self::KEYS_SEPARATOR.
+                '/',
+                self::KEYS_SEPARATOR,
+                $info->dirname
+            ).self::KEYS_SEPARATOR.
             current(explode(self::KEYS_SEPARATOR, $info->basename));
     }
 
@@ -482,5 +485,11 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
     public function getLocale(): string
     {
         return $this->translator->getLocale();
+    }
+
+    #[Pure]
+    public function getCatalogues(): array
+    {
+        return $this->translator->getCatalogues();
     }
 }
