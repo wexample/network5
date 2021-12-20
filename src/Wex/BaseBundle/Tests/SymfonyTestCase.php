@@ -3,6 +3,8 @@
 namespace App\Wex\BaseBundle\Tests;
 
 use SplFileInfo;
+use function end;
+use function explode;
 use function preg_match_all;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\DomCrawler\Crawler;
@@ -11,6 +13,10 @@ use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use function realpath;
+use function str_replace;
+use function strlen;
+use function substr;
 
 abstract class SymfonyTestCase extends WebTestCase
 {

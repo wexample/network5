@@ -5,6 +5,13 @@ namespace App\Wex\BaseBundle\Helper;
 use JetBrains\PhpStorm\Pure;
 use ReflectionClass;
 use ReflectionException;
+use function array_slice;
+use function count;
+use function explode;
+use function implode;
+use function is_string;
+use function strlen;
+use function substr;
 
 class ClassHelper
 {

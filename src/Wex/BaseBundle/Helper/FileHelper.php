@@ -2,6 +2,10 @@
 
 namespace App\Wex\BaseBundle\Helper;
 
+use function implode;
+use function strlen;
+use function substr;
+
 class FileHelper
 {
     public const EXTENSION_SEPARATOR = '.';
@@ -24,5 +28,10 @@ class FileHelper
                 FileHelper::FOLDER_SEPARATOR,
                 $parts
             ).FileHelper::FILE_EXTENSION_PHP;
+    }
+
+    public static function removeExtension(string $path, string $extension): string
+    {
+        return substr($path, 0, -strlen($extension));
     }
 }

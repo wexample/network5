@@ -7,6 +7,8 @@ use JetBrains\PhpStorm\NoReturn;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
+use function class_exists;
+use function is_dir;
 
 /**
  * Trait LoggingTestCase
@@ -57,10 +59,7 @@ trait ClassTestCaseTrait
             $cousinBasePath,
             $cousinSuffix
         );
-dump($className);
-dump(new \App\Tests\Integration\Controller\Pages\TestController());
-dump(class_exists('\\' . $cousinClass));
-        dd(class_exists(\App\Tests\Integration\Controller\Pages\TestController::class));
+
         $this->assertTrue(
             class_exists($cousinClass),
             'The class '.$className

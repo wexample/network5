@@ -2,8 +2,10 @@
 
 namespace App\Wex\BaseBundle\Helper;
 
+use function lcfirst;
 use function preg_quote;
 use function preg_replace;
+use function str_replace;
 use function Symfony\Component\String\u;
 
 class TextHelper
@@ -13,6 +15,29 @@ class TextHelper
         return preg_replace(
             '/^'.preg_quote($prefix, '/').'/',
             '',
+            $string
+        );
+    }
+
+    public static function toCamel(string $string): string
+    {
+        return lcfirst(
+            static::toClass($string)
+        );
+    }
+
+    public static function toClass(string $string): string
+    {
+        return u(
+            static::kebabToDash($string)
+        )->camel()->title();
+    }
+
+    public static function kebabToDash(string $string): string
+    {
+        return str_replace(
+            '-',
+            '_',
             $string
         );
     }

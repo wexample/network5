@@ -4,7 +4,24 @@ namespace App\Wex\BaseBundle\Tests\Traits;
 
 use App\Wex\BaseBundle\Controller\AbstractEntityController;
 use App\Wex\BaseBundle\Helper\ClassHelper;
+use App\Wex\BaseBundle\Helper\FileHelper;
+use App\Wex\BaseBundle\Helper\TemplateHelper;
+use App\Wex\BaseBundle\Helper\TextHelper;
 use SplFileInfo;
+use function basename;
+use function class_exists;
+use function explode;
+use function file_exists;
+use function implode;
+use function is_dir;
+use function is_file;
+use function method_exists;
+use function rtrim;
+use function scandir;
+use function str_ends_with;
+use function str_starts_with;
+use function strlen;
+use function substr;
 
 /**
  * Trait LoggingTestCase
@@ -24,7 +41,7 @@ trait ControllerTestCaseTrait
             function (SplFileInfo $file) use (
                 $srcSubDir,
                 $projectDir
-            ) {
+            ): void {
                 $controllerClass = $this->buildClassNameFromSpl($file);
                 $split = explode('\\', $controllerClass);
 
@@ -112,5 +129,73 @@ trait ControllerTestCaseTrait
                 }
             }
         );
+    }
+
+    protected function scanControllerPagesTemplates(
+        string $templatesRelDir,
+        string $templatesDir,
+        string $classSrcDir,
+    )
+    {
+        $scan = scandir($templatesDir.$templatesRelDir);
+
+        foreach ($scan as $item)
+        {
+            if ($item[0] !== '.')
+            {
+                $realSubPath = $templatesDir.$templatesRelDir.$item;
+
+                if (is_dir($realSubPath))
+                {
+                    $this->scanControllerPagesTemplates(
+                        $templatesRelDir.$item.'/',
+                        $templatesDir,
+                        $classSrcDir
+                    );
+                } elseif (str_ends_with(
+                    $item,
+                    TemplateHelper::TEMPLATE_FILE_EXTENSION
+                ))
+                {
+                    $pathParts = explode('/',
+                        rtrim($templatesRelDir, '/')
+                    );
+
+                    foreach ($pathParts as $key => $part)
+                    {
+                        $pathParts[$key] = TextHelper::toClass($part);
+                    }
+
+                    $controllerClassName = '\\App\\Controller\\'.implode(
+                            ClassHelper::NAMESPACE_SEPARATOR,
+                            $pathParts
+                        )
+                        .'Controller';
+
+                    $this->assertTrue(
+                        class_exists(
+                            $controllerClassName,
+                        ),
+                        'The controller class '.$controllerClassName.' exists for template '.$realSubPath
+                    );
+
+                    $methodName = TextHelper::toCamel(
+                        FileHelper::removeExtension(
+                            basename($realSubPath),
+                            TemplateHelper::TEMPLATE_FILE_EXTENSION
+                        )
+                    );
+
+                    $this->assertTrue(
+                        method_exists(
+                            $controllerClassName,
+                            $methodName
+                        ),
+                        'The method exists in controller : '
+                        .$controllerClassName.ClassHelper::METHOD_SEPARATOR.$methodName
+                    );
+                }
+            }
+        }
     }
 }

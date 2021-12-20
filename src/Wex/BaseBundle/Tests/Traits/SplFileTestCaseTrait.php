@@ -3,8 +3,12 @@
 namespace App\Wex\BaseBundle\Tests\Traits;
 
 use App\Wex\BaseBundle\Controller\AbstractEntityController;
-use JetBrains\PhpStorm\NoReturn;
 use SplFileInfo;
+use function implode;
+use function is_subclass_of;
+use function str_ends_with;
+use function strlen;
+use function substr;
 
 /**
  * Trait LoggingTestCase
@@ -73,8 +77,6 @@ trait SplFileTestCaseTrait
         );
     }
 
-
-    #[NoReturn]
     public function splFileTestCousin(
         SplFileInfo $file,
         string $srcFileSubDir,
