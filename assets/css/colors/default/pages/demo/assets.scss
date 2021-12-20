@@ -1,4 +1,5 @@
 $global-color-scheme-name: 'default' !default;
 
-@use '../../../dark/pages/demo/assets' with
-  ($global-color-scheme-name: $global-color-scheme-name);
+@use '../../../dark/pages/demo/assets' with (
+  $global-color-scheme-name: $global-color-scheme-name
+);

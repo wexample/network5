@@ -3,12 +3,12 @@
 namespace App\Wex\BaseBundle\Tests\Traits;
 
 use App\Wex\BaseBundle\Helper\ClassHelper;
+use function class_exists;
+use function is_dir;
 use JetBrains\PhpStorm\NoReturn;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
-use function class_exists;
-use function is_dir;
 
 /**
  * Trait LoggingTestCase
@@ -19,8 +19,7 @@ trait ClassTestCaseTrait
     public function forEachClassFileRecursive(
         string $srcSubDir,
         callable $callback
-    )
-    {
+    ) {
         $srcDir = $this->getSrcDir();
         $controllersDir = $srcDir.$srcSubDir.'/';
 
@@ -50,8 +49,7 @@ trait ClassTestCaseTrait
         string $classSuffix,
         string $cousinBasePath,
         string $cousinSuffix = ''
-    )
-    {
+    ) {
         $cousinClass = ClassHelper::getCousin(
             $className,
             $classBasePath,

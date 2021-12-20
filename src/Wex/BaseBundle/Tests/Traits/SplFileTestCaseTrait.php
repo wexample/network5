@@ -3,9 +3,9 @@
 namespace App\Wex\BaseBundle\Tests\Traits;
 
 use App\Wex\BaseBundle\Controller\AbstractEntityController;
-use SplFileInfo;
 use function implode;
 use function is_subclass_of;
+use SplFileInfo;
 use function str_ends_with;
 use function strlen;
 use function substr;
@@ -19,8 +19,7 @@ trait SplFileTestCaseTrait
     public function assertSplFileNameHasSuffix(
         SplFileInfo $file,
         array $suffixes
-    )
-    {
+    ) {
         $this->assertTrue(
             $this->splFileNameHasAnySuffix($file, $suffixes),
             $file->getRealPath()
@@ -38,8 +37,7 @@ trait SplFileTestCaseTrait
     public function splFileNameHasAnySuffix(
         SplFileInfo $file,
         array $suffixes
-    ): bool
-    {
+    ): bool {
         $baseNameWithoutExt = $this->spfFilenameWithoutExt($file);
 
         foreach ($suffixes as $suffix)
@@ -56,8 +54,7 @@ trait SplFileTestCaseTrait
     protected function assertSplSrcFileIsSubClassOf(
         SplFileInfo $splFileInfo,
         string $classToExtend
-    )
-    {
+    ) {
         $this->assertTrue(
             $this->splFileIsSubClassOf($splFileInfo, $classToExtend),
             'All controller placed in the Entity dir should extend the class '.AbstractEntityController::class
@@ -67,8 +64,7 @@ trait SplFileTestCaseTrait
     protected function splFileIsSubClassOf(
         SplFileInfo $splFileInfo,
         string $classToExtend
-    ): bool
-    {
+    ): bool {
         $controllerClass = $this->buildClassNameFromSpl($splFileInfo);
 
         return is_subclass_of(
@@ -81,8 +77,7 @@ trait SplFileTestCaseTrait
         SplFileInfo $file,
         string $srcFileSubDir,
         string $testFileSubDir
-    ): string
-    {
+    ): string {
         return $this->getProjectDir().'tests/'
             .$testFileSubDir.substr(
                 $file->getRealPath(),

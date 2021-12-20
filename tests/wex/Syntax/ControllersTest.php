@@ -44,7 +44,7 @@ class ControllersTest extends NetworkTestCase
         $this->scanControllerPagesTemplates(
             TemplateHelper::REL_BUNDLE_PATH_PAGES,
             $this->getProjectDir()
-                .'src/Wex/BaseBundle/' . TemplateHelper::BUNDLE_PATH_RESOURCES
+                .'src/Wex/BaseBundle/'.TemplateHelper::BUNDLE_PATH_RESOURCES
             .TemplateHelper::REL_BUNDLE_PATH_TEMPLATES,
             'src/Controllers'
         );

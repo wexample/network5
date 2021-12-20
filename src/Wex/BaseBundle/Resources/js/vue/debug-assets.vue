@@ -5,7 +5,9 @@ import { shallowCopy as ArrayShallowCopy } from '../helpers/Arrays';
 import { AssetsServiceType } from '../services/AssetsService';
 import Explorer from './explorer';
 import { ComponentsServiceEvents } from '../services/ComponentsService';
-import ColorSchemeService, { ColorSchemeServiceEvents } from '../services/ColorSchemeService';
+import ColorSchemeService, {
+  ColorSchemeServiceEvents,
+} from '../services/ColorSchemeService';
 import { EventsServiceEvents } from '../services/EventsService';
 import { formatBytes } from '../helpers/Number';
 

@@ -25,7 +25,10 @@ export default class ColorSchemeService extends AppService {
 
   activeColorScheme?: string = ColorSchemeService.COLOR_SCHEME_DEFAULT;
   activePrint: boolean = false;
-  colorSchemes: string[] = [ColorSchemeService.COLOR_SCHEME_DARK, ColorSchemeService.COLOR_SCHEME_LIGHT];
+  colorSchemes: string[] = [
+    ColorSchemeService.COLOR_SCHEME_DARK,
+    ColorSchemeService.COLOR_SCHEME_LIGHT,
+  ];
   userHasForced?: null;
 
   registerHooks() {
@@ -122,7 +125,10 @@ export default class ColorSchemeService extends AppService {
   }
 
   assetUpdateFilter(asset: AssetsInterface) {
-    if (asset.colorScheme !== null && asset.colorScheme !== this.activeColorScheme) {
+    if (
+      asset.colorScheme !== null &&
+      asset.colorScheme !== this.activeColorScheme
+    ) {
       return AssetsService.UPDATE_FILTER_REJECT;
     }
   }

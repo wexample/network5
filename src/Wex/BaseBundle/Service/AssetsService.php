@@ -57,8 +57,7 @@ class AssetsService
     public function __construct(
         KernelInterface $kernel,
         private AdaptiveResponseService $adaptiveResponseService
-    )
-    {
+    ) {
         $this->pathProject = $kernel->getProjectDir().'/';
         $this->pathPublic = $this->pathProject.self::DIR_PUBLIC;
         $this->pathBuild = $this->pathPublic.self::DIR_BUILD;
@@ -74,8 +73,7 @@ class AssetsService
         string $path,
         RenderNode $context,
         array &$collection = []
-    ): array
-    {
+    ): array {
         foreach (Asset::ASSETS_EXTENSIONS as $ext)
         {
             $collection[$ext] = array_merge(
@@ -100,8 +98,7 @@ class AssetsService
         string $ext,
         RenderNode $renderNode,
         bool $searchColorScheme
-    ): array
-    {
+    ): array {
         $assetPathFull = $ext.'/'.$pageName.'.'.$ext;
         $output = [];
 
@@ -186,8 +183,7 @@ class AssetsService
     public function addAsset(
         string $pathRelative,
         RenderNode $renderNode
-    ): ?Asset
-    {
+    ): ?Asset {
         $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
         if (!isset($this->manifest[$pathRelativeToPublic]))
         {
@@ -203,7 +199,8 @@ class AssetsService
             );
 
             $this->assetsLoaded[$pathRelative] = $asset;
-        } else
+        }
+        else
         {
             $asset = $this->assetsLoaded[$pathRelative];
         }

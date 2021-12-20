@@ -14,11 +14,16 @@ export default class extends Page {
 
     await this.testVariables();
 
-    document.querySelectorAll('.demo-button-switch-color-scheme').forEach((el) => {
-      el.addEventListener(Events.CLICK, async () => {
-        await this.services.colorScheme.setColorScheme(el.getAttribute('data-color-scheme'), true);
+    document
+      .querySelectorAll('.demo-button-switch-color-scheme')
+      .forEach((el) => {
+        el.addEventListener(Events.CLICK, async () => {
+          await this.services.colorScheme.setColorScheme(
+            el.getAttribute('data-color-scheme'),
+            true
+          );
+        });
       });
-    });
   }
 
   updateCurrentResponsiveDisplay() {

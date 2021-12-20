@@ -7,7 +7,6 @@ use App\Wex\BaseBundle\Helper\ClassHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Helper\TextHelper;
-use SplFileInfo;
 use function basename;
 use function class_exists;
 use function explode;
@@ -18,6 +17,7 @@ use function is_file;
 use function method_exists;
 use function rtrim;
 use function scandir;
+use SplFileInfo;
 use function str_ends_with;
 use function str_starts_with;
 use function strlen;
@@ -55,16 +55,17 @@ trait ControllerTestCaseTrait
 
                 // This is a plain controller class.
                 if (str_ends_with(
-                        $fileNameWithoutExt,
-                        'Controller'
-                    ) && !str_starts_with(
+                    $fileNameWithoutExt,
+                    'Controller'
+                ) && !str_starts_with(
                         $fileNameWithoutExt,
                         'Abstract'
                     ))
                 {
                     $relDir = substr(
                         $srcSubDir,
-                        0, -strlen('Controller')
+                        0,
+                        -strlen('Controller')
                     );
 
                     $testFile = $this->splFileTestCousin(
@@ -119,7 +120,8 @@ trait ControllerTestCaseTrait
                         .$templateEntityWrongDir
                         .' or it should not contains no view.html.twig or edit.html.twig'
                     );
-                } else
+                }
+                else
                 {
                     $this->assertNotEquals(
                         'Entity',
@@ -135,8 +137,7 @@ trait ControllerTestCaseTrait
         string $templatesRelDir,
         string $templatesDir,
         string $classSrcDir,
-    )
-    {
+    ) {
         $scan = scandir($templatesDir.$templatesRelDir);
 
         foreach ($scan as $item)
@@ -152,12 +153,14 @@ trait ControllerTestCaseTrait
                         $templatesDir,
                         $classSrcDir
                     );
-                } elseif (str_ends_with(
+                }
+                elseif (str_ends_with(
                     $item,
                     TemplateHelper::TEMPLATE_FILE_EXTENSION
                 ))
                 {
-                    $pathParts = explode('/',
+                    $pathParts = explode(
+                        '/',
                         rtrim($templatesRelDir, '/')
                     );
 
@@ -167,9 +170,9 @@ trait ControllerTestCaseTrait
                     }
 
                     $controllerClassName = '\\App\\Controller\\'.implode(
-                            ClassHelper::NAMESPACE_SEPARATOR,
-                            $pathParts
-                        )
+                        ClassHelper::NAMESPACE_SEPARATOR,
+                        $pathParts
+                    )
                         .'Controller';
 
                     $this->assertTrue(

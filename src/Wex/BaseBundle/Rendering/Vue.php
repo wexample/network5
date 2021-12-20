@@ -82,9 +82,9 @@ class Vue
             // Use reference to identify sub folders length.
             $templatePath = count(
                 explode(
-                        FileHelper::FOLDER_SEPARATOR,
-                        WexBaseBundle::WEX_BUNDLE_PATH_TEMPLATES
-                    )
+                    FileHelper::FOLDER_SEPARATOR,
+                    WexBaseBundle::WEX_BUNDLE_PATH_TEMPLATES
+                )
             ) - 1;
 
             // Remove sub folders.

@@ -17,7 +17,7 @@ import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import AsyncConstructor from './AsyncConstructor';
 import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 import AppService from './AppService';
-import { toCamel } from "../helpers/String";
+import { toCamel } from '../helpers/String';
 
 export default class extends AsyncConstructor {
   public bundles: any;

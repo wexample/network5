@@ -14,10 +14,6 @@ export default {
     };
   },
 
-  mounted() {
-
-  },
-
   methods: {
     getItemName() {
       return this.type;

@@ -15,7 +15,7 @@ class VariableHelper
     public const CLASS_VAR = 'class';
 
     public const COLOR = 'color';
-    
+
     public const CONTEXT = 'context';
 
     public const BODY = 'body';

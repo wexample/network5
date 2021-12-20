@@ -16,5 +16,7 @@ export function firstLetterLowerCase(string) {
 }
 
 export function toCamel(string) {
-  return firstLetterLowerCase(string.replace(/([\_\-]\w)/g, (m) => m[1].toUpperCase()));
+  return firstLetterLowerCase(
+    string.replace(/([\_\-]\w)/g, (m) => m[1].toUpperCase())
+  );
 }

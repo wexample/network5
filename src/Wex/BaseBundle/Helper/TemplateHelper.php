@@ -21,8 +21,7 @@ class TemplateHelper
     public static function buildTemplateInheritanceStack(
         string $relativePath,
         string $pageExtension = self::TEMPLATE_FILE_EXTENSION
-    ): array
-    {
+    ): array {
         return [
             // Search local.
             $relativePath.$pageExtension,

@@ -2,14 +2,14 @@
 
 namespace App\Wex\BaseBundle\Helper;
 
-use JetBrains\PhpStorm\Pure;
-use ReflectionClass;
-use ReflectionException;
 use function array_slice;
 use function count;
 use function explode;
 use function implode;
 use function is_string;
+use JetBrains\PhpStorm\Pure;
+use ReflectionClass;
+use ReflectionException;
 use function strlen;
 use function substr;
 
@@ -31,7 +31,8 @@ class ClassHelper
             $reflexion = new ReflectionClass($className);
 
             return $reflexion->getShortName();
-        } catch (ReflectionException)
+        }
+        catch (ReflectionException)
         {
             return 'undefined';
         }
@@ -44,8 +45,7 @@ class ClassHelper
         string $classSuffix,
         string $cousinBasePath,
         string $cousinSuffix = ''
-    ): string
-    {
+    ): string {
         $parts = static::getPathParts(
             $className,
             count(explode('\\', $classBasePath)) - 1
