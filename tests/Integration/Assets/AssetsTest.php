@@ -4,6 +4,7 @@ namespace App\Tests\Integration\Assets;
 
 use App\Tests\NetworkTestCase;
 use App\Wex\BaseBundle\Helper\VariableHelper;
+use function count;
 
 class AssetsTest extends NetworkTestCase
 {

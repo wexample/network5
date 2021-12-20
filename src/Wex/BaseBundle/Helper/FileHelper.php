@@ -10,9 +10,19 @@ class FileHelper
 
     public const FILE_EXTENSION_PDF = 'pdf';
 
+    public const FILE_EXTENSION_PHP = 'php';
+
     public const FILE_EXTENSION_YML = 'yml';
 
     public const FILE_EXTENSION_VUE = 'vue';
 
     public const FILE_EXTENSION_SVG = 'svg';
+
+    public static function joinPathParts(array $parts): string
+    {
+        return implode(
+                FileHelper::FOLDER_SEPARATOR,
+                $parts
+            ).FileHelper::FILE_EXTENSION_PHP;
+    }
 }

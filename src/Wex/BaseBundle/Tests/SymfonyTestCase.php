@@ -2,6 +2,7 @@
 
 namespace App\Wex\BaseBundle\Tests;
 
+use SplFileInfo;
 use function preg_match_all;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\DomCrawler\Crawler;
@@ -33,6 +34,56 @@ abstract class SymfonyTestCase extends WebTestCase
         );
     }
 
+    protected function getSrcDir(): string
+    {
+        $projectDir = $this->getProjectDir();
+
+        return realpath($projectDir.'src').'/';
+    }
+
+    public function getProjectDir(): string
+    {
+        return $this
+                ->getContainer()
+                ->get('kernel')
+                ->getProjectDir().'/';
+    }
+
+    public function buildRelatedEntityClassNameFromSplFile(
+        SplFileInfo $fileInfo,
+        string $fileSuffix = null
+    ): string {
+        $controllerClass = $this->buildClassNameFromSpl($fileInfo);
+        $split = explode('\\', $controllerClass);
+        $controllerName = end($split);
+
+        $entityName = $fileSuffix ? substr(
+            $controllerName,
+            0,
+            -strlen($fileSuffix)
+        ) : $controllerName;
+
+        return '\\App\\Entity\\'.$entityName;
+    }
+
+    protected function buildClassNameFromSpl(SplFileInfo $file): string
+    {
+        $srcDir = $this->getSrcDir();
+
+        $controllerClass = substr(
+            $file->getRealPath(),
+            strlen($srcDir),
+            -4
+        );
+
+        return 'App\\'
+            .str_replace(
+                '/',
+                '\\',
+                $controllerClass
+            );
+    }
+    
     /**
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface

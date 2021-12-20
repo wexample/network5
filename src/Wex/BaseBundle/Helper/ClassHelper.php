@@ -2,9 +2,73 @@
 
 namespace App\Wex\BaseBundle\Helper;
 
+use JetBrains\PhpStorm\Pure;
+use ReflectionClass;
+use ReflectionException;
+
 class ClassHelper
 {
     public const METHOD_SEPARATOR = '::';
 
     public const NAMESPACE_SEPARATOR = '\\';
+
+    public static function getTableizedName(string $className): string
+    {
+        return TextHelper::toSnake(static::getShortName($className));
+    }
+
+    public static function getShortName(string $className): string
+    {
+        try
+        {
+            $reflexion = new ReflectionClass($className);
+
+            return $reflexion->getShortName();
+        } catch (ReflectionException)
+        {
+            return 'undefined';
+        }
+    }
+
+    #[Pure]
+    public static function getCousin(
+        string $className,
+        string $classBasePath,
+        string $classSuffix,
+        string $cousinBasePath,
+        string $cousinSuffix = ''
+    ): string
+    {
+        $parts = static::getPathParts(
+            $className,
+            count(explode('\\', $classBasePath)) - 1
+        );
+
+        $classBase = implode('\\', $parts);
+
+        // Remove suffix if exists.
+        $classBase = $classSuffix ? substr(
+            $classBase,
+            0,
+            -strlen($classSuffix)
+        ) : $classBase;
+
+        return $cousinBasePath.$classBase.$cousinSuffix;
+    }
+
+    public static function getPathParts($type, $offset = 2): array
+    {
+        return array_slice(
+            explode('\\', is_string($type) ? $type : $type::class),
+            $offset
+        );
+    }
+
+    #[Pure]
+    public static function buildPathFromClassName(string $className): string
+    {
+        return FileHelper::joinPathParts(
+            static::getPathParts($className)
+        );
+    }
 }
