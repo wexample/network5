@@ -173,14 +173,6 @@ class ComponentService extends RenderNodeService
 
         $component->options = $options;
 
-        $this
-            ->assetsService
-            ->assetsDetect(
-                $component->name,
-                $component,
-                $component->assets
-            );
-
         $component->body = $this->componentRenderHtml(
             $twig,
             $component
