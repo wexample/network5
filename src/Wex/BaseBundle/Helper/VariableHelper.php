@@ -14,6 +14,8 @@ class VariableHelper
 
     public const CLASS_VAR = 'class';
 
+    public const COLOR = 'color';
+    
     public const CONTEXT = 'context';
 
     public const BODY = 'body';
@@ -75,6 +77,8 @@ class VariableHelper
     public const PARENT = 'parent';
 
     public const PATH_ENTITY = 'Entity';
+
+    public const PLURAL_COLORS = self::COLOR.'s';
 
     public const PLURAL_COMPONENT = self::COMPONENT.'s';
 

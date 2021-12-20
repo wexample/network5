@@ -16,6 +16,6 @@ export default interface AssetsInterface {
   // so browser will not load it again
   // if we append it again to document.
   rendered: boolean;
-  theme?: string;
+  colorScheme?: string;
   type: string;
 }

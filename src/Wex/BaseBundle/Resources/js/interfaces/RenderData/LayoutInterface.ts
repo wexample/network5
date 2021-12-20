@@ -7,6 +7,6 @@ export default interface LayoutInterface extends RenderDataInterface {
   components: ComponentInterface[];
   env: string;
   page: PageInterface;
-  theme: string;
+  colorScheme: string;
   translationsDomainSeparator: string;
 }

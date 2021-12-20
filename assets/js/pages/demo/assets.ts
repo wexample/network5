@@ -14,9 +14,9 @@ export default class extends Page {
 
     await this.testVariables();
 
-    document.querySelectorAll('.demo-button-switch-theme').forEach((el) => {
+    document.querySelectorAll('.demo-button-switch-color-scheme').forEach((el) => {
       el.addEventListener(Events.CLICK, async () => {
-        await this.services.theme.setTheme(el.getAttribute('data-theme'), true);
+        await this.services.colorScheme.setColorScheme(el.getAttribute('data-color-scheme'), true);
       });
     });
   }
@@ -34,10 +34,6 @@ export default class extends Page {
     document
       .querySelector(`.display-breakpoint-${current}`)
       .classList.add('display-breakpoint-current');
-  }
-
-  updateLayoutTheme(theme) {
-    super.updateLayoutTheme(theme);
   }
 
   testVariables() {

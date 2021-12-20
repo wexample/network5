@@ -2,8 +2,9 @@
 import RenderNode from '../RenderNode';
 import { h } from 'vue';
 import Page from '../Page';
-import ThemeService from '../../services/ThemeService';
+import ColorSchemeService from '../../services/ColorSchemeService';
 import { TagName } from '../../helpers/Dom';
+import AssetsInterface from "../../interfaces/AssetInterface";
 
 export default {
   props: {
@@ -93,16 +94,16 @@ export default {
           },
           [
             renderLineTitle('COL.S'),
-            ThemeService.THEMES.map((theme) => {
+            ColorSchemeService.COLOR_SCHEMES.map((name:string) => {
               return h(
                 TagName.DIV,
                 {
                   class: {
-                    active: this.app.services.theme.activeTheme === theme,
-                    available: this.hasThemeAsset('css', theme),
+                    active: this.app.services.colorScheme.activeColorScheme === name,
+                    available: this.hasColorSchemeAsset('css', name),
                   },
                 },
-                theme.toUpperCase()
+                name.toUpperCase()
               );
             }),
           ]
@@ -143,11 +144,13 @@ export default {
       return false;
     },
 
-    hasThemeAsset(type: string, scheme: string) {
+    hasColorSchemeAsset(type: string, scheme: string) {
       if (this.renderData.assets) {
-        for (let asset of this.renderData.assets[type]) {
+        let asset:AssetsInterface;
+
+        for (asset of this.renderData.assets[type]) {
           // TODO Context is wrong and always true.
-          if (asset.theme === scheme) {
+          if (asset.colorScheme === scheme) {
             return true;
           }
         }

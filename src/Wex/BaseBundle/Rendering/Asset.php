@@ -66,7 +66,7 @@ class Asset extends RenderDataGenerator
 
     public ?string $responsive = null;
 
-    public ?string $theme = null;
+    public ?string $colorScheme = null;
 
     public string $type;
 
@@ -80,6 +80,10 @@ class Asset extends RenderDataGenerator
     ) {
         $this->filesize = filesize($path);
         $info = pathinfo($path);
+        if (!isset($info['extension'])) {
+            dd(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
+        }
+
         $this->type = $info['extension'];
 
         $this->path = '/'.PathHelper::relativeTo(
@@ -130,9 +134,9 @@ class Asset extends RenderDataGenerator
                 return !$useJs;
             }
 
-            if ($this->theme)
+            if ($this->colorScheme)
             {
-                // Theme CSS are loaded using JS.
+                // Color scheme CSS are loaded using JS.
                 // TODO Preload default theme.
                 return false;
             }
@@ -156,7 +160,7 @@ class Asset extends RenderDataGenerator
             'preload',
             'rendered',
             'responsive',
-            'theme',
+            'colorScheme',
             'type',
         ]);
     }

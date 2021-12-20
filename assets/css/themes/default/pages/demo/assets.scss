@@ -1,4 +1,0 @@
-$global-theme-name: 'default' !default;
-
-@use '../../../dark/pages/demo/assets' with
-  ($global-theme-name: $global-theme-name);

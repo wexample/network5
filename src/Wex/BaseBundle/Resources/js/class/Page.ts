@@ -7,7 +7,7 @@ import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 import RequestOptionsPageInterface from '../interfaces/RequestOptions/PageInterface';
 import AppService from './AppService';
-import { ThemeServiceEvents } from '../services/ThemeService';
+import { ColorSchemeServiceEvents } from '../services/ColorSchemeService';
 import { ResponsiveServiceEvents } from '../services/ResponsiveService';
 
 export default class extends RenderNode {
@@ -15,7 +15,7 @@ export default class extends RenderNode {
   public isInitialPage: boolean;
   public name: string;
   protected onChangeResponsiveSizeProxy: Function;
-  protected onChangeThemeProxy: Function;
+  protected onChangeColorSchemeProxy: Function;
   public parentRenderNode: PageHandlerComponent;
   protected readonly responsiveDisplays: any = [];
   public renderData: RenderDataPageInterface;
@@ -67,7 +67,7 @@ export default class extends RenderNode {
 
     this.updateCurrentResponsiveDisplay();
 
-    this.updateLayoutTheme(this.services.theme.activeTheme);
+    this.updateLayoutColorScheme(this.services.colorScheme.activeColorScheme);
 
     this.activateListeners();
 
@@ -89,7 +89,7 @@ export default class extends RenderNode {
     super.activateListeners();
 
     this.onChangeResponsiveSizeProxy = this.onChangeResponsiveSize.bind(this);
-    this.onChangeThemeProxy = this.onChangeTheme.bind(this);
+    this.onChangeColorSchemeProxy = this.onChangeColorScheme.bind(this);
 
     this.services.events.listen(
       'responsive-change-size',
@@ -97,8 +97,8 @@ export default class extends RenderNode {
     );
 
     this.services.events.listen(
-      ThemeServiceEvents.THEME_CHANGE,
-      this.onChangeThemeProxy
+      ColorSchemeServiceEvents.COLOR_SCHEME_CHANGE,
+      this.onChangeColorSchemeProxy
     );
   }
 
@@ -111,7 +111,7 @@ export default class extends RenderNode {
     );
 
     this.services.events.forget(
-      ThemeServiceEvents.THEME_CHANGE,
+      ColorSchemeServiceEvents.COLOR_SCHEME_CHANGE,
       this.onChangeResponsiveSizeProxy
     );
   }
@@ -155,11 +155,11 @@ export default class extends RenderNode {
     this.updateCurrentResponsiveDisplay();
   }
 
-  onChangeTheme(event) {
-    this.updateLayoutTheme(event.theme);
+  onChangeColorScheme(event) {
+    this.updateLayoutColorScheme(event.theme);
   }
 
-  updateLayoutTheme(theme: string) {
+  updateLayoutColorScheme(theme: string) {
     // To override.
   }
 

@@ -1,0 +1,10 @@
+$global-color-scheme-name: 'light' !default;
+
+@import '../mixins/_blocks';
+@import '../mixins/global';
+
+body.color-scheme-#{$global-color-scheme-name} .block,
+body.color-scheme-default .color-scheme-light.block {
+  background: $color-block-background;
+  color: $color-block-text;
+}

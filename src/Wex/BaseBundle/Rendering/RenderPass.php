@@ -65,7 +65,7 @@ class RenderPass
                 'document_head_title' => '@page::page_title',
                 'document_head_title_args' => [],
                 'layout_name' => null,
-                'layout_theme' => ColorSchemeHelper::SCHEME_DEFAULT,
+                'layout_color_scheme' => ColorSchemeHelper::SCHEME_DEFAULT,
                 'layout_use_js' => $this->useJs,
                 'page_path' => $this->view,
                 'page_title' => '@page::page_title',

@@ -5,7 +5,7 @@ import { shallowCopy as ArrayShallowCopy } from '../helpers/Arrays';
 import { AssetsServiceType } from '../services/AssetsService';
 import Explorer from './explorer';
 import { ComponentsServiceEvents } from '../services/ComponentsService';
-import ThemeService, { ThemeServiceEvents } from '../services/ThemeService';
+import ColorSchemeService, { ColorSchemeServiceEvents } from '../services/ColorSchemeService';
 import { EventsServiceEvents } from '../services/EventsService';
 import { formatBytes } from '../helpers/Number';
 
@@ -32,7 +32,7 @@ export default {
       updateEvents: [
         ComponentsServiceEvents.CREATE_COMPONENT,
         ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
-        ThemeServiceEvents.THEME_CHANGE,
+        ColorSchemeServiceEvents.COLOR_SCHEME_CHANGE,
       ],
       updateTime: 0,
     };
@@ -60,15 +60,15 @@ export default {
     },
 
     buildColorSchemeIcon(asset) {
-      if (asset.theme === ThemeService.THEME_LIGHT) {
+      if (asset.colorScheme === ColorSchemeService.COLOR_SCHEME_LIGHT) {
         return 'moon';
       }
 
-      if (asset.theme === ThemeService.THEME_DARK) {
+      if (asset.colorScheme === ColorSchemeService.COLOR_SCHEME_DARK) {
         return 'sun';
       }
 
-      if (asset.theme === ThemeService.THEME_PRINT) {
+      if (asset.colorScheme === ColorSchemeService.COLOR_SCHEME_PRINT) {
         return 'print';
       }
 

@@ -32,8 +32,8 @@
       <td class="asset-responsive" v-html="asset.responsive || '·'">
       </td>
       <td class="asset-color-scheme">
-        <div v-if="asset.theme" v-html="buildColorSchemeIcon(asset)"></div>
-        <div v-if="!asset.theme">·</div>
+        <div v-if="asset.colorScheme" v-html="buildColorSchemeIcon(asset)"></div>
+        <div v-if="!asset.colorScheme">·</div>
       </td>
       <td class="asset-path" v-on:click="assetLog(asset)">
         <div class="table-td-ellipsis-wrapper">

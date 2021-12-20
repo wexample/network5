@@ -1,0 +1,18 @@
+$global-color-scheme-name: 'default';
+
+// Use both base themes.
+@use '../../../dark/layouts/black/layout' as theme-dark-layout;
+@use '../../../light/layouts/black/layout' as theme-light-layout;
+
+// Allowed partials in all pages.
+@use '../../../../../../src/Wex/BaseBundle/Resources/css/colors/dark/partials/blocks'
+  as theme-dark-blocks;
+@use '../../../../../../src/Wex/BaseBundle/Resources/css/colors/light/partials/blocks'
+  as theme-light-blocks;
+
+body.color-scheme-default {
+  // By default, the default theme is dark.
+  // We need to adjust modals and panels
+  // to use the light theme.
+  @extend .color-scheme-dark;
+}

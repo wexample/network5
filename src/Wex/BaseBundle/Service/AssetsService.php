@@ -28,6 +28,8 @@ class AssetsService
         'xxl' => 1400,
     ];
 
+    public const COLOR_SCHEME_DIR = VariableHelper::PLURAL_COLORS;
+
     /**
      * @var array|Asset[][]
      */
@@ -55,7 +57,8 @@ class AssetsService
     public function __construct(
         KernelInterface $kernel,
         private AdaptiveResponseService $adaptiveResponseService
-    ) {
+    )
+    {
         $this->pathProject = $kernel->getProjectDir().'/';
         $this->pathPublic = $this->pathProject.self::DIR_PUBLIC;
         $this->pathBuild = $this->pathPublic.self::DIR_BUILD;
@@ -71,7 +74,8 @@ class AssetsService
         string $path,
         RenderNode $context,
         array &$collection = []
-    ): array {
+    ): array
+    {
         foreach (Asset::ASSETS_EXTENSIONS as $ext)
         {
             $collection[$ext] = array_merge(
@@ -95,8 +99,9 @@ class AssetsService
         string $pageName,
         string $ext,
         RenderNode $renderNode,
-        bool $searchTheme
-    ): array {
+        bool $searchColorScheme
+    ): array
+    {
         $assetPathFull = $ext.'/'.$pageName.'.'.$ext;
         $output = [];
 
@@ -138,27 +143,27 @@ class AssetsService
         }
 
         // Prevent infinite loops.
-        if ($searchTheme)
+        if ($searchColorScheme)
         {
-            // Add themes assets.
+            // Add color scheme assets.
             $basename = basename($pageName);
             $dirname = dirname($pageName);
-            foreach (ColorSchemeHelper::SCHEMES as $themeName)
+            foreach (ColorSchemeHelper::SCHEMES as $colorSchemeName)
             {
-                // Theme's version should be place in :
-                // themes/[dark|light|...]/same/path
-                $themePageName = implode(
+                // Color scheme's version should be place in :
+                // colors/[dark|light|...]/same/path
+                $colorSchemePageName = implode(
                     FileHelper::FOLDER_SEPARATOR,
                     [
-                        VariableHelper::PLURAL_THEME,
-                        $themeName,
+                        self::COLOR_SCHEME_DIR,
+                        $colorSchemeName,
                         $dirname,
                         $basename,
                     ]
                 );
 
                 $assets = $this->assetsDetectForType(
-                    $themePageName,
+                    $colorSchemePageName,
                     $ext,
                     $renderNode,
                     false
@@ -167,7 +172,7 @@ class AssetsService
                 /** @var Asset $asset */
                 foreach ($assets as $asset)
                 {
-                    $asset->theme = $themeName;
+                    $asset->colorScheme = $colorSchemeName;
                     $output[] = $asset;
                 }
             }
@@ -181,7 +186,8 @@ class AssetsService
     public function addAsset(
         string $pathRelative,
         RenderNode $renderNode
-    ): ?Asset {
+    ): ?Asset
+    {
         $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
         if (!isset($this->manifest[$pathRelativeToPublic]))
         {
@@ -197,8 +203,7 @@ class AssetsService
             );
 
             $this->assetsLoaded[$pathRelative] = $asset;
-        }
-        else
+        } else
         {
             $asset = $this->assetsLoaded[$pathRelative];
         }
@@ -223,8 +228,8 @@ class AssetsService
     public function assetsIsAvailable(Asset $asset, bool $useJs): bool
     {
         // When using JS, we manage responsive
-        // and extra theme style outside page rendering flow.
-        return !((!$useJs) || $asset->responsive || $asset->theme);
+        // and extra color style outside page rendering flow.
+        return !((!$useJs) || $asset->responsive || $asset->colorScheme);
     }
 
     public function assetsPreloadList(string $ext): array

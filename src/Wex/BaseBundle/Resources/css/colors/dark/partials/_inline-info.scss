@@ -1,0 +1,8 @@
+$global-color-scheme-name: 'dark' !default;
+
+body.color-scheme-#{$global-color-scheme-name} .inline-infos,
+body.color-scheme-default .color-scheme-dark.inline-infos {
+  //color: white;
+  background: rgba(20, 20, 20, 0.7);
+  color: lavenderblush;
+}

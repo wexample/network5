@@ -1,0 +1,18 @@
+@import '../mixins/global';
+
+.color-scheme-light {
+  background: $color-default-background;
+}
+
+.color-scheme-light,
+.color-scheme-default .color-scheme-light {
+  color: $color-default-text;
+
+  a {
+    color: $color-default-link;
+  }
+
+  #{$selector-title-all} {
+    color: $color-default-title;
+  }
+}

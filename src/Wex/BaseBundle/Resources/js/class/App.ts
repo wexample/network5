@@ -9,7 +9,7 @@ import MixinsService from '../services/MixinsService';
 import PagesService from '../services/PagesService';
 import ResponsiveService from '../services/ResponsiveService';
 
-import ThemeService from '../services/ThemeService';
+import ColorSchemeService from '../services/ColorSchemeService';
 import { unique as arrayUnique } from '../helpers/Arrays';
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import LayoutInitial from './LayoutInitial';
@@ -17,6 +17,7 @@ import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import AsyncConstructor from './AsyncConstructor';
 import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 import AppService from './AppService';
+import { toCamel } from "../helpers/String";
 
 export default class extends AsyncConstructor {
   public bundles: any;
@@ -101,7 +102,7 @@ export default class extends AsyncConstructor {
   }
 
   buildServiceName(serviceName: string): string {
-    return serviceName.slice(0, -'Service'.length).toLowerCase();
+    return toCamel(serviceName.slice(0, -'Service'.length));
   }
 
   getClassPage() {
@@ -116,7 +117,7 @@ export default class extends AsyncConstructor {
       MixinsService,
       PagesService,
       ResponsiveService,
-      ThemeService,
+      ColorSchemeService,
     ];
   }
 

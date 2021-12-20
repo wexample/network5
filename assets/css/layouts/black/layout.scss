@@ -8,7 +8,7 @@
 @use '../../partials/fonts';
 
 // Themes.
-@use '../../themes/default/layouts/black/layout' as theme-default-layout;
+@use '../../colors/default/layouts/black/layout' as theme-default-layout;
 
 // Allowed partials in all pages.
 @use '../../../../src/Wex/BaseBundle/Resources/css/partials/blocks';

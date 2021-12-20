@@ -1,0 +1,15 @@
+.color-scheme-dark {
+  &.tabs,
+  .tabs {
+    a.tab {
+      &:hover {
+        background: rgba(black, 0.5);
+      }
+
+      &.active {
+        background: black;
+        color: white;
+      }
+    }
+  }
+}
