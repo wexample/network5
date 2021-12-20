@@ -1,4 +1,3 @@
-import * as Vue from 'vue';
 import { createApp } from 'vue/dist/vue.esm-bundler';
 import AppService from '../class/AppService';
 import PagesService from './PagesService';
@@ -22,8 +21,6 @@ export default class VueService extends AppService {
             registry.assets === MixinsAppService.LOAD_STATUS_COMPLETE &&
             registry.pages === MixinsAppService.LOAD_STATUS_COMPLETE
           ) {
-            this.app.addLib('vue', Vue);
-
             let app = this.app;
             this.globalMixin = {
               props: {

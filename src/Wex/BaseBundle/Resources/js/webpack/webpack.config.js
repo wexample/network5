@@ -37,7 +37,7 @@ Encore
   .enableVersioning(isProd)
 
   // Load VueJs.
-  .enableVueLoader(() => {}, { runtimeCompilerBuild: false })
+  .enableVueLoader(() => {}, { runtimeCompilerBuild: true })
   .addPlugin(
     new webpack.DefinePlugin({
       // Drop Options API from bundle
