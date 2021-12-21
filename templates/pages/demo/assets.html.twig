@@ -34,13 +34,25 @@
     <h2>{{ '@page::themes.title' | trans }}</h2>
     <div class="blocks">
         <div class="block blocks-col theme-light">
-            {{ component('components/button', {attr:{'data-color-scheme':'dark'}, class:'demo-button-switch-color-scheme',  text:'Thème sombre'}) }}
+            {{ component('components/button', {
+                attr:{'data-color-scheme':'dark'},
+                class:'demo-button-switch-color-scheme',
+                text:'Thème sombre'
+            }) }}
         </div>
         <div class="block blocks-col theme-light">
-            {{ component('components/button', {attr:{'data-color-scheme':'light'}, class:'demo-button-switch-color-scheme', text:'Thème clair'}) }}
+            {{ component('components/button', {
+                attr:{'data-color-scheme':'light'},
+                class:'demo-button-switch-color-scheme',
+                text:'Thème clair'
+            }) }}
         </div>
         <div class="block blocks-col theme-light">
-            {{ component('components/button', {attr:{'data-color-scheme':'default'}, class:'demo-button-switch-color-scheme', text:'Thème par défaut'}) }}
+            {{ component('components/button', {
+                attr:{'data-color-scheme':'default'},
+                class:'demo-button-switch-color-scheme',
+                text:'Thème par défaut'
+            }) }}
         </div>
     </div>
     <h2>{{ '@page::breakpoints.title' | trans }}</h2>
