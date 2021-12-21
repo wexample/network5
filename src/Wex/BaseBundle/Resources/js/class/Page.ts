@@ -69,8 +69,6 @@ export default class extends RenderNode {
 
     this.updateLayoutColorScheme(this.services.colorScheme.activeColorScheme);
 
-    this.activateListeners();
-
     this.focus();
 
     this.mounted();
@@ -92,7 +90,7 @@ export default class extends RenderNode {
     this.onChangeColorSchemeProxy = this.onChangeColorScheme.bind(this);
 
     this.services.events.listen(
-      'responsive-change-size',
+      ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
       this.onChangeResponsiveSizeProxy
     );
 
