@@ -32,6 +32,6 @@ class FileHelper
 
     public static function removeExtension(string $path, string $extension): string
     {
-        return substr($path, 0, -strlen($extension));
+        return substr($path, 0, -(strlen($extension) + 1));
     }
 }

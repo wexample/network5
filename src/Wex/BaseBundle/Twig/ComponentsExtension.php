@@ -74,13 +74,6 @@ class ComponentsExtension extends AbstractExtension
                     self::FUNCTION_OPTION_NEEDS_CONTEXT => true,
                 ]
             ),
-            new TwigFunction(
-                'component_render_templates',
-                [
-                    $this,
-                    'componentRenderTemplates',
-                ]
-            ),
         ];
     }
 
@@ -177,10 +170,5 @@ class ComponentsExtension extends AbstractExtension
         return DomHelper::buildTagAttributes(
             $attributes
         );
-    }
-
-    public function componentRenderTemplates(): string
-    {
-        return $this->componentService->componentRenderTemplates();
     }
 }

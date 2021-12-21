@@ -51,6 +51,15 @@ class TextHelper
         );
     }
 
+    public static function toKebab(string $string): string
+    {
+        return str_replace(
+            '_',
+            '-',
+            self::toSnake($string)
+        );
+    }
+
     public static function toSnake(string $string): string
     {
         return u($string)->snake();

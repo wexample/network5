@@ -159,21 +159,11 @@ trait ControllerTestCaseTrait
                     TemplateHelper::TEMPLATE_FILE_EXTENSION
                 ))
                 {
-                    $pathParts = explode(
-                        '/',
-                        rtrim($templatesRelDir, '/')
+                    $controllerClassName = ClassHelper::buildClassNameFromPath(
+                        $templatesRelDir,
+                        '\\App\\Controller\\',
+                        'Controller'
                     );
-
-                    foreach ($pathParts as $key => $part)
-                    {
-                        $pathParts[$key] = TextHelper::toClass($part);
-                    }
-
-                    $controllerClassName = '\\App\\Controller\\'.implode(
-                        ClassHelper::NAMESPACE_SEPARATOR,
-                        $pathParts
-                    )
-                        .'Controller';
 
                     $this->assertTrue(
                         class_exists(

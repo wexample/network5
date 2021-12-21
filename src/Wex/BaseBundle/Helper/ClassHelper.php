@@ -19,6 +19,10 @@ class ClassHelper
 
     public const NAMESPACE_SEPARATOR = '\\';
 
+    public const PROJECT_PATH_SRC = 'src/';
+
+    public const PROJECT_PATH_TESTS = 'tests/';
+
     public static function getTableizedName(string $className): string
     {
         return TextHelper::toSnake(static::getShortName($className));
@@ -77,5 +81,31 @@ class ClassHelper
         return FileHelper::joinPathParts(
             static::getPathParts($className)
         );
+    }
+
+    public static function buildClassNameFromPath(
+        string $path,
+        string $classPathPrefix = '',
+        string $classPathSuffix = ''
+    ): string
+    {
+        $pathParts = explode(
+            FileHelper::FOLDER_SEPARATOR,
+            rtrim(
+                $path,
+                FileHelper::FOLDER_SEPARATOR
+            )
+        );
+
+        foreach ($pathParts as $key => $part)
+        {
+            $pathParts[$key] = TextHelper::toClass($part);
+        }
+
+        return $classPathPrefix.implode(
+                ClassHelper::NAMESPACE_SEPARATOR,
+                $pathParts
+            )
+            .$classPathSuffix;
     }
 }
