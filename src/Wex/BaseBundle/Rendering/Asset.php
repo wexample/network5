@@ -54,7 +54,11 @@ class Asset extends RenderDataGenerator
 
     public const PRELOAD_NONE = 'none';
 
+    public bool $active = false;
+
     public string $id;
+
+    public bool $initial = false;
 
     public string $media = 'screen';
 
@@ -77,7 +81,8 @@ class Asset extends RenderDataGenerator
         string $path,
         public RenderNode $renderData,
         string $basePath
-    ) {
+    )
+    {
         $this->filesize = filesize($path);
         $info = pathinfo($path);
         if (!isset($info['extension']))
@@ -88,9 +93,9 @@ class Asset extends RenderDataGenerator
         $this->type = $info['extension'];
 
         $this->path = '/'.PathHelper::relativeTo(
-            $path,
-            $basePath
-        );
+                $path,
+                $basePath
+            );
 
         // Remove the base part before build/{type}/ folder.
         $pathWithoutExt = dirname($this->path).'/'.$info['filename'];
@@ -148,14 +153,18 @@ class Asset extends RenderDataGenerator
 
     public function setRendered(bool $bool = true)
     {
-        $this->rendered = $bool;
+        $this->active =
+        $this->rendered =
+        $this->initial = $bool;
     }
 
     public function toRenderData(): array
     {
         return $this->serializeVariables([
+            'active',
             'filesize',
             'id',
+            'initial',
             'media',
             'path',
             'preload',

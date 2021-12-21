@@ -44,21 +44,22 @@ export default class AssetsService extends AppService {
       // Mark all initially rendered assets in layout as loaded.
       await this.app.layout.forEachRenderNode(
         async (renderNode: RenderNode) => {
-          await this.forEachAssetInCollection(
-            renderNode.renderData.assets,
-            (asset) => {
-              if (asset.rendered) {
-                this.setAssetLoaded(asset);
+          this.assetsInCollection(renderNode.renderData.assets)
+            .forEach((asset) => {
+                if (asset.rendered) {
+                  this.setAssetLoaded(asset);
+                }
               }
-            }
-          );
+            )
         }
       );
     });
   }
 
-  async appendAsset(asset: AssetInterface) {
+  appendAsset(asset: AssetInterface) {
     return new Promise(async (resolve) => {
+      // Storing resolver allow javascript to be,
+      // marked as loaded asynchronously.
       asset.resolver = resolve;
 
       // Avoid currently and already loaded.
@@ -89,30 +90,51 @@ export default class AssetsService extends AppService {
     });
   }
 
-  async forEachAssetInCollection(
-    assetsCollection: AssetsCollectionInterface,
-    callback
-  ) {
+  assetsInCollection(
+    assetsCollection: AssetsCollectionInterface
+  ): AssetInterface[] {
     let asset: AssetInterface;
     let data;
     let entries = Object.entries(assetsCollection);
+    let output = [];
 
     for (data of entries) {
       for (asset of data[1]) {
-        await callback(asset, data[0]);
+        output.push(asset);
       }
     }
+
+    return output;
   }
 
   async appendAssets(assetsCollection) {
-    await this.forEachAssetInCollection(assetsCollection, async (asset) => {
-      await this.appendAsset(asset);
+    return new Promise(async (resolveAll) => {
+      let count: number = 0;
+
+      this.assetsInCollection(assetsCollection).forEach(
+        (asset) => {
+          count++;
+
+          new Promise(async (resolve) => {
+            this.appendAsset(asset)
+              .then((asset) => {
+
+                count--;
+                resolve(asset);
+
+                if (count === 0) {
+                  resolveAll(assetsCollection);
+                }
+              })
+          });
+        }
+      );
     });
   }
 
-  async removeAssets(assetsCollection) {
-    await this.forEachAssetInCollection(assetsCollection, async (asset) =>
-      this.removeAsset(asset)
+  removeAssets(assetsCollection) {
+    this.assetsInCollection(assetsCollection).forEach(
+      (asset) => this.removeAsset(asset)
     );
   }
 
@@ -204,39 +226,38 @@ export default class AssetsService extends AppService {
     let hasChange = false;
     let assetsRegistry = this.assetsRegistry;
 
-    await this.forEachAssetInCollection(
-      assetsCollection,
-      async (asset: AssetInterface) => {
-        let type = asset.type;
+    this.assetsInCollection(assetsCollection)
+      .forEach((asset: AssetInterface) => {
+          let type = asset.type;
 
-        // Asset object may come from a fresh xhr load,
-        // and represent an existing but locally updated version.
-        // We always prefer local version.
-        if (assetsRegistry[type][asset.id]) {
-          asset = assetsRegistry[type][asset.id];
-        } else {
-          assetsRegistry[type][asset.id] = asset;
-        }
+          // Asset object may come from a fresh xhr load,
+          // and represent an existing but locally updated version.
+          // We always prefer local version.
+          if (assetsRegistry[type][asset.id]) {
+            asset = assetsRegistry[type][asset.id];
+          } else {
+            assetsRegistry[type][asset.id] = asset;
+          }
 
-        if (this.askFilterIfAssetIsValid(asset)) {
-          if (!asset.active) {
-            hasChange = true;
-            toLoad[type].push(asset);
-          }
-        } else {
-          if (asset.active) {
-            hasChange = true;
-            toUnload[type].push(asset);
+          if (this.askFilterIfAssetIsValid(asset)) {
+            if (!asset.active) {
+              hasChange = true;
+              toLoad[type].push(asset);
+            }
+          } else {
+            if (asset.active) {
+              hasChange = true;
+              toUnload[type].push(asset);
+            }
           }
         }
-      }
-    );
+      );
 
     if (hasChange) {
       // Load new assets.
       await this.appendAssets(toLoad);
       // Remove old ones.
-      await this.removeAssets(toUnload);
+      this.removeAssets(toUnload);
     }
   }
 }

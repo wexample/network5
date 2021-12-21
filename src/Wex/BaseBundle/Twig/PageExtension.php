@@ -29,13 +29,6 @@ class PageExtension extends AbstractExtension
                 ]
             ),
             new TwigFunction(
-                'page_name_from_path',
-                [
-                    $this,
-                    'pageNameFromPath',
-                ]
-            ),
-            new TwigFunction(
                 'page_name_from_route',
                 [
                     $this,
@@ -53,24 +46,6 @@ class PageExtension extends AbstractExtension
             $pageName,
             $this->adaptiveResponseService->renderPass->layoutRenderNode->useJs
         );
-    }
-
-    public function pageNameFromPath(string $templatePath): string
-    {
-        // Define template name.
-        $ext = TemplateHelper::TEMPLATE_FILE_EXTENSION;
-
-        // Path have extension.
-        if (str_ends_with($templatePath, $ext))
-        {
-            return substr(
-                $templatePath,
-                0,
-                -strlen(TemplateHelper::TEMPLATE_FILE_EXTENSION)
-            );
-        }
-
-        return $templatePath;
     }
 
     public function pageNameFromRoute(string $route): string

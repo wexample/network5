@@ -67,6 +67,7 @@ class RenderPass
                 'layout_name' => null,
                 'layout_color_scheme' => ColorSchemeHelper::SCHEME_DEFAULT,
                 'layout_use_js' => $this->useJs,
+                'page_name' => RenderingHelper::pageNameFromPath($this->view),
                 'page_path' => $this->view,
                 'page_title' => '@page::page_title',
                 'request_uri' => $this->request->getRequestUri(),

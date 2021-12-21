@@ -6,6 +6,7 @@ use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
+use App\Wex\BaseBundle\Service\AssetsService;
 use function explode;
 use function str_contains;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -26,11 +27,13 @@ abstract class AbstractPagesController extends AbstractController
 
     public function __construct(
         protected AdaptiveResponseService $adaptiveResponseService,
+        protected AssetsService $assetsService,
         protected Environment $twigEnvironment,
         protected RequestStack $requestStack
     ) {
         parent::__construct(
             $adaptiveResponseService,
+            $assetsService,
             $twigEnvironment
         );
 

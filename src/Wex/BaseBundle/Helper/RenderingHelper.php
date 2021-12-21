@@ -14,7 +14,7 @@ class RenderingHelper
 
     public const CONTEXT_VUE = VariableHelper::VUE;
 
-    public const VAR_RENDERING_CONTEXT = 'renderingContext';
+    public const PLACEHOLDER_PRELOAD_TAG = '<-- {{ ADAPTIVE_PRELOAD_PLACEHOLDER }} -->';
 
     public static function buildRenderContextKey(
         string $renderContextType,
@@ -24,5 +24,22 @@ class RenderingHelper
             $renderContextType,
             $renderContextName,
         ]);
+    }
+
+    public static function pageNameFromPath(string $pagePath):string {
+        // Define template name.
+        $ext = TemplateHelper::TEMPLATE_FILE_EXTENSION;
+
+        // Path have extension.
+        if (str_ends_with($pagePath, $ext))
+        {
+            return substr(
+                $pagePath,
+                0,
+                -strlen(TemplateHelper::TEMPLATE_FILE_EXTENSION)
+            );
+        }
+
+        return $pagePath;
     }
 }

@@ -9,12 +9,20 @@ class AssetsExtension extends AbstractExtension
 {
     public function __construct(
         protected AssetsService $assetsService,
-    ) {
+    )
+    {
     }
 
     public function getFunctions(): array
     {
         return [
+            new TwigFunction(
+                'assets_render_initial',
+                [
+                    $this,
+                    'assetsRenderInitial',
+                ]
+            ),
             new TwigFunction(
                 'assets_type_filtered',
                 [
@@ -32,12 +40,27 @@ class AssetsExtension extends AbstractExtension
         ];
     }
 
-    public function assetsTypeFiltered(string $contextType, string $assetType = null): array
+    public function assetsRenderInitial(string $pageName, string $type): string
     {
-        return $this->assetsService->assetsFiltered(
-            $contextType,
-            $assetType
-        );
+        return $this
+            ->assetsService
+            ->aggregateInitialAssets(
+                $pageName,
+                $type
+            );
+    }
+
+    public function assetsTypeFiltered(
+        string $contextType,
+        string $assetType = null
+    ): array
+    {
+        return $this
+            ->assetsService
+            ->assetsFiltered(
+                $contextType,
+                $assetType
+            );
     }
 
     public function assetsPreloadList(string $ext): array

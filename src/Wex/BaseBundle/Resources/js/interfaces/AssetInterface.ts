@@ -1,9 +1,10 @@
 export default interface AssetsInterface {
   // Defines that assets should be rendered
-  // event the loading process is not finished.
+  // even the loading process is not finished.
   active: boolean;
   el: HTMLElement;
   id: string;
+  initial: string;
   media: string;
   loaded: boolean;
   name: string;

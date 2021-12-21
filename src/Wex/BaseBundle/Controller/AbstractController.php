@@ -5,6 +5,7 @@ namespace App\Wex\BaseBundle\Controller;
 use App\Wex\BaseBundle\Controller\Interfaces\AdaptiveResponseControllerInterface;
 use App\Wex\BaseBundle\Controller\Traits\AdaptiveResponseControllerTrait;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
+use App\Wex\BaseBundle\Service\AssetsService;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -19,6 +20,7 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
 
     public function __construct(
         protected AdaptiveResponseService $adaptiveResponseService,
+        protected AssetsService $assetsService,
         protected Environment $twigEnvironment
     ) {
         $adaptiveResponseService->setController($this);
@@ -65,6 +67,16 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
             $view,
             $parameters,
             $response
+        );
+    }
+
+    protected function renderView(string $view, array $parameters = []): string
+    {
+        $rendered = parent::renderView($view, $parameters);
+
+        return $this->assetsService->replacePreloadPlaceholder(
+            $view,
+            $rendered
         );
     }
 }
