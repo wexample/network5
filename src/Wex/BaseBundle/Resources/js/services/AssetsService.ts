@@ -110,8 +110,14 @@ export default class AssetsService extends AppService {
   async appendAssets(assetsCollection) {
     return new Promise(async (resolveAll) => {
       let count: number = 0;
+      let assets = this.assetsInCollection(assetsCollection);
 
-      this.assetsInCollection(assetsCollection).forEach(
+      if (!assets.length) {
+        resolveAll(assets);
+        return;
+      }
+
+      assets.forEach(
         (asset) => {
           count++;
 
