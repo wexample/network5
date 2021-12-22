@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\DBAL\Types\Types;
 use function array_unique;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
@@ -18,22 +19,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[Id]
     #[GeneratedValue]
-    #[Column(type: 'integer')]
+    #[Column(type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[Column(type: 'string', length: 180, unique: true)]
+    #[Column(type: Types::STRING, length: 180, unique: true)]
     private ?string $email = null;
 
-    #[Column(type: 'json')]
+    #[Column(type: Types::JSON)]
     private array $roles = [];
 
     /**
      * The hashed password.
      */
-    #[Column(type: 'string')]
+    #[Column(type: Types::STRING)]
     private ?string $password = null;
 
-    #[Column(type: 'boolean')]
+    #[Column(type: Types::BOOLEAN)]
     private bool $isVerified = false;
 
     public function getId(): ?int
