@@ -47,6 +47,8 @@ class ComponentService extends RenderNodeService
     {
         parent::__construct($assetsService);
 
+        $adaptiveResponseService->addRenderEventListener($this);
+
         $this->componentsClasses = [];
 
         $locations = [
@@ -73,7 +75,10 @@ class ComponentService extends RenderNodeService
 
             foreach ($managers as $componentName => $managerClassName)
             {
-                $this->componentsManagers[$componentName] = new $managerClassName();
+                $this->componentsManagers[VariableHelper::PLURAL_COMPONENT . '/' .$componentName] = new $managerClassName(
+                    $kernel,
+                    $this->adaptiveResponseService
+                );
             }
         }
     }
@@ -126,7 +131,7 @@ class ComponentService extends RenderNodeService
     /**
      * @throws Exception
      */
-    public function componentRenderHtml(
+    public function componentRenderBody(
         Environment $env,
         ComponentRenderNode $component
     ): ?string
@@ -263,8 +268,8 @@ class ComponentService extends RenderNodeService
             $options
         );
 
-        $manager = $this->getComponentManager($name);
-        $manager?->createComponent($component);
+        $this->getComponentManager($name)
+            ?->createComponent($component);
 
         $this->initRenderNode(
             $component,
@@ -272,13 +277,20 @@ class ComponentService extends RenderNodeService
             $this->adaptiveResponseService->renderPass->useJs
         );
 
-        $component->options = $options;
-
-        $component->body = $this->componentRenderHtml(
+        $component->body = $this->componentRenderBody(
             $twig,
             $component
         );
 
         return $component;
+    }
+
+    public function renderEventPostRender(array &$options)
+    {
+        /** @var ComponentRenderNodeManager $componentsManager */
+        foreach ($this->componentsManagers as $componentsManager)
+        {
+            $componentsManager->postRender();
+        }
     }
 }

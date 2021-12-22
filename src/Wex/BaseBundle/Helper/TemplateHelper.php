@@ -10,13 +10,15 @@ class TemplateHelper
 
     public const BUNDLE_PATH_ALIAS_PREFIX = '@';
 
-    public const BUNDLE_PATH_RESOURCES = 'Resources/';
+    public const BUNDLE_PATH_RESOURCES = 'Resources' . FileHelper::FOLDER_SEPARATOR;
 
     public const BUNDLE_PATH_TEMPLATES = self::BUNDLE_PATH_RESOURCES.self::REL_BUNDLE_PATH_TEMPLATES;
 
-    public const REL_BUNDLE_PATH_PAGES = 'pages/';
+    public const REL_BUNDLE_PATH_PAGES = 'pages' . FileHelper::FOLDER_SEPARATOR;
 
-    public const REL_BUNDLE_PATH_TEMPLATES = 'templates/';
+    public const REL_BUNDLE_PATH_TEMPLATES = 'templates' . FileHelper::FOLDER_SEPARATOR;
+
+    public const REL_BUNDLE_PATH_RESOURCE_FONTS = 'fonts' . FileHelper::FOLDER_SEPARATOR;
 
     public static function buildTemplateInheritanceStack(
         string $relativePath,

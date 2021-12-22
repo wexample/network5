@@ -11,22 +11,29 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class AdaptiveResponseService
 {
+    public const EVENT_METHODS_PREFIX = 'renderEvent';
+    public const EVENT_NAME_POST_RENDER = 'PostRender';
+
     private ?AbstractController $controller = null;
 
     private ?AdaptiveResponse $currentResponse = null;
+
+    private array $renderEventListeners = [];
 
     public RenderPass $renderPass;
 
     public function __construct(
         private RequestStack $requestStack,
         private KernelInterface $kernel,
-    ) {
+    )
+    {
     }
 
     public function renderPrepare(
-        string $pageName,
+        string $view,
         array &$parameters = []
-    ) {
+    )
+    {
         // Response may be explicitly created in controller,
         // but if not we need at least one to detect layout base name.
         if (!$this->getResponse())
@@ -37,7 +44,7 @@ class AdaptiveResponseService
         $this->renderPass = new RenderPass(
             $this->requestStack->getMainRequest(),
             $this->getResponse(),
-            $pageName,
+            $view,
             is_null($this->requestStack->getMainRequest()->get('no_js'))
         );
 
@@ -65,7 +72,8 @@ class AdaptiveResponseService
 
     public function setController(
         AbstractController $controller
-    ): self {
+    ): self
+    {
         $this->controller = $controller;
 
         return $this;
@@ -74,5 +82,25 @@ class AdaptiveResponseService
     public function getController(): ?AbstractController
     {
         return $this->controller;
+    }
+
+    public function addRenderEventListener(object $service)
+    {
+        $this->renderEventListeners[] = $service;
+    }
+
+    public function triggerRenderEvent(string $eventName, array &$options = []): array
+    {
+        $eventName = AdaptiveResponseService::EVENT_METHODS_PREFIX.ucfirst($eventName);
+
+        foreach ($this->renderEventListeners as $service)
+        {
+            if (method_exists($service, $eventName))
+            {
+                $service->$eventName($options);
+            }
+        }
+
+        return $options;
     }
 }

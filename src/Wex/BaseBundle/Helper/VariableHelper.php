@@ -83,6 +83,8 @@ class VariableHelper
     public const PLURAL_COMPONENT = self::COMPONENT.'s';
 
     public const PLURAL_PAGE = self::PAGE.'s';
+    
+    public const PLURAL_ICON = self::ICON.'s';
 
     public const PLURAL_THEME = self::THEME.'s';
 

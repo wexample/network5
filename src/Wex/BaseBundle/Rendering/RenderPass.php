@@ -31,12 +31,16 @@ class RenderPass
         RenderingHelper::CONTEXT_VUE => [],
     ];
 
+    public string $pageName;
+
     public function __construct(
         private Request $request,
         public AdaptiveResponse $adaptiveResponse,
         public string $view,
         public bool $useJs
     ) {
+        $this->pageName = RenderingHelper::pageNameFromPath($this->view);
+
         $this->createRenderRequestId();
 
         $this->adaptiveResponse->setRenderPass($this);
@@ -67,7 +71,7 @@ class RenderPass
                 'layout_name' => null,
                 'layout_color_scheme' => ColorSchemeHelper::SCHEME_DEFAULT,
                 'layout_use_js' => $this->useJs,
-                'page_name' => RenderingHelper::pageNameFromPath($this->view),
+                'page_name' => $this->pageName,
                 'page_path' => $this->view,
                 'page_title' => '@page::page_title',
                 'request_uri' => $this->request->getRequestUri(),

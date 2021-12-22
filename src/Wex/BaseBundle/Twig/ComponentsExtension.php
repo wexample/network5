@@ -20,7 +20,8 @@ class ComponentsExtension extends AbstractExtension
         private AdaptiveResponseService $adaptiveResponseService,
         private AssetsService $assetsService,
         protected ComponentService $componentService,
-    ) {
+    )
+    {
     }
 
     public function getFunctions(): array
@@ -84,7 +85,8 @@ class ComponentsExtension extends AbstractExtension
         Environment $twig,
         string $name,
         array $options = []
-    ): string {
+    ): string
+    {
         $component = $this->componentService->componentInitPrevious(
             $twig,
             $name,
@@ -109,7 +111,9 @@ class ComponentsExtension extends AbstractExtension
         )->renderTag();
     }
 
-    public function comLoadAssets(ComponentRenderNode $component): array
+    public function comLoadAssets(
+        ComponentRenderNode $component
+    ): array
     {
         return $this
             ->assetsService
@@ -129,7 +133,8 @@ class ComponentsExtension extends AbstractExtension
         Environment $twig,
         string $name,
         array $options = []
-    ): string {
+    ): string
+    {
         return $this
             ->componentService
             ->componentInitClass(
@@ -159,7 +164,8 @@ class ComponentsExtension extends AbstractExtension
     public function componentRenderTagAttributes(
         array $context,
         array $defaults = []
-    ): string {
+    ): string
+    {
         $class = trim(($defaults[VariableHelper::CLASS_VAR] ?? '').' '.($context[VariableHelper::CLASS_VAR] ?? ''));
 
         $attributes = array_merge([

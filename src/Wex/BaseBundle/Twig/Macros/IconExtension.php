@@ -7,6 +7,7 @@ use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Twig\AbstractExtension;
 use App\Wex\BaseBundle\Twig\ComponentsExtension;
+use Exception;
 use function explode;
 use function file_get_contents;
 use function json_decode;
@@ -37,28 +38,48 @@ class IconExtension extends AbstractExtension
 
     private string $pathSvgFa;
 
-    private array $iconsTemplates;
-
     public function __construct(
         KernelInterface $kernel,
         protected ComponentsExtension $componentsExtension
-    ) {
+    )
+    {
         $pathBundle = $kernel
             ->getBundle('WexBaseBundle')
             ->getPath();
 
-        $this->pathSvgFa = $pathBundle.'/Resources/fonts/fontawesome/svgs/regular/';
+        $this->pathSvgFa = $pathBundle.'/Resources/fonts/fontawesome/svgs/';
 
         $this->icons = (object) [
-            self::ICONS_LIBRARY_FA => json_decode(
-                file_get_contents($pathBundle.'/Resources/json/icons-fa.json')
-            ),
+            self::ICONS_LIBRARY_FA => $this->buildIconsListFa(),
             self::ICONS_LIBRARY_MATERIAL => json_decode(
                 file_get_contents(
                     $pathBundle.'/Resources/json/icons-material.json'
                 )
             ),
         ];
+    }
+
+    public function buildIconsListFa(): array
+    {
+        $groups = scandir($this->pathSvgFa);
+        $output = [];
+
+        foreach ($groups as $group)
+        {
+            if ($group[0] !== '.')
+            {
+                $icons = scandir($this->pathSvgFa.FileHelper::FOLDER_SEPARATOR.$group);
+                foreach ($icons as $icon)
+                {
+                    if ($icon[0] !== '.')
+                    {
+                        $output[$group][FileHelper::removeExtension(basename($icon))] = true;
+                    }
+                }
+            }
+        }
+
+        return $output;
     }
 
     public function getFunctions(): array
@@ -78,12 +99,16 @@ class IconExtension extends AbstractExtension
         ];
     }
 
+    /**
+     * @throws Exception
+     */
     public function icon(
         Environment $twig,
         string $name,
         string $class = '',
         string $tagName = 'i'
-    ): string {
+    ): string
+    {
         $type = null;
 
         if (str_contains($name, self::LIBRARY_SEPARATOR))
@@ -107,25 +132,13 @@ class IconExtension extends AbstractExtension
         // Font Awesome.
         if (self::ICONS_LIBRARY_FA === $type || (null === $type && isset($this->icons->fa->$name)))
         {
-            if (!isset($this->iconsTemplates[$name]))
-            {
-                $this->iconsTemplates[$name] = file_get_contents(
-                    $this->pathSvgFa.$name.'.'.FileHelper::FILE_EXTENSION_SVG
-                );
-            }
-
-            return DomHelper::buildTag(
-                $tagName,
+            return $this->componentsExtension->component(
+                $twig,
+                VariableHelper::PLURAL_COMPONENT . '/' . VariableHelper::ICON,
                 [
-                    VariableHelper::CLASS_VAR => $class,
-                ],
-                $this->componentsExtension->componentInitParent(
-                    $twig,
-                    VariableHelper::ICON,
-                    [
-                        'name' => $name,
-                    ]
-                )
+                    'name' => $name,
+                    'group' => $this->findFaIconGroup($name),
+                ]
             );
         }
 
@@ -133,5 +146,18 @@ class IconExtension extends AbstractExtension
         return DomHelper::buildTag($tagName, [
             VariableHelper::CLASS_VAR => $class,
         ]);
+    }
+
+    private function findFaIconGroup(string $name): ?string
+    {
+        foreach ($this->icons->fa as $group => $icons)
+        {
+            if (isset($icons[$name]))
+            {
+                return $group;
+            }
+        }
+
+        return null;
     }
 }

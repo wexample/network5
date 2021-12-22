@@ -74,9 +74,16 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
     {
         $rendered = parent::renderView($view, $parameters);
 
-        return $this->assetsService->replacePreloadPlaceholder(
-            $view,
-            $rendered
+        $options = [
+            'view' => $view,
+            'rendered' => $rendered
+        ];
+
+        $this->adaptiveResponseService->triggerRenderEvent(
+            AdaptiveResponseService::EVENT_NAME_POST_RENDER,
+            $options
         );
+
+        return $options['rendered'];
     }
 }

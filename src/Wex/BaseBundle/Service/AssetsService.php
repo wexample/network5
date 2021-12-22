@@ -73,6 +73,10 @@ class AssetsService
             ),
             JSON_OBJECT_AS_ARRAY
         );
+
+        $this->adaptiveResponseService->addRenderEventListener(
+            $this
+        );
     }
 
     public function replacePreloadPlaceholder(string $view, string $rendered): string
@@ -100,7 +104,7 @@ class AssetsService
 
     protected function buildAggregatedPathFromPageName(string $pageName, string $type): string
     {
-        return self::DIR_BUILD.$type.'/'.$pageName.'.agg.'.$type;
+        return self::DIR_BUILD.$type.'/'.$pageName.'.'.FileHelper::SUFFIX_AGGREGATED.'.'.$type;
     }
 
     #[Pure]
@@ -128,12 +132,10 @@ class AssetsService
             }
         }
 
-        file_put_contents(
+        $this->aggregationHash[$type.'-'.$pageName] = FileHelper::fileWriteAndHash(
             $this->pathPublic.$aggregatedFileName,
             $output
         );
-
-        $this->aggregationHash[$type.'-'.$pageName] = md5($output);
 
         return $this->buildAggregatedPublicPath(
             $pageName,
@@ -338,5 +340,13 @@ class AssetsService
         }
 
         return $assets;
+    }
+
+    public function renderEventPostRender(array &$options)
+    {
+        $options['rendered'] = $this->replacePreloadPlaceholder(
+            $options['view'],
+            $options['rendered']
+        );
     }
 }

@@ -22,16 +22,41 @@ class FileHelper
 
     public const FILE_EXTENSION_SVG = 'svg';
 
+    public const SUFFIX_AGGREGATED = 'agg';
+
     public static function joinPathParts(array $parts): string
     {
         return implode(
-            FileHelper::FOLDER_SEPARATOR,
-            $parts
-        ).FileHelper::FILE_EXTENSION_PHP;
+                FileHelper::FOLDER_SEPARATOR,
+                $parts
+            ).FileHelper::FILE_EXTENSION_PHP;
     }
 
-    public static function removeExtension(string $path, string $extension): string
+    public static function removeExtension(string $path, string $extension = null): string
     {
+        if (is_null($extension))
+        {
+            $extension = pathinfo($path)['extension'];
+        }
         return substr($path, 0, -(strlen($extension) + 1));
+    }
+
+    public static function fileWrite(string $fileName, string $content)
+    {
+        $dir = dirname($fileName);
+
+        if (!is_dir($dir))
+        {
+            mkdir($dir, 0777, true);
+        }
+
+        file_put_contents($fileName, $content);
+    }
+
+    public static function fileWriteAndHash(string $fileName, string $content): string
+    {
+        self::fileWrite($fileName, $content);
+
+        return md5($content);
     }
 }
