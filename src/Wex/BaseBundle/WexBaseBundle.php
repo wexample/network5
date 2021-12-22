@@ -15,5 +15,5 @@ class WexBaseBundle extends Bundle
 
     public const WEX_BUNDLE_PATH_TEMPLATES = self::WEX_BUNDLE_PATH_ALIAS.Helper\TemplateHelper::BUNDLE_PATH_RESOURCES.'templates/';
 
-    public const WEX_BUNDLE_PATH_BASE = ClassHelper::PROJECT_PATH_SRC . 'Wex/BaseBundle/';
+    public const WEX_BUNDLE_PATH_BASE = ClassHelper::PROJECT_PATH_SRC.'Wex/BaseBundle/';
 }

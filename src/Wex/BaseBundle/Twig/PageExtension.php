@@ -2,12 +2,8 @@
 
 namespace App\Wex\BaseBundle\Twig;
 
-use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use App\Wex\BaseBundle\Service\PageService;
-use function str_ends_with;
-use function strlen;
-use function substr;
 use Twig\TwigFunction;
 
 class PageExtension extends AbstractExtension

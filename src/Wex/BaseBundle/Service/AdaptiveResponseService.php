@@ -25,15 +25,13 @@ class AdaptiveResponseService
     public function __construct(
         private RequestStack $requestStack,
         private KernelInterface $kernel,
-    )
-    {
+    ) {
     }
 
     public function renderPrepare(
         string $view,
         array &$parameters = []
-    )
-    {
+    ) {
         // Response may be explicitly created in controller,
         // but if not we need at least one to detect layout base name.
         if (!$this->getResponse())
@@ -72,8 +70,7 @@ class AdaptiveResponseService
 
     public function setController(
         AbstractController $controller
-    ): self
-    {
+    ): self {
         $this->controller = $controller;
 
         return $this;

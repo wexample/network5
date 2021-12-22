@@ -87,8 +87,7 @@ class ClassHelper
         string $path,
         string $classPathPrefix = '',
         string $classPathSuffix = ''
-    ): string
-    {
+    ): string {
         $pathParts = explode(
             FileHelper::FOLDER_SEPARATOR,
             rtrim(
@@ -103,9 +102,9 @@ class ClassHelper
         }
 
         return $classPathPrefix.implode(
-                ClassHelper::NAMESPACE_SEPARATOR,
-                $pathParts
-            )
+            ClassHelper::NAMESPACE_SEPARATOR,
+            $pathParts
+        )
             .$classPathSuffix;
     }
 }

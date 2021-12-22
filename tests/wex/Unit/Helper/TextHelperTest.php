@@ -1,7 +1,6 @@
 <?php
 
 use App\Tests\NetworkTestCase;
-use App\Tests\Unit\Helper;
 use App\Wex\BaseBundle\Helper\TextHelper;
 
 class TextHelperTest extends NetworkTestCase

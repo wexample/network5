@@ -11,11 +11,9 @@ use function basename;
 use function class_exists;
 use function explode;
 use function file_exists;
-use function implode;
 use function is_dir;
 use function is_file;
 use function method_exists;
-use function rtrim;
 use function scandir;
 use SplFileInfo;
 use function str_ends_with;
@@ -58,9 +56,9 @@ trait ControllerTestCaseTrait
                     $fileNameWithoutExt,
                     'Controller'
                 ) && !str_starts_with(
-                        $fileNameWithoutExt,
-                        'Abstract'
-                    ))
+                    $fileNameWithoutExt,
+                    'Abstract'
+                ))
                 {
                     $relDir = substr(
                         $srcSubDir,

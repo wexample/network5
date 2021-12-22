@@ -43,8 +43,7 @@ class ComponentService extends RenderNodeService
         protected AssetsService $assetsService,
         KernelInterface $kernel,
         protected Translator $translator
-    )
-    {
+    ) {
         parent::__construct($assetsService);
 
         $adaptiveResponseService->addRenderEventListener($this);
@@ -75,7 +74,7 @@ class ComponentService extends RenderNodeService
 
             foreach ($managers as $componentName => $managerClassName)
             {
-                $this->componentsManagers[VariableHelper::PLURAL_COMPONENT . '/' .$componentName] = new $managerClassName(
+                $this->componentsManagers[VariableHelper::PLURAL_COMPONENT.'/'.$componentName] = new $managerClassName(
                     $kernel,
                     $this->adaptiveResponseService
                 );
@@ -88,8 +87,7 @@ class ComponentService extends RenderNodeService
         string $classPrefix,
         string $classesSubDir,
         string $unwantedSuffix = '',
-    ): array
-    {
+    ): array {
         $output = [];
         $componentDir = $location.$classesSubDir;
 
@@ -106,14 +104,16 @@ class ComponentService extends RenderNodeService
                     if (is_file($componentClassRealPath))
                     {
                         $componentClass = FileHelper::removeExtension(
-                            $componentClass, FileHelper::FILE_EXTENSION_PHP
+                            $componentClass,
+                            FileHelper::FILE_EXTENSION_PHP
                         );
 
                         $output[TextHelper::toKebab(substr($componentClass, 0, -strlen($unwantedSuffix)))] =
                             $classPrefix.ClassHelper::buildClassNameFromPath(
                                 $classesSubDir.'/'.$componentClass
                             );
-                    } else
+                    }
+                    else
                     {
                         $output += $this->findComponentClassesInDir(
                             $location,
@@ -134,8 +134,7 @@ class ComponentService extends RenderNodeService
     public function componentRenderBody(
         Environment $env,
         ComponentRenderNode $component
-    ): ?string
-    {
+    ): ?string {
         $loader = $env->getLoader();
         $search = TemplateHelper::buildTemplateInheritanceStack(
             $component->name
@@ -155,7 +154,8 @@ class ComponentService extends RenderNodeService
             }
 
             return null;
-        } catch (Exception $exception)
+        }
+        catch (Exception $exception)
         {
             throw new Exception('Error during rendering component '.$component->name.' : '.$exception->getMessage(), $exception->getCode(), $exception);
         }
@@ -170,8 +170,7 @@ class ComponentService extends RenderNodeService
         Environment $twig,
         string $name,
         array $options = []
-    ): ComponentRenderNode
-    {
+    ): ComponentRenderNode {
         return $this->registerComponent(
             $twig,
             $name,
@@ -187,8 +186,7 @@ class ComponentService extends RenderNodeService
         Environment $twig,
         string $name,
         array $options = []
-    ): ComponentRenderNode
-    {
+    ): ComponentRenderNode {
         $component = $this->registerComponent(
             $twig,
             $name,
@@ -211,8 +209,7 @@ class ComponentService extends RenderNodeService
         Environment $twig,
         string $name,
         array $options = []
-    ): ComponentRenderNode
-    {
+    ): ComponentRenderNode {
         return $this->registerComponent(
             $twig,
             $name,
@@ -228,8 +225,7 @@ class ComponentService extends RenderNodeService
         Environment $twig,
         string $name,
         array $options = []
-    ): ComponentRenderNode
-    {
+    ): ComponentRenderNode {
         return $this->registerComponent(
             $twig,
             $name,
@@ -256,8 +252,7 @@ class ComponentService extends RenderNodeService
         string $name,
         string $initMode,
         array $options = [],
-    ): ComponentRenderNode
-    {
+    ): ComponentRenderNode {
         $className = $this->findComponentClassName($name);
 
         // Using an object allow continuing edit properties after save.

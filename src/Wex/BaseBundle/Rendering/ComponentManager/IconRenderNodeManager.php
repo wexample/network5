@@ -16,11 +16,11 @@ class IconRenderNodeManager extends ComponentRenderNodeManager
 {
     private array $icons = [];
 
-    const DIR_FONTAWESOME_SVG = 'fontawesome'.FileHelper::FOLDER_SEPARATOR.'svgs'.FileHelper::FOLDER_SEPARATOR;
+    public const DIR_FONTAWESOME_SVG = 'fontawesome'.FileHelper::FOLDER_SEPARATOR.'svgs'.FileHelper::FOLDER_SEPARATOR;
 
-    const DIR_BUILD_ICONS = 'icons'.FileHelper::FOLDER_SEPARATOR;
+    public const DIR_BUILD_ICONS = 'icons'.FileHelper::FOLDER_SEPARATOR;
 
-    const REL_PATH_LIB_FONTAWESOME_SVG = FileHelper::FOLDER_SEPARATOR
+    public const REL_PATH_LIB_FONTAWESOME_SVG = FileHelper::FOLDER_SEPARATOR
     .WexBaseBundle::WEX_BUNDLE_PATH_BASE
     .TemplateHelper::BUNDLE_PATH_RESOURCES
     .TemplateHelper::REL_BUNDLE_PATH_RESOURCE_FONTS
@@ -56,7 +56,8 @@ class IconRenderNodeManager extends ComponentRenderNodeManager
                 try
                 {
                     $xml = new SimpleXMLElement($svg);
-                } catch (Exception $e)
+                }
+                catch (Exception $e)
                 {
                     $xml = null;
                 }
@@ -66,7 +67,8 @@ class IconRenderNodeManager extends ComponentRenderNodeManager
                     $pathXml = $xml->children();
 
                     $pathXml->addAttribute('fill', 'currentColor');
-                    $pathXml->addAttribute('transform',
+                    $pathXml->addAttribute(
+                        'transform',
                         'translate('
                         .$this->translationX.',0)'
                     );
@@ -79,10 +81,11 @@ class IconRenderNodeManager extends ComponentRenderNodeManager
                     $componentRenderNode->options += [
                         'width' => $width,
                         'height' => $this->iconHeight,
-                        'path' => FileHelper::FOLDER_SEPARATOR.$this->buildPublicPath().'#'.$key
+                        'path' => FileHelper::FOLDER_SEPARATOR.$this->buildPublicPath().'#'.$key,
                     ];
                 }
-            } else
+            }
+            else
             {
                 throw new \Exception('Icon not found : '.$key);
             }

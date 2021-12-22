@@ -41,8 +41,7 @@ class IconExtension extends AbstractExtension
     public function __construct(
         KernelInterface $kernel,
         protected ComponentsExtension $componentsExtension
-    )
-    {
+    ) {
         $pathBundle = $kernel
             ->getBundle('WexBaseBundle')
             ->getPath();
@@ -107,8 +106,7 @@ class IconExtension extends AbstractExtension
         string $name,
         string $class = '',
         string $tagName = 'i'
-    ): string
-    {
+    ): string {
         $type = null;
 
         if (str_contains($name, self::LIBRARY_SEPARATOR))
@@ -134,7 +132,7 @@ class IconExtension extends AbstractExtension
         {
             return $this->componentsExtension->component(
                 $twig,
-                VariableHelper::PLURAL_COMPONENT . '/' . VariableHelper::ICON,
+                VariableHelper::PLURAL_COMPONENT.'/'.VariableHelper::ICON,
                 [
                     'name' => $name,
                     'group' => $this->findFaIconGroup($name),

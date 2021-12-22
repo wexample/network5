@@ -6,5 +6,4 @@ use App\Wex\BaseBundle\Rendering\RenderNode\ComponentRenderNode;
 
 class Icon extends ComponentRenderNode
 {
-
 }

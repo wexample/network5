@@ -1,9 +1,9 @@
 <script>
 import ExplorerItem from './explorer-item';
-import { faCube } from "@fortawesome/free-solid-svg-icons/faCube.js";
-import { faColumns } from "@fortawesome/free-solid-svg-icons/faColumns.js";
-import { faFile } from "@fortawesome/free-solid-svg-icons/faFile.js";
-import { faVuejs } from "@fortawesome/free-brands-svg-icons/faVuejs.js";
+import { faCube } from '@fortawesome/free-solid-svg-icons/faCube.js';
+import { faColumns } from '@fortawesome/free-solid-svg-icons/faColumns.js';
+import { faFile } from '@fortawesome/free-solid-svg-icons/faFile.js';
+import { faVuejs } from '@fortawesome/free-brands-svg-icons/faVuejs.js';
 
 export default {
   extends: ExplorerItem,

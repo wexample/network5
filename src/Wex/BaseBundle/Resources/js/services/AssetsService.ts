@@ -44,13 +44,13 @@ export default class AssetsService extends AppService {
       // Mark all initially rendered assets in layout as loaded.
       await this.app.layout.forEachRenderNode(
         async (renderNode: RenderNode) => {
-          this.assetsInCollection(renderNode.renderData.assets)
-            .forEach((asset) => {
-                if (asset.rendered) {
-                  this.setAssetLoaded(asset);
-                }
+          this.assetsInCollection(renderNode.renderData.assets).forEach(
+            (asset) => {
+              if (asset.rendered) {
+                this.setAssetLoaded(asset);
               }
-            )
+            }
+          );
         }
       );
     });
@@ -117,30 +117,26 @@ export default class AssetsService extends AppService {
         return;
       }
 
-      assets.forEach(
-        (asset) => {
-          count++;
+      assets.forEach((asset) => {
+        count++;
 
-          new Promise(async (resolve) => {
-            this.appendAsset(asset)
-              .then((asset) => {
+        new Promise(async (resolve) => {
+          this.appendAsset(asset).then((asset) => {
+            count--;
+            resolve(asset);
 
-                count--;
-                resolve(asset);
-
-                if (count === 0) {
-                  resolveAll(assetsCollection);
-                }
-              })
+            if (count === 0) {
+              resolveAll(assetsCollection);
+            }
           });
-        }
-      );
+        });
+      });
     });
   }
 
   removeAssets(assetsCollection) {
-    this.assetsInCollection(assetsCollection).forEach(
-      (asset) => this.removeAsset(asset)
+    this.assetsInCollection(assetsCollection).forEach((asset) =>
+      this.removeAsset(asset)
     );
   }
 
@@ -232,32 +228,32 @@ export default class AssetsService extends AppService {
     let hasChange = false;
     let assetsRegistry = this.assetsRegistry;
 
-    this.assetsInCollection(assetsCollection)
-      .forEach((asset: AssetInterface) => {
-          let type = asset.type;
+    this.assetsInCollection(assetsCollection).forEach(
+      (asset: AssetInterface) => {
+        let type = asset.type;
 
-          // Asset object may come from a fresh xhr load,
-          // and represent an existing but locally updated version.
-          // We always prefer local version.
-          if (assetsRegistry[type][asset.id]) {
-            asset = assetsRegistry[type][asset.id];
-          } else {
-            assetsRegistry[type][asset.id] = asset;
+        // Asset object may come from a fresh xhr load,
+        // and represent an existing but locally updated version.
+        // We always prefer local version.
+        if (assetsRegistry[type][asset.id]) {
+          asset = assetsRegistry[type][asset.id];
+        } else {
+          assetsRegistry[type][asset.id] = asset;
+        }
+
+        if (this.askFilterIfAssetIsValid(asset)) {
+          if (!asset.active) {
+            hasChange = true;
+            toLoad[type].push(asset);
           }
-
-          if (this.askFilterIfAssetIsValid(asset)) {
-            if (!asset.active) {
-              hasChange = true;
-              toLoad[type].push(asset);
-            }
-          } else {
-            if (asset.active) {
-              hasChange = true;
-              toUnload[type].push(asset);
-            }
+        } else {
+          if (asset.active) {
+            hasChange = true;
+            toUnload[type].push(asset);
           }
         }
-      );
+      }
+    );
 
     if (hasChange) {
       // Load new assets.

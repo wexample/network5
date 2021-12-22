@@ -12,7 +12,6 @@ abstract class ComponentRenderNodeManager
         protected KernelInterface $kernel,
         protected AdaptiveResponseService $adaptiveResponseService,
     ) {
-
     }
 
     public function createComponent(ComponentRenderNode $componentRenderNode)

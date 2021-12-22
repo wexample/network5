@@ -76,7 +76,7 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
 
         $options = [
             'view' => $view,
-            'rendered' => $rendered
+            'rendered' => $rendered,
         ];
 
         $this->adaptiveResponseService->triggerRenderEvent(

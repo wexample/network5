@@ -9,8 +9,7 @@ class AssetsExtension extends AbstractExtension
 {
     public function __construct(
         protected AssetsService $assetsService,
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array
@@ -53,8 +52,7 @@ class AssetsExtension extends AbstractExtension
     public function assetsTypeFiltered(
         string $contextType,
         string $assetType = null
-    ): array
-    {
+    ): array {
         return $this
             ->assetsService
             ->assetsFiltered(

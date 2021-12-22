@@ -27,9 +27,9 @@ class FileHelper
     public static function joinPathParts(array $parts): string
     {
         return implode(
-                FileHelper::FOLDER_SEPARATOR,
-                $parts
-            ).FileHelper::FILE_EXTENSION_PHP;
+            FileHelper::FOLDER_SEPARATOR,
+            $parts
+        ).FileHelper::FILE_EXTENSION_PHP;
     }
 
     public static function removeExtension(string $path, string $extension = null): string
@@ -38,6 +38,7 @@ class FileHelper
         {
             $extension = pathinfo($path)['extension'];
         }
+
         return substr($path, 0, -(strlen($extension) + 1));
     }
 

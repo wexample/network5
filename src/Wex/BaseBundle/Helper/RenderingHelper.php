@@ -26,7 +26,8 @@ class RenderingHelper
         ]);
     }
 
-    public static function pageNameFromPath(string $pagePath):string {
+    public static function pageNameFromPath(string $pagePath): string
+    {
         // Define template name.
         $ext = TemplateHelper::TEMPLATE_FILE_EXTENSION;
 

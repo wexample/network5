@@ -81,8 +81,7 @@ class Asset extends RenderDataGenerator
         string $path,
         public RenderNode $renderData,
         string $basePath
-    )
-    {
+    ) {
         $this->filesize = filesize($path);
         $info = pathinfo($path);
         if (!isset($info['extension']))
@@ -93,9 +92,9 @@ class Asset extends RenderDataGenerator
         $this->type = $info['extension'];
 
         $this->path = '/'.PathHelper::relativeTo(
-                $path,
-                $basePath
-            );
+            $path,
+            $basePath
+        );
 
         // Remove the base part before build/{type}/ folder.
         $pathWithoutExt = dirname($this->path).'/'.$info['filename'];
