@@ -17,12 +17,16 @@ export default class ResponsiveService extends AppService {
   registerHooks() {
     return {
       app: {
-        async loadRenderData() {
+        init() {
           let responsiveService = this.services.responsive;
 
           this.services.assets.updateFilters.push(
             responsiveService.assetUpdateFilter.bind(responsiveService)
           );
+        },
+
+        async loadRenderData() {
+          let responsiveService = this.services.responsive;
 
           window.addEventListener(
             Events.RESIZE,
@@ -101,7 +105,7 @@ export default class ResponsiveService extends AppService {
       asset.responsive !== null &&
       asset.responsive !== this.responsiveSizeCurrent
     ) {
-      return 'reject';
+      return AssetsService.UPDATE_FILTER_REJECT;
     }
   }
 }
