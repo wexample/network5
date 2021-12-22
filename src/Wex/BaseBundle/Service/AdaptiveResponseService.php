@@ -12,6 +12,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class AdaptiveResponseService
 {
     public const EVENT_METHODS_PREFIX = 'renderEvent';
+
     public const EVENT_NAME_POST_RENDER = 'PostRender';
 
     private ?AbstractController $controller = null;

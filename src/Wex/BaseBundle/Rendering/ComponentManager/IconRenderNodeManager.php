@@ -38,7 +38,6 @@ class IconRenderNodeManager extends ComponentRenderNodeManager
     public function createComponent(ComponentRenderNode $componentRenderNode)
     {
         $key = $componentRenderNode->options['group'].'-'.$componentRenderNode->options['name'];
-        $html = '';
 
         // Avoid duplicates.
         if (!isset($this->icons[$key]))
@@ -57,7 +56,7 @@ class IconRenderNodeManager extends ComponentRenderNodeManager
                 {
                     $xml = new SimpleXMLElement($svg);
                 }
-                catch (Exception $e)
+                catch (Exception)
                 {
                     $xml = null;
                 }
