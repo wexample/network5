@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Wex\BaseBundle\Entity\Interfaces\LinkedToAnyEntityInterface;
 use App\Wex\BaseBundle\Entity\Traits\LinkedToAnyEntity;
 use Doctrine\ORM\Mapping\Column;
@@ -20,32 +18,21 @@ use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\Table;
 use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
 use Rector\Core\Configuration\Option;
+use Rector\Core\DependencyInjection\Loader\Configurator\RectorServiceConfigurator;
 use Rector\Core\ValueObject\PhpVersion;
-use Rector\Doctrine\Rector\Class_\InitializeDefaultEntityCollectionRector;
-use Rector\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector;
-use Rector\Doctrine\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector;
-use Rector\Doctrine\Rector\Class_\RemoveRedundantDefaultClassAnnotationValuesRector;
-use Rector\Doctrine\Rector\ClassMethod\MakeEntitySetterNullabilityInSyncWithPropertyRector;
-use Rector\Doctrine\Rector\Property\ChangeBigIntEntityPropertyToIntTypeRector;
-use Rector\Doctrine\Rector\Property\MakeEntityDateTimePropertyDateTimeInterfaceRector;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
-use Rector\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector;
-use Rector\Privatization\ValueObject\ReplaceStringWithClassConstant;
 use Rector\Symfony\Set\SwiftmailerSetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\Set\TwigSetList;
-use Rector\Transform\Rector\Class_\AddInterfaceByTraitRector;
-use Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
-use Rector\Transform\ValueObject\ServiceGetterToConstructorInjection;
+use RectorPrefix20211213\Symplify\SymfonyPhpConfig\ValueObjectInliner;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator;
 use Symfony\Component\Routing\Annotation\Route;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     // Using this script in the wiki page : https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#php70
@@ -366,9 +353,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // MakeInheritedMethodVisibilitySameAsParentRector
         // Make method visibility same as parent one
         Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector::class,
-        // ManualJsonStringToJsonEncodeArrayRector
-        // Convert manual JSON string to JSON::encode array
-        Rector\CodingStyle\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector::class,
         // NewlineAfterStatementRector
         // Add new line after statements to tidify code
         Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector::class,
@@ -392,15 +376,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // Changes $this->... and static:: to self:: or vise versa for given types
         //  configure it!
         // Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector::class,
-        // PreslashSimpleFunctionRector
-        // Add pre-slash to short named functions to improve performance
-        Rector\CodingStyle\Rector\FuncCall\PreslashSimpleFunctionRector::class,
         // RemoveDoubleUnderscoreInMethodNameRector
         // Non-magic PHP object methods cannot start with "__"
         Rector\CodingStyle\Rector\ClassMethod\RemoveDoubleUnderscoreInMethodNameRector::class,
-        // RemoveUnusedAliasRector
-        // Removes unused use aliases. Keep annotation aliases like "Doctrine\ORM\Mapping as ORM" to keep convention format
-        Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector::class,
         // ReturnArrayClassMethodToYieldRector
         // Turns array return to yield return in specific type and method
         //  configure it!
@@ -414,9 +392,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // SplitGroupedConstantsAndPropertiesRector
         // Separate constant and properties to own lines
         Rector\CodingStyle\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector::class,
-        // SplitStringClassConstantToClassConstFetchRector
-        // Separate class constant in a string to class constant fetch and string
-        Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector::class,
         // StrictArraySearchRector
         // Makes array_search search for identical elements
         Rector\CodingStyle\Rector\FuncCall\StrictArraySearchRector::class,
@@ -488,9 +463,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // Remove annotation by names
         //  configure it!
         // Rector\DeadCode\Rector\ClassLike\RemoveAnnotationRector::class,
-        // RemoveAssignOfVoidReturnFunctionRector
-        // Remove assign of void function/method to variable
-        Rector\DeadCode\Rector\Assign\RemoveAssignOfVoidReturnFunctionRector::class,
         // RemoveCodeAfterReturnRector
         // Remove dead code after return statement
         Rector\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector::class,
@@ -665,9 +637,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // Add method parent call, in case new parent method is added
         //  configure it!
         // Rector\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector::class,
-        // ReplaceVariableByPropertyFetchRector
-        // Turns variable in controller action to property fetch, as follow up to action injection variable to property change.
-        Rector\DependencyInjection\Rector\Variable\ReplaceVariableByPropertyFetchRector::class,
 
         // DowngradePhp53
         // DirConstToFileConstRector
@@ -1530,13 +1499,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // AddInterfaceByTraitRector
         // Add interface by used trait
         //  configure it!
-        Rector\Transform\Rector\Class_\AddInterfaceByTraitRector::class => function ($configurator) {
-            /* @var ServiceConfigurator $configurator */
-            $configurator->call('configure', [[
-                AddInterfaceByTraitRector::INTERFACE_BY_TRAIT => [
-                    LinkedToAnyEntity::class => LinkedToAnyEntityInterface::class,
-                ], ]]);
-        },
+        Rector\Transform\Rector\Class_\AddInterfaceByTraitRector::class => [
+            LinkedToAnyEntity::class => LinkedToAnyEntityInterface::class,
+        ],
         // ArgumentFuncCallToMethodCallRector
         // Move help facade-like function calls to constructor injection
         //  configure it!
@@ -1780,13 +1745,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         }
 
         // Move entities (ORM) to Entity namespace (folder).
+        /** @var RectorServiceConfigurator $configurator */
         $configurator = $services->set(
             $rule
         );
 
-        if ($configuration)
+        // Old style.
+        if (is_callable($configuration))
         {
             $configuration($configurator);
+        }
+        // New style.
+        elseif ($configuration) {
+            $configurator->configure($configuration);
         }
     }
 
@@ -1805,20 +1776,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(SwiftmailerSetList::SWIFTMAILER_60);
 
     // Doctrine
-    // Customize $containerConfigurator->import(Rector\Doctrine\Set\DoctrineSetList::DOCTRINE_CODE_QUALITY);
-    $services->set(ManagerRegistryGetManagerToEntityManagerRector::class);
-    $services->set(InitializeDefaultEntityCollectionRector::class);
-    $services->set(MakeEntitySetterNullabilityInSyncWithPropertyRector::class);
-    $services->set(MakeEntityDateTimePropertyDateTimeInterfaceRector::class);
-    $services->set(MoveCurrentDateTimeDefaultInEntityToConstructorRector::class);
-    // Remove to avoid issues, @see https://github.com/rectorphp/rector-doctrine/issues/34
-    // $services->set(\Rector\Doctrine\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector::class);
-    $services->set(ChangeBigIntEntityPropertyToIntTypeRector::class);
-    // This rule is messing up variables typing.
-    // $services->set(\Rector\Doctrine\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector::class);
-    // Remove to avoid issues, @see https://github.com/rectorphp/rector-doctrine/issues/34
-    // $services->set(\Rector\Doctrine\Rector\Property\RemoveRedundantDefaultPropertyAnnotationValuesRector::class);
-    $services->set(RemoveRedundantDefaultClassAnnotationValuesRector::class);
-    $services->set(ReplaceStringWithClassConstantRector::class)->call('configure', [[ReplaceStringWithClassConstantRector::REPLACE_STRING_WITH_CLASS_CONSTANT => ValueObjectInliner::inline([new ReplaceStringWithClassConstant('Doctrine\\ORM\\QueryBuilder', 'orderBy', 1, 'Doctrine\\Common\\Collections\\Criteria'), new ReplaceStringWithClassConstant('Doctrine\\ORM\\QueryBuilder', 'addOrderBy', 1, 'Doctrine\\Common\\Collections\\Criteria')])]]);
-    $services->set(ServiceGetterToConstructorInjectionRector::class)->call('configure', [[ServiceGetterToConstructorInjectionRector::METHOD_CALL_TO_SERVICES => ValueObjectInliner::inline([new ServiceGetterToConstructorInjection('Doctrine\\Common\\Persistence\\ManagerRegistry', 'getConnection', 'Doctrine\\DBAL\\Connection'), new ServiceGetterToConstructorInjection('Doctrine\\ORM\\EntityManagerInterface', 'getConfiguration', 'Doctrine\\ORM\\Configuration')])]]);
+    $containerConfigurator->import(Rector\Doctrine\Set\DoctrineSetList::DOCTRINE_CODE_QUALITY);
 };
