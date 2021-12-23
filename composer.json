@@ -7,11 +7,13 @@
         "php": "^8.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-simplexml": "*",
         "composer/package-versions-deprecated": "1.11.99.4",
         "doctrine/annotations": "^1.13",
         "doctrine/doctrine-bundle": "^2.4",
         "doctrine/doctrine-migrations-bundle": "^3.1.1",
         "doctrine/orm": "^2.10",
+        "friendsofsymfony/jsrouting-bundle": "^3.0",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^6.2.0",
         "symfony/asset": "6.0.*",
@@ -45,8 +47,7 @@
         "symfony/yaml": "6.0.*",
         "symfonycasts/verify-email-bundle": "^1.5",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0",
-        "ext-simplexml": "*"
+        "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.1",
