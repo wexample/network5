@@ -79,19 +79,23 @@ class AssetsService
         );
     }
 
-    public function replacePreloadPlaceholder(string $view, string $rendered): string
+    public function replacePreloadPlaceholder(string $rendered): string
     {
-        $html = '';
-        $pageName = RenderingHelper::pageNameFromPath($view);
+        if (str_contains($rendered, RenderingHelper::PLACEHOLDER_PRELOAD_TAG))
+        {
+            $pageName = $this->adaptiveResponseService->renderPass->pageName;
 
-        $html .= $this->renderPreloadLink($pageName, Asset::EXTENSION_CSS);
-        $html .= $this->renderPreloadLink($pageName, Asset::EXTENSION_JS);
+            $html = $this->renderPreloadLink($pageName, Asset::EXTENSION_CSS);
+            $html .= $this->renderPreloadLink($pageName, Asset::EXTENSION_JS);
 
-        return str_replace(
-            RenderingHelper::PLACEHOLDER_PRELOAD_TAG,
-            $html,
-            $rendered
-        );
+            return str_replace(
+                RenderingHelper::PLACEHOLDER_PRELOAD_TAG,
+                $html,
+                $rendered
+            );
+        }
+
+        return $rendered;
     }
 
     #[Pure]
@@ -340,7 +344,6 @@ class AssetsService
     public function renderEventPostRender(array &$options)
     {
         $options['rendered'] = $this->replacePreloadPlaceholder(
-            $options['view'],
             $options['rendered']
         );
     }
