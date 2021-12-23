@@ -32,8 +32,6 @@ class PageHelper
         {
             foreach (TemplateHelper::TEMPLATES_LOCATIONS as $location)
             {
-                $location .= TemplateHelper::REL_BUNDLE_PATH_PAGES;
-
                 if ($location && str_starts_with($pagePath, $location))
                 {
                     return substr($pagePath, strlen($location));

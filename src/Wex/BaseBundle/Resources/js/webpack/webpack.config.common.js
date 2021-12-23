@@ -4,19 +4,27 @@ const tools = require('./webpack.tools');
 // Ignored CSS files are prefixed by an underscore.
 tools.title('All CSS');
 
-// Local.
-tools.addAssetsCss('./assets/', 'css/', 'scss');
-// Core.
-tools.addAssetsCss('./src/Wex/BaseBundle/Resources/', 'css/', 'scss');
+let locations = [
+  // Local.
+  './assets/',
+  // Core.
+  './src/Wex/BaseBundle/Resources/',
+];
 
-// Take only js that is not in special folders.
+locations.forEach((location) => {
+  tools.addAssetsCss(location, 'css/', 'scss');
+});
+
 tools.title('Common JS');
 
-let disallowed = ['components', 'forms', 'pages', 'vue'];
+// Take only special folders.
+let allowed = ['layouts'];
 
 ['js', 'ts'].forEach((srcExt) => {
-  tools.addAssetsJs('./assets/', 'js/', srcExt, (srcFile) => {
-    // First dir under js should not be a part of disallowed dirs.
-    return disallowed.indexOf(srcFile.file.split('/')[3]) === -1 && srcFile;
+  locations.forEach((location) => {
+    tools.addAssetsJs(location, 'js/', srcExt, (srcFile) => {
+      // First dir under js should be a part of allowed dirs.
+      return allowed.indexOf(srcFile.file.substring(`${location}js/`.length).split('/')[0]) !== -1 && srcFile;
+    });
   });
 });
