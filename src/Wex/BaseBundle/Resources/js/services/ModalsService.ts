@@ -10,8 +10,7 @@ export default class ModalsService extends AppService {
 
   get(path: string, requestOptions: ModalInterface = {}): Promise<any> {
     requestOptions.layout = requestOptions.layout || 'modal';
-    requestOptions.parentRenderNode = this.app.layout.pageFocused;
-
+    requestOptions.callerRenderNode = this.app.layout.pageFocused;
     return this.services.pages.get(path, requestOptions);
   }
 }

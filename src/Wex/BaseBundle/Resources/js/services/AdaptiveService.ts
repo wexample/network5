@@ -26,7 +26,7 @@ export default class AdaptiveService extends AppService {
     };
   }
 
-  fetch(path: string, requestOptions?: RequestOptionsInterface): Promise<any> {
+  fetch(path: string, requestOptions: RequestOptionsInterface = {}): Promise<any> {
     return fetch(path, {
       ...{
         headers: {
@@ -37,7 +37,7 @@ export default class AdaptiveService extends AppService {
     })
   }
 
-  get(path: string, requestOptions?: RequestOptionsInterface): Promise<any> {
+  get(path: string, requestOptions: RequestOptionsInterface = {}): Promise<any> {
     return this
       .fetch(path, requestOptions)
       .then((response: Response) => {

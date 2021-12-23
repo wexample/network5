@@ -55,7 +55,7 @@ export default class PagesService extends RenderNodeService {
 
     if (renderData.isInitialPage) {
       el = this.app.layout.el;
-      requestOptions.parentRenderNode = this.app.layout;
+      requestOptions.callerRenderNode = this.app.layout;
     } else {
       el = renderData.el;
     }
@@ -73,7 +73,7 @@ export default class PagesService extends RenderNodeService {
       pageHandler.renderPageEl(renderData);
       el = pageHandler.getPageEl();
 
-      requestOptions.parentRenderNode = pageHandler;
+      requestOptions.callerRenderNode = pageHandler;
     }
 
     if (!el) {

@@ -21,6 +21,7 @@ export default class extends TestManagerPage {
     // TODO Test js helpers
     // TODO Test variables (layout / page / com / modal)
     // TODO Test translations (layout / page / com / modal)
+    // TODO Test overlays (multiple / inside a modal ?)
 
     this.runTests({
       TestTest,

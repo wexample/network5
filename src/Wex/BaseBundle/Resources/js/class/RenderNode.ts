@@ -45,8 +45,10 @@ export default abstract class RenderNode extends AppChild {
   ) {
     this.renderData = renderData;
 
-    if (requestOptions.parentRenderNode) {
-      requestOptions.parentRenderNode.appendChildRenderNode(this);
+    // Attach to caller not, or current active page, or null.
+    let parentNode = (requestOptions.callerRenderNode || (this.app.layout && this.app.layout.pageFocused))
+    if (parentNode) {
+      parentNode.appendChildRenderNode(this);
     }
 
     this.translations.catalog = {
