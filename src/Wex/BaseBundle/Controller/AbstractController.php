@@ -78,9 +78,9 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
             {
                 $rendered = parent::renderView($view, $parameters);
             }
-            catch (\Exception $e)
+            catch (\Exception $exception)
             {
-                $rendered = $e->getMessage();
+                $rendered = $exception->getMessage();
             }
         }
         else
