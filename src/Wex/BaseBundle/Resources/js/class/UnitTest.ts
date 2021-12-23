@@ -1,4 +1,6 @@
-export default class {
+import AppChild from "./AppChild";
+
+export default abstract class extends AppChild {
   assertEquals(value, equals, message?: string) {
     let styleDefault = 'border-radius:10rem;';
     if (value !== equals) {
@@ -20,7 +22,9 @@ export default class {
     this.assertEquals(value, true, message);
   }
 
-  assertNoTrue(value, message?: string) {
+  assertFalse(value, message?: string) {
     this.assertEquals(value, false, message);
   }
+
+  public abstract getTestMethods();
 }

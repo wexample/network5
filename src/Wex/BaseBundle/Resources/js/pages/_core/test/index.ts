@@ -1,6 +1,10 @@
-import Page from '../../../class/Page';
+import AdaptiveRenderingTest from "./class/AdaptiveRenderingTest";
+import TestManagerPage from "../../../class/TestManagerPage";
+import TestTest from "./class/TestTest";
 
-export default class extends Page {
+export default class extends TestManagerPage {
+  tests: any;
+
   async mounted() {
     // TODO Test adaptive rendering
     // TODO Test non adaptive
@@ -10,11 +14,18 @@ export default class extends Page {
     // TODO Test vue
     // TODO Test component
     // TODO Test component in vue
-    // TODO Test responsive
+    // TODO Test responsive (and js responsive displays)
     // TODO Test color schemes
     // TODO Test modal
     // TODO Test modal in modal
+    // TODO Test js helpers
     // TODO Test variables (layout / page / com / modal)
     // TODO Test translations (layout / page / com / modal)
+
+    this.runTests({
+      TestTest,
+      AdaptiveRenderingTest,
+      // TODO VariablesTest
+    });
   }
 }
