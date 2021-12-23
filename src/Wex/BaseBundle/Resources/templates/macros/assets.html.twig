@@ -1,7 +1,7 @@
-{% macro render_available_css(context_type, color_scheme, layout_use_js) %}
+{% macro render_available_css(context_type, enable_aggregation, color_scheme, layout_use_js) %}
     {% for asset in assets_type_filtered(context_type, 'css') %}
         {%- if asset.isReadyForServerSideRendering(color_scheme, layout_use_js) -%}
-            {% if not layout_use_js or not constant('\\App\\Wex\\BaseBundle\\Service\\AssetsService::ENABLE_AGGREGATION') %}
+            {% if not layout_use_js or not enable_aggregation %}
                 <link rel="stylesheet" media="{{ asset.media }}"
                       href="{{ asset(asset.path) }}"/>
             {% endif %}
@@ -10,10 +10,10 @@
     {% endfor %}
 {% endmacro %}
 
-{% macro render_available_js(context_type, color_scheme) %}
+{% macro render_available_js(context_type, enable_aggregation, color_scheme) %}
     {%- for asset in assets_type_filtered(context_type, 'js') -%}
         {%- if asset.isReadyForServerSideRendering(color_scheme, true) -%}
-            {% if not constant('\\App\\Wex\\BaseBundle\\Service\\AssetsService::ENABLE_AGGREGATION') %}
+            {% if not enable_aggregation %}
                 <script type="text/javascript" src="{{ asset(asset.path) }}"></script>
             {% endif %}
             {{ asset.setServerSideRendered() }}

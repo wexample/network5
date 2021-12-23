@@ -45,8 +45,6 @@ class AssetsService
 
     public const DIR_PUBLIC = 'public/';
 
-    public const ENABLE_AGGREGATION = true;
-
     public const FILE_MANIFEST = 'manifest.json';
 
     private array $aggregationHash = [];
@@ -127,7 +125,7 @@ class AssetsService
         $aggregatePaths = [];
         $output = '';
 
-        if (self::ENABLE_AGGREGATION)
+        if ($this->adaptiveResponseService->renderPass->getEnableAggregation())
         {
             // Per type specific assets.
             if ($type === Asset::EXTENSION_JS)

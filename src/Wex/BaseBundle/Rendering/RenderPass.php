@@ -35,10 +35,11 @@ class RenderPass
     public string $pageName;
 
     public function __construct(
-        private Request $request,
         public AdaptiveResponse $adaptiveResponse,
+        private bool $enableAggregation,
+        private Request $request,
+        public bool $useJs,
         public string $view,
-        public bool $useJs
     ) {
         $this->pageName = PageHelper::pageNameFromPath($this->view);
 
@@ -75,8 +76,8 @@ class RenderPass
                 'page_name' => $this->pageName,
                 'page_path' => $this->view,
                 'page_title' => '@page::page_title',
+                'render_pass' => $this,
                 'request_uri' => $this->request->getRequestUri(),
-                'render_request_id' => $this->getRenderRequestId(),
             ] + $parameters;
     }
 
@@ -95,6 +96,11 @@ class RenderPass
     public function getRenderRequestId(): string
     {
         return $this->currentRequestId;
+    }
+
+    public function getEnableAggregation(): bool
+    {
+        return $this->enableAggregation;
     }
 
     public function registerContextRenderNode(RenderNode $renderNode)

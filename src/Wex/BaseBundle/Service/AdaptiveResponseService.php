@@ -41,10 +41,11 @@ class AdaptiveResponseService
         }
 
         $this->renderPass = new RenderPass(
-            $this->requestStack->getMainRequest(),
             $this->getResponse(),
+            $this->kernel->getContainer()->getParameter('responsite.enable_aggregation'),
+            $this->requestStack->getMainRequest(),
+            is_null($this->requestStack->getMainRequest()->get('no_js')),
             $view,
-            is_null($this->requestStack->getMainRequest()->get('no_js'))
         );
 
         $this->renderPass->prepare(
