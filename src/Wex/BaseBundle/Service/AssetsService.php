@@ -326,13 +326,10 @@ class AssetsService
         /** @var RenderNode $renderNode */
         foreach ($registry[$contextType] as $renderNode)
         {
-            foreach ($renderNode->assets as $asset)
-            {
-                $assets = array_merge(
-                    $assets,
-                    $renderNode->assets[$assetType]
-                );
-            }
+            $assets = array_merge(
+                $assets,
+                $renderNode->assets[$assetType]
+            );
         }
 
         return $assets;
