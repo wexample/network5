@@ -1,6 +1,7 @@
 import AdaptiveRenderingTest from './class/AdaptiveRenderingTest';
 import TestManagerPage from '../../../class/TestManagerPage';
 import TestTest from './class/TestTest';
+import AppTest from "./class/AppTest";
 
 export default class extends TestManagerPage {
   tests: any;
@@ -24,8 +25,9 @@ export default class extends TestManagerPage {
     // TODO Test overlays (multiple / inside a modal ?)
 
     this.runTests({
-      TestTest,
       AdaptiveRenderingTest,
+      AppTest,
+      TestTest,
       // TODO VariablesTest
     });
   }
