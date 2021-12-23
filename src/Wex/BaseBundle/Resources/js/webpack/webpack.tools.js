@@ -5,6 +5,21 @@ const fs = require('fs');
 let entries = {};
 
 module.exports = {
+  templatesLocations: [
+    // Local.
+    './assets/',
+    // Core.
+    './src/Wex/BaseBundle/Resources/',
+  ],
+
+  forEachJsExtAndLocations(callback) {
+    ['js', 'ts'].forEach((srcExt) => {
+      this.templatesLocations.forEach((location) => {
+        callback(srcExt, location);
+      });
+    });
+  },
+
   title(string) {
     console.log('');
     console.log('---###  ' + string.toUpperCase() + '  ###---');
@@ -137,7 +152,7 @@ module.exports = {
         className.push(module.exports.camelCaseToDash(className.pop()));
         className = className.join('/');
 
-        fs.mkdirSync(assetPathTemp, { recursive: true });
+        fs.mkdirSync(assetPathTemp, {recursive: true});
 
         let placeHolders = {
           type: type,

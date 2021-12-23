@@ -1,10 +1,8 @@
 import Page from '../../../../src/Wex/BaseBundle/Resources/js/class/Page';
 import UnitTest from '../../../../src/Wex/BaseBundle/Resources/js/class/UnitTest';
-import { PageInterface } from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistry/PageInterface';
 import Events from '../../../../src/Wex/BaseBundle/Resources/js/helpers/Events';
 
 export default class extends Page {
-  services: PageInterface;
   unitTest: UnitTest;
 
   async mounted() {
