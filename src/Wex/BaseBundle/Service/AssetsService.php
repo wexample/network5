@@ -129,10 +129,7 @@ class AssetsService
         foreach ($this->assets[$type] as $asset)
         {
             if ($asset->isServerSideRendered()
-                && $asset->type === $type
-                // Ignore contextual variations.
-                && $asset->responsive === null
-                && ($asset->colorScheme === null || $asset->colorScheme === $colorScheme))
+                && $asset->type === $type)
             {
                 $output .= file_get_contents($this->pathPublic.$asset->path);
             }

@@ -84,12 +84,8 @@ class Asset extends RenderDataGenerator
     )
     {
         $this->filesize = filesize($path);
-        $info = pathinfo($path);
-        if (!isset($info['extension']))
-        {
-            dd(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
-        }
 
+        $info = pathinfo($path);
         $this->type = $info['extension'];
 
         $this->path = '/'.PathHelper::relativeTo(
