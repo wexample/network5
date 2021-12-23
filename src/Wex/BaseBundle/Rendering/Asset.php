@@ -5,6 +5,7 @@ namespace App\Wex\BaseBundle\Rendering;
 use App\Wex\BaseBundle\Helper\PathHelper;
 use App\Wex\BaseBundle\Rendering\RenderNode\RenderNode;
 use App\Wex\BaseBundle\Service\AssetsService;
+use JetBrains\PhpStorm\Pure;
 use function dirname;
 use function filesize;
 use JetBrains\PhpStorm\NoReturn;
@@ -116,6 +117,7 @@ class Asset extends RenderDataGenerator
         return null;
     }
 
+    #[Pure]
     public function getIsReadyForServerSideRendering(string $colorScheme, bool $useJs): bool
     {
         if ($this->isServerSideRendered())

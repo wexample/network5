@@ -97,9 +97,9 @@
     </div>
 
     {%- block template_assets -%}
-        {{ macro_assets.render_available_css('layout', layout_use_js, layout_color_scheme) }}
-        {{ macro_assets.render_available_css('page', layout_use_js, layout_color_scheme) }}
-        {{ macro_assets.render_available_css('component', layout_use_js, layout_color_scheme) }}
+        {{ macro_assets.render_available_css('layout', layout_color_scheme, layout_use_js) }}
+        {{ macro_assets.render_available_css('page', layout_color_scheme, layout_use_js) }}
+        {{ macro_assets.render_available_css('component', layout_color_scheme, layout_use_js) }}
         <link rel="stylesheet" media="screen" href="{{ asset(assets_render_initial(page_name, 'css', layout_color_scheme)) }}">
 
         {%- if layout_use_js -%}
