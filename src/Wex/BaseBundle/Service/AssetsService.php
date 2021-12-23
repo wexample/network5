@@ -145,9 +145,13 @@ class AssetsService
                 }
             }
 
+            $aggregated = [];
             foreach ($aggregatePaths as $path)
             {
-                $output .= file_get_contents($path);
+                if (!isset($aggregated[$path])) {
+                    $aggregated[$path] = true;
+                    $output .= file_get_contents($path);
+                }
             }
         }
 
