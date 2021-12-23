@@ -12,6 +12,16 @@ module.exports = {
     './src/Wex/BaseBundle/Resources/',
   ],
 
+  getFileName(path) {
+    return path.substring(path.lastIndexOf('/')+1);
+  },
+
+  fileIsAClass(filePath) {
+    let fileName = this.getFileName(filePath);
+    // If first letter is a capital, this is a included class.
+    return fileName[0].toUpperCase() === fileName[0]
+  },
+
   forEachJsExtAndLocations(callback) {
     ['js', 'ts'].forEach((srcExt) => {
       this.templatesLocations.forEach((location) => {

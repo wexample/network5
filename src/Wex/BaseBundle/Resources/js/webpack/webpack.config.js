@@ -66,6 +66,5 @@ Encore
 require('./webpack.config.common');
 require('./webpack.config.pages');
 require('./webpack.config.components');
-require('./webpack.config.vues');
 
 module.exports = Encore;

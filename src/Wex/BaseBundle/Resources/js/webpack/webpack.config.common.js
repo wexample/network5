@@ -16,7 +16,9 @@ let allowed = ['layouts'];
 tools.forEachJsExtAndLocations((srcExt, location) => {
   tools.addAssetsJs(location, 'js/', srcExt, (srcFile) => {
     // First dir under js should be a part of allowed dirs.
-    return allowed.indexOf(srcFile.file.substring(`${location}js/`.length).split('/')[0]) !== -1 && srcFile;
+    return (allowed.indexOf(srcFile.file.substring(`${location}js/`.length).split('/')[0]) !== -1)
+      && !tools.fileIsAClass(srcFile.file)
+      && srcFile;
   });
 });
 
