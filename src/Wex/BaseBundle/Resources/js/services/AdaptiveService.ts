@@ -27,15 +27,19 @@ export default class AdaptiveService extends AppService {
     };
   }
 
-  get(path, requestOptions: AdaptiveInterface): Promise<any> {
+  fetch(path: string, requestOptions: AdaptiveInterface): Promise<any> {
     return fetch(path, {
-        ...{
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-          },
+      ...{
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
         },
-        ...requestOptions,
-      })
+      },
+      ...requestOptions,
+    })
+  }
+
+  get(path: string, requestOptions: AdaptiveInterface): Promise<any> {
+    return this.fetch(path, requestOptions)
       .then((response: Response) => {
         if (response.ok) {
           return response.json();

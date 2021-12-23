@@ -4,25 +4,48 @@ export default class AdaptiveRenderingTest extends UnitTest {
   public getTestMethods() {
     return [
       this.testNonAdaptivePage,
-      this.testAdaptivePage
+      this.testAdaptivePage,
+      // this.testAdaptiveErrorMissingVue,
     ]
   }
 
   async testNonAdaptivePage() {
-    await this.fetchTestPage(
+    await this.fetchTestPageAdaptiveHtml(
       '/_core/test/view',
       'VIEW'
     );
   }
 
   async testAdaptivePage() {
-    await this.fetchTestPage(
-      '/_core/test/adaptive',
+    let path = '/_core/test/adaptive';
+    // Load in html.
+    await this.fetchTestPageAdaptiveHtml(
+      path,
       'ADAPTIVE'
+    );
+
+    this.fetchTestPageAdaptiveJson(path);
+  }
+
+  async testAdaptiveErrorMissingVue() {
+    await this.app.services['adaptive'].fetch(
+      '/_core/test/error-missing-view',
     );
   }
 
-  private fetchTestPage(path, pageContent) {
+  private fetchTestPageAdaptiveJson(path) {
+    // Load in json.
+    return this.app.services['adaptive']
+      .get(path)
+      .then((response) => {
+        this.assertTrue(!!response.page, 'The response contains page data');
+
+        this.assertTrue(!!response.templates, 'The response contains template html');
+      });
+  }
+
+  private fetchTestPageAdaptiveHtml(path, pageContent) {
+    // Use normal fetch to fake a non ajax get request.
     return fetch(path)
       .then((response: Response) => {
         this.assertTrue(response.ok, `${path} : Fetch succeed`);

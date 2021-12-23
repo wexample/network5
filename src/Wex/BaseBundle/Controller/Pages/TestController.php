@@ -14,14 +14,6 @@ abstract class TestController extends AbstractPagesController
         return $this->renderPage('@WexBaseBundle::_core/test/index');
     }
 
-    #[Route(path: '_core/test/view', name: '_core_test_view')]
-    public function view(): Response
-    {
-        return $this->render(
-            '@WexBaseBundle/Resources/templates/pages/_core/test/view.html.twig'
-        );
-    }
-
     #[Route(path: '_core/test/adaptive', name: '_core_test_adaptive')]
     public function adaptive(): Response
     {
@@ -30,6 +22,26 @@ abstract class TestController extends AbstractPagesController
             ->createResponse($this)
             ->setView(
                 '@WexBaseBundle/Resources/templates/pages/_core/test/adaptive.html.twig'
+            )
+            ->render();
+    }
+
+    #[Route(path: '_core/test/view', name: '_core_test_view')]
+    public function view(): Response
+    {
+        return $this->render(
+            '@WexBaseBundle/Resources/templates/pages/_core/test/view.html.twig'
+        );
+    }
+
+    #[Route(path: '_core/test/error-missing-view', name: '_core_test_error-missing-view')]
+    public function errorMissingVue(): Response
+    {
+        return $this
+            ->adaptiveResponseService
+            ->createResponse($this)
+            ->setView(
+                'MISSING_VIEW'
             )
             ->render();
     }

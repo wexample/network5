@@ -56,7 +56,8 @@ class AdaptiveResponse
         protected Request $request,
         protected AbstractController $controller,
         protected AdaptiveResponseService $adaptiveResponseService,
-    ) {
+    )
+    {
         $this->setOutputType(
             $this->detectOutputType()
         );
@@ -108,13 +109,25 @@ class AdaptiveResponse
             ?? $this->outputType;
     }
 
+    #[Pure]
+    public function isJsonRequest(): bool
+    {
+        return $this->getOutputType() === self::OUTPUT_TYPE_RESPONSE_JSON;
+    }
+
+    #[Pure]
+    public function isHtmlRequest(): bool
+    {
+        return $this->getOutputType() === self::OUTPUT_TYPE_RESPONSE_HTML;
+    }
+
     public function detectRenderingBase(): string
     {
         // Allow defining json layout expected type from query string.
         $layout = $this->request->get(self::RENDER_PARAM_NAME_BASE);
 
         // Layout not specified in query string.
-        if (is_null($layout) && $this->request->isXmlHttpRequest())
+        if (is_null($layout) && $this->isJsonRequest())
         {
             // Use modal as default ajax layout, but might be configurable.
             $layout = self::BASE_MODAL;
@@ -136,7 +149,8 @@ class AdaptiveResponse
     public function setView(
         string $view,
         $parameters = null
-    ): self {
+    ): self
+    {
         $this->view = $view;
 
         if ($parameters)
