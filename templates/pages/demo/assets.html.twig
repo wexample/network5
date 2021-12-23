@@ -33,21 +33,21 @@
     {% endif %}
     <h2>{{ '@page::themes.title' | trans }}</h2>
     <div class="blocks">
-        <div class="block blocks-col theme-light">
+        <div class="block blocks-col color-scheme-light">
             {{ component('components/button', {
                 attr:{'data-color-scheme':'dark'},
                 class:'demo-button-switch-color-scheme',
                 text:'Thème sombre'
             }) }}
         </div>
-        <div class="block blocks-col theme-light">
+        <div class="block blocks-col color-scheme-light">
             {{ component('components/button', {
                 attr:{'data-color-scheme':'light'},
                 class:'demo-button-switch-color-scheme',
                 text:'Thème clair'
             }) }}
         </div>
-        <div class="block blocks-col theme-light">
+        <div class="block blocks-col color-scheme-light">
             {{ component('components/button', {
                 attr:{'data-color-scheme':'default'},
                 class:'demo-button-switch-color-scheme',
@@ -65,7 +65,7 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="block theme-light">
+        <div class="block color-scheme-light">
             {{ '@page::breakpoints.body' | trans | raw }}
             <br>
             <br>
