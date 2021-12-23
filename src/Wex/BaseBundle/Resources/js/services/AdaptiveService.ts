@@ -28,8 +28,7 @@ export default class AdaptiveService extends AppService {
   }
 
   get(path, requestOptions: AdaptiveInterface): Promise<any> {
-    return window
-      .fetch(path, {
+    return fetch(path, {
         ...{
           headers: {
             'X-Requested-With': 'XMLHttpRequest',
