@@ -45,6 +45,8 @@ class AssetsService
 
     public const DIR_PUBLIC = 'public/';
 
+    public const ENABLE_AGGREGATION = true;
+
     public const FILE_MANIFEST = 'manifest.json';
 
     private array $aggregationHash = [];
@@ -119,19 +121,33 @@ class AssetsService
             .'?'.$this->aggregationHash[$type.'-'.$pageName];
     }
 
-    public function aggregateInitialAssets(string $pageName, string $type, string $colorScheme): string
+    public function aggregateInitialAssets(string $pageName, string $type): string
     {
         $aggregatedFileName = $this->buildAggregatedPathFromPageName($pageName, $type);
-
+        $aggregatePaths = [];
         $output = '';
 
-        /** @var Asset $asset */
-        foreach ($this->assets[$type] as $asset)
+        if (self::ENABLE_AGGREGATION)
         {
-            if ($asset->isServerSideRendered()
-                && $asset->type === $type)
+            // Per type specific assets.
+            if ($type === Asset::EXTENSION_JS)
             {
-                $output .= file_get_contents($this->pathPublic.$asset->path);
+                $aggregatePaths[] = $this->pathBuild.'runtime.js';
+            }
+
+            /** @var Asset $asset */
+            foreach ($this->assets[$type] as $asset)
+            {
+                if ($asset->isServerSideRendered()
+                    && $asset->type === $type)
+                {
+                    $aggregatePaths[] = $this->pathPublic.$asset->path;
+                }
+            }
+
+            foreach ($aggregatePaths as $path)
+            {
+                $output .= file_get_contents($path);
             }
         }
 

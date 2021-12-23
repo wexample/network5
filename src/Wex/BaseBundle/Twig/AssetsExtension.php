@@ -39,14 +39,13 @@ class AssetsExtension extends AbstractExtension
         ];
     }
 
-    public function assetsRenderInitial(string $pageName, string $type, string $colorScheme): string
+    public function assetsRenderInitial(string $pageName, string $type): string
     {
         return $this
             ->assetsService
             ->aggregateInitialAssets(
                 $pageName,
-                $type,
-                $colorScheme
+                $type
             );
     }
 
