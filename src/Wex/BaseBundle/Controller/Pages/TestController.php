@@ -14,7 +14,7 @@ abstract class TestController extends AbstractPagesController
         return $this->renderPage('@WexBaseBundle::_core/test/index');
     }
 
-    #[Route(path: '_core/test/adaptive', name: '_core_test_adaptive')]
+    #[Route(path: '_core/test/adaptive', name: '_core_test_adaptive', options: self::ROUTE_OPTIONS_ONLY_EXPOSE)]
     public function adaptive(): Response
     {
         return $this
@@ -26,7 +26,7 @@ abstract class TestController extends AbstractPagesController
             ->render();
     }
 
-    #[Route(path: '_core/test/view', name: '_core_test_view')]
+    #[Route(path: '_core/test/view', name: '_core_test_view', options: self::ROUTE_OPTIONS_ONLY_EXPOSE)]
     public function view(): Response
     {
         return $this->render(
@@ -34,7 +34,7 @@ abstract class TestController extends AbstractPagesController
         );
     }
 
-    #[Route(path: '_core/test/error-missing-view', name: '_core_test_error-missing-view')]
+    #[Route(path: '_core/test/error-missing-view', name: '_core_test_error-missing-view', options: self::ROUTE_OPTIONS_ONLY_EXPOSE)]
     public function errorMissingVue(): Response
     {
         return $this

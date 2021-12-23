@@ -8,6 +8,7 @@ import LayoutsService from '../services/LayoutsService';
 import MixinsService from '../services/MixinsService';
 import PagesService from '../services/PagesService';
 import ResponsiveService from '../services/ResponsiveService';
+import RoutingService from "../services/RoutingService";
 
 import ColorSchemeService from '../services/ColorSchemeService';
 import { unique as arrayUnique } from '../helpers/Arrays';
@@ -112,12 +113,13 @@ export default class extends AsyncConstructor {
   getServices(): typeof AppService[] {
     return [
       AssetsService,
+      ColorSchemeService,
       EventsService,
       LayoutsService,
       MixinsService,
       PagesService,
       ResponsiveService,
-      ColorSchemeService,
+      RoutingService,
     ];
   }
 

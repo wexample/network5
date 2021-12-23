@@ -11,12 +11,15 @@ export default class AdaptiveRenderingTest extends UnitTest {
   }
 
   async testNonAdaptivePage() {
-    await this.fetchTestPageAdaptiveHtml('/_core/test/view', 'VIEW');
+    await this.fetchTestPageAdaptiveHtml(
+      this.app.services.routing.path('_core_test_view'),
+      'VIEW'
+    );
   }
 
   async testAdaptivePage() {
     let pageNamePart = '_core/test/adaptive';
-    let path = `/${pageNamePart}`;
+    let path = this.app.services.routing.path('_core_test_adaptive');
 
     // Load in html.
     await this.fetchTestPageAdaptiveHtml(path, 'ADAPTIVE');
@@ -59,7 +62,9 @@ export default class AdaptiveRenderingTest extends UnitTest {
   }
 
   async testAdaptiveErrorMissingVue() {
-    await this.app.services['adaptive'].fetch('/_core/test/error-missing-view');
+    await this.app.services['adaptive'].fetch(
+      this.app.services.routing.path('_core_test_error-missing-view')
+    );
   }
 
   private fetchTestPageAdaptiveJson(path) {

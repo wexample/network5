@@ -14,6 +14,10 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
     /* Set methods for adaptive rendering. */
     use AdaptiveResponseControllerTrait;
 
+    public const ROUTE_OPTION_KEY_EXPOSE = 'expose';
+
+    public const ROUTE_OPTIONS_ONLY_EXPOSE = [self::ROUTE_OPTION_KEY_EXPOSE => true];
+
     public bool $templateUseJs;
 
     public string $requestUri;
