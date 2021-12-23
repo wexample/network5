@@ -8,9 +8,12 @@ export default class AdaptiveRenderingTest extends UnitTest {
   }
 
   public testNonAdaptivePage() {
-    fetch('/_core/test/view')
+    let path = '/_core/test/view';
+    let pageContent = 'VIEW';
+
+    fetch(path)
       .then((response: Response) => {
-        this.assertTrue(response.ok, 'Fetch succeed');
+        this.assertTrue(response.ok, `Fetch succeed of ${path}`);
         return response.text();
       })
       .then((html) => {
@@ -20,10 +23,8 @@ export default class AdaptiveRenderingTest extends UnitTest {
 
         this.assertTrue(
           !!elHtml.querySelector('body'),
-          'Fetched page content is a standard html document'
+          `Fetched page content is a standard html document in  ${path}`
         )
-
-        let pageContent = 'VIEW';
         this.assertEquals(
           elHtml.querySelector('.page').innerHTML,
           pageContent,
