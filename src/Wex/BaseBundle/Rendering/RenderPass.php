@@ -3,6 +3,7 @@
 namespace App\Wex\BaseBundle\Rendering;
 
 use App\Wex\BaseBundle\Helper\ColorSchemeHelper;
+use App\Wex\BaseBundle\Helper\PageHelper;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Rendering\RenderNode\AjaxLayoutRenderNode;
 use App\Wex\BaseBundle\Rendering\RenderNode\InitialLayoutRenderNode;
@@ -39,7 +40,7 @@ class RenderPass
         public string $view,
         public bool $useJs
     ) {
-        $this->pageName = RenderingHelper::pageNameFromPath($this->view);
+        $this->pageName = PageHelper::pageNameFromPath($this->view);
 
         $this->createRenderRequestId();
 

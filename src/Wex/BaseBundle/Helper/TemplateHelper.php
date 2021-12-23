@@ -20,15 +20,25 @@ class TemplateHelper
 
     public const REL_BUNDLE_PATH_RESOURCE_FONTS = 'fonts'.FileHelper::FOLDER_SEPARATOR;
 
+    public const TEMPLATES_LOCATIONS = [
+        // Search in default local template folder.
+        '',
+        // Search in base bundle.
+        WexBaseBundle::WEX_BUNDLE_PATH_TEMPLATES
+    ];
+
     public static function buildTemplateInheritanceStack(
         string $relativePath,
         string $pageExtension = self::TEMPLATE_FILE_EXTENSION
-    ): array {
-        return [
-            // Search local.
-            $relativePath.$pageExtension,
-            // Search in base bundle.
-            WexBaseBundle::WEX_BUNDLE_PATH_TEMPLATES.$relativePath.$pageExtension,
-        ];
+    ): array
+    {
+        $output = [];
+
+        foreach (self::TEMPLATES_LOCATIONS as $location)
+        {
+            $output[] = $location.$relativePath.$pageExtension;
+        }
+
+        return $output;
     }
 }
