@@ -1,4 +1,6 @@
 import UnitTest from '../../../../class/UnitTest';
+import modal from "../../../../components/modal";
+import ModalComponent from "../../../../components/modal";
 
 export default class AdaptiveRenderingTest extends UnitTest {
   public getTestMethods() {
@@ -21,7 +23,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
     await this.fetchTestPageAdaptiveHtml(path, 'ADAPTIVE');
 
     this.fetchTestPageAdaptiveJson(path)
-      .then(() => {
+      .then(async () => {
         let pageFocused = this.app.layout.pageFocused;
 
         this.assertEquals(
@@ -43,6 +45,16 @@ export default class AdaptiveRenderingTest extends UnitTest {
             .el.querySelector('.modal-header h2').innerHTML,
           'ADAPTIVE_PAGE_TITLE',
           'The modal page title has been translated'
+        );
+
+        // Close modal.
+        let modal = pageFocused.parentRenderNode as ModalComponent;
+        await modal.close();
+
+        this.assertEquals(
+          this.app.layout.pageFocused,
+          this.app.layout.page,
+          'The focus has been thrown back to the main page'
         );
       });
   }
