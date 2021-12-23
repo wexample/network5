@@ -1,5 +1,4 @@
 import Page from '../../../../src/Wex/BaseBundle/Resources/js/class/Page';
-import UnitTest from '../../../../src/Wex/BaseBundle/Resources/js/class/UnitTest';
 import ModalsService from '../../../../src/Wex/BaseBundle/Resources/js/services/ModalsService';
 import { PageInterface } from '../../../../src/Wex/BaseBundle/Resources/js/interfaces/ServiceRegistry/PageInterface';
 import AppService from '../../../../src/Wex/BaseBundle/Resources/js/class/AppService';
@@ -10,15 +9,12 @@ interface ServiceRegistryPageCurrentInterface extends PageInterface {
 
 export default class extends Page {
   services: ServiceRegistryPageCurrentInterface;
-  unitTest: UnitTest;
 
   getPageLevelMixins(): typeof AppService[] {
     return [ModalsService];
   }
 
   mounted() {
-    this.unitTest = new UnitTest();
-
     this.el
       .querySelector('.open-another-modal')
       .addEventListener('click', () => {
