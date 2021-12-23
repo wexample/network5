@@ -1756,7 +1756,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             $configuration($configurator);
         }
         // New style.
-        elseif ($configuration) {
+        elseif ($configuration)
+        {
             $configurator->configure($configuration);
         }
     }

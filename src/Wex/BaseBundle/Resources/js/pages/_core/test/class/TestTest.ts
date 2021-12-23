@@ -2,9 +2,7 @@ import UnitTest from '../../../../class/UnitTest';
 
 export default class TestTest extends UnitTest {
   public getTestMethods() {
-    return [
-      this.testAsserts
-    ]
+    return [this.testAsserts];
   }
 
   public testAsserts() {
@@ -12,6 +10,6 @@ export default class TestTest extends UnitTest {
 
     this.assertFalse(false, 'Assert false works');
 
-    this.assertEquals('A', 'A', 'Assert equals works')
+    this.assertEquals('A', 'A', 'Assert equals works');
   }
 }

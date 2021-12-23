@@ -7,7 +7,7 @@ import Mouse from '../helpers/Mouse';
 import Variables from '../helpers/Variables';
 import Events from '../helpers/Events';
 import RenderNode from '../class/RenderNode';
-import RequestOptionsInterface from "../interfaces/RequestOptions/RequestOptionsInterface";
+import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 
 export default class extends PageHandlerComponent {
   public closing: boolean;

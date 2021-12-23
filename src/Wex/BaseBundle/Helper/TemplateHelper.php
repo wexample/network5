@@ -24,14 +24,13 @@ class TemplateHelper
         // Search in default local template folder.
         '',
         // Search in base bundle.
-        WexBaseBundle::WEX_BUNDLE_PATH_TEMPLATES
+        WexBaseBundle::WEX_BUNDLE_PATH_TEMPLATES,
     ];
 
     public static function buildTemplateInheritanceStack(
         string $relativePath,
         string $pageExtension = self::TEMPLATE_FILE_EXTENSION
-    ): array
-    {
+    ): array {
         $output = [];
 
         foreach (self::TEMPLATES_LOCATIONS as $location)

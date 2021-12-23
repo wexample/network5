@@ -26,7 +26,10 @@ export default class AdaptiveService extends AppService {
     };
   }
 
-  fetch(path: string, requestOptions: RequestOptionsInterface = {}): Promise<any> {
+  fetch(
+    path: string,
+    requestOptions: RequestOptionsInterface = {}
+  ): Promise<any> {
     return fetch(path, {
       ...{
         headers: {
@@ -34,12 +37,14 @@ export default class AdaptiveService extends AppService {
         },
       },
       ...requestOptions,
-    })
+    });
   }
 
-  get(path: string, requestOptions: RequestOptionsInterface = {}): Promise<any> {
-    return this
-      .fetch(path, requestOptions)
+  get(
+    path: string,
+    requestOptions: RequestOptionsInterface = {}
+  ): Promise<any> {
+    return this.fetch(path, requestOptions)
       .then((response: Response) => {
         if (response.ok) {
           return response.json();
@@ -50,11 +55,9 @@ export default class AdaptiveService extends AppService {
         response.requestOptions = requestOptions;
 
         // Wait render data loading to continue.
-        return this.app
-          .loadRenderData(response, requestOptions)
-          .then(() => {
-            return response;
-          });
+        return this.app.loadRenderData(response, requestOptions).then(() => {
+          return response;
+        });
       });
   }
 }

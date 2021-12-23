@@ -6,42 +6,35 @@ export default class AdaptiveRenderingTest extends UnitTest {
       this.testNonAdaptivePage,
       this.testAdaptivePage,
       // this.testAdaptiveErrorMissingVue,
-    ]
+    ];
   }
 
   async testNonAdaptivePage() {
-    await this.fetchTestPageAdaptiveHtml(
-      '/_core/test/view',
-      'VIEW'
-    );
+    await this.fetchTestPageAdaptiveHtml('/_core/test/view', 'VIEW');
   }
 
   async testAdaptivePage() {
     let path = '/_core/test/adaptive';
     // Load in html.
-    await this.fetchTestPageAdaptiveHtml(
-      path,
-      'ADAPTIVE'
-    );
+    await this.fetchTestPageAdaptiveHtml(path, 'ADAPTIVE');
 
     this.fetchTestPageAdaptiveJson(path);
   }
 
   async testAdaptiveErrorMissingVue() {
-    await this.app.services['adaptive'].fetch(
-      '/_core/test/error-missing-view',
-    );
+    await this.app.services['adaptive'].fetch('/_core/test/error-missing-view');
   }
 
   private fetchTestPageAdaptiveJson(path) {
     // Load in json.
-    return this.app.services['adaptive']
-      .get(path)
-      .then((response) => {
-        this.assertTrue(!!response.page, 'The response contains page data');
+    return this.app.services['adaptive'].get(path).then((response) => {
+      this.assertTrue(!!response.page, 'The response contains page data');
 
-        this.assertTrue(!!response.templates, 'The response contains template html');
-      });
+      this.assertTrue(
+        !!response.templates,
+        'The response contains template html'
+      );
+    });
   }
 
   private fetchTestPageAdaptiveHtml(path, pageContent) {
@@ -59,19 +52,19 @@ export default class AdaptiveRenderingTest extends UnitTest {
         this.assertTrue(
           !!elHtml.querySelector('body'),
           `${path} : Fetched page content is a standard html document `
-        )
+        );
 
         this.assertEquals(
           elHtml.querySelectorAll('.page').length,
           1,
           `${path} : Page element exists and is unique`
-        )
+        );
 
         this.assertEquals(
           elHtml.querySelector('.page').innerHTML,
           pageContent,
           `Page content is ${pageContent}`
-        )
+        );
       });
   }
 }

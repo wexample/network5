@@ -1,4 +1,4 @@
-import AppChild from "./AppChild";
+import AppChild from './AppChild';
 
 export default abstract class extends AppChild {
   assertEquals(value, equals, message?: string) {

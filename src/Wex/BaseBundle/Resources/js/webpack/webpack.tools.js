@@ -13,13 +13,13 @@ module.exports = {
   ],
 
   getFileName(path) {
-    return path.substring(path.lastIndexOf('/')+1);
+    return path.substring(path.lastIndexOf('/') + 1);
   },
 
   fileIsAClass(filePath) {
     let fileName = this.getFileName(filePath);
     // If first letter is a capital, this is a included class.
-    return fileName[0].toUpperCase() === fileName[0]
+    return fileName[0].toUpperCase() === fileName[0];
   },
 
   forEachJsExtAndLocations(callback) {
@@ -162,7 +162,7 @@ module.exports = {
         className.push(module.exports.camelCaseToDash(className.pop()));
         className = className.join('/');
 
-        fs.mkdirSync(assetPathTemp, {recursive: true});
+        fs.mkdirSync(assetPathTemp, { recursive: true });
 
         let placeHolders = {
           type: type,

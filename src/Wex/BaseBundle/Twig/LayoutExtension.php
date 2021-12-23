@@ -2,7 +2,6 @@
 
 namespace App\Wex\BaseBundle\Twig;
 
-use App\Wex\BaseBundle\Helper\ColorSchemeHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use App\Wex\BaseBundle\Service\LayoutService;

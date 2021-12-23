@@ -1,6 +1,6 @@
-import AdaptiveRenderingTest from "./class/AdaptiveRenderingTest";
-import TestManagerPage from "../../../class/TestManagerPage";
-import TestTest from "./class/TestTest";
+import AdaptiveRenderingTest from './class/AdaptiveRenderingTest';
+import TestManagerPage from '../../../class/TestManagerPage';
+import TestTest from './class/TestTest';
 
 export default class extends TestManagerPage {
   tests: any;

@@ -56,8 +56,7 @@ class AdaptiveResponse
         protected Request $request,
         protected AbstractController $controller,
         protected AdaptiveResponseService $adaptiveResponseService,
-    )
-    {
+    ) {
         $this->setOutputType(
             $this->detectOutputType()
         );
@@ -149,8 +148,7 @@ class AdaptiveResponse
     public function setView(
         string $view,
         $parameters = null
-    ): self
-    {
+    ): self {
         $this->view = $view;
 
         if ($parameters)

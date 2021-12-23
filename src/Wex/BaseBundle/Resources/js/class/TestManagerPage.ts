@@ -1,4 +1,4 @@
-import Page from "./Page";
+import Page from './Page';
 
 export default class TestManagerPage extends Page {
   runTests(tests) {
@@ -7,7 +7,7 @@ export default class TestManagerPage extends Page {
 
       test.getTestMethods().forEach((method) => {
         method.apply(test);
-      })
+      });
     });
   }
-};
+}

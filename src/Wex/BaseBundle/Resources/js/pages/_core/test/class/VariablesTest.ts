@@ -2,7 +2,7 @@ import UnitTest from '../../../../class/UnitTest';
 
 export default class VariablesTest extends UnitTest {
   public getTestMethods() {
-    return []
+    return [];
   }
 
   public testVariables() {

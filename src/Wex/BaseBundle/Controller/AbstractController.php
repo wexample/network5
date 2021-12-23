@@ -22,8 +22,7 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         protected AdaptiveResponseService $adaptiveResponseService,
         protected AssetsService $assetsService,
         protected Environment $twigEnvironment
-    )
-    {
+    ) {
         $adaptiveResponseService->setController($this);
     }
 
@@ -36,8 +35,7 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         string $view,
         array $parameters = [],
         Response $response = null
-    ): ?Response
-    {
+    ): ?Response {
         return $this->render(
             $view,
             $parameters,
@@ -59,8 +57,7 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         string $view,
         array $parameters = [],
         Response $response = null
-    ): Response
-    {
+    ): Response {
         $this->adaptiveResponseService->renderPrepare(
             $view,
             $parameters
@@ -80,15 +77,16 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
             try
             {
                 $rendered = parent::renderView($view, $parameters);
-            } catch (\Exception $e)
+            }
+            catch (\Exception $e)
             {
                 $rendered = $e->getMessage();
             }
-        } else
+        }
+        else
         {
             $rendered = parent::renderView($view, $parameters);
         }
-
 
         $options = [
             'view' => $view,

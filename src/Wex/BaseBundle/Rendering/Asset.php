@@ -5,10 +5,10 @@ namespace App\Wex\BaseBundle\Rendering;
 use App\Wex\BaseBundle\Helper\PathHelper;
 use App\Wex\BaseBundle\Rendering\RenderNode\RenderNode;
 use App\Wex\BaseBundle\Service\AssetsService;
-use JetBrains\PhpStorm\Pure;
 use function dirname;
 use function filesize;
 use JetBrains\PhpStorm\NoReturn;
+use JetBrains\PhpStorm\Pure;
 use function pathinfo;
 
 class Asset extends RenderDataGenerator
@@ -82,17 +82,16 @@ class Asset extends RenderDataGenerator
         string $path,
         public RenderNode $renderData,
         string $basePath
-    )
-    {
+    ) {
         $this->filesize = filesize($path);
 
         $info = pathinfo($path);
         $this->type = $info['extension'];
 
         $this->path = '/'.PathHelper::relativeTo(
-                $path,
-                $basePath
-            );
+            $path,
+            $basePath
+        );
 
         // Remove the base part before build/{type}/ folder.
         $pathWithoutExt = dirname($this->path).'/'.$info['filename'];
