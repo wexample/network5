@@ -14,11 +14,37 @@ export default class AdaptiveRenderingTest extends UnitTest {
   }
 
   async testAdaptivePage() {
-    let path = '/_core/test/adaptive';
+    let pageNamePart = '_core/test/adaptive';
+    let path = `/${pageNamePart}`;
+
     // Load in html.
     await this.fetchTestPageAdaptiveHtml(path, 'ADAPTIVE');
 
-    this.fetchTestPageAdaptiveJson(path);
+    this.fetchTestPageAdaptiveJson(path)
+      .then(() => {
+        let pageFocused = this.app.layout.pageFocused;
+
+        this.assertEquals(
+          pageFocused.renderData.name,
+          `pages/${pageNamePart}`,
+          'The focused page is the modal content page'
+        );
+
+        this.assertEquals(
+          pageFocused.parentRenderNode.renderData.name,
+          `components/modal`,
+          'The focused page is a child of modal component'
+        );
+
+        this.assertEquals(
+          this.app
+            .layout
+            .pageFocused
+            .el.querySelector('.modal-header h2').innerHTML,
+          'ADAPTIVE_PAGE_TITLE',
+          'The modal page title has been translated'
+        );
+      });
   }
 
   async testAdaptiveErrorMissingVue() {
@@ -34,6 +60,8 @@ export default class AdaptiveRenderingTest extends UnitTest {
         !!response.templates,
         'The response contains template html'
       );
+
+      return response;
     });
   }
 
