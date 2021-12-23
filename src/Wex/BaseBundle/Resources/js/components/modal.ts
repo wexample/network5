@@ -9,7 +9,7 @@ import Events from '../helpers/Events';
 import RenderNode from '../class/RenderNode';
 import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 
-export default class extends PageHandlerComponent {
+export default class ModalComponent extends PageHandlerComponent {
   public closing: boolean;
   public elContent: HTMLElement;
   public listenKeyboardKey: string[] = [Keyboard.KEY_ESCAPE];
@@ -99,15 +99,19 @@ export default class extends PageHandlerComponent {
 
     this.blur();
 
-    // Sync with CSS animation.
-    setTimeout(() => {
-      this.el.classList.remove(Variables.CLOSED);
-      this.opened = this.focused = this.closing = false;
+    return new Promise(async (resolve) => {
+      // Sync with CSS animation.
+      await setTimeout(() => {
+        this.el.classList.remove(Variables.CLOSED);
+        this.opened = this.focused = this.closing = false;
 
-      this.exit();
+        this.exit();
 
-      this.parentRenderNode.focus();
-    }, 400);
+        this.parentRenderNode.focus();
+
+        resolve(this);
+      }, 400);
+    });
   }
 
   onClickClose() {
