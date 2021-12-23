@@ -81,7 +81,8 @@ class Asset extends RenderDataGenerator
         string $path,
         public RenderNode $renderData,
         string $basePath
-    ) {
+    )
+    {
         $this->filesize = filesize($path);
         $info = pathinfo($path);
         if (!isset($info['extension']))
@@ -92,9 +93,9 @@ class Asset extends RenderDataGenerator
         $this->type = $info['extension'];
 
         $this->path = '/'.PathHelper::relativeTo(
-            $path,
-            $basePath
-        );
+                $path,
+                $basePath
+            );
 
         // Remove the base part before build/{type}/ folder.
         $pathWithoutExt = dirname($this->path).'/'.$info['filename'];
@@ -119,9 +120,9 @@ class Asset extends RenderDataGenerator
         return null;
     }
 
-    public function getIsAvailable(bool $useJs): bool
+    public function getIsReadyForServerSideRendering(string $colorScheme, bool $useJs): bool
     {
-        if ($this->rendered)
+        if ($this->isServerSideRendered())
         {
             return false;
         }
@@ -139,10 +140,9 @@ class Asset extends RenderDataGenerator
                 return !$useJs;
             }
 
-            if ($this->colorScheme)
+            if ($this->colorScheme !== null && $this->colorScheme !== $colorScheme)
             {
-                // Color scheme CSS are loaded using JS.
-                // TODO Preload default theme.
+                // Non-base color schemes CSS are loaded using JS.
                 return false;
             }
         }
@@ -150,11 +150,18 @@ class Asset extends RenderDataGenerator
         return true;
     }
 
-    public function setRendered(bool $bool = true)
+    public function setServerSideRendered(bool $bool = true)
     {
         $this->active =
         $this->rendered =
         $this->initial = $bool;
+    }
+
+    public function isServerSideRendered(): bool
+    {
+        return $this->active &&
+            $this->rendered &&
+            $this->initial;
     }
 
     public function toRenderData(): array

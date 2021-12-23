@@ -19,7 +19,8 @@ class LayoutService extends RenderNodeService
         protected ComponentService $componentService
     ) {
         parent::__construct(
-            $assetsService
+            $assetsService,
+            $adaptiveResponseService
         );
     }
 

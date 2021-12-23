@@ -18,12 +18,14 @@ class PageService extends RenderNodeService
 {
     #[Pure]
     public function __construct(
+        protected AdaptiveResponseService $adaptiveResponseService,
         protected AssetsService $assetsService,
         protected Translator $translator,
         protected RouterInterface $router
     ) {
         parent::__construct(
-            $this->assetsService
+            $this->assetsService,
+            $adaptiveResponseService
         );
     }
 

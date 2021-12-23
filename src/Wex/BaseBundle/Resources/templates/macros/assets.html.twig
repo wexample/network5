@@ -1,19 +1,19 @@
-{% macro render_available_css(context_type, layout_use_js) %}
+{% macro render_available_css(context_type, color_scheme, layout_use_js) %}
     {% for asset in assets_type_filtered(context_type, 'css') %}
-        {%- if asset.isAvailable(layout_use_js) -%}
+        {%- if asset.isReadyForServerSideRendering(color_scheme, layout_use_js) -%}
             {% if not layout_use_js %}
                 <link rel="stylesheet" media="{{ asset.media }}"
                       href="{{ asset(asset.path) }}"/>
             {% endif %}
-            {{ asset.setRendered() }}
+            {{ asset.setServerSideRendered() }}
         {%- endif -%}
     {% endfor %}
 {% endmacro %}
 
-{% macro render_available_js(context_type) %}
+{% macro render_available_js(context_type, color_scheme) %}
     {%- for asset in assets_type_filtered(context_type, 'js') -%}
-        {%- if asset.isAvailable(true) -%}
-            {{ asset.setRendered() }}
+        {%- if asset.isReadyForServerSideRendering(color_scheme, true) -%}
+            {{ asset.setServerSideRendered() }}
         {%- endif -%}
     {%- endfor -%}
 {% endmacro %}

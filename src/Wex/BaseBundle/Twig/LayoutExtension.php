@@ -52,7 +52,7 @@ class LayoutExtension extends AbstractExtension
     public function layoutInit(
         Environment $twig,
         ?string $layoutName,
-        string $colorScheme = ColorSchemeHelper::SCHEME_DEFAULT,
+        string $colorScheme,
         bool $useJs = true,
     ): void {
         $this->layoutService->layoutInitInitial(

@@ -62,7 +62,8 @@ class AssetsService
     public function __construct(
         KernelInterface $kernel,
         private AdaptiveResponseService $adaptiveResponseService
-    ) {
+    )
+    {
         $this->pathProject = $kernel->getProjectDir().'/';
         $this->pathPublic = $this->pathProject.self::DIR_PUBLIC;
         $this->pathBuild = $this->pathPublic.self::DIR_BUILD;
@@ -114,7 +115,7 @@ class AssetsService
             .'?'.$this->aggregationHash[$type.'-'.$pageName];
     }
 
-    public function aggregateInitialAssets(string $pageName, string $type): string
+    public function aggregateInitialAssets(string $pageName, string $type, string $colorScheme): string
     {
         $aggregatedFileName = $this->buildAggregatedPathFromPageName($pageName, $type);
 
@@ -123,9 +124,11 @@ class AssetsService
         /** @var Asset $asset */
         foreach ($this->assets[$type] as $asset)
         {
-            if ($asset->type === $type && $asset->initial
+            if ($asset->isServerSideRendered()
+                && $asset->type === $type
                 // Ignore contextual variations.
-                && !$asset->responsive && !$asset->colorScheme)
+                && $asset->responsive === null
+                && ($asset->colorScheme === null || $asset->colorScheme === $colorScheme))
             {
                 $output .= file_get_contents($this->pathPublic.$asset->path);
             }
@@ -146,7 +149,8 @@ class AssetsService
         string $path,
         RenderNode $context,
         array &$collection = []
-    ): array {
+    ): array
+    {
         foreach (Asset::ASSETS_EXTENSIONS as $ext)
         {
             $collection[$ext] = array_merge(
@@ -171,7 +175,8 @@ class AssetsService
         string $ext,
         RenderNode $renderNode,
         bool $searchColorScheme
-    ): array {
+    ): array
+    {
         $assetPathFull = $ext.'/'.$pageName.'.'.$ext;
         $output = [];
 
@@ -256,7 +261,8 @@ class AssetsService
     public function addAsset(
         string $pathRelative,
         RenderNode $renderNode
-    ): ?Asset {
+    ): ?Asset
+    {
         $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
         if (!isset($this->manifest[$pathRelativeToPublic]))
         {
@@ -272,8 +278,7 @@ class AssetsService
             );
 
             $this->assetsLoaded[$pathRelative] = $asset;
-        }
-        else
+        } else
         {
             $asset = $this->assetsLoaded[$pathRelative];
         }
@@ -283,23 +288,16 @@ class AssetsService
         return $this->assetsLoaded[$pathRelative];
     }
 
-    public function assetsPreload(array $assets, bool $useJs)
+    public function assetsPreload(array $assets, string $colorScheme, bool $useJs)
     {
         /** @var Asset $asset */
         foreach ($assets as $asset)
         {
-            if ($this->assetsIsAvailable($asset, $useJs))
+            if ($asset->getIsReadyForServerSideRendering($colorScheme, $useJs))
             {
                 $asset->preload = true;
             }
         }
-    }
-
-    public function assetsIsAvailable(Asset $asset, bool $useJs): bool
-    {
-        // When using JS, we manage responsive
-        // and extra color style outside page rendering flow.
-        return !((!$useJs) || $asset->responsive || $asset->colorScheme);
     }
 
     public function assetsPreloadList(string $ext): array

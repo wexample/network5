@@ -44,7 +44,10 @@ class ComponentService extends RenderNodeService
         KernelInterface $kernel,
         protected Translator $translator
     ) {
-        parent::__construct($assetsService);
+        parent::__construct(
+            $assetsService,
+            $adaptiveResponseService
+        );
 
         $adaptiveResponseService->addRenderEventListener($this);
 
@@ -269,7 +272,7 @@ class ComponentService extends RenderNodeService
         $this->initRenderNode(
             $component,
             $name,
-            $this->adaptiveResponseService->renderPass->useJs
+            $this->adaptiveResponseService->renderPass->useJs,
         );
 
         $component->body = $this->componentRenderBody(

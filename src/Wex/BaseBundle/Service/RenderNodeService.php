@@ -7,15 +7,18 @@ use App\Wex\BaseBundle\Rendering\RenderNode\RenderNode;
 abstract class RenderNodeService
 {
     public function __construct(
-        protected AssetsService $assetsService
-    ) {
+        protected AssetsService $assetsService,
+        protected AdaptiveResponseService $adaptiveResponseService,
+    )
+    {
     }
 
     public function initRenderNode(
         RenderNode $renderNode,
         string $name,
         string $useJs
-    ) {
+    )
+    {
         $renderNode->init(
             $name
         );
@@ -28,7 +31,8 @@ abstract class RenderNodeService
 
         $this->assetsService->assetsPreload(
             $renderNode->assets['css'],
-            $useJs
+            $this->adaptiveResponseService->renderPass->layoutRenderNode->colorScheme,
+            $useJs,
         );
     }
 }
