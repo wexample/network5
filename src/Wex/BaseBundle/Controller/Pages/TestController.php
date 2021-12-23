@@ -8,28 +8,28 @@ use Symfony\Component\Routing\Annotation\Route;
 
 abstract class TestController extends AbstractPagesController
 {
-    #[Route(path: 'test', name: 'test_index')]
+    #[Route(path: '_core/test', name: '_core_test_index')]
     public function index(): Response
     {
-        return $this->renderPage('@WexBaseBundle::test/index');
+        return $this->renderPage('@WexBaseBundle::_core/test/index');
     }
 
-    #[Route(path: 'test/view', name: 'test_view')]
+    #[Route(path: '_core/test/view', name: '_core_test_view')]
     public function view(): Response
     {
         return $this->render(
-            '@WexBaseBundle/Resources/templates/pages/test/view.html.twig'
+            '@WexBaseBundle/Resources/templates/pages/_core/test/view.html.twig'
         );
     }
 
-    #[Route(path: 'test/adaptive', name: 'test_adaptive')]
+    #[Route(path: '_core/test/adaptive', name: '_core_test_adaptive')]
     public function adaptive(): Response
     {
         return $this
             ->adaptiveResponseService
             ->createResponse($this)
             ->setView(
-                '@WexBaseBundle/Resources/templates/pages/test/adaptive.html.twig'
+                '@WexBaseBundle/Resources/templates/pages/_core/test/adaptive.html.twig'
             )
             ->render();
     }
