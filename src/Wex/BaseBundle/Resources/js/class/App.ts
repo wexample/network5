@@ -65,7 +65,7 @@ export default class extends AsyncConstructor {
       // The main functionalities are ready.
       this.hasCoreLoaded = true;
 
-      await this.loadRenderData(this.layout.renderData);
+      await this.loadLayoutRenderData(this.layout.renderData);
 
       // Display page content.
       this.layout.el.classList.remove('layout-loading');
@@ -87,14 +87,17 @@ export default class extends AsyncConstructor {
     }
   }
 
-  async loadRenderData(
+  async loadLayoutRenderData(
     renderData: RenderDataInterface,
     requestOptions: RequestOptionsInterface = {}
   ): Promise<any> {
-    await this.services.mixins.invokeUntilComplete('loadRenderData', 'app', [
-      renderData,
-      requestOptions,
-    ]);
+    await this.services.mixins.invokeUntilComplete(
+      'loadRenderData',
+      'app',
+      [
+        renderData,
+        requestOptions,
+      ]);
 
     // Execute ready callbacks.
     await this.readyComplete();
