@@ -4,6 +4,7 @@ import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import AssetInterface from '../interfaces/AssetInterface';
 import RenderNode from '../class/RenderNode';
 import { Attribute, AttributeValue, TagName } from '../helpers/Dom';
+import AssetsInterface from "../interfaces/AssetInterface";
 
 export class AssetsServiceType {
   public static CSS: string = 'css';
@@ -17,7 +18,7 @@ export default class AssetsService extends AppService {
   public static UPDATE_FILTER_REJECT = 'reject';
 
   public assetsRegistry: AssetsCollectionInterface =
-    this.createEmptyAssetsCollection();
+    AssetsService.createEmptyAssetsCollection();
   public jsAssetsPending: { [key: string]: AssetInterface } = {};
   public updateFilters: Function[] = [];
 
@@ -29,6 +30,8 @@ export default class AssetsService extends AppService {
         },
 
         async loadLayoutRenderData(renderData: LayoutInterface) {
+          renderData.assets = this.registerAssetsInCollection(renderData.assets);
+
           // Load only layout assets.
           await this.app.services.assets.loadValidAssetsInCollection(
             renderData.assets
@@ -132,7 +135,28 @@ export default class AssetsService extends AppService {
     });
   }
 
-  removeAssets(assetsCollection) {
+  registerAssetsInCollection(
+    assetsCollection: AssetsCollectionInterface
+  ): AssetsCollectionInterface {
+    let outputCollection = AssetsService.createEmptyAssetsCollection();
+
+    this.assetsInCollection(assetsCollection).forEach((asset) =>
+      outputCollection[asset.type].push(this.registerAsset(asset))
+    );
+
+    return outputCollection;
+  }
+
+  registerAsset(asset: AssetsInterface): AssetInterface {
+    // Each asset has a unique reference object shared between all render node.
+    if (!this.assetsRegistry[asset.type][asset.id]) {
+      this.assetsRegistry[asset.type][asset.id] = asset;
+    }
+
+    return this.assetsRegistry[asset.type][asset.id];
+  }
+
+  removeAssets(assetsCollection: AssetsCollectionInterface) {
     this.assetsInCollection(assetsCollection).forEach((asset) =>
       this.removeAsset(asset)
     );
@@ -211,7 +235,7 @@ export default class AssetsService extends AppService {
     await this.updateRenderNodeAssets(this.app.layout);
   }
 
-  public createEmptyAssetsCollection(): AssetsCollectionInterface {
+  public static createEmptyAssetsCollection(): AssetsCollectionInterface {
     return {
       css: [],
       js: [],
@@ -221,8 +245,8 @@ export default class AssetsService extends AppService {
   public async loadValidAssetsInCollection(
     assetsCollection: AssetsCollectionInterface
   ) {
-    let toLoad = this.createEmptyAssetsCollection();
-    let toUnload = this.createEmptyAssetsCollection();
+    let toLoad = AssetsService.createEmptyAssetsCollection();
+    let toUnload = AssetsService.createEmptyAssetsCollection();
     let hasChange = false;
     let assetsRegistry = this.assetsRegistry;
 
