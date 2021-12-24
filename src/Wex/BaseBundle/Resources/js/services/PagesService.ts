@@ -84,7 +84,7 @@ export default class PagesService extends RenderNodeService {
     }
 
     await this.createRenderNode(
-      await this.prepareRenderNodeDefinition(renderData),
+      renderData.name,
       el,
       renderData,
       requestOptions

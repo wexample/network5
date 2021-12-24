@@ -9,12 +9,26 @@ export default abstract class RenderNodeService extends AppService {
   pages: {};
   services: ServiceRegistryPageInterface;
 
+  public async prepareRenderData(renderData: RenderDataInterface) {
+    await this.services.mixins.invokeUntilComplete(
+      'prepareRenderData',
+      'app',
+      [renderData]
+    );
+
+    await this.services.assets.loadValidAssetsInCollection(renderData.assets);
+  }
+
   async createRenderNode(
-    classDefinition: any,
+    definitionName: string,
     el: HTMLElement,
     renderData: RenderDataInterface,
     requestOptions: RequestOptionsInterface
   ): Promise<RenderNode> {
+    await this.prepareRenderData(renderData);
+
+    let classDefinition = await this.app.getBundleClassDefinition(definitionName, true);
+
     let instance = this.createRenderNodeInstance(
       el,
       renderData,
@@ -34,12 +48,6 @@ export default abstract class RenderNodeService extends AppService {
     classDefinition: any
   ): RenderNode | null {
     return new classDefinition(this.app, el);
-  }
-
-  async prepareRenderNodeDefinition(renderData: RenderDataInterface) {
-    await this.services.assets.loadValidAssetsInCollection(renderData.assets);
-
-    return this.app.getBundleClassDefinition(renderData.name, true);
   }
 
   get(path: string, options: PageInterface): Promise<any> {

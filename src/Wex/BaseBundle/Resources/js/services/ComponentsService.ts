@@ -148,7 +148,7 @@ export default class ComponentsService extends RenderNodeService {
       }
 
       let component = (await this.createRenderNode(
-        await this.prepareRenderNodeDefinition(renderDataComponent),
+        renderDataComponent.name,
         el,
         renderDataComponent,
         requestOptions

@@ -5,6 +5,7 @@ import AssetInterface from '../interfaces/AssetInterface';
 import RenderNode from '../class/RenderNode';
 import { Attribute, AttributeValue, TagName } from '../helpers/Dom';
 import AssetsInterface from "../interfaces/AssetInterface";
+import RenderDataInterface from "../interfaces/RenderData/RenderDataInterface";
 
 export class AssetsServiceType {
   public static CSS: string = 'css';
@@ -17,8 +18,7 @@ export default class AssetsService extends AppService {
 
   public static UPDATE_FILTER_REJECT = 'reject';
 
-  public assetsRegistry: AssetsCollectionInterface =
-    AssetsService.createEmptyAssetsCollection();
+  public assetsRegistry: any = {css: {}, js: {}};
   public jsAssetsPending: { [key: string]: AssetInterface } = {};
   public updateFilters: Function[] = [];
 
@@ -29,13 +29,8 @@ export default class AssetsService extends AppService {
           this.app.services.assets.appInit();
         },
 
-        async loadLayoutRenderData(renderData: LayoutInterface) {
+        prepareRenderData(renderData: RenderDataInterface) {
           renderData.assets = this.registerAssetsInCollection(renderData.assets);
-
-          // Load only layout assets.
-          await this.app.services.assets.loadValidAssetsInCollection(
-            renderData.assets
-          );
         },
       },
     };
@@ -150,7 +145,7 @@ export default class AssetsService extends AppService {
   registerAsset(asset: AssetsInterface): AssetInterface {
     // Each asset has a unique reference object shared between all render node.
     if (!this.assetsRegistry[asset.type][asset.id]) {
-      this.assetsRegistry[asset.type][asset.id] = asset;
+      this.assetsRegistry[asset.type][asset.id] = asset
     }
 
     return this.assetsRegistry[asset.type][asset.id];
@@ -248,20 +243,10 @@ export default class AssetsService extends AppService {
     let toLoad = AssetsService.createEmptyAssetsCollection();
     let toUnload = AssetsService.createEmptyAssetsCollection();
     let hasChange = false;
-    let assetsRegistry = this.assetsRegistry;
 
     this.assetsInCollection(assetsCollection).forEach(
       (asset: AssetInterface) => {
         let type = asset.type;
-
-        // Asset object may come from a fresh xhr load,
-        // and represent an existing but locally updated version.
-        // We always prefer local version.
-        if (assetsRegistry[type][asset.id]) {
-          asset = assetsRegistry[type][asset.id];
-        } else {
-          assetsRegistry[type][asset.id] = asset;
-        }
 
         if (this.askFilterIfAssetIsValid(asset)) {
           if (!asset.active) {
