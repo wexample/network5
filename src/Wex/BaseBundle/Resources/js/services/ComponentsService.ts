@@ -31,7 +31,7 @@ export default class ComponentsService extends RenderNodeService {
   registerHooks() {
     return {
       app: {
-        async loadRenderData(
+        async loadLayoutRenderData(
           renderData: LayoutInterface,
           requestOptions: RequestOptionsInterface,
           registry: any
@@ -48,7 +48,7 @@ export default class ComponentsService extends RenderNodeService {
       },
 
       page: {
-        async loadPageRenderData(page: Page, registry: any) {
+        async initPage(page: Page, registry: any) {
           // Wait for page loading.
           if (
             registry.pages !== MixinsAppService.LOAD_STATUS_COMPLETE ||
@@ -57,7 +57,7 @@ export default class ComponentsService extends RenderNodeService {
             return MixinsAppService.LOAD_STATUS_WAIT;
           }
 
-          await this.services.components.loadPageRenderData(page);
+          await this.services.components.initPage(page);
         },
       },
     };
@@ -100,7 +100,7 @@ export default class ComponentsService extends RenderNodeService {
     );
   }
 
-  async loadPageRenderData(page: Page) {
+  async initPage(page: Page) {
     await this.createRenderDataComponents(
       page.renderData,
       page,

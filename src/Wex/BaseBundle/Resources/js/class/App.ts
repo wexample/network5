@@ -92,7 +92,7 @@ export default class extends AsyncConstructor {
     requestOptions: RequestOptionsInterface = {}
   ): Promise<any> {
     await this.services.mixins.invokeUntilComplete(
-      'loadRenderData',
+      'loadLayoutRenderData',
       'app',
       [
         renderData,

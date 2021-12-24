@@ -28,7 +28,7 @@ export default class AssetsService extends AppService {
           this.app.services.assets.appInit();
         },
 
-        async loadRenderData(renderData: LayoutInterface) {
+        async loadLayoutRenderData(renderData: LayoutInterface) {
           // Load only layout assets.
           await this.app.services.assets.loadValidAssetsInCollection(
             renderData.assets

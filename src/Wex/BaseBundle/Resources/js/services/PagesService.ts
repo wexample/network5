@@ -22,7 +22,7 @@ export default class PagesService extends RenderNodeService {
   registerHooks() {
     return {
       app: {
-        async loadRenderData(
+        async loadLayoutRenderData(
           renderData: LayoutInterface,
           requestOptions: RequestOptionsInterface,
           registry: any

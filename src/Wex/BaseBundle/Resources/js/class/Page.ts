@@ -59,7 +59,7 @@ export default class extends RenderNode {
     await this.app.loadAndInitServices(this.getPageLevelMixins());
 
     await this.services.mixins.invokeUntilComplete(
-      'loadPageRenderData',
+      'initPage',
       'page',
       [this]
     );

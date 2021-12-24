@@ -5,7 +5,7 @@ export default class LayoutsService extends RenderNodeService {
   registerHooks() {
     return {
       app: {
-        async loadRenderData(
+        async loadLayoutRenderData(
           renderData: LayoutInterface,
         ) {
           this.app.layout.mergeRenderData(renderData);
