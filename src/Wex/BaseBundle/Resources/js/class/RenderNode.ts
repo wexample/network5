@@ -11,6 +11,7 @@ export default abstract class RenderNode extends AppChild {
   public el: HTMLElement;
   public focused: boolean = false;
   public id: string;
+  public name: string;
   public parentRenderNode: RenderNode;
   public renderData: RenderDataInterface;
   public translations: TranslationsInterface = {
@@ -57,6 +58,9 @@ export default abstract class RenderNode extends AppChild {
   }
 
   mergeRenderData(renderData: RenderDataInterface) {
+    this.id = renderData.id;
+    this.name = renderData.name;
+
     this.translations.catalog = {
       ...this.translations.catalog,
       ...renderData.translations.catalog,

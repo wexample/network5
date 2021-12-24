@@ -37,15 +37,10 @@ class InitialLayoutRenderNode extends LayoutRenderNode
         $this->page->isInitialPage = true;
 
         $this->vars += [
-            'displayBreakpoints' => AssetsService::DISPLAY_BREAKPOINTS
+            'colorScheme' => $this->colorScheme,
+            'displayBreakpoints' => AssetsService::DISPLAY_BREAKPOINTS,
+            'translationsDomainSeparator' => $this->translationsDomainSeparator,
+            'useJs' => $this->useJs,
         ];
-    }
-
-    public function toRenderData(): array
-    {
-        return parent::toRenderData() + [
-                'colorScheme' => $this->colorScheme,
-                'useJs' => $this->useJs,
-            ];
     }
 }

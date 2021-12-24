@@ -13,7 +13,7 @@ export default class LocaleService extends AppService {
             args,
             this.translations.domains,
             {
-              ...this.app.layout.renderData.translations.catalog,
+              ...this.app.layout.translations.catalog,
               ...this.translations.catalog,
             }
           );
@@ -26,10 +26,10 @@ export default class LocaleService extends AppService {
     string = '',
     args = {},
     domains = this.transDomains,
-    catalog = this.app.layout.renderData.translations.catalog
+    catalog = this.app.layout.translations.catalog
   ) {
     let stringWithDomain;
-    let sep = this.app.layout.renderData.translationsDomainSeparator;
+    let sep = this.app.layout.vars.translationsDomainSeparator;
 
     // A domain is specified.
     if (string.indexOf(sep) !== -1) {

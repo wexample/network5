@@ -6,6 +6,7 @@ import RenderNode from './RenderNode';
 export default abstract class Component extends RenderNode {
   protected listenKeyboardKey: string[] = [];
   protected onKeyUpProxy: Function;
+  public options: any = {};
   public renderData: ComponentInterface;
   protected readonly services: ServiceRegistryComponentInterface;
 
@@ -16,6 +17,12 @@ export default abstract class Component extends RenderNode {
   public static INIT_MODE_PARENT: string = 'parent';
 
   public static INIT_MODE_PREVIOUS: string = 'previous';
+
+  mergeRenderData(renderData: ComponentInterface) {
+    super.mergeRenderData(renderData);
+
+    this.options = {...this.options, ...renderData.options};
+  }
 
   public getRenderNodeType(): string {
     return 'component';

@@ -130,7 +130,7 @@ export default {
 
   methods: {
     renderDebugInfo() {
-      return [this.renderData.name].join('<br>');
+      return [this.name].join('<br>');
     },
 
     hasResponsiveAsset(type: string, size: string): boolean {

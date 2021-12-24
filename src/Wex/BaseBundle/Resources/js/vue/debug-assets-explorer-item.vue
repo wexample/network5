@@ -20,13 +20,13 @@ export default {
 
   methods: {
     getItemName() {
-      return this.object.renderData.name;
+      return this.object.name;
     },
 
     renderItemIcon() {
       let icon;
 
-      if (this.object.renderData.name === 'components/vue') {
+      if (this.object.name === 'components/vue') {
         icon = faVuejs;
       } else {
         icon = {

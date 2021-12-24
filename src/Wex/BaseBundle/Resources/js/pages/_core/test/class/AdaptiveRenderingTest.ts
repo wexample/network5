@@ -29,13 +29,13 @@ export default class AdaptiveRenderingTest extends UnitTest {
         let pageFocused = this.app.layout.pageFocused;
 
         this.assertEquals(
-          pageFocused.renderData.name,
+          pageFocused.name,
           `pages/${pageNamePart}`,
           'The focused page is the modal content page'
         );
 
         this.assertEquals(
-          pageFocused.parentRenderNode.renderData.name,
+          pageFocused.parentRenderNode.name,
           `components/modal`,
           'The focused page is a child of modal component'
         );

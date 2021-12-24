@@ -17,7 +17,7 @@ export default class extends Component {
   ) {
     super.loadRenderData(renderData, requestOptions);
 
-    this.group = this.renderData.options.group;
+    this.group = this.options.group;
 
     this.el.querySelectorAll('a.tab-internal').forEach((elTab) => {
       if (this.isCurrentPageTab(elTab)) {
