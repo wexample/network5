@@ -23,10 +23,6 @@ export default class extends RenderNode {
   public responsiveDisplayCurrent: PageResponsiveDisplay;
   public services: ServiceRegistryPageInterface;
 
-  public getId(): string {
-    return 'page-' + this.name;
-  }
-
   public getRenderNodeType(): string {
     return 'page';
   }

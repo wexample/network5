@@ -67,11 +67,11 @@ export default abstract class RenderNode extends AppChild {
 
   appendChildRenderNode(renderNode: RenderNode) {
     renderNode.parentRenderNode = this;
-    this.childRenderNodes[renderNode.getId()] = renderNode;
+    this.childRenderNodes[renderNode.id] = renderNode;
   }
 
   removeChildRenderNode(renderNode: RenderNode) {
-    delete this.childRenderNodes[renderNode.getId()];
+    delete this.childRenderNodes[renderNode.id];
   }
 
   forEachChildRenderNode(callback?: Function) {
@@ -103,8 +103,6 @@ export default abstract class RenderNode extends AppChild {
   protected deactivateListeners(): void {
     // To override...
   }
-
-  public abstract getId(): string;
 
   public abstract getRenderNodeType(): string;
 }

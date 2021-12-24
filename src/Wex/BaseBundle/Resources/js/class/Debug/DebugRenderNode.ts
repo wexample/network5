@@ -42,7 +42,7 @@ export default class DebugRenderNode extends AppChild {
 
     // After app loaded.
     renderNode.ready(() => {
-      this.service.debugRenderNodes[this.renderNode.getId()] = this;
+      this.service.debugRenderNodes[this.renderNode.id] = this;
 
       // Wait rendering complete.
       setTimeout(this.updateProxy, 200);
@@ -86,7 +86,7 @@ export default class DebugRenderNode extends AppChild {
     this.service.elDebugHelpers.appendChild(this.el);
 
     this.renderNode.ready(() => {
-      this.el.setAttribute(Attribute.ID, `debug-${this.renderNode.getId()}`);
+      this.el.setAttribute(Attribute.ID, `debug-${this.renderNode.id}`);
     });
   }
 

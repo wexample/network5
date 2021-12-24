@@ -17,8 +17,6 @@ class ComponentRenderNode extends RenderNode
 
     public ?string $body = null;
 
-    public string $id;
-
     #[Pure]
     public function __construct(
         protected RenderPass $renderPass,
@@ -28,8 +26,6 @@ class ComponentRenderNode extends RenderNode
         parent::__construct(
             $this->renderPass
         );
-
-        $this->id = 'com-'.uniqid();
     }
 
     public function init(string $name, )
@@ -69,7 +65,6 @@ class ComponentRenderNode extends RenderNode
     {
         return parent::toRenderData()
             + [
-                'id' => $this->id,
                 'initMode' => $this->initMode,
                 'options' => $this->options,
             ];

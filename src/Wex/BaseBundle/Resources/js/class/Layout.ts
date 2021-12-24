@@ -9,10 +9,6 @@ export default class extends RenderNode {
 
   public renderData: LayoutInterface;
 
-  public getId(): string {
-    return 'layout-' + this.renderData.renderRequestId;
-  }
-
   public getRenderNodeType(): string {
     return 'layout';
   }

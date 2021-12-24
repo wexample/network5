@@ -13,6 +13,8 @@ abstract class RenderNode extends RenderDataGenerator
 
     public array $components = [];
 
+    protected string $id;
+
     public ?RenderNode $parent = null;
 
     public string $renderRequestId;
@@ -36,6 +38,9 @@ abstract class RenderNode extends RenderDataGenerator
         $this->parent = $this->renderPass->getCurrentContextRenderNode();
         $this->renderRequestId = $this->renderPass->getRenderRequestId();
         $this->name = $name;
+        $this->id = $this->getContextType().'-'
+            .str_replace('/', '-', $this->name)
+            .'-'.uniqid();
 
         $this->renderPass->registerContextRenderNode($this);
 
@@ -81,6 +86,7 @@ abstract class RenderNode extends RenderDataGenerator
                 'js' => $this->arrayToRenderData($this->assets['js']),
             ],
             'components' => $this->arrayToRenderData($this->components),
+            'id' => $this->id,
             'name' => $this->name,
             'renderRequestId' => $this->renderRequestId,
             'translations' => $this->translations,

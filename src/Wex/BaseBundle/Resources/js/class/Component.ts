@@ -17,10 +17,6 @@ export default abstract class Component extends RenderNode {
 
   public static INIT_MODE_PREVIOUS: string = 'previous';
 
-  public getId(): string {
-    return this.renderData.id;
-  }
-
   public getRenderNodeType(): string {
     return 'component';
   }
