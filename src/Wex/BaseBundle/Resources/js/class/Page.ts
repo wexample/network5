@@ -16,6 +16,7 @@ export default class extends RenderNode {
   public name: string;
   protected onChangeResponsiveSizeProxy: Function;
   protected onChangeColorSchemeProxy: Function;
+  public pageHandler: PageHandlerComponent;
   public parentRenderNode: PageHandlerComponent;
   protected readonly responsiveDisplays: any = [];
   public renderData: RenderDataPageInterface;
@@ -32,13 +33,11 @@ export default class extends RenderNode {
   }
 
   loadRenderData(
-    renderData: RenderDataInterface,
+    renderData: RenderDataPageInterface,
     requestOptions: RequestOptionsInterface
   ) {
     super.loadRenderData(renderData, requestOptions);
 
-    this.isInitialPage = this.renderData.isInitialPage;
-    this.name = this.renderData.name;
     this.requestOptions = requestOptions;
 
     if (this.isInitialPage) {
@@ -46,6 +45,14 @@ export default class extends RenderNode {
     }
 
     this.elOverlay = this.el.querySelector('.page-overlay');
+  }
+
+  mergeRenderData(renderData: RenderDataPageInterface) {
+    super.mergeRenderData(renderData);
+
+    this.isInitialPage = renderData.isInitialPage;
+    this.name = renderData.name;
+    this.pageHandler = renderData.pageHandler;
   }
 
   async init() {
@@ -57,8 +64,8 @@ export default class extends RenderNode {
       [this]
     );
 
-    if (this.renderData.pageHandler) {
-      this.renderData.pageHandler.setPage(this);
+    if (this.pageHandler) {
+      this.pageHandler.setPage(this);
     }
 
     this.updateCurrentResponsiveDisplay();

@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       backgroundColor: 'transparent',
-      displayBreakpoints: this.app.layout.renderData.displayBreakpoints,
+      displayBreakpoints: this.app.layout.vars.displayBreakpoints,
       opened: false,
     };
   },
@@ -65,7 +65,7 @@ export default {
         },
         [
           renderLineTitle(type.toUpperCase()),
-          Object.keys(this.app.layout.renderData.displayBreakpoints).map(
+          Object.keys(this.app.layout.vars.displayBreakpoints).map(
             (size) => {
               return h(
                 TagName.DIV,
