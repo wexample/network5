@@ -1,3 +1,13 @@
-{%- extends '@WexBaseBundle/Resources/templates/layouts/default.html.twig' -%}
+{%- extends '@WexBaseBundle/Resources/templates/layouts/test.html.twig' -%}
+
+{%- block layout_config -%}
+    {{ parent() }}
+    {{- js_var('layout_level_test_var', 'value') -}}
+{%- endblock -%}
+
+{%- block page_config -%}
+    {{ parent() }}
+    {{- js_var('page_level_test_var', 'value') -}}
+{%- endblock -%}
 
 {%- block page_body -%}ADAPTIVE{%- endblock -%}

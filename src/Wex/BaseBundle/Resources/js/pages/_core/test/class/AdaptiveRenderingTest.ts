@@ -41,12 +41,22 @@ export default class AdaptiveRenderingTest extends UnitTest {
         );
 
         this.assertEquals(
-          this.app
-            .layout
-            .pageFocused
+          pageFocused
             .el.querySelector('.modal-header h2').innerHTML,
           'ADAPTIVE_PAGE_TITLE',
           'The modal page title has been translated'
+        );
+
+        this.assertEquals(
+          pageFocused.vars.page_level_test_var,
+          'value',
+          'The modal page has vars'
+        );
+
+        this.assertEquals(
+          this.app.layout.vars.layout_level_test_var,
+          'value',
+          'The layout has a new var'
         );
 
         // Close modal.

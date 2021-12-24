@@ -45,7 +45,7 @@ export default abstract class RenderNode extends AppChild {
   ) {
     this.renderData = renderData;
 
-    // Attach to caller not, or current active page, or null.
+    // Attach to caller node, or current active page, or null.
     let parentNode =
       requestOptions.callerRenderNode ||
       (this.app.layout && this.app.layout.pageFocused);
@@ -53,11 +53,16 @@ export default abstract class RenderNode extends AppChild {
       parentNode.appendChildRenderNode(this);
     }
 
+    this.mergeRenderData(renderData);
+  }
+
+  mergeRenderData(renderData: RenderDataInterface) {
     this.translations.catalog = {
       ...this.translations.catalog,
-      ...this.renderData.translations.catalog,
+      ...renderData.translations.catalog,
     };
-    this.vars = { ...this.vars, ...this.renderData.vars };
+
+    this.vars = {...this.vars, ...renderData.vars};
   }
 
   appendChildRenderNode(renderNode: RenderNode) {
