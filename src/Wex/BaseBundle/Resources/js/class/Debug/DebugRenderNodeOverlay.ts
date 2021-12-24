@@ -47,9 +47,9 @@ export default {
     return function () {
       debugRenderNode.focus();
 
-      renderNode.forEachChildRenderNode((childRenderNode) => {
+      renderNode.forEachChildRenderNode((childRenderNode:RenderNode) => {
         debugRenderNode.service.debugRenderNodes[
-          childRenderNode.getId()
+          childRenderNode.id
         ].focus();
       });
 
@@ -65,9 +65,9 @@ export default {
     return function () {
       debugRenderNode.blur();
 
-      renderNode.forEachChildRenderNode((childRenderNode) => {
+      renderNode.forEachChildRenderNode((childRenderNode:RenderNode) => {
         debugRenderNode.service.debugRenderNodes[
-          childRenderNode.getId()
+          childRenderNode.id
         ].blur();
       });
 
