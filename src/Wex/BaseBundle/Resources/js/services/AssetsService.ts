@@ -1,6 +1,5 @@
 import AssetsCollectionInterface from '../interfaces/AssetsCollectionInterface';
 import AppService from '../class/AppService';
-import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import AssetInterface from '../interfaces/AssetInterface';
 import RenderNode from '../class/RenderNode';
 import { Attribute, AttributeValue, TagName } from '../helpers/Dom';
@@ -29,8 +28,10 @@ export default class AssetsService extends AppService {
           this.app.services.assets.appInit();
         },
 
-        prepareRenderData(renderData: RenderDataInterface) {
+        async prepareRenderData(renderData: RenderDataInterface) {
           renderData.assets = this.registerAssetsInCollection(renderData.assets);
+
+          await this.services.assets.loadValidAssetsInCollection(renderData.assets);
         },
       },
     };

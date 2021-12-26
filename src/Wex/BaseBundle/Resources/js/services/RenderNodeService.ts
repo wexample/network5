@@ -15,8 +15,6 @@ export default abstract class RenderNodeService extends AppService {
       'app',
       [renderData]
     );
-
-    await this.services.assets.loadValidAssetsInCollection(renderData.assets);
   }
 
   async createRenderNode(
