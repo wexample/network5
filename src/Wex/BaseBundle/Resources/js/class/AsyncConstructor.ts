@@ -35,4 +35,8 @@ export default abstract class {
       await callback[method](thisArg || this, args);
     }
   }
+
+  seal() {
+    Object.seal(this);
+  }
 }

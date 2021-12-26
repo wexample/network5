@@ -67,6 +67,10 @@ export default class extends AsyncConstructor {
       // The main functionalities are ready.
       this.hasCoreLoaded = true;
 
+      // Every core properties has been set,
+      // block any try to add extra property.
+      this.seal();
+
       await this.loadLayoutRenderData(this.layout.renderData);
 
       // Display page content.
