@@ -12,7 +12,6 @@ export default class AdaptiveService extends AppService {
       app: {
         loadRenderData(
           renderData: RenderDataInterface,
-          requestOptions: RequestOptionsInterface,
           registry
         ) {
           // Expect all assets to be loaded before triggering events.
@@ -44,6 +43,8 @@ export default class AdaptiveService extends AppService {
     path: string,
     requestOptions: RequestOptionsInterface = {}
   ): Promise<any> {
+    Object.freeze(requestOptions);
+
     return this.fetch(path, requestOptions)
       .then((response: Response) => {
         if (response.ok) {
@@ -59,7 +60,7 @@ export default class AdaptiveService extends AppService {
         await this.services.layouts.prepareRenderData(renderData);
 
         // Wait render data loading to continue.
-        return this.app.loadLayoutRenderData(renderData, requestOptions).then(() => {
+        return this.app.loadLayoutRenderData(renderData).then(() => {
           return renderData;
         });
       });

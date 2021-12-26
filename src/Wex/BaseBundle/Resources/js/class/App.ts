@@ -58,8 +58,7 @@ export default class extends AsyncConstructor {
       this.layout = (await this.services.layouts.createRenderNode(
         registry.layoutRenderData.name,
         doc.getElementById('layout'),
-        registry.layoutRenderData,
-        {}
+        registry.layoutRenderData
       )) as LayoutInitial;
 
       this.addLibraries(this.lib);
@@ -94,15 +93,13 @@ export default class extends AsyncConstructor {
   }
 
   async loadLayoutRenderData(
-    renderData: RenderDataInterface,
-    requestOptions: RequestOptionsInterface = {}
+    renderData: RenderDataInterface
   ): Promise<any> {
     await this.services.mixins.invokeUntilComplete(
       'loadLayoutRenderData',
       'app',
       [
-        renderData,
-        requestOptions,
+        renderData
       ]);
 
     // Execute ready callbacks.

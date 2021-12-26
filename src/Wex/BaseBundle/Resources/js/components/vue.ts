@@ -1,19 +1,16 @@
 import Component from '../class/Component';
-import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 
 export default class extends Component {
   loadRenderData(
-    renderData: ComponentInterface,
-    requestOptions: RequestOptionsInterface
+    renderData: ComponentInterface
   ) {
-    super.loadRenderData(renderData, requestOptions);
+    super.loadRenderData(renderData);
 
     this.app.services['vue']
       .createVueAppForComponent(
         renderData.options.path,
-        renderData,
-        requestOptions
+        renderData
       )
       .mount(this.el);
   }

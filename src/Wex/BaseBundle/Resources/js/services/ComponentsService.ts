@@ -33,7 +33,6 @@ export default class ComponentsService extends RenderNodeService {
       app: {
         async loadLayoutRenderData(
           renderData: LayoutInterface,
-          requestOptions: RequestOptionsInterface,
           registry: any
         ) {
           if (registry.assets !== MixinsAppService.LOAD_STATUS_COMPLETE) {
@@ -41,8 +40,7 @@ export default class ComponentsService extends RenderNodeService {
           }
 
           await this.services.components.loadLayoutRenderData(
-            renderData,
-            requestOptions
+            renderData
           );
         },
       },
@@ -85,8 +83,7 @@ export default class ComponentsService extends RenderNodeService {
   }
 
   async loadLayoutRenderData(
-    renderData: LayoutInterface,
-    requestOptions: RequestOptionsInterface
+    renderData: LayoutInterface
   ) {
     if (renderData.templates) {
       // Append html for global components.
@@ -95,23 +92,20 @@ export default class ComponentsService extends RenderNodeService {
 
     await this.createRenderDataComponents(
       renderData,
-      this.app.layout,
-      requestOptions
+      this.app.layout
     );
   }
 
   async initPage(page: Page) {
     await this.createRenderDataComponents(
       page.renderData,
-      page,
-      page.requestOptions
+      page
     );
   }
 
   async createRenderDataComponents(
     renderData: RenderDataInterface,
-    renderNode: RenderNode,
-    requestOptions: RequestOptionsInterface
+    renderNode: RenderNode
   ) {
     for (const renderDataComponent of renderData.components) {
       let el: HTMLElement;
@@ -150,8 +144,7 @@ export default class ComponentsService extends RenderNodeService {
       let component = (await this.createRenderNode(
         renderDataComponent.name,
         el,
-        renderDataComponent,
-        requestOptions
+        renderDataComponent
       )) as Component;
 
       renderNode.components.push(component);

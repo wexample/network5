@@ -15,10 +15,6 @@ export default {
       type: Object,
       default: {},
     },
-    requestOptions: {
-      type: Object,
-      default: {},
-    },
   },
 
   data() {

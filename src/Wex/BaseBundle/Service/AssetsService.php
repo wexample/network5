@@ -8,6 +8,7 @@ use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Rendering\RenderNode\RenderNode;
+use Exception;
 use function array_merge;
 use function array_reverse;
 use function basename;
@@ -62,7 +63,8 @@ class AssetsService
     public function __construct(
         KernelInterface $kernel,
         private AdaptiveResponseService $adaptiveResponseService
-    ) {
+    )
+    {
         $this->pathProject = $kernel->getProjectDir().'/';
         $this->pathPublic = $this->pathProject.self::DIR_PUBLIC;
         $this->pathBuild = $this->pathPublic.self::DIR_BUILD;
@@ -168,7 +170,8 @@ class AssetsService
         string $path,
         RenderNode $context,
         array &$collection = []
-    ): array {
+    ): array
+    {
         foreach (Asset::ASSETS_EXTENSIONS as $ext)
         {
             $collection[$ext] = array_merge(
@@ -193,7 +196,8 @@ class AssetsService
         string $ext,
         RenderNode $renderNode,
         bool $searchColorScheme
-    ): array {
+    ): array
+    {
         $assetPathFull = $ext.'/'.$pageName.'.'.$ext;
         $output = [];
 
@@ -275,10 +279,14 @@ class AssetsService
 
     protected array $assetsLoaded = [];
 
+    /**
+     * @throws Exception
+     */
     public function addAsset(
         string $pathRelative,
         RenderNode $renderNode
-    ): ?Asset {
+    ): ?Asset
+    {
         $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
         if (!isset($this->manifest[$pathRelativeToPublic]))
         {
@@ -287,15 +295,22 @@ class AssetsService
 
         if (!isset($this->assetsLoaded[$pathRelative]))
         {
+            $pathReal = realpath($this->pathPublic.$this->manifest[$pathRelativeToPublic]);
+            
+            if (!$pathReal)
+            {
+                throw new Exception('Unable to find asset "'.$this->manifest[$pathRelativeToPublic]
+                    .'" from manifest for render node '.$renderNode->name);
+            }
+
             $asset = new Asset(
-                realpath($this->pathPublic.$this->manifest[$pathRelativeToPublic]),
+                $pathReal,
                 $renderNode,
                 $this->pathPublic
             );
 
             $this->assetsLoaded[$pathRelative] = $asset;
-        }
-        else
+        } else
         {
             $asset = $this->assetsLoaded[$pathRelative];
         }

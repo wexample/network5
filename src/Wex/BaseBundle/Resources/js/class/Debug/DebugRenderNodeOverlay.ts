@@ -1,7 +1,6 @@
 // Script par of a Vue component.
 import RenderNode from '../RenderNode';
 import RenderDataInterface from '../../interfaces/RenderData/RenderDataInterface';
-import RequestOptionsInterface from '../../interfaces/RequestOptions/RequestOptionsInterface';
 import DebugRenderNode from './DebugRenderNode';
 import { EventsServiceEvents } from '../../services/EventsService';
 
@@ -81,11 +80,9 @@ export default {
     debugRenderNode: DebugRenderNode
   ) {
     return function (
-      renderData: RenderDataInterface,
-      requestOptions: RequestOptionsInterface
+      renderData: RenderDataInterface
     ) {
       debugRenderNode.vueInfo.$.props.renderData = renderData;
-      debugRenderNode.vueInfo.$.props.requestOptions = requestOptions;
 
       return methodOriginal.apply(renderNode, arguments);
     };

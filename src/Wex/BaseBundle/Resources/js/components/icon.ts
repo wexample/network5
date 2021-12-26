@@ -1,14 +1,12 @@
 import Component from '../class/Component';
 import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
-import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 
 export default class extends Component {
   loadRenderData(
-    renderData: ComponentInterface,
-    requestOptions: RequestOptionsInterface
+    renderData: ComponentInterface
   ) {
     // TODO
 
-    super.loadRenderData(renderData, requestOptions);
+    super.loadRenderData(renderData);
   }
 }

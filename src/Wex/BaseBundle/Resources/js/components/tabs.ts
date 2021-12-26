@@ -12,10 +12,9 @@ export default class extends Component {
   protected group: string;
 
   loadRenderData(
-    renderData: ComponentInterface,
-    requestOptions: RequestOptionsInterface
+    renderData: ComponentInterface
   ) {
-    super.loadRenderData(renderData, requestOptions);
+    super.loadRenderData(renderData);
 
     this.group = this.options.group;
 

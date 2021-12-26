@@ -8,7 +8,6 @@ import { PageInterface as ServiceRegistryPageInterface } from '../interfaces/Ser
 import RenderNodeService from './RenderNodeService';
 import Page from '../class/Page';
 import RenderNode from '../class/RenderNode';
-import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 import AppService from '../class/AppService';
 
 export default class PagesService extends RenderNodeService {
@@ -24,7 +23,6 @@ export default class PagesService extends RenderNodeService {
       app: {
         async loadLayoutRenderData(
           renderData: LayoutInterface,
-          requestOptions: RequestOptionsInterface,
           registry: any
         ) {
           if (
@@ -34,8 +32,7 @@ export default class PagesService extends RenderNodeService {
           ) {
             if (renderData.page) {
               await this.services.pages.createPage(
-                renderData.page,
-                requestOptions
+                renderData.page
               );
             }
             return;
@@ -48,14 +45,16 @@ export default class PagesService extends RenderNodeService {
   }
 
   async createPage(
-    renderData: RenderDataPageInterface,
-    requestOptions: RequestOptionsInterface
+    renderData: RenderDataPageInterface
   ) {
     let el;
 
+    // Support missing request option when creating first page.
+    renderData.requestOptions = renderData.requestOptions || {};
+
     if (renderData.isInitialPage) {
       el = this.app.layout.el;
-      requestOptions.callerRenderNode = this.app.layout;
+      renderData.requestOptions.callerRenderNode = this.app.layout;
     } else {
       el = renderData.el;
     }
@@ -73,7 +72,7 @@ export default class PagesService extends RenderNodeService {
       pageHandler.renderPageEl(renderData);
       el = pageHandler.getPageEl();
 
-      requestOptions.callerRenderNode = pageHandler;
+      renderData.requestOptions.callerRenderNode = pageHandler;
     }
 
     if (!el) {
@@ -86,8 +85,7 @@ export default class PagesService extends RenderNodeService {
     await this.createRenderNode(
       renderData.name,
       el,
-      renderData,
-      requestOptions
+      renderData
     );
   }
 

@@ -10,10 +10,9 @@ export default abstract class PageHandlerComponent extends Component {
   page: Page;
 
   loadRenderData(
-    renderData: ComponentInterface,
-    requestOptions: RequestOptionsInterface
+    renderData: ComponentInterface
   ) {
-    super.loadRenderData(renderData, requestOptions);
+    super.loadRenderData(renderData);
 
     // This component is defined as the manager of
     // rendered page from the request.

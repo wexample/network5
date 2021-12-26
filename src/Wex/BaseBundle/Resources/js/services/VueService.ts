@@ -80,14 +80,12 @@ export default class VueService extends AppService {
 
   createVueAppForComponent(
     path,
-    renderData: ComponentInterface,
-    requestOptions: RequestOptionsInterface
+    renderData: ComponentInterface
   ) {
     let component = this.initComponent(path);
 
     let app = this.createApp(component, {
-      renderData: renderData,
-      requestOptions: requestOptions,
+      renderData: renderData
     });
 
     Object.entries(this.componentRegistered).forEach((data) => {

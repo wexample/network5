@@ -61,7 +61,6 @@ export default class DebugService extends AppService {
     renderNodeService.createRenderNodeInstance = function (
       el: HTMLElement,
       renderData: RenderDataInterface,
-      requestOptions: RequestOptionsInterface,
       complete?: Function
     ): RenderNode | null {
       let instance = methodOriginal.apply(renderNodeService, arguments);

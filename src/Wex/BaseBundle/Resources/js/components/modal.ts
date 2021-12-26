@@ -21,10 +21,9 @@ export default class ModalComponent extends PageHandlerComponent {
   public opened: boolean = false;
 
   loadRenderData(
-    renderData: ComponentInterface,
-    requestOptions: RequestOptionsInterface
+    renderData: ComponentInterface
   ) {
-    super.loadRenderData(renderData, requestOptions);
+    super.loadRenderData(renderData);
 
     this.elContent = this.el.querySelector('.modal-content');
   }

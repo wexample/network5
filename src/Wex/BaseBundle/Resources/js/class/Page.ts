@@ -3,9 +3,6 @@ import RenderDataPageInterface from '../interfaces/RenderData/PageInterface';
 import { PageInterface as ServiceRegistryPageInterface } from '../interfaces/ServiceRegistry/PageInterface';
 import RenderNode from './RenderNode';
 import PageHandlerComponent from './PageHandlerComponent';
-import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
-import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
-import RequestOptionsPageInterface from '../interfaces/RequestOptions/PageInterface';
 import AppService from './AppService';
 import { ColorSchemeServiceEvents } from '../services/ColorSchemeService';
 import { ResponsiveServiceEvents } from '../services/ResponsiveService';
@@ -20,7 +17,6 @@ export default class extends RenderNode {
   public parentRenderNode: PageHandlerComponent;
   protected readonly responsiveDisplays: any = [];
   public renderData: RenderDataPageInterface;
-  public requestOptions: RequestOptionsPageInterface;
   public responsiveDisplayCurrent: PageResponsiveDisplay;
   public services: ServiceRegistryPageInterface;
 
@@ -33,12 +29,9 @@ export default class extends RenderNode {
   }
 
   loadRenderData(
-    renderData: RenderDataPageInterface,
-    requestOptions: RequestOptionsInterface
+    renderData: RenderDataPageInterface
   ) {
-    super.loadRenderData(renderData, requestOptions);
-
-    this.requestOptions = requestOptions;
+    super.loadRenderData(renderData);
 
     if (this.isInitialPage) {
       this.app.layout.page = this;

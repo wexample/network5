@@ -23,8 +23,7 @@ export default abstract class RenderNodeService extends AppService {
   async createRenderNode(
     definitionName: string,
     el: HTMLElement,
-    renderData: RenderDataInterface,
-    requestOptions: RequestOptionsInterface
+    renderData: RenderDataInterface
   ): Promise<RenderNode> {
 
     await this.prepareRenderData(renderData);
@@ -37,7 +36,7 @@ export default abstract class RenderNodeService extends AppService {
       classDefinition
     );
 
-    instance.loadRenderData(renderData, requestOptions);
+    instance.loadRenderData(renderData);
 
     await instance.init();
 
