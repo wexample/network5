@@ -17,6 +17,8 @@ abstract class RenderNode extends RenderDataGenerator
 
     public ?RenderNode $parent = null;
 
+    public bool $hasAssets = true;
+
     public string $renderRequestId;
 
     public array $translations = [];

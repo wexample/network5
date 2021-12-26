@@ -1,5 +1,6 @@
 import UnitTest from '../../../../class/UnitTest';
 import ModalComponent from "../../../../components/modal";
+import LayoutInterface from "../../../../interfaces/RenderData/LayoutInterface";
 
 export default class AdaptiveRenderingTest extends UnitTest {
   public getTestMethods() {
@@ -79,15 +80,28 @@ export default class AdaptiveRenderingTest extends UnitTest {
 
   private fetchTestPageAdaptiveJson(path) {
     // Load in json.
-    return this.app.services['adaptive'].get(path).then((response) => {
-      this.assertTrue(!!response.page, 'The response contains page data');
+    return this.app.services['adaptive'].get(path).then((renderData: LayoutInterface) => {
+      this.assertTrue(
+        !renderData.assets.css.length,
+        `Layout data contains any CSS assets`
+      );
 
       this.assertTrue(
-        !!response.templates,
+        !renderData.assets.js.length,
+        `Layout data contains any JS assets`
+      );
+
+      this.assertTrue(
+        !!renderData.page,
+        'The response contains page data'
+      );
+
+      this.assertTrue(
+        !!renderData.templates,
         'The response contains template html'
       );
 
-      return response;
+      return renderData;
     });
   }
 

@@ -32,7 +32,8 @@ class LayoutService extends RenderNodeService
         string $layoutName,
         string $colorScheme,
         bool $useJs
-    ) {
+    )
+    {
         $renderPass = $this->adaptiveResponseService->renderPass;
 
         $renderPass->layoutRenderNode->colorScheme = $colorScheme;
@@ -53,10 +54,18 @@ class LayoutService extends RenderNodeService
         LayoutRenderNode $layoutRenderNode,
         string $layoutName,
         bool $useJs
-    ) {
+    )
+    {
         $layoutRenderNode->name = $layoutName;
         $layoutRenderNode->useJs = $useJs;
         $backEndAssets = $layoutRenderNode->assets;
+
+        // No layout assets on ajax responses.
+        $layoutRenderNode->hasAssets = $this
+            ->adaptiveResponseService
+            ->renderPass
+            ->adaptiveResponse
+            ->isHtmlRequest();
 
         $this->initRenderNode(
             $layoutRenderNode,
