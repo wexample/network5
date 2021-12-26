@@ -134,8 +134,8 @@ export default {
     },
 
     hasResponsiveAsset(type: string, size: string): boolean {
-      if (this.renderData.assets) {
-        for (let asset of this.renderData.assets[type]) {
+      if (this.assets) {
+        for (let asset of this.assets[type]) {
           if (asset.responsive === size) {
             return true;
           }
@@ -146,10 +146,10 @@ export default {
     },
 
     hasColorSchemeAsset(type: string, scheme: string) {
-      if (this.renderData.assets) {
+      if (this.assets) {
         let asset: AssetsInterface;
 
-        for (asset of this.renderData.assets[type]) {
+        for (asset of this.assets[type]) {
           // TODO Context is wrong and always true.
           if (asset.colorScheme === scheme) {
             return true;
