@@ -61,22 +61,19 @@ export default {
         },
         [
           renderLineTitle(type.toUpperCase()),
-          Object.keys(this.app.layout.vars.displayBreakpoints).map(
-            (size) => {
-              return h(
-                TagName.DIV,
-                {
-                  class: {
-                    active:
-                      this.app.services.responsive.responsiveSizeCurrent ===
-                      size,
-                    available: this.hasResponsiveAsset(type, size),
-                  },
+          Object.keys(this.app.layout.vars.displayBreakpoints).map((size) => {
+            return h(
+              TagName.DIV,
+              {
+                class: {
+                  active:
+                    this.app.services.responsive.responsiveSizeCurrent === size,
+                  available: this.hasResponsiveAsset(type, size),
                 },
-                size.toUpperCase()
-              );
-            }
-          ),
+              },
+              size.toUpperCase()
+            );
+          }),
         ]
       );
     };

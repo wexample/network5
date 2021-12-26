@@ -10,10 +10,7 @@ export default class AdaptiveService extends AppService {
   registerHooks() {
     return {
       app: {
-        loadRenderData(
-          renderData: RenderDataInterface,
-          registry
-        ) {
+        loadRenderData(renderData: RenderDataInterface, registry) {
           // Expect all assets to be loaded before triggering events.
           if (registry.components === MixinsAppService.LOAD_STATUS_COMPLETE) {
             // TODO Events...

@@ -1,14 +1,12 @@
 import AdaptiveRenderingTest from './class/AdaptiveRenderingTest';
 import TestManagerPage from '../../../class/TestManagerPage';
 import TestTest from './class/TestTest';
-import AppTest from "./class/AppTest";
+import AppTest from './class/AppTest';
 
 export default class extends TestManagerPage {
   tests: any;
 
   async mounted() {
-    // TODO Test adaptive rendering
-    // TODO Test non adaptive
     // TODO Test no js
     // TODO Test no aggregation
     // TODO Test icons

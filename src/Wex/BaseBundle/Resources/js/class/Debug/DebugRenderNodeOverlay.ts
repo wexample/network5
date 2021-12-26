@@ -46,10 +46,8 @@ export default {
     return function () {
       debugRenderNode.focus();
 
-      renderNode.forEachChildRenderNode((childRenderNode:RenderNode) => {
-        debugRenderNode.service.debugRenderNodes[
-          childRenderNode.id
-        ].focus();
+      renderNode.forEachChildRenderNode((childRenderNode: RenderNode) => {
+        debugRenderNode.service.debugRenderNodes[childRenderNode.id].focus();
       });
 
       methodOriginal.apply(renderNode, arguments);
@@ -64,10 +62,8 @@ export default {
     return function () {
       debugRenderNode.blur();
 
-      renderNode.forEachChildRenderNode((childRenderNode:RenderNode) => {
-        debugRenderNode.service.debugRenderNodes[
-          childRenderNode.id
-        ].blur();
+      renderNode.forEachChildRenderNode((childRenderNode: RenderNode) => {
+        debugRenderNode.service.debugRenderNodes[childRenderNode.id].blur();
       });
 
       methodOriginal.apply(renderNode, arguments);
@@ -79,9 +75,7 @@ export default {
     renderNode: RenderNode,
     debugRenderNode: DebugRenderNode
   ) {
-    return function (
-      renderData: RenderDataInterface
-    ) {
+    return function (renderData: RenderDataInterface) {
       debugRenderNode.vueInfo.$.props.renderData = renderData;
 
       return methodOriginal.apply(renderNode, arguments);

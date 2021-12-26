@@ -21,19 +21,14 @@ export default class PagesService extends RenderNodeService {
   registerHooks() {
     return {
       app: {
-        async loadLayoutRenderData(
-          renderData: LayoutInterface,
-          registry: any
-        ) {
+        async loadLayoutRenderData(renderData: LayoutInterface, registry: any) {
           if (
             registry.components === MixinsAppService.LOAD_STATUS_COMPLETE &&
             registry.responsive === MixinsAppService.LOAD_STATUS_COMPLETE &&
             registry.locale === MixinsAppService.LOAD_STATUS_COMPLETE
           ) {
             if (renderData.page) {
-              await this.services.pages.createPage(
-                renderData.page
-              );
+              await this.services.pages.createPage(renderData.page);
             }
             return;
           }
@@ -44,9 +39,7 @@ export default class PagesService extends RenderNodeService {
     };
   }
 
-  async createPage(
-    renderData: RenderDataPageInterface
-  ) {
+  async createPage(renderData: RenderDataPageInterface) {
     let el;
 
     // Support missing request option when creating first page.
@@ -82,11 +75,7 @@ export default class PagesService extends RenderNodeService {
       return;
     }
 
-    await this.createRenderNode(
-      renderData.name,
-      el,
-      renderData
-    );
+    await this.createRenderNode(renderData.name, el, renderData);
   }
 
   createRenderNodeInstance(

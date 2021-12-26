@@ -1,5 +1,3 @@
-import Page from "../../../class/Page";
+import Page from '../../../class/Page';
 
-export default class extends Page {
-
-}
+export default class extends Page {}

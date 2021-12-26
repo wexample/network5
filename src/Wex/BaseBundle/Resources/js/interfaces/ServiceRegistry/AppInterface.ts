@@ -5,7 +5,7 @@ import ResponsiveService from '../../services/ResponsiveService';
 import ColorSchemeService from '../../services/ColorSchemeService';
 import EventsService from '../../services/EventsService';
 import LayoutsService from '../../services/LayoutsService';
-import RoutingService from "../../services/RoutingService";
+import RoutingService from '../../services/RoutingService';
 
 export default interface AppInterface {
   assets?: AssetsService;

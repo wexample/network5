@@ -58,8 +58,10 @@ class JsService
     /**
      * @throws ExceptionInterface
      */
-    public function serializeValue(mixed $item, $context = null): mixed
-    {
+    public function serializeValue(
+        mixed $item,
+        $context = null
+    ): mixed {
         // Recursive exploration.
         if (is_array($item))
         {

@@ -3,8 +3,8 @@ import AppService from '../class/AppService';
 import AssetInterface from '../interfaces/AssetInterface';
 import RenderNode from '../class/RenderNode';
 import { Attribute, AttributeValue, TagName } from '../helpers/Dom';
-import AssetsInterface from "../interfaces/AssetInterface";
-import RenderDataInterface from "../interfaces/RenderData/RenderDataInterface";
+import AssetsInterface from '../interfaces/AssetInterface';
+import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 
 export class AssetsServiceType {
   public static CSS: string = 'css';
@@ -17,7 +17,7 @@ export default class AssetsService extends AppService {
 
   public static UPDATE_FILTER_REJECT = 'reject';
 
-  public assetsRegistry: any = {css: {}, js: {}};
+  public assetsRegistry: any = { css: {}, js: {} };
   public jsAssetsPending: { [key: string]: AssetInterface } = {};
   public updateFilters: Function[] = [];
 
@@ -29,9 +29,13 @@ export default class AssetsService extends AppService {
         },
 
         async prepareRenderData(renderData: RenderDataInterface) {
-          renderData.assets = this.registerAssetsInCollection(renderData.assets);
+          renderData.assets = this.registerAssetsInCollection(
+            renderData.assets
+          );
 
-          await this.services.assets.loadValidAssetsInCollection(renderData.assets);
+          await this.services.assets.loadValidAssetsInCollection(
+            renderData.assets
+          );
         },
       },
     };
@@ -146,7 +150,7 @@ export default class AssetsService extends AppService {
   registerAsset(asset: AssetsInterface): AssetInterface {
     // Each asset has a unique reference object shared between all render node.
     if (!this.assetsRegistry[asset.type][asset.id]) {
-      this.assetsRegistry[asset.type][asset.id] = asset
+      this.assetsRegistry[asset.type][asset.id] = asset;
     }
 
     return this.assetsRegistry[asset.type][asset.id];

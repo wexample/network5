@@ -21,7 +21,7 @@ export default abstract class Component extends RenderNode {
   mergeRenderData(renderData: ComponentInterface) {
     super.mergeRenderData(renderData);
 
-    this.options = {...this.options, ...renderData.options};
+    this.options = { ...this.options, ...renderData.options };
   }
 
   public getRenderNodeType(): string {

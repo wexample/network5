@@ -18,8 +18,7 @@ class InitialLayoutRenderNode extends LayoutRenderNode
         protected RenderPass $renderPass,
         public bool $useJs,
         protected string $env
-    )
-    {
+    ) {
         parent::__construct(
             $renderPass,
             $useJs
@@ -28,8 +27,7 @@ class InitialLayoutRenderNode extends LayoutRenderNode
 
     public function init(
         string $name,
-    )
-    {
+    ) {
         parent::init(
             $name
         );

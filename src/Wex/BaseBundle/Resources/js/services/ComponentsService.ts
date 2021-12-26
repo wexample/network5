@@ -31,17 +31,12 @@ export default class ComponentsService extends RenderNodeService {
   registerHooks() {
     return {
       app: {
-        async loadLayoutRenderData(
-          renderData: LayoutInterface,
-          registry: any
-        ) {
+        async loadLayoutRenderData(renderData: LayoutInterface, registry: any) {
           if (registry.assets !== MixinsAppService.LOAD_STATUS_COMPLETE) {
             return MixinsAppService.LOAD_STATUS_WAIT;
           }
 
-          await this.services.components.loadLayoutRenderData(
-            renderData
-          );
+          await this.services.components.loadLayoutRenderData(renderData);
         },
       },
 
@@ -82,25 +77,17 @@ export default class ComponentsService extends RenderNodeService {
     }
   }
 
-  async loadLayoutRenderData(
-    renderData: LayoutInterface
-  ) {
+  async loadLayoutRenderData(renderData: LayoutInterface) {
     if (renderData.templates) {
       // Append html for global components.
       this.elLayoutComponents.innerHTML += renderData.templates;
     }
 
-    await this.createRenderDataComponents(
-      renderData,
-      this.app.layout
-    );
+    await this.createRenderDataComponents(renderData, this.app.layout);
   }
 
   async initPage(page: Page) {
-    await this.createRenderDataComponents(
-      page.renderData,
-      page
-    );
+    await this.createRenderDataComponents(page.renderData, page);
   }
 
   async createRenderDataComponents(

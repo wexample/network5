@@ -20,9 +20,7 @@ export default class ModalComponent extends PageHandlerComponent {
   public onMouseUpOverlayProxy: EventListenerObject;
   public opened: boolean = false;
 
-  loadRenderData(
-    renderData: ComponentInterface
-  ) {
+  loadRenderData(renderData: ComponentInterface) {
     super.loadRenderData(renderData);
 
     this.elContent = this.el.querySelector('.modal-content');

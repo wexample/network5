@@ -8,7 +8,7 @@ import LayoutsService from '../services/LayoutsService';
 import MixinsService from '../services/MixinsService';
 import PagesService from '../services/PagesService';
 import ResponsiveService from '../services/ResponsiveService';
-import RoutingService from "../services/RoutingService";
+import RoutingService from '../services/RoutingService';
 
 import ColorSchemeService from '../services/ColorSchemeService';
 import { unique as arrayUnique } from '../helpers/Arrays';
@@ -92,15 +92,12 @@ export default class extends AsyncConstructor {
     }
   }
 
-  async loadLayoutRenderData(
-    renderData: RenderDataInterface
-  ): Promise<any> {
+  async loadLayoutRenderData(renderData: RenderDataInterface): Promise<any> {
     await this.services.mixins.invokeUntilComplete(
       'loadLayoutRenderData',
       'app',
-      [
-        renderData
-      ]);
+      [renderData]
+    );
 
     // Execute ready callbacks.
     await this.readyComplete();

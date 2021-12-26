@@ -11,9 +11,7 @@ export default class extends Component {
   protected elContentCurrent?: HTMLElement;
   protected group: string;
 
-  loadRenderData(
-    renderData: ComponentInterface
-  ) {
+  loadRenderData(renderData: ComponentInterface) {
     super.loadRenderData(renderData);
 
     this.group = this.options.group;

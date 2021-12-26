@@ -80,13 +80,11 @@ export default class ResponsiveService extends AppService {
 
   detectSupported() {
     let supported = {};
-    Object.entries(this.app.layout.vars.displayBreakpoints).forEach(
-      (entry) => {
-        if (window.innerWidth > entry[1]) {
-          supported[entry[0]] = entry[1];
-        }
+    Object.entries(this.app.layout.vars.displayBreakpoints).forEach((entry) => {
+      if (window.innerWidth > entry[1]) {
+        supported[entry[0]] = entry[1];
       }
-    );
+    });
 
     return supported;
   }

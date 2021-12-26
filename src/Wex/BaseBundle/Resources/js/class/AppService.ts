@@ -1,5 +1,5 @@
 import App from './App';
-import AppChild from "./AppChild";
+import AppChild from './AppChild';
 
 export default class AppService extends AppChild {
   public app: App;

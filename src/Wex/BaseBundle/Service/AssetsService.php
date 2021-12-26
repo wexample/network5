@@ -5,14 +5,13 @@ namespace App\Wex\BaseBundle\Service;
 use App\Wex\BaseBundle\Helper\ColorSchemeHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
-use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Rendering\RenderNode\RenderNode;
-use Exception;
 use function array_merge;
 use function array_reverse;
 use function basename;
 use function dirname;
+use Exception;
 use function file_get_contents;
 use function implode;
 use JetBrains\PhpStorm\Pure;
@@ -63,8 +62,7 @@ class AssetsService
     public function __construct(
         KernelInterface $kernel,
         private AdaptiveResponseService $adaptiveResponseService
-    )
-    {
+    ) {
         $this->pathProject = $kernel->getProjectDir().'/';
         $this->pathPublic = $this->pathProject.self::DIR_PUBLIC;
         $this->pathBuild = $this->pathPublic.self::DIR_BUILD;
@@ -80,8 +78,7 @@ class AssetsService
         );
     }
 
-    public function replacePreloadPlaceholder(string $rendered): string
-    {
+    public function replacePreloadPlaceholder(string $rendered): string {
         if (str_contains($rendered, RenderingHelper::PLACEHOLDER_PRELOAD_TAG))
         {
             $pageName = $this->adaptiveResponseService->renderPass->pageName;
@@ -100,28 +97,36 @@ class AssetsService
     }
 
     #[Pure]
-    protected function renderPreloadLink(string $pageName, string $type): string
-    {
+    protected function renderPreloadLink(
+        string $pageName,
+        string $type
+    ): string {
         return '<link rel="preload" href="'
             .$this->buildAggregatedPublicPath($pageName, $type)
             .'" as="'.Asset::PRELOAD_BY_ASSET_TYPE[$type].'">';
     }
 
-    protected function buildAggregatedPathFromPageName(string $pageName, string $type): string
-    {
+    protected function buildAggregatedPathFromPageName(
+        string $pageName,
+        string $type
+    ): string {
         return self::DIR_BUILD.$type.'/'.$pageName.'.'.FileHelper::SUFFIX_AGGREGATED.'.'.$type;
     }
 
     #[Pure]
-    protected function buildAggregatedPublicPath(string $pageName, string $type): string
-    {
+    protected function buildAggregatedPublicPath(
+        string $pageName,
+        string $type
+    ): string {
         return FileHelper::FOLDER_SEPARATOR.
             $this->buildAggregatedPathFromPageName($pageName, $type)
             .'?'.$this->aggregationHash[$type.'-'.$pageName];
     }
 
-    public function aggregateInitialAssets(string $pageName, string $type): string
-    {
+    public function aggregateInitialAssets(
+        string $pageName,
+        string $type
+    ): string {
         $aggregatedFileName = $this->buildAggregatedPathFromPageName($pageName, $type);
         $aggregatePaths = [];
         $output = '';
@@ -170,8 +175,7 @@ class AssetsService
         string $path,
         RenderNode $context,
         array &$collection = []
-    ): array
-    {
+    ): array {
         foreach (Asset::ASSETS_EXTENSIONS as $ext)
         {
             $collection[$ext] = array_merge(
@@ -196,8 +200,7 @@ class AssetsService
         string $ext,
         RenderNode $renderNode,
         bool $searchColorScheme
-    ): array
-    {
+    ): array {
         $assetPathFull = $ext.'/'.$pageName.'.'.$ext;
         $output = [];
 
@@ -285,8 +288,7 @@ class AssetsService
     public function addAsset(
         string $pathRelative,
         RenderNode $renderNode
-    ): ?Asset
-    {
+    ): ?Asset {
         $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
         if (!isset($this->manifest[$pathRelativeToPublic]))
         {
@@ -299,8 +301,7 @@ class AssetsService
 
             if (!$pathReal)
             {
-                throw new Exception('Unable to find asset "'.$this->manifest[$pathRelativeToPublic]
-                    .'" from manifest for render node '.$renderNode->name);
+                throw new Exception('Unable to find asset "'.$this->manifest[$pathRelativeToPublic].'" from manifest for render node '.$renderNode->name);
             }
 
             $asset = new Asset(
@@ -310,7 +311,8 @@ class AssetsService
             );
 
             $this->assetsLoaded[$pathRelative] = $asset;
-        } else
+        }
+        else
         {
             $asset = $this->assetsLoaded[$pathRelative];
         }
@@ -320,8 +322,11 @@ class AssetsService
         return $this->assetsLoaded[$pathRelative];
     }
 
-    public function assetsPreload(array $assets, string $colorScheme, bool $useJs)
-    {
+    public function assetsPreload(
+        array $assets,
+        string $colorScheme,
+        bool $useJs
+    ) {
         /** @var Asset $asset */
         foreach ($assets as $asset)
         {
@@ -332,8 +337,7 @@ class AssetsService
         }
     }
 
-    public function assetsPreloadList(string $ext): array
-    {
+    public function assetsPreloadList(string $ext): array {
         $assets = $this->assets[$ext];
         $output = [];
 
@@ -349,8 +353,10 @@ class AssetsService
         return $output;
     }
 
-    public function assetsFiltered(string $contextType, string $assetType = null): array
-    {
+    public function assetsFiltered(
+        string $contextType,
+        string $assetType = null
+    ): array {
         $registry = $this->adaptiveResponseService->renderPass->registry;
         $assets = [];
 
@@ -366,8 +372,7 @@ class AssetsService
         return $assets;
     }
 
-    public function renderEventPostRender(array &$options)
-    {
+    public function renderEventPostRender(array &$options) {
         $options['rendered'] = $this->replacePreloadPlaceholder(
             $options['rendered']
         );

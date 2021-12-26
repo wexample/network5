@@ -3,9 +3,7 @@ import { MDCRipple } from '@material/ripple/index';
 import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 
 export default class extends Component {
-  loadRenderData(
-    renderData: ComponentInterface
-  ) {
+  loadRenderData(renderData: ComponentInterface) {
     super.loadRenderData(renderData);
 
     new MDCRipple(this.el);

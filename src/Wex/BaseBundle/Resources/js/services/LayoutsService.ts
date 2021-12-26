@@ -1,13 +1,11 @@
 import RenderNodeService from './RenderNodeService';
-import LayoutInterface from "../interfaces/RenderData/LayoutInterface";
+import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 
 export default class LayoutsService extends RenderNodeService {
   registerHooks() {
     return {
       app: {
-        async loadLayoutRenderData(
-          renderData: LayoutInterface,
-        ) {
+        async loadLayoutRenderData(renderData: LayoutInterface) {
           this.app.layout.mergeRenderData(renderData);
         },
       },

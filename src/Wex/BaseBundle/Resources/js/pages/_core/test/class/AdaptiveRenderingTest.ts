@@ -1,6 +1,6 @@
 import UnitTest from '../../../../class/UnitTest';
-import ModalComponent from "../../../../components/modal";
-import LayoutInterface from "../../../../interfaces/RenderData/LayoutInterface";
+import ModalComponent from '../../../../components/modal';
+import LayoutInterface from '../../../../interfaces/RenderData/LayoutInterface';
 
 export default class AdaptiveRenderingTest extends UnitTest {
   public getTestMethods() {
@@ -25,51 +25,49 @@ export default class AdaptiveRenderingTest extends UnitTest {
     // Load in html.
     await this.fetchTestPageAdaptiveHtml(path, 'ADAPTIVE');
 
-    this.fetchTestPageAdaptiveJson(path)
-      .then(async () => {
-        let pageFocused = this.app.layout.pageFocused;
+    this.fetchTestPageAdaptiveJson(path).then(async () => {
+      let pageFocused = this.app.layout.pageFocused;
 
-        this.assertEquals(
-          pageFocused.name,
-          `pages/${pageNamePart}`,
-          'The focused page is the modal content page'
-        );
+      this.assertEquals(
+        pageFocused.name,
+        `pages/${pageNamePart}`,
+        'The focused page is the modal content page'
+      );
 
-        this.assertEquals(
-          pageFocused.parentRenderNode.name,
-          `components/modal`,
-          'The focused page is a child of modal component'
-        );
+      this.assertEquals(
+        pageFocused.parentRenderNode.name,
+        `components/modal`,
+        'The focused page is a child of modal component'
+      );
 
-        this.assertEquals(
-          pageFocused
-            .el.querySelector('.modal-header h2').innerHTML,
-          'ADAPTIVE_PAGE_TITLE',
-          'The modal page title has been translated'
-        );
+      this.assertEquals(
+        pageFocused.el.querySelector('.modal-header h2').innerHTML,
+        'ADAPTIVE_PAGE_TITLE',
+        'The modal page title has been translated'
+      );
 
-        this.assertEquals(
-          pageFocused.vars.page_level_test_var,
-          'value',
-          'The modal page has vars'
-        );
+      this.assertEquals(
+        pageFocused.vars.page_level_test_var,
+        'value',
+        'The modal page has vars'
+      );
 
-        this.assertEquals(
-          this.app.layout.vars.layout_level_test_var,
-          'value',
-          'The layout has a new var'
-        );
+      this.assertEquals(
+        this.app.layout.vars.layout_level_test_var,
+        'value',
+        'The layout has a new var'
+      );
 
-        // Close modal.
-        let modal = pageFocused.parentRenderNode as ModalComponent;
-        await modal.close();
+      // Close modal.
+      let modal = pageFocused.parentRenderNode as ModalComponent;
+      await modal.close();
 
-        this.assertEquals(
-          this.app.layout.pageFocused,
-          this.app.layout.page,
-          'The focus has been thrown back to the main page'
-        );
-      });
+      this.assertEquals(
+        this.app.layout.pageFocused,
+        this.app.layout.page,
+        'The focus has been thrown back to the main page'
+      );
+    });
   }
 
   async testAdaptiveErrorMissingVue() {
@@ -80,29 +78,28 @@ export default class AdaptiveRenderingTest extends UnitTest {
 
   private fetchTestPageAdaptiveJson(path) {
     // Load in json.
-    return this.app.services['adaptive'].get(path).then((renderData: LayoutInterface) => {
-      this.assertTrue(
-        !renderData.assets.css.length,
-        `Layout data contains any CSS assets`
-      );
+    return this.app.services['adaptive']
+      .get(path)
+      .then((renderData: LayoutInterface) => {
+        this.assertTrue(
+          !renderData.assets.css.length,
+          `Layout data contains any CSS assets`
+        );
 
-      this.assertTrue(
-        !renderData.assets.js.length,
-        `Layout data contains any JS assets`
-      );
+        this.assertTrue(
+          !renderData.assets.js.length,
+          `Layout data contains any JS assets`
+        );
 
-      this.assertTrue(
-        !!renderData.page,
-        'The response contains page data'
-      );
+        this.assertTrue(!!renderData.page, 'The response contains page data');
 
-      this.assertTrue(
-        !!renderData.templates,
-        'The response contains template html'
-      );
+        this.assertTrue(
+          !!renderData.templates,
+          'The response contains template html'
+        );
 
-      return renderData;
-    });
+        return renderData;
+      });
   }
 
   private fetchTestPageAdaptiveHtml(path, pageContent) {
@@ -134,19 +131,15 @@ export default class AdaptiveRenderingTest extends UnitTest {
           `Page content is ${pageContent}`
         );
 
-        let found = elHtml.querySelector('#layout-data').innerHTML.match(/layoutRenderData = ([.\S\s\n]*);(\s*)/);
+        let found = elHtml
+          .querySelector('#layout-data')
+          .innerHTML.match(/layoutRenderData = ([.\S\s\n]*);(\s*)/);
 
-        this.assertTrue(
-          !!found,
-          `Layout data found`
-        );
+        this.assertTrue(!!found, `Layout data found`);
 
         let layoutData = JSON.parse(found[1]);
 
-        this.assertTrue(
-          !!layoutData,
-          `Layout data is valid JSON`
-        );
+        this.assertTrue(!!layoutData, `Layout data is valid JSON`);
 
         this.assertTrue(
           !!layoutData.assets.css.length,

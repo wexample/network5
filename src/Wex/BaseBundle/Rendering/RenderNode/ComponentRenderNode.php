@@ -7,7 +7,6 @@ use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\RenderPass;
 use JetBrains\PhpStorm\Pure;
-use function uniqid;
 
 class ComponentRenderNode extends RenderNode
 {
