@@ -32,7 +32,7 @@ class AssetsService
         'xxl' => 1400,
     ];
 
-    public const COLOR_SCHEME_DIR = VariableHelper::PLURAL_COLORS;
+    public const COLOR_SCHEME_DIR = 'color_schemes';
 
     /**
      * @var array|Asset[][]
@@ -296,7 +296,7 @@ class AssetsService
         if (!isset($this->assetsLoaded[$pathRelative]))
         {
             $pathReal = realpath($this->pathPublic.$this->manifest[$pathRelativeToPublic]);
-            
+
             if (!$pathReal)
             {
                 throw new Exception('Unable to find asset "'.$this->manifest[$pathRelativeToPublic]

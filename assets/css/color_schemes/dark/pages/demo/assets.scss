@@ -1,11 +1,11 @@
 $global-color-scheme-name: 'dark' !default;
 
-@use '../../../../../../src/Wex/BaseBundle/Resources/css/colors/dark/partials/inline-info'
+@use '../../../../../../src/Wex/BaseBundle/Resources/css/color_schemes/dark/partials/inline-info'
   with (
   $global-color-scheme-name: $global-color-scheme-name
 );
 
-@import '../../../../../../src/Wex/BaseBundle/Resources/css/colors/dark/mixins/global';
+@import '../../../../../../src/Wex/BaseBundle/Resources/css/color_schemes/dark/mixins/global';
 
 body.color-scheme-#{$global-color-scheme-name} .display-breakpoint,
 body.color-scheme-default .theme-dark.display-breakpoint {
