@@ -15,6 +15,9 @@ export default abstract class RenderNodeService extends AppService {
       'app',
       [renderData]
     );
+
+    // Do not deep freeze as sub-parts might be prepared later.
+    Object.freeze(renderData);
   }
 
   async createRenderNode(
@@ -23,6 +26,7 @@ export default abstract class RenderNodeService extends AppService {
     renderData: RenderDataInterface,
     requestOptions: RequestOptionsInterface
   ): Promise<RenderNode> {
+
     await this.prepareRenderData(renderData);
 
     let classDefinition = await this.app.getBundleClassDefinition(definitionName, true);
