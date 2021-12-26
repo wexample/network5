@@ -110,7 +110,7 @@
             {{ macro_assets.render_available_js('page', render_pass.enableAggregation, layout_color_scheme) }}
             {{ macro_assets.render_available_js('component', render_pass.enableAggregation, layout_color_scheme) }}
             <script type="text/javascript" src="{{ asset(assets_render_initial(page_name, 'js')) }}"></script>
-            <script type="text/javascript" nonce="layout-data">
+            <script type="text/javascript" nonce="layout-data" id="layout-data">
               window.appRegistry.layoutRenderData = {{ layout_render_initial_data() | json_encode(constant('JSON_PRETTY_PRINT')) | raw }};
             </script>
         {%- endif -%}
