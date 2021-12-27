@@ -10,4 +10,10 @@
     {{- js_var('page_level_test_var', 'value') -}}
 {%- endblock -%}
 
-{%- block page_body -%}ADAPTIVE{%- endblock -%}
+{%- block page_body -%}
+    <div class="test-string">ADAPTIVE</div>
+    <ul>
+        <li>{{ component('components/test-component', {testOption:true}) }}</li>
+        <li>Test vue</li>
+    </ul>
+{%- endblock -%}

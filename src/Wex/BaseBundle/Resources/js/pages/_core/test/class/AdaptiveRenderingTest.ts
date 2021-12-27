@@ -129,7 +129,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
     return elHtml;
   }
 
-  private fetchTestPageAdaptiveHtml(path, pageContent) {
+  private fetchTestPageAdaptiveHtml(path: string, testString: string) {
     // Use normal fetch to fake a non ajax get request.
     return fetch(path)
       .then((response: Response) => {
@@ -151,9 +151,9 @@ export default class AdaptiveRenderingTest extends UnitTest {
         );
 
         this.assertEquals(
-          elHtml.querySelector('.page').innerHTML,
-          pageContent,
-          `Page content is ${pageContent}`
+          elHtml.querySelector('.page .test-string').innerHTML,
+          testString,
+          `Test string is "${testString}"`
         );
 
         let found = elHtml
