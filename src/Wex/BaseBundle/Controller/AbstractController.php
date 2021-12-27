@@ -85,7 +85,7 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         } catch (\Exception $exception)
         {
             $rendered = parent::renderView(
-                WexBaseBundle::WEX_BUNDLE_PATH_TEMPLATES.'pages/error/default.html.twig',
+                WexBaseBundle::WEX_BUNDLE_PATH_TEMPLATES.'pages/_core/error/default.html.twig',
                 $parameters + [
                     'message' => $exception->getMessage()
                 ]
