@@ -123,12 +123,12 @@ export default {
 
   methods: {
     renderDebugInfo() {
-      return [this.name].join('<br>');
+      return [this.renderNode.name].join('<br>');
     },
 
     hasResponsiveAsset(type: string, size: string): boolean {
-      if (this.assets) {
-        for (let asset of this.assets[type]) {
+      if (this.renderNode.assets) {
+        for (let asset of this.renderNode.assets[type]) {
           if (asset.responsive === size) {
             return true;
           }
@@ -139,10 +139,10 @@ export default {
     },
 
     hasColorSchemeAsset(type: string, scheme: string) {
-      if (this.assets) {
+      if (this.renderNode.assets) {
         let asset: AssetsInterface;
 
-        for (asset of this.assets[type]) {
+        for (asset of this.renderNode.assets[type]) {
           // TODO Context is wrong and always true.
           if (asset.colorScheme === scheme) {
             return true;
