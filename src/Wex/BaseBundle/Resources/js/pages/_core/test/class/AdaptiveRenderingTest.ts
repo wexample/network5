@@ -7,7 +7,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
     return [
       this.testNonAdaptivePage,
       this.testAdaptivePage,
-      // this.testAdaptiveErrorMissingVue,
+      this.testAdaptiveErrorMissingVue,
     ];
   }
 
@@ -71,7 +71,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
   }
 
   async testAdaptiveErrorMissingVue() {
-    await this.app.services['adaptive'].fetch(
+    await this.app.services['adaptive'].get(
       this.app.services.routing.path('_core_test_error-missing-view')
     );
   }

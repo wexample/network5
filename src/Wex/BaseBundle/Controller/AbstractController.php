@@ -6,6 +6,7 @@ use App\Wex\BaseBundle\Controller\Interfaces\AdaptiveResponseControllerInterface
 use App\Wex\BaseBundle\Controller\Traits\AdaptiveResponseControllerTrait;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use App\Wex\BaseBundle\Service\AssetsService;
+use App\Wex\BaseBundle\WexBaseBundle;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -74,22 +75,21 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         );
     }
 
-    protected function renderView(string $view, array $parameters = []): string
-    {
-        if ($this->adaptiveResponseService->getResponse()->isJsonRequest())
-        {
-            try
-            {
-                $rendered = parent::renderView($view, $parameters);
-            }
-            catch (\Exception $exception)
-            {
-                $rendered = $exception->getMessage();
-            }
-        }
-        else
+    protected function renderView(
+        string $view,
+        array $parameters = []): string {
+
+        try
         {
             $rendered = parent::renderView($view, $parameters);
+        } catch (\Exception $exception)
+        {
+            $rendered = parent::renderView(
+                WexBaseBundle::WEX_BUNDLE_PATH_TEMPLATES.'pages/error/default.html.twig',
+                $parameters + [
+                    'message' => $exception->getMessage()
+                ]
+            );
         }
 
         $options = [
