@@ -81,7 +81,10 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
 
         try
         {
-            $rendered = parent::renderView($view, $parameters);
+            $rendered = parent::renderView(
+                $view,
+                $parameters
+            );
         } catch (\Exception $exception)
         {
             $rendered = parent::renderView(

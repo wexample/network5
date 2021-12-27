@@ -3,7 +3,7 @@ import AppService from '../class/AppService';
 import PagesService from './PagesService';
 import MixinsAppService from '../class/MixinsAppService';
 import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
-import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
+import LayoutInterface from "../interfaces/RenderData/LayoutInterface";
 
 export default class VueService extends AppService {
   protected componentRegistered: any = {};
@@ -11,6 +11,8 @@ export default class VueService extends AppService {
   public static dependencies: typeof AppService[] = [PagesService];
 
   protected globalMixin: any;
+
+  protected renderedTemplates: { [key: string]: boolean } = {};
 
   registerHooks(): { app?: {}; page?: {} } {
     return {
@@ -38,6 +40,10 @@ export default class VueService extends AppService {
           }
           return MixinsAppService.LOAD_STATUS_WAIT;
         },
+
+        loadLayoutRenderData(renderData: LayoutInterface) {
+          this.services.vue.addTemplatesHtml(renderData.vueTemplates);
+        },
       },
     };
   }
@@ -52,7 +58,7 @@ export default class VueService extends AppService {
 
   inherit(vueComponent) {
     let componentsFinal = vueComponent.components || {};
-    let extend = { components: {} };
+    let extend = {components: {}};
 
     if (vueComponent.extends) {
       extend = this.inherit(vueComponent.extends);
@@ -126,6 +132,20 @@ export default class VueService extends AppService {
       }
 
       return this.componentRegistered[className];
+    }
+  }
+
+  addTemplatesHtml(renderedTemplates: string[]) {
+    let elContainer = document.getElementById('vue-templates');
+
+    for (let name in renderedTemplates) {
+      if (!this.renderedTemplates[name]) {
+        elContainer.insertAdjacentHTML(
+          'beforeend',
+          renderedTemplates[name]
+        );
+        this.renderedTemplates[name] = true;
+      }
     }
   }
 }

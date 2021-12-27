@@ -9,4 +9,5 @@ export default interface LayoutInterface extends RenderDataInterface {
   page: PageInterface;
   colorScheme: string;
   translationsDomainSeparator: string;
+  vueTemplates?: string[]
 }

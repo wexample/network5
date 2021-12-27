@@ -37,6 +37,8 @@ class VueService
 
         $pathTemplate = $vue->findTemplate($twig);
 
+        $renderPass = $this->adaptiveResponseService->renderPass;
+
         $attributes['class'] ??= '';
         $attributes['class'] .= ' '.$vue->id;
 
@@ -65,7 +67,7 @@ class VueService
         }
         else
         {
-            $rootComponent = $this->adaptiveResponseService->renderPass->getCurrentContextRenderNode();
+            $rootComponent = $renderPass->getCurrentContextRenderNode();
 
             $contextCurrent = RenderingHelper::buildRenderContextKey(
                 RenderingHelper::CONTEXT_COMPONENT,
@@ -89,7 +91,7 @@ class VueService
 
         if (!isset($this->renderedTemplates[$vue->name]))
         {
-            $this->adaptiveResponseService->renderPass->setCurrentContextRenderNode(
+            $renderPass->setCurrentContextRenderNode(
                 $rootComponent
             );
 
@@ -105,9 +107,14 @@ class VueService
                 )
             );
 
-            $this->adaptiveResponseService->renderPass->revertCurrentContextRenderNode();
+            $renderPass->revertCurrentContextRenderNode();
 
             $this->renderedTemplates[$vue->name] = $template;
+        }
+
+        if ($this->adaptiveResponseService->getResponse()->isJsonRequest())
+        {
+            $renderPass->layoutRenderNode->vueTemplates = $this->renderedTemplates;
         }
 
         return DomHelper::buildTag(

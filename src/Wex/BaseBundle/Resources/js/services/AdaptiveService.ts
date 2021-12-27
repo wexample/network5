@@ -53,7 +53,7 @@ export default class AdaptiveService extends AppService {
         renderData.requestOptions = requestOptions;
 
         // Prepare layout render data separately,
-        // at at this point it is already created.
+        // as at this point layout is already created.
         await this.services.layouts.prepareRenderData(renderData);
 
         // Wait render data loading to continue.

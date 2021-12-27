@@ -1,3 +1,3 @@
-import App from '../../class/App';
+import App from '../../class/TestApp';
 
 new App();
