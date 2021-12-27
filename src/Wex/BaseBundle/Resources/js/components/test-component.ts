@@ -3,6 +3,7 @@ import Component from '../class/Component';
 export default class extends Component {
   protected interval: any;
   protected onIntervalProxy: Function;
+  protected elBlink: HTMLElement;
 
   async init() {
     await super.init();

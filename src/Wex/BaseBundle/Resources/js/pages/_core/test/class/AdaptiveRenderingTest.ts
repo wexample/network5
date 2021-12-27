@@ -58,14 +58,12 @@ export default class AdaptiveRenderingTest extends UnitTest {
         'The layout has a new var'
       );
 
-      // Close modal.
       let modal = pageFocused.parentRenderNode as ModalComponent;
-      await modal.close();
 
       this.assertEquals(
-        this.app.layout.pageFocused,
-        this.app.layout.page,
-        'The focus has been thrown back to the main page'
+        modal.el.querySelector('.test-component-string-translated').innerHTML,
+        'SERVER_SIDE_COMPONENT_TRANSLATION',
+        `Test string equals "SERVER_SIDE_COMPONENT_TRANSLATION"`
       );
     });
   }
@@ -153,7 +151,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
         this.assertEquals(
           elHtml.querySelector('.page .test-string').innerHTML,
           testString,
-          `Test string is "${testString}"`
+          `Test string equals "${testString}"`
         );
 
         let found = elHtml

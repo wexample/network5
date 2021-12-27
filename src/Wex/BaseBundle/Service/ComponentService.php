@@ -149,10 +149,21 @@ class ComponentService extends RenderNodeService
             {
                 if ($loader->exists($templatePath))
                 {
-                    return $env->render(
+                    $this->translator->setDomainFromPath(
+                        Translator::DOMAIN_TYPE_COMPONENT,
+                        $component->name
+                    );
+
+                    $rendered = $env->render(
                         $templatePath,
                         $component->options
                     );
+
+                    $this->translator->revertDomain(
+                        Translator::DOMAIN_TYPE_COMPONENT
+                    );
+
+                    return $rendered;
                 }
             }
 
