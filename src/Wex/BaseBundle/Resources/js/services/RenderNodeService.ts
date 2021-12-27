@@ -25,7 +25,7 @@ export default abstract class RenderNodeService extends AppService {
   ): Promise<RenderNode> {
     await this.prepareRenderData(renderData);
 
-    let classDefinition = await this.app.getBundleClassDefinition(
+    let classDefinition = this.app.getBundleClassDefinition(
       definitionName,
       true
     );

@@ -1,13 +1,16 @@
 import Page from './Page';
 
 export default class TestManagerPage extends Page {
-  runTests(tests) {
-    Object.values(tests).forEach((testDefinition: any) => {
+  async runTests(tests) {
+    let testDefinition: any;
+    let method: Function;
+
+    for (testDefinition of Object.values(tests)) {
       let test = new testDefinition(this.app);
 
-      test.getTestMethods().forEach((method) => {
-        method.apply(test);
-      });
-    });
+      for (method of test.getTestMethods()) {
+        await method.apply(test);
+      }
+    }
   }
 }

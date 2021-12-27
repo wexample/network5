@@ -1,5 +1,13 @@
 {%- extends '@WexBaseBundle/Resources/templates/layouts/test.html.twig' -%}
 
-{% set page_title = 'pages.error.default::page_title' %}
+{%- block layout_config -%}
+    {{ parent() }}
+    {% set layout_title = 'pages.error.default::page_title' %}
+{%- endblock -%}
+
+{%- block page_config -%}
+    {{ parent() }}
+    {{- js_var('hasError', true) -}}
+{%- endblock -%}
 
 {%- block page_body -%}{{ message }}{%- endblock -%}

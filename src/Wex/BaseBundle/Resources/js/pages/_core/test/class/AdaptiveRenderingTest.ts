@@ -25,7 +25,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
     // Load in html.
     await this.fetchTestPageAdaptiveHtml(path, 'ADAPTIVE');
 
-    this.fetchTestPageAdaptiveJson(path).then(async () => {
+    await this.fetchTestPageAdaptiveJson(path).then(async () => {
       let pageFocused = this.app.layout.pageFocused;
 
       this.assertEquals(
@@ -73,7 +73,24 @@ export default class AdaptiveRenderingTest extends UnitTest {
   async testAdaptiveErrorMissingVue() {
     await this.app.services['adaptive'].get(
       this.app.services.routing.path('_core_test_error-missing-view')
-    );
+    ).then(async () => {
+      let pageFocused = this.app.layout.pageFocused;
+
+      this.assertTrue(
+        pageFocused.el.querySelector('.modal-body').innerHTML.indexOf('Unable to find template') !== -1,
+        'Error message has been displayed into modal'
+      );
+
+      this.assertTrue(
+        pageFocused.vars.hasError,
+        'Page has error'
+      );
+
+      // Close modal.
+      let modal = pageFocused.parentRenderNode as ModalComponent;
+
+      await modal.close();
+    });
   }
 
   private fetchTestPageAdaptiveJson(path) {
@@ -91,7 +108,10 @@ export default class AdaptiveRenderingTest extends UnitTest {
           `Layout data contains any JS assets`
         );
 
-        this.assertTrue(!!renderData.page, 'The response contains page data');
+        this.assertTrue(
+          !!renderData.page,
+          'The response contains page data'
+        );
 
         this.assertTrue(
           !!renderData.templates,
@@ -102,6 +122,13 @@ export default class AdaptiveRenderingTest extends UnitTest {
       });
   }
 
+  protected createElDocument(html: string) {
+    let elHtml = document.createElement('html');
+    elHtml.innerHTML = html;
+
+    return elHtml;
+  }
+
   private fetchTestPageAdaptiveHtml(path, pageContent) {
     // Use normal fetch to fake a non ajax get request.
     return fetch(path)
@@ -110,9 +137,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
         return response.text();
       })
       .then((html) => {
-        let elHtml = document.createElement('html');
-
-        elHtml.innerHTML = html;
+        let elHtml = this.createElDocument(html);
 
         this.assertTrue(
           !!elHtml.querySelector('body'),

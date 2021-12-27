@@ -22,7 +22,7 @@ export default class extends TestManagerPage {
     // TODO Test translations (layout / page / com / modal)
     // TODO Test overlays (multiple / inside a modal ?)
 
-    this.runTests({
+    await this.runTests({
       AdaptiveRenderingTest,
       AppTest,
       TestTest,
