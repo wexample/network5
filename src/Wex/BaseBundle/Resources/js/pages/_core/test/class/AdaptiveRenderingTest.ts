@@ -65,6 +65,15 @@ export default class AdaptiveRenderingTest extends UnitTest {
         'SERVER_SIDE_COMPONENT_TRANSLATION',
         `Test string equals "SERVER_SIDE_COMPONENT_TRANSLATION"`
       );
+
+      // Close modal.
+      await modal.close();
+
+      this.assertEquals(
+        this.app.layout.pageFocused,
+        this.app.layout.page,
+        'The focus has been thrown back to the main page'
+      );
     });
   }
 
