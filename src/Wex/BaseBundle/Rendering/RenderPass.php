@@ -72,6 +72,8 @@ class RenderPass
                 'document_head_title_args' => [],
                 'layout_name' => null,
                 'layout_color_scheme' => ColorSchemeHelper::SCHEME_DEFAULT,
+                'layout_animation' => null,
+                'layout_shape' => null,
                 'layout_use_js' => $this->useJs,
                 'page_name' => $this->pageName,
                 'page_path' => $this->view,
@@ -81,8 +83,9 @@ class RenderPass
             ] + $parameters;
     }
 
-    public function registerRenderNode(RenderNode $renderNode)
-    {
+    public function registerRenderNode(
+        RenderNode $renderNode
+    ) {
         $this->registry[$renderNode->getContextType()][$renderNode->name] = $renderNode;
     }
 
@@ -103,13 +106,16 @@ class RenderPass
         return $this->enableAggregation;
     }
 
-    public function registerContextRenderNode(RenderNode $renderNode)
+    public function registerContextRenderNode(
+        RenderNode $renderNode
+    )
     {
         $this->contextRenderNodeRegistry[$renderNode->getContextRenderNodeKey()] = $renderNode;
     }
 
-    public function setCurrentContextRenderNode(RenderNode $renderNode)
-    {
+    public function setCurrentContextRenderNode(
+        RenderNode $renderNode
+    ) {
         $this->setCurrentContextRenderNodeByTypeAndName(
             $renderNode->getContextType(),
             $renderNode->name

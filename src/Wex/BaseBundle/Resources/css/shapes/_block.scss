@@ -1,6 +1,6 @@
 @use 'sass:math';
 
-@import '../mixins/blocks';
+@import '../mixins/block';
 
 .block {
   margin: $block-spacing;

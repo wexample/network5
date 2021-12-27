@@ -3,8 +3,8 @@
 @use '@material/button/mdc-button';
 @use '@material/button';
 
-@import '../mixins/pills';
-@import '../mixins/blocks';
+@import '../mixins/pill';
+@import '../mixins/block';
 
 .button {
   border-radius: $pill-border-radius;
