@@ -43,8 +43,6 @@ class TranslationExtension extends AbstractExtension
 
     /**
      * Make translation available for javascript.
-     *
-     * @param string|array $keys
      */
     public function transJs(
         string|array $keys
