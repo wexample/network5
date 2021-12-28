@@ -3,4 +3,11 @@
   <div class="test-string">TEST VUE</div>
 </li>
 <li>{{ 'testData' | vue_key }}</li>
+<li>
+  {{ '@vue::string.server_side' | trans }}
+</li>
+<li>
+  <span class="test-vue-string-translated-client">-</span>
+</li>
+<li>{{ component('components/test-component') }}</li>
 </ul>

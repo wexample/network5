@@ -99,7 +99,7 @@ class VueService
 
             $this->translator->setDomainFromPath(
                 Translator::DOMAIN_TYPE_VUE,
-                $rootComponent->name
+                $rootComponent->options['path']
             );
 
             $template = DomHelper::buildTag(
