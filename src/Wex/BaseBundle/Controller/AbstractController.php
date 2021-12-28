@@ -77,20 +77,21 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
 
     protected function renderView(
         string $view,
-        array $parameters = []): string {
-
+        array $parameters = []
+    ): string {
         try
         {
             $rendered = parent::renderView(
                 $view,
                 $parameters
             );
-        } catch (\Exception $exception)
+        }
+        catch (\Exception $exception)
         {
             $rendered = parent::renderView(
                 WexBaseBundle::WEX_BUNDLE_PATH_TEMPLATES.'pages/_core/error/default.html.twig',
                 $parameters + [
-                    'message' => $exception->getMessage()
+                    'message' => $exception->getMessage(),
                 ]
             );
         }

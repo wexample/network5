@@ -6,9 +6,10 @@ class AjaxLayoutRenderNode extends LayoutRenderNode
 {
     public array $vueTemplates = [];
 
-    public function toRenderData(): array {
+    public function toRenderData(): array
+    {
         return parent::toRenderData() + [
-                'vueTemplates' => $this->vueTemplates
+                'vueTemplates' => $this->vueTemplates,
             ];
     }
 }

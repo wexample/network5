@@ -1,6 +1,6 @@
 import AdaptiveRenderingTest from './class/AdaptiveRenderingTest';
 import TestManagerPage from '../../../class/TestManagerPage';
-import PageTest from "./class/PageTest";
+import PageTest from './class/PageTest';
 import TestTest from './class/TestTest';
 import AppTest from './class/AppTest';
 

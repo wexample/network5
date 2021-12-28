@@ -2,9 +2,7 @@ import UnitTest from '../../../../class/UnitTest';
 
 export default class PageTest extends UnitTest {
   public getTestMethods() {
-    return [
-      this.testDefault
-    ];
+    return [this.testDefault];
   }
 
   public testDefault() {

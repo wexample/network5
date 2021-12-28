@@ -101,8 +101,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
 
             $cache->get(
                 self::CACHE_KEY_TRANSLATIONS_RESOLVED,
-                function () use
-                (
+                function () use (
                     $pathProject
                 ): array {
                     // Search into "translation" folder for sub folders.
@@ -287,8 +286,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
             {
                 $subTranslations = array_filter(
                     $all[$refDomain],
-                    function ($key) use
-                    (
+                    function ($key) use (
                         $refKey
                     ): bool {
                         return str_starts_with($key, $refKey.self::KEYS_SEPARATOR);
@@ -466,10 +464,10 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         $info = (object) pathinfo($path);
 
         return str_replace(
-                '/',
-                self::KEYS_SEPARATOR,
-                $info->dirname
-            ).self::KEYS_SEPARATOR.
+            '/',
+            self::KEYS_SEPARATOR,
+            $info->dirname
+        ).self::KEYS_SEPARATOR.
             current(explode(self::KEYS_SEPARATOR, $info->basename));
     }
 
@@ -505,10 +503,12 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
     {
         $keyRegex = str_replace('*', '[a-zA-Z0-9]', $this->splitId($key));
         $keyRegex = str_replace('.', '\.', $keyRegex);
+
         return '/'.$keyRegex.'/';
     }
 
-    public function transFilter(string $key):array {
+    public function transFilter(string $key): array
+    {
         $output = [];
 
         if (str_contains($key, '*'))

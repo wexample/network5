@@ -6,14 +6,10 @@ export default class LocaleService extends AppService {
     return {
       renderNode: {
         trans(string: string = '', args: {} = {}) {
-          return this.app.services.locale.trans(
-            string,
-            args,
-            {
-              ...this.app.layout.translations,
-              ...this.translations,
-            }
-          );
+          return this.app.services.locale.trans(string, args, {
+            ...this.app.layout.translations,
+            ...this.translations,
+          });
         },
       },
     };

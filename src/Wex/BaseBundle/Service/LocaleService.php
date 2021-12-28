@@ -10,7 +10,6 @@ class LocaleService
         protected AdaptiveResponseService $adaptiveResponseService,
         protected Translator $translator
     ) {
-
     }
 
     public function transJs(

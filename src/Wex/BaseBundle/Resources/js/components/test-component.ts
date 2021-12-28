@@ -12,10 +12,7 @@ export default class extends Component {
     this.elBlink = this.el.querySelector('.test-blink');
 
     this.onIntervalProxy = this.onInterval.bind(this);
-    this.interval = setInterval(
-      this.onIntervalProxy,
-      1000
-    );
+    this.interval = setInterval(this.onIntervalProxy, 1000);
   }
 
   async exit() {
@@ -26,7 +23,6 @@ export default class extends Component {
 
   onInterval() {
     this.elBlink.style.display =
-      this.elBlink.style.display === 'none'
-        ? 'inline' : 'none';
+      this.elBlink.style.display === 'none' ? 'inline' : 'none';
   }
 }

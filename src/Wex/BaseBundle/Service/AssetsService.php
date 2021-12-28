@@ -339,7 +339,8 @@ class AssetsService
         }
     }
 
-    public function assetsPreloadList(string $ext): array {
+    public function assetsPreloadList(string $ext): array
+    {
         $assets = $this->assets[$ext];
         $output = [];
 
@@ -374,7 +375,8 @@ class AssetsService
         return $assets;
     }
 
-    public function renderEventPostRender(array &$options) {
+    public function renderEventPostRender(array &$options)
+    {
         $options['rendered'] = $this->replacePreloadPlaceholder(
             $options['rendered']
         );

@@ -20,7 +20,8 @@ class AdaptiveResponseExtension extends AbstractExtension
     ) {
     }
 
-    public function getFunctions(): array {
+    public function getFunctions(): array
+    {
         return [
             new TwigFunction(
                 'adaptive_response_revert_context',
@@ -67,14 +68,16 @@ class AdaptiveResponseExtension extends AbstractExtension
      * Return base layout path regarding request type
      * and template configuration.
      */
-    public function adaptiveResponseRenderingBasePath(array $context): string {
+    public function adaptiveResponseRenderingBasePath(array $context): string
+    {
         return $this
             ->adaptiveResponseService
             ->getResponse()
             ->getRenderingBasePath($context);
     }
 
-    public function adaptiveRenderingBase(): string {
+    public function adaptiveRenderingBase(): string
+    {
         return $this
             ->adaptiveResponseService
             ->getResponse()
@@ -94,7 +97,8 @@ class AdaptiveResponseExtension extends AbstractExtension
             );
     }
 
-    public function adaptiveResponseRevertContext() {
+    public function adaptiveResponseRevertContext()
+    {
         $this
             ->adaptiveResponseService
             ->renderPass

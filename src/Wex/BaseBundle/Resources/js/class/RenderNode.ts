@@ -20,10 +20,7 @@ export default abstract class RenderNode extends AppChild {
 
     this.el = el;
 
-    this.app.mix(
-      this,
-      'renderNode'
-    );
+    this.app.mix(this, 'renderNode');
   }
 
   public async init() {

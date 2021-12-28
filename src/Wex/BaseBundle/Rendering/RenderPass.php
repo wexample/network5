@@ -108,8 +108,7 @@ class RenderPass
 
     public function registerContextRenderNode(
         RenderNode $renderNode
-    )
-    {
+    ) {
         $this->contextRenderNodeRegistry[$renderNode->getContextRenderNodeKey()] = $renderNode;
     }
 

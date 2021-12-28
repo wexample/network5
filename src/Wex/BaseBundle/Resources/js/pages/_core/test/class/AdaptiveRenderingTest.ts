@@ -78,26 +78,25 @@ export default class AdaptiveRenderingTest extends UnitTest {
   }
 
   async testAdaptiveErrorMissingVue() {
-    await this.app.services['adaptive'].get(
-      this.app.services.routing.path('_core_test_error-missing-view')
-    ).then(async () => {
-      let pageFocused = this.app.layout.pageFocused;
+    await this.app.services['adaptive']
+      .get(this.app.services.routing.path('_core_test_error-missing-view'))
+      .then(async () => {
+        let pageFocused = this.app.layout.pageFocused;
 
-      this.assertTrue(
-        pageFocused.el.querySelector('.modal-body').innerHTML.indexOf('Unable to find template') !== -1,
-        'Error message has been displayed into modal'
-      );
+        this.assertTrue(
+          pageFocused.el
+            .querySelector('.modal-body')
+            .innerHTML.indexOf('Unable to find template') !== -1,
+          'Error message has been displayed into modal'
+        );
 
-      this.assertTrue(
-        pageFocused.vars.hasError,
-        'Page has error'
-      );
+        this.assertTrue(pageFocused.vars.hasError, 'Page has error');
 
-      // Close modal.
-      let modal = pageFocused.parentRenderNode as ModalComponent;
+        // Close modal.
+        let modal = pageFocused.parentRenderNode as ModalComponent;
 
-      await modal.close();
-    });
+        await modal.close();
+      });
   }
 
   private fetchTestPageAdaptiveJson(path) {
@@ -115,10 +114,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
           `Layout data contains any JS assets`
         );
 
-        this.assertTrue(
-          !!renderData.page,
-          'The response contains page data'
-        );
+        this.assertTrue(!!renderData.page, 'The response contains page data');
 
         this.assertTrue(
           !!renderData.templates,

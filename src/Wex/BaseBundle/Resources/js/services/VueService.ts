@@ -3,7 +3,7 @@ import AppService from '../class/AppService';
 import PagesService from './PagesService';
 import MixinsAppService from '../class/MixinsAppService';
 import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
-import LayoutInterface from "../interfaces/RenderData/LayoutInterface";
+import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 
 export default class VueService extends AppService {
   protected componentRegistered: any = {};
@@ -34,10 +34,7 @@ export default class VueService extends AppService {
               },
             };
 
-            this.app.mix(
-              this.globalMixin,
-              'vue'
-            );
+            this.app.mix(this.globalMixin, 'vue');
 
             return;
           }
@@ -61,7 +58,7 @@ export default class VueService extends AppService {
 
   inherit(vueComponent) {
     let componentsFinal = vueComponent.components || {};
-    let extend = {components: {}};
+    let extend = { components: {} };
 
     if (vueComponent.extends) {
       extend = this.inherit(vueComponent.extends);
@@ -143,10 +140,7 @@ export default class VueService extends AppService {
 
     for (let name in renderedTemplates) {
       if (!this.renderedTemplates[name]) {
-        elContainer.insertAdjacentHTML(
-          'beforeend',
-          renderedTemplates[name]
-        );
+        elContainer.insertAdjacentHTML('beforeend', renderedTemplates[name]);
         this.renderedTemplates[name] = true;
       }
     }
