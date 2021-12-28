@@ -7,6 +7,9 @@ use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Rendering\RenderNode\RenderNode;
+use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\Cache\CacheItem;
+use Symfony\Contracts\Cache\CacheInterface;
 use function array_merge;
 use function array_reverse;
 use function basename;
@@ -22,6 +25,11 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class AssetsService
 {
+    /**
+     * @var string
+     */
+    private const CACHE_KEY_ASSETS_REGISTRY = 'assets_registry';
+
     public const DISPLAY_BREAKPOINTS = [
         'xs' => 0,
         's' => 576,
@@ -55,23 +63,45 @@ class AssetsService
 
     private string $pathBuild;
 
-    private array $manifest;
+    private array $registry;
 
     private string $pathPublic;
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         KernelInterface $kernel,
-        private AdaptiveResponseService $adaptiveResponseService
+        private AdaptiveResponseService $adaptiveResponseService,
+        CacheInterface $cache
     ) {
         $this->pathProject = $kernel->getProjectDir().'/';
         $this->pathPublic = $this->pathProject.self::DIR_PUBLIC;
         $this->pathBuild = $this->pathPublic.self::DIR_BUILD;
-        $this->manifest = json_decode(
-            file_get_contents(
-                $this->pathBuild.self::FILE_MANIFEST
-            ),
-            JSON_OBJECT_AS_ARRAY
-        );
+
+        // Assets registry is cached as manifest file may be unstable.
+        if ($cache->hasItem(self::CACHE_KEY_ASSETS_REGISTRY))
+        {
+            /** @var CacheItem $item */
+            $item = $cache->getItem(self::CACHE_KEY_ASSETS_REGISTRY);
+            $this->registry = $item->get();
+        }
+        else
+        {
+            $cache->get(
+                self::CACHE_KEY_ASSETS_REGISTRY,
+                function (): array {
+                    $this->registry = json_decode(
+                        file_get_contents(
+                            $this->pathBuild.self::FILE_MANIFEST
+                        ),
+                        JSON_OBJECT_AS_ARRAY
+                    );
+
+                    return $this->registry;
+                }
+            );
+        }
 
         $this->adaptiveResponseService->addRenderEventListener(
             $this
@@ -292,18 +322,18 @@ class AssetsService
         RenderNode $renderNode
     ): ?Asset {
         $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
-        if (!isset($this->manifest[$pathRelativeToPublic]))
+        if (!isset($this->registry[$pathRelativeToPublic]))
         {
             return null;
         }
 
         if (!isset($this->assetsLoaded[$pathRelative]))
         {
-            $pathReal = realpath($this->pathPublic.$this->manifest[$pathRelativeToPublic]);
+            $pathReal = realpath($this->pathPublic.$this->registry[$pathRelativeToPublic]);
 
             if (!$pathReal)
             {
-                throw new Exception('Unable to find asset "'.$this->manifest[$pathRelativeToPublic].'" from manifest for render node '.$renderNode->name);
+                throw new Exception('Unable to find asset "'.$this->registry[$pathRelativeToPublic].'" from manifest for render node '.$renderNode->name);
             }
 
             $asset = new Asset(

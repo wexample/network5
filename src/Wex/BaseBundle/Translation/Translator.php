@@ -36,6 +36,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface
 {
+    /**
+     * @var string
+     */
+    private const CACHE_KEY_TRANSLATIONS_RESOLVED = 'translations_resolved';
+
     public const DOMAIN_SEPARATOR = ClassHelper::METHOD_SEPARATOR;
 
     public const DOMAIN_PREFIX = '@';
@@ -68,11 +73,6 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
     public const FILE_EXTENDS = '~extends';
 
     protected array $domainsStack = [];
-
-    /**
-     * @var string
-     */
-    private const CACHE_KEY_TRANSLATIONS_RESOLVED = 'translations_resolved';
 
     /**
      * @throws InvalidArgumentException
