@@ -4,7 +4,6 @@ namespace App\Wex\BaseBundle\Service;
 
 use App\Wex\BaseBundle\Api\Dto\Traits\EntityDto;
 use App\Wex\BaseBundle\Entity\Interfaces\AbstractEntityInterface;
-use App\Wex\BaseBundle\Helper\RenderingHelper;
 use function class_exists;
 use function is_array;
 use function is_object;
@@ -18,12 +17,6 @@ class JsService
     public const VARS_GROUP_GLOBAL = 'global';
 
     public const VARS_GROUP_PAGE = 'page';
-
-    // TODO Remove ?
-    protected array $jsVars = [
-        JsService::VARS_GROUP_GLOBAL => [],
-        JsService::VARS_GROUP_PAGE => [],
-    ];
 
     /**
      * CommonExtension constructor.
@@ -46,13 +39,6 @@ class JsService
             ->renderPass
             ->getCurrentContextRenderNode()
             ->vars[$name] = $this->serializeValue($value);
-    }
-
-    public function jsVarExists(
-        string $name,
-        string $context = RenderingHelper::CONTEXT_PAGE
-    ): bool {
-        return isset($this->jsVars[$context][$name]);
     }
 
     /**
