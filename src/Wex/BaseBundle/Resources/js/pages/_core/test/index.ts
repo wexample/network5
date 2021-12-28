@@ -1,5 +1,6 @@
 import AdaptiveRenderingTest from './class/AdaptiveRenderingTest';
 import TestManagerPage from '../../../class/TestManagerPage';
+import PageTest from "./class/PageTest";
 import TestTest from './class/TestTest';
 import AppTest from './class/AppTest';
 
@@ -26,6 +27,7 @@ export default class extends TestManagerPage {
       AdaptiveRenderingTest,
       AppTest,
       TestTest,
+      PageTest,
       // TODO VariablesTest
     });
   }
