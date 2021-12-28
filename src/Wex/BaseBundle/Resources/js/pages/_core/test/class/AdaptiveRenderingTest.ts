@@ -86,6 +86,11 @@ export default class AdaptiveRenderingTest extends UnitTest {
       'rgb(0, 128, 0)',
       'The adaptive CSS has applied green'
     );
+
+    this.assertTrue(
+      page.components[0].options.testOption,
+      'The component option has been loaded'
+    );
   }
 
   async testAdaptiveErrorMissingVue() {
