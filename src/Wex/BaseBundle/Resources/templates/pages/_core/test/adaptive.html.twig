@@ -2,12 +2,12 @@
 
 {%- block layout_config -%}
     {{ parent() }}
-    {{- js_var('layout_level_test_var', 'value') -}}
+    {{- var_js('layoutLevelTestVar', 'value') -}}
 {%- endblock -%}
 
 {%- block page_config -%}
     {{ parent() }}
-    {{- js_var('page_level_test_var', 'value') -}}
+    {{- var_js('page_level_test_var', 'value') -}}
 {%- endblock -%}
 
 {%- block page_body -%}

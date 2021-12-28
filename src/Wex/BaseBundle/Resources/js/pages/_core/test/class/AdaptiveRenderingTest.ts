@@ -53,7 +53,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
       );
 
       this.assertEquals(
-        this.app.layout.vars.layout_level_test_var,
+        this.app.layout.vars.layoutLevelTestVar,
         'value',
         'The layout has a new var'
       );

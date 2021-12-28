@@ -1,5 +1,19 @@
 {%- extends '@WexBaseBundle/Resources/templates/layouts/test.html.twig' -%}
 
+{%- block layout_config -%}
+    {{ parent() }}
+    {{- var_js('initialLayoutVar', true) -}}
+{%- endblock -%}
+
+{%- block page_config -%}
+    {{ parent() }}
+    {{- var_js('initialPageVar', true) -}}
+    {{- trans_js('initialPageVar', true) -}}
+{%- endblock -%}
+
 {%- block page_body -%}
     <div class="test-string">TESTS PAGE</div>
+    <ul>
+        <li></li>
+    </ul>
 {%- endblock -%}

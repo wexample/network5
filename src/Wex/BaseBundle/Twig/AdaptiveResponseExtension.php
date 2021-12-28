@@ -3,7 +3,9 @@
 namespace App\Wex\BaseBundle\Twig;
 
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
+use App\Wex\BaseBundle\Service\JsService;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Twig\TwigFunction;
 
 class AdaptiveResponseExtension extends AbstractExtension
@@ -14,11 +16,11 @@ class AdaptiveResponseExtension extends AbstractExtension
     public function __construct(
         protected AdaptiveResponseService $adaptiveResponseService,
         protected RequestStack $requestStack,
+        protected JsService $jsService
     ) {
     }
 
-    public function getFunctions(): array
-    {
+    public function getFunctions(): array {
         return [
             new TwigFunction(
                 'adaptive_response_revert_context',
@@ -51,6 +53,13 @@ class AdaptiveResponseExtension extends AbstractExtension
                     'adaptiveRenderingBase',
                 ]
             ),
+            new TwigFunction(
+                'var_js',
+                [
+                    $this,
+                    'varJs',
+                ]
+            ),
         ];
     }
 
@@ -58,16 +67,14 @@ class AdaptiveResponseExtension extends AbstractExtension
      * Return base layout path regarding request type
      * and template configuration.
      */
-    public function adaptiveResponseRenderingBasePath(array $context): string
-    {
+    public function adaptiveResponseRenderingBasePath(array $context): string {
         return $this
             ->adaptiveResponseService
             ->getResponse()
             ->getRenderingBasePath($context);
     }
 
-    public function adaptiveRenderingBase(): string
-    {
+    public function adaptiveRenderingBase(): string {
         return $this
             ->adaptiveResponseService
             ->getResponse()
@@ -87,11 +94,20 @@ class AdaptiveResponseExtension extends AbstractExtension
             );
     }
 
-    public function adaptiveResponseRevertContext()
-    {
+    public function adaptiveResponseRevertContext() {
         $this
             ->adaptiveResponseService
             ->renderPass
             ->revertCurrentContextRenderNode();
+    }
+
+    /**
+     * @throws ExceptionInterface
+     */
+    public function varJs(
+        string $name,
+        mixed $value
+    ): void {
+        $this->jsService->jsVar($name, $value);
     }
 }

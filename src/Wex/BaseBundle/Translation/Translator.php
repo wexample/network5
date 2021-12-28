@@ -69,6 +69,12 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
 
     protected array $domainsStack = [];
 
+    protected array $transJsKeys = [
+        '@page::alert',
+        '@page::confirm',
+        '@page::page_message',
+    ];
+
     /**
      * @var string
      */
@@ -101,7 +107,10 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
 
             $cache->get(
                 self::CACHE_KEY_TRANSLATIONS_RESOLVED,
-                function () use ($pathProject): array {
+                function () use
+                (
+                    $pathProject
+                ): array {
                     // Search into "translation" folder for sub folders.
                     // Allow notation : path.to.folder::translation.key
 
@@ -284,7 +293,10 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
             {
                 $subTranslations = array_filter(
                     $all[$refDomain],
-                    function ($key) use ($refKey): bool {
+                    function ($key) use
+                    (
+                        $refKey
+                    ): bool {
                         return str_starts_with($key, $refKey.self::KEYS_SEPARATOR);
                     },
                     ARRAY_FILTER_USE_KEY
@@ -443,8 +455,10 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
             end($this->domainsStack[$name]);
     }
 
-    public function setDomainFromPath(string $name, string $path): string
-    {
+    public function setDomainFromPath(
+        string $name,
+        string $path
+    ): string {
         $domain = Translator::buildDomainFromPath($path);
 
         $this->setDomain($name, $domain);
@@ -458,15 +472,17 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         $info = (object) pathinfo($path);
 
         return str_replace(
-            '/',
-            self::KEYS_SEPARATOR,
-            $info->dirname
-        ).self::KEYS_SEPARATOR.
+                '/',
+                self::KEYS_SEPARATOR,
+                $info->dirname
+            ).self::KEYS_SEPARATOR.
             current(explode(self::KEYS_SEPARATOR, $info->basename));
     }
 
-    public function setDomain(string $name, string $value): void
-    {
+    public function setDomain(
+        string $name,
+        string $value
+    ): void {
         $this->domainsStack[$name][] = $value;
     }
 
@@ -489,5 +505,14 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
     public function getCatalogues(): array
     {
         return $this->translator->getCatalogues();
+    }
+
+    public function transJs(
+        string|array $keys,
+    ) {
+        $this->transJsKeys = array_merge(
+            $this->transJsKeys,
+            is_string($keys) ? [$keys] : $keys
+        );
     }
 }

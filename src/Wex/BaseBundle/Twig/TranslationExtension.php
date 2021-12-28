@@ -8,12 +8,6 @@ use Twig\TwigFunction;
 
 class TranslationExtension extends AbstractExtension
 {
-    public array $transJsKeys = [
-        '@page::alert',
-        '@page::confirm',
-        '@page::page_message',
-    ];
-
     public function __construct(
         public Translator $translator
     ) {
@@ -22,6 +16,13 @@ class TranslationExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
+            new TwigFunction(
+                'trans_js',
+                [
+                    $this,
+                    'transJs',
+                ]
+            ),
             new TwigFunction(
                 'translation_build_domain_from_path',
                 [
@@ -74,5 +75,16 @@ class TranslationExtension extends AbstractExtension
         return Translator::buildDomainFromPath(
             $path
         );
+    }
+
+    /**
+     * Make translation available for javascript.
+     *
+     * @param string|array $keys
+     */
+    public function transJs(
+        string|array $keys
+    ): void {
+        $this->translator->transJs($keys);
     }
 }

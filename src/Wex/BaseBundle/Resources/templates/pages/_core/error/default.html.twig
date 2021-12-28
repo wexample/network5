@@ -7,7 +7,7 @@
 
 {%- block page_config -%}
     {{ parent() }}
-    {{- js_var('hasError', true) -}}
+    {{- var_js('hasError', true) -}}
 {%- endblock -%}
 
 {%- block page_body -%}{{ message }}{%- endblock -%}
