@@ -1,5 +1,9 @@
 <div {{ component_render_tag_attributes({class: 'test-component'}) }}>
     <span class="test-component-string">TEST_COMPONENT</span>
+    <ul>
+        <li><span class="test-component-test-js">JS</span> component test</li>
+        <li><span class="test-component-test-css">CSS</span> component test</li>
+    </ul>
     <span class="test-blink">...</span>
     <div class="test-component-string-translated">{{ '@component::string.server_side' | trans }}</div>
 </div>

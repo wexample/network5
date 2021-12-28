@@ -24,6 +24,12 @@ export default abstract class RenderNode extends AppChild {
   }
 
   public async init() {
+    await this.services.mixins.invokeUntilComplete(
+      'renderNodeInit',
+      'renderNode',
+      [this]
+    );
+
     await this.readyComplete();
   }
 
@@ -61,7 +67,7 @@ export default abstract class RenderNode extends AppChild {
       ...renderData.translations,
     };
 
-    this.vars = { ...this.vars, ...renderData.vars };
+    this.vars = {...this.vars, ...renderData.vars};
   }
 
   appendChildRenderNode(renderNode: RenderNode) {

@@ -63,14 +63,14 @@ export default class AdaptiveRenderingTest extends UnitTest {
 
       this.assertPageAdaptiveLoaded(modal.page);
 
-      // // Close modal.
-      // await modal.close();
-      //
-      // this.assertEquals(
-      //   this.app.layout.pageFocused,
-      //   this.app.layout.page,
-      //   'The focus has been thrown back to the main page'
-      // );
+      // Close modal.
+      await modal.close();
+
+      this.assertEquals(
+        this.app.layout.pageFocused,
+        this.app.layout.page,
+        'The focus has been thrown back to the main page'
+      );
     });
   }
 
@@ -82,9 +82,9 @@ export default class AdaptiveRenderingTest extends UnitTest {
     );
 
     this.assertEquals(
-      getComputedStyle(page.el.querySelector('.adaptive-page-test-class')).backgroundColor,
-      'rgb(255, 0, 255)',
-      'The adaptive CSS has applied magenta'
+      getComputedStyle(page.el.querySelector('.adaptive-page-test-css')).backgroundColor,
+      'rgb(0, 128, 0)',
+      'The adaptive CSS has applied green'
     );
   }
 
