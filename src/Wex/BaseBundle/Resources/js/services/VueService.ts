@@ -4,6 +4,7 @@ import PagesService from './PagesService';
 import MixinsAppService from '../class/MixinsAppService';
 import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
+import { appendInnerHtml } from "../helpers/Dom";
 
 export default class VueService extends AppService {
   protected componentRegistered: any = {};
@@ -58,7 +59,7 @@ export default class VueService extends AppService {
 
   inherit(vueComponent) {
     let componentsFinal = vueComponent.components || {};
-    let extend = { components: {} };
+    let extend = {components: {}};
 
     if (vueComponent.extends) {
       extend = this.inherit(vueComponent.extends);
@@ -140,7 +141,7 @@ export default class VueService extends AppService {
 
     for (let name in renderedTemplates) {
       if (!this.renderedTemplates[name]) {
-        elContainer.insertAdjacentHTML('beforeend', renderedTemplates[name]);
+        appendInnerHtml(elContainer, renderedTemplates[name]);
         this.renderedTemplates[name] = true;
       }
     }

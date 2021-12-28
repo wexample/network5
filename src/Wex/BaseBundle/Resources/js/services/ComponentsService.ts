@@ -7,7 +7,7 @@ import PageHandlerComponent from '../class/PageHandlerComponent';
 import Component from '../class/Component';
 import RenderNodeService from './RenderNodeService';
 import RenderNode from '../class/RenderNode';
-import { findPreviousNode as DomFindPreviousNode } from '../helpers/Dom';
+import { appendInnerHtml, findPreviousNode as DomFindPreviousNode } from '../helpers/Dom';
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import AppService from '../class/AppService';
 
@@ -79,7 +79,7 @@ export default class ComponentsService extends RenderNodeService {
   async loadLayoutRenderData(renderData: LayoutInterface) {
     if (renderData.templates) {
       // Append html for global components.
-      this.elLayoutComponents.innerHTML += renderData.templates;
+      appendInnerHtml(this.elLayoutComponents, renderData.templates);
     }
 
     await this.createRenderDataComponents(renderData, this.app.layout);
