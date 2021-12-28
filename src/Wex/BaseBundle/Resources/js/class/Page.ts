@@ -19,6 +19,8 @@ export default class extends RenderNode {
   public renderData: RenderDataPageInterface;
   public responsiveDisplayCurrent: PageResponsiveDisplay;
   public services: ServiceRegistryPageInterface;
+  // Mixed functions from services.
+  public trans?: Function;
 
   public getRenderNodeType(): string {
     return 'page';

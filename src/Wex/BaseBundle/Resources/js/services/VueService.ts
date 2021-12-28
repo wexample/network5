@@ -34,7 +34,10 @@ export default class VueService extends AppService {
               },
             };
 
-            this.app.mix(this.globalMixin, 'vue');
+            this.app.mix(
+              this.globalMixin,
+              'vue'
+            );
 
             return;
           }

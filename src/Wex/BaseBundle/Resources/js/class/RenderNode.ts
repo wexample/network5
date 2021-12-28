@@ -1,9 +1,7 @@
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import AppChild from './AppChild';
 import App from './App';
-import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 import Component from './Component';
-import TranslationsInterface from '../interfaces/TranslationsInterface';
 
 export default abstract class RenderNode extends AppChild {
   public childRenderNodes: { [key: string]: RenderNode } = {};
@@ -14,16 +12,18 @@ export default abstract class RenderNode extends AppChild {
   public name: string;
   public parentRenderNode: RenderNode;
   public renderData: RenderDataInterface;
-  public translations: TranslationsInterface = {
-    domain: null,
-    catalog: {},
-  };
+  public translations: {} = {};
   public vars: any = {};
 
   constructor(app: App, el: HTMLElement = null) {
     super(app);
 
     this.el = el;
+
+    this.app.mix(
+      this,
+      'renderNode'
+    );
   }
 
   public async init() {
@@ -59,9 +59,9 @@ export default abstract class RenderNode extends AppChild {
     this.id = renderData.id;
     this.name = renderData.name;
 
-    this.translations.catalog = {
-      ...this.translations.catalog,
-      ...renderData.translations.catalog,
+    this.translations = {
+      ...this.translations,
+      ...renderData.translations,
     };
 
     this.vars = { ...this.vars, ...renderData.vars };

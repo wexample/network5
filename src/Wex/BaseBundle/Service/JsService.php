@@ -30,7 +30,7 @@ class JsService
     /**
      * @throws ExceptionInterface
      */
-    public function jsVar(
+    public function varJs(
         string $name,
         mixed $value,
     ): void {

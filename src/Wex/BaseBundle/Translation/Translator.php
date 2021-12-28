@@ -69,12 +69,6 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
 
     protected array $domainsStack = [];
 
-    protected array $transJsKeys = [
-        '@page::alert',
-        '@page::confirm',
-        '@page::page_message',
-    ];
-
     /**
      * @var string
      */
@@ -507,12 +501,41 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         return $this->translator->getCatalogues();
     }
 
-    public function transJs(
-        string|array $keys,
-    ) {
-        $this->transJsKeys = array_merge(
-            $this->transJsKeys,
-            is_string($keys) ? [$keys] : $keys
-        );
+    public function buildRegexForFilterKey(string $key): string
+    {
+        $keyRegex = str_replace('*', '[a-zA-Z0-9]', $this->splitId($key));
+        $keyRegex = str_replace('.', '\.', $keyRegex);
+        return '/'.$keyRegex.'/';
+    }
+
+    public function transFilter(string $key):array {
+        $output = [];
+
+        if (str_contains($key, '*'))
+        {
+            $keyRegex = $this->buildRegexForFilterKey($key);
+
+            $domainAlias = $this->splitDomain($key);
+            $domainResolved = $this
+                ->resolveDomain(
+                    $domainAlias
+                );
+
+            $allDomainTranslations = $this->translator->getCatalogue()->all($domainResolved);
+
+            foreach ($allDomainTranslations as $translationCandidateKey => $value)
+            {
+                if (preg_match($keyRegex, $translationCandidateKey))
+                {
+                    $output[$domainAlias.Translator::DOMAIN_SEPARATOR.$translationCandidateKey] = $value;
+                }
+            }
+        }
+        else
+        {
+            $output[$key] = $this->trans($key);
+        }
+
+        return $output;
     }
 }

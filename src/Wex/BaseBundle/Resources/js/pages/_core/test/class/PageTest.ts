@@ -19,5 +19,17 @@ export default class PageTest extends UnitTest {
       true,
       'Initial layout var is set'
     );
+
+    this.assertEquals(
+      this.app.layout.page.trans('@page::secondGroup.first'),
+      'First',
+      'A simple translation is loaded in js'
+    );
+
+    this.assertEquals(
+      this.app.layout.page.trans('@page::firstGroup.third'),
+      'Third',
+      'A translations with the * wildcard is loaded in js'
+    );
   }
 }

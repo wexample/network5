@@ -108,6 +108,6 @@ class AdaptiveResponseExtension extends AbstractExtension
         string $name,
         mixed $value
     ): void {
-        $this->jsService->jsVar($name, $value);
+        $this->jsService->varJs($name, $value);
     }
 }

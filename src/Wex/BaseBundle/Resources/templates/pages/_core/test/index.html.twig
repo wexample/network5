@@ -8,7 +8,8 @@
 {%- block page_config -%}
     {{ parent() }}
     {{- var_js('initialPageVar', true) -}}
-    {{- trans_js('initialPageVar', true) -}}
+    {{- trans_js('@page::firstGroup.*') -}}
+    {{- trans_js('@page::secondGroup.first') -}}
 {%- endblock -%}
 
 {%- block page_body -%}

@@ -1,6 +1,5 @@
 import AssetsCollectionInterface from '../AssetsCollectionInterface';
 import ComponentInterface from './ComponentInterface';
-import TranslationsInterface from '../TranslationsInterface';
 import RequestOptionsInterface from '../RequestOptions/RequestOptionsInterface';
 
 export default interface RenderDataInterface {
@@ -10,7 +9,7 @@ export default interface RenderDataInterface {
   name: string;
   renderRequestId: string;
   requestOptions?: RequestOptionsInterface;
-  translations: TranslationsInterface;
+  translations: {};
   vars: object;
   templates: string;
 }
