@@ -1,6 +1,7 @@
 import UnitTest from '../../../../class/UnitTest';
 import ModalComponent from '../../../../components/modal';
 import LayoutInterface from '../../../../interfaces/RenderData/LayoutInterface';
+import Page from "../../../../class/Page";
 
 export default class AdaptiveRenderingTest extends UnitTest {
   public getTestMethods() {
@@ -47,7 +48,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
       );
 
       this.assertEquals(
-        pageFocused.vars.page_level_test_var,
+        pageFocused.vars.pageLevelTestVar,
         'value',
         'The modal page has vars'
       );
@@ -60,21 +61,31 @@ export default class AdaptiveRenderingTest extends UnitTest {
 
       let modal = pageFocused.parentRenderNode as ModalComponent;
 
-      this.assertEquals(
-        modal.el.querySelector('.test-component-string-translated').innerHTML,
-        'SERVER_SIDE_COMPONENT_TRANSLATION',
-        `Test string equals "SERVER_SIDE_COMPONENT_TRANSLATION"`
-      );
+      this.assertPageAdaptiveLoaded(modal.page);
 
-      // Close modal.
-      await modal.close();
-
-      this.assertEquals(
-        this.app.layout.pageFocused,
-        this.app.layout.page,
-        'The focus has been thrown back to the main page'
-      );
+      // // Close modal.
+      // await modal.close();
+      //
+      // this.assertEquals(
+      //   this.app.layout.pageFocused,
+      //   this.app.layout.page,
+      //   'The focus has been thrown back to the main page'
+      // );
     });
+  }
+
+  assertPageAdaptiveLoaded(page: Page) {
+    this.assertEquals(
+      page.el.querySelector('.test-component-string-translated').innerHTML,
+      'SERVER_SIDE_COMPONENT_TRANSLATION',
+      `Test string equals "SERVER_SIDE_COMPONENT_TRANSLATION"`
+    );
+
+    this.assertEquals(
+      getComputedStyle(page.el.querySelector('.adaptive-page-test-class')).backgroundColor,
+      'rgb(255, 0, 255)',
+      'The adaptive CSS has applied magenta'
+    );
   }
 
   async testAdaptiveErrorMissingVue() {
