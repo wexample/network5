@@ -12,6 +12,16 @@ export default class LocaleService extends AppService {
           });
         },
       },
+      vue: {
+        methods: {
+          trans() {
+            return this.rootComponent.trans.apply(
+              this.rootComponent,
+              arguments
+            );
+          },
+        }
+      }
     };
   }
 

@@ -1,3 +1,5 @@
+{{- trans_js('@vue::string.client_side') -}}
+
 <ul>
 <li>
   <div class="test-string">TEST VUE</div>
@@ -7,7 +9,7 @@
   {{ '@vue::string.server_side' | trans }}
 </li>
 <li>
-  <span class="test-vue-string-translated-client">-</span>
+  <span class="test-vue-string-translated-client">{{ 'translatedStringClientSide' | vue_key }}</span>
 </li>
 <li>{{ component('components/test-component') }}</li>
 </ul>

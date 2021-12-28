@@ -5,6 +5,7 @@ import MixinsAppService from '../class/MixinsAppService';
 import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import { appendInnerHtml } from "../helpers/Dom";
+import Component from "../class/Component";
 
 export default class VueService extends AppService {
   protected componentRegistered: any = {};
@@ -27,6 +28,11 @@ export default class VueService extends AppService {
             let app = this.app;
             this.globalMixin = {
               props: {
+                rootComponent: {
+                  default: () => {
+                    return this;
+                  },
+                },
                 app: {
                   default: () => {
                     return app;
@@ -85,11 +91,12 @@ export default class VueService extends AppService {
     return vueComponent;
   }
 
-  createVueAppForComponent(path, renderData: ComponentInterface) {
-    let component = this.initComponent(path);
+  createVueAppForComponent(component: Component, renderData: ComponentInterface) {
+    let vue = this.initComponent(renderData.options.path);
 
-    let app = this.createApp(component, {
+    let app = this.createApp(vue, {
       renderData: renderData,
+      rootComponent: component,
     });
 
     Object.entries(this.componentRegistered).forEach((data) => {

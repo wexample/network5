@@ -16,7 +16,7 @@ export default class extends Component {
     }
 
     this.app.services['vue']
-      .createVueAppForComponent(renderData.options.path, renderData)
+      .createVueAppForComponent(this, renderData)
       .mount(this.el);
   }
 }
