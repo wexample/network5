@@ -18,6 +18,14 @@ export default abstract class Component extends RenderNode {
 
   public static INIT_MODE_PREVIOUS: string = 'previous';
 
+  async init() {
+    await this.services.mixins.invokeUntilComplete(
+      'initComponent',
+      'component',
+      [this]
+    );
+  }
+
   mergeRenderData(renderData: ComponentInterface) {
     super.mergeRenderData(renderData);
 

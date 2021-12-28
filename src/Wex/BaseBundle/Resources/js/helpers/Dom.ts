@@ -28,7 +28,7 @@ export class TagName {
 
 export function appendInnerHtml(el: HTMLElement, html: string) {
   // Using innerHTML will break dom structure.
-  el.insertAdjacentHTML(InsertPosition.BEFORE_END, html);
+  el.insertAdjacentHTML(InsertPosition.BEFORE_END as any, html);
 }
 
 export function findPreviousNode(el) {

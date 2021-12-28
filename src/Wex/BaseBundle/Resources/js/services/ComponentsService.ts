@@ -39,17 +39,15 @@ export default class ComponentsService extends RenderNodeService {
         },
       },
 
-      page: {
-        async initPage(page: Page, registry: any) {
-          // Wait for page loading.
-          if (
-            registry.pages !== MixinsAppService.LOAD_STATUS_COMPLETE ||
-            registry.assets !== MixinsAppService.LOAD_STATUS_COMPLETE
-          ) {
-            return MixinsAppService.LOAD_STATUS_WAIT;
-          }
+      component: {
+        async initComponent(component: Component) {
+          await this.createRenderDataComponents(component.renderData, component);
+        },
+      },
 
-          await this.services.components.initPage(page);
+      page: {
+        async initPage(page: Page) {
+          await this.createRenderDataComponents(page.renderData, page);
         },
       },
     };
@@ -83,10 +81,6 @@ export default class ComponentsService extends RenderNodeService {
     }
 
     await this.createRenderDataComponents(renderData, this.app.layout);
-  }
-
-  async initPage(page: Page) {
-    await this.createRenderDataComponents(page.renderData, page);
   }
 
   async createRenderDataComponents(

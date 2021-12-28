@@ -1,18 +1,23 @@
 {{- trans_js('@component::string.client_side') -}}
 
-<div {{ component_render_tag_attributes({class: 'test-component'}) }}>
-    <span class="test-component-string">TEST_COMPONENT</span>
+{% set suffix = suffix|default('') %}
+
+<div {{ component_render_tag_attributes({class: 'test-component' ~ suffix}) }}>
+    <span class="test-component-string">TEST_COMPONENT{{ suffix }}</span>
     <ul>
-        <li><span class="test-component-test-js">JS</span> component test</li>
-        <li><span class="test-component-test-css">CSS</span> component test</li>
+        <li><span class="test-component-test-js{{ suffix }}">JS</span> component test</li>
+        <li><span class="test-component-test-css{{ suffix }}">CSS</span> component test</li>
         <li>
-            BLINK <span class="test-blink">...</span>
+            BLINK <span class="test-blink{{ suffix }}">...</span>
         </li>
         <li>
-            <div class="test-component-string-translated">{{ '@component::string.server_side' | trans }}</div>
+            <div class="test-component-string-translated{{ suffix }}">{{ '@component::string.server_side' | trans }}</div>
         </li>
         <li>
-            <div class="test-component-string-translated-client">-</div>
+            <div class="test-component-string-translated-client{{ suffix }}">-</div>
         </li>
+        {% block sub_component %}
+            <li>{{ component('components/test-component-2') }}</li>
+        {% endblock %}
     </ul>
 </div>
