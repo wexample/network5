@@ -87,7 +87,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
         `Test string equals "CLIENT_SIDE_COMPONENT_TRANSLATION"`
       );
 
-      // // Close modal.
+      // Close modal.
       let modal = pageFocused.parentRenderNode as ModalComponent;
       await modal.close();
 
