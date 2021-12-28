@@ -139,6 +139,7 @@ class ComponentService extends RenderNodeService
         ComponentRenderNode $component
     ): ?string {
         $loader = $env->getLoader();
+        $renderPass = $this->adaptiveResponseService->renderPass;
         $search = TemplateHelper::buildTemplateInheritanceStack(
             $component->name
         );
@@ -149,6 +150,10 @@ class ComponentService extends RenderNodeService
             {
                 if ($loader->exists($templatePath))
                 {
+                    $renderPass->setCurrentContextRenderNode(
+                        $component
+                    );
+
                     $this->translator->setDomainFromPath(
                         Translator::DOMAIN_TYPE_COMPONENT,
                         $component->name
@@ -163,13 +168,14 @@ class ComponentService extends RenderNodeService
                         Translator::DOMAIN_TYPE_COMPONENT
                     );
 
+                    $renderPass->revertCurrentContextRenderNode();
+
                     return $rendered;
                 }
             }
 
             return null;
-        }
-        catch (Exception $exception)
+        } catch (Exception $exception)
         {
             throw new Exception('Error during rendering component '.$component->name.' : '.$exception->getMessage(), $exception->getCode(), $exception);
         }

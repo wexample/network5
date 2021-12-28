@@ -1,3 +1,5 @@
+{{- trans_js('@component::string.client_side') -}}
+
 <div {{ component_render_tag_attributes({class: 'test-component'}) }}>
     <span class="test-component-string">TEST_COMPONENT</span>
     <ul>
@@ -8,6 +10,9 @@
         </li>
         <li>
             <div class="test-component-string-translated">{{ '@component::string.server_side' | trans }}</div>
+        </li>
+        <li>
+            <div class="test-component-string-translated-client">-</div>
         </li>
     </ul>
 </div>

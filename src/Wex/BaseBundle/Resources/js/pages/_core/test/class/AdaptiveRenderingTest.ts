@@ -58,10 +58,9 @@ export default class AdaptiveRenderingTest extends UnitTest {
         'The layout has a new var'
       );
 
-      this.assertEquals(
-        pageFocused.el.querySelector('.test-component-string-translated').innerHTML,
-        'SERVER_SIDE_COMPONENT_TRANSLATION',
-        `Test string equals "SERVER_SIDE_COMPONENT_TRANSLATION"`
+      this.assertTrue(
+        pageFocused.components[0].options.testOption,
+        'The component option has been loaded'
       );
 
       this.assertEquals(
@@ -70,12 +69,25 @@ export default class AdaptiveRenderingTest extends UnitTest {
         'The adaptive CSS has applied green'
       );
 
-      this.assertTrue(
-        pageFocused.components[0].options.testOption,
-        'The component option has been loaded'
+      this.assertEquals(
+        getComputedStyle(pageFocused.el.querySelector('.adaptive-page-test-css')).backgroundColor,
+        'rgb(0, 128, 0)',
+        'The adaptive JS has applied green'
       );
 
-      // Close modal.
+      this.assertEquals(
+        pageFocused.el.querySelector('.test-component-string-translated').innerHTML,
+        'SERVER_SIDE_COMPONENT_TRANSLATION',
+        `Test string equals "SERVER_SIDE_COMPONENT_TRANSLATION"`
+      );
+
+      this.assertEquals(
+        pageFocused.el.querySelector('.test-component-string-translated-client').innerHTML,
+        'CLIENT_SIDE_COMPONENT_TRANSLATION',
+        `Test string equals "CLIENT_SIDE_COMPONENT_TRANSLATION"`
+      );
+
+      // // Close modal.
       let modal = pageFocused.parentRenderNode as ModalComponent;
       await modal.close();
 
@@ -87,7 +99,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
     });
   }
 
-  async testAdaptiveErrorMissingVue() {
+  async testAdaptiveErrorMissingView() {
     await this.app.services['adaptive']
       .get(this.app.services.routing.path('_core_test_error-missing-view'))
       .then(async () => {

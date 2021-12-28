@@ -5,6 +5,7 @@ namespace App\Wex\BaseBundle\Service;
 use App\Wex\BaseBundle\Helper\DomHelper;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Rendering\Vue;
+use App\Wex\BaseBundle\Translation\Translator;
 use Exception;
 use Twig\Environment;
 
@@ -15,9 +16,10 @@ class VueService
     public array $rootComponents = [];
 
     public function __construct(
-        private AdaptiveResponseService $adaptiveResponseService,
+        protected AdaptiveResponseService $adaptiveResponseService,
         protected AssetsService $assetsService,
-        private ComponentService $componentsService,
+        protected ComponentService $componentsService,
+        protected Translator $translator
     ) {
     }
 
@@ -95,6 +97,11 @@ class VueService
                 $rootComponent
             );
 
+            $this->translator->setDomainFromPath(
+                Translator::DOMAIN_TYPE_VUE,
+                $rootComponent->name
+            );
+
             $template = DomHelper::buildTag(
                 'template',
                 [
@@ -105,6 +112,10 @@ class VueService
                     $pathTemplate,
                     $twigContext + $context
                 )
+            );
+
+            $this->translator->revertDomain(
+                Translator::DOMAIN_TYPE_VUE
             );
 
             $renderPass->revertCurrentContextRenderNode();

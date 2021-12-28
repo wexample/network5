@@ -14,6 +14,8 @@ export default abstract class RenderNode extends AppChild {
   public renderData: RenderDataInterface;
   public translations: {} = {};
   public vars: any = {};
+  // Mixed functions from services.
+  public trans?: Function;
 
   constructor(app: App, el: HTMLElement = null) {
     super(app);
