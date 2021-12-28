@@ -1,14 +1,13 @@
 import UnitTest from '../../../../class/UnitTest';
 import ModalComponent from '../../../../components/modal';
 import LayoutInterface from '../../../../interfaces/RenderData/LayoutInterface';
-import Page from "../../../../class/Page";
 
 export default class AdaptiveRenderingTest extends UnitTest {
   public getTestMethods() {
     return [
       this.testNonAdaptivePage,
       this.testAdaptivePage,
-      this.testAdaptiveErrorMissingVue,
+      this.testAdaptiveErrorMissingView,
     ];
   }
 
@@ -59,11 +58,25 @@ export default class AdaptiveRenderingTest extends UnitTest {
         'The layout has a new var'
       );
 
-      let modal = pageFocused.parentRenderNode as ModalComponent;
+      this.assertEquals(
+        pageFocused.el.querySelector('.test-component-string-translated').innerHTML,
+        'SERVER_SIDE_COMPONENT_TRANSLATION',
+        `Test string equals "SERVER_SIDE_COMPONENT_TRANSLATION"`
+      );
 
-      this.assertPageAdaptiveLoaded(modal.page);
+      this.assertEquals(
+        getComputedStyle(pageFocused.el.querySelector('.adaptive-page-test-css')).backgroundColor,
+        'rgb(0, 128, 0)',
+        'The adaptive CSS has applied green'
+      );
+
+      this.assertTrue(
+        pageFocused.components[0].options.testOption,
+        'The component option has been loaded'
+      );
 
       // Close modal.
+      let modal = pageFocused.parentRenderNode as ModalComponent;
       await modal.close();
 
       this.assertEquals(
@@ -72,25 +85,6 @@ export default class AdaptiveRenderingTest extends UnitTest {
         'The focus has been thrown back to the main page'
       );
     });
-  }
-
-  assertPageAdaptiveLoaded(page: Page) {
-    this.assertEquals(
-      page.el.querySelector('.test-component-string-translated').innerHTML,
-      'SERVER_SIDE_COMPONENT_TRANSLATION',
-      `Test string equals "SERVER_SIDE_COMPONENT_TRANSLATION"`
-    );
-
-    this.assertEquals(
-      getComputedStyle(page.el.querySelector('.adaptive-page-test-css')).backgroundColor,
-      'rgb(0, 128, 0)',
-      'The adaptive CSS has applied green'
-    );
-
-    this.assertTrue(
-      page.components[0].options.testOption,
-      'The component option has been loaded'
-    );
   }
 
   async testAdaptiveErrorMissingVue() {
