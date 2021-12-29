@@ -4,7 +4,11 @@
 <li>
   <div class="test-string">TEST VUE</div>
 </li>
-<li>{{ 'testData' | vue_key }}</li>
+<li>TEST_VUE_PROP_BOOL : {{ 'testVuePropBool' | vue_key }}</li>
+<li>TEST_VUE_PROP_OBJECT : {{ 'testVuePropObject' | vue_key }}</li>
+<li>TEST_VUE_PROP_ARRAY : {{ 'testVuePropArray' | vue_key }}</li>
+<li>TEST_DATA : {{ 'testData' | vue_key }}</li>
+<li>TEST_NUMBER : {{ 'testNumber' | vue_key }}</li>
 <li>
   {{ '@vue::string.server_side' | trans }}
 </li>

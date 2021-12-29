@@ -64,28 +64,50 @@ export default class AdaptiveRenderingTest extends UnitTest {
       );
 
       this.assertEquals(
-        getComputedStyle(pageFocused.el.querySelector('.adaptive-page-test-css')).backgroundColor,
+        getComputedStyle(pageFocused.el.querySelector(`.adaptive-page-test-css`)).backgroundColor,
         'rgb(0, 128, 0)',
         'The adaptive CSS has applied green'
       );
 
       this.assertEquals(
-        getComputedStyle(pageFocused.el.querySelector('.adaptive-page-test-css')).backgroundColor,
+        getComputedStyle(pageFocused.el.querySelector(`.adaptive-page-test-js`)).backgroundColor,
         'rgb(0, 128, 0)',
         'The adaptive JS has applied green'
       );
 
-      this.assertEquals(
-        pageFocused.el.querySelector('.test-component-string-translated').innerHTML,
-        'SERVER_SIDE_COMPONENT_TRANSLATION',
-        `Test string equals "SERVER_SIDE_COMPONENT_TRANSLATION"`
-      );
+      let testComponent = (el, suffix: string = '') => {
+        this.assertEquals(
+          getComputedStyle(pageFocused.el.querySelector(`.test-component-test-css${suffix}`)).backgroundColor,
+          'rgb(0, 128, 0)',
+          'The adaptive CSS has applied green'
+        );
 
-      this.assertEquals(
-        pageFocused.el.querySelector('.test-component-string-translated-client').innerHTML,
-        'CLIENT_SIDE_COMPONENT_TRANSLATION',
-        `Test string equals "CLIENT_SIDE_COMPONENT_TRANSLATION"`
-      );
+        this.assertEquals(
+          getComputedStyle(pageFocused.el.querySelector(`.test-component-test-js${suffix}`)).backgroundColor,
+          'rgb(0, 128, 0)',
+          'The adaptive JS has applied green'
+        );
+
+        this.assertEquals(
+          pageFocused.el.querySelector(`.test-component-string-translated${suffix}`).innerHTML,
+          `SERVER_SIDE_COMPONENT_TRANSLATION${suffix}`,
+          `Test string equals "SERVER_SIDE_COMPONENT_TRANSLATION"`
+        );
+
+        this.assertEquals(
+          pageFocused.el.querySelector(`.test-component-string-translated-client${suffix}`).innerHTML,
+          `CLIENT_SIDE_COMPONENT_TRANSLATION${suffix}`,
+          `Test string equals "CLIENT_SIDE_COMPONENT_TRANSLATION"`
+        );
+      }
+
+      let elComponent = pageFocused.el.querySelector('.adaptive-page-test-component');
+      testComponent(elComponent);
+      testComponent(elComponent,'-2');
+
+      let elVue = pageFocused.el.querySelector('.adaptive-page-test-vue');
+      testComponent(elVue);
+      testComponent(elVue,'-2');
 
       // Close modal.
       let modal = pageFocused.parentRenderNode as ModalComponent;

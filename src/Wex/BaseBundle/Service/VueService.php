@@ -29,7 +29,7 @@ class VueService
     public function vueRender(
         Environment $twig,
         string $path,
-        ?array $attributes = [],
+        ?array $props = [],
         ?array $twigContext = [],
         ?bool $root = false
     ): string {
@@ -41,14 +41,11 @@ class VueService
 
         $renderPass = $this->adaptiveResponseService->renderPass;
 
-        $attributes['class'] ??= '';
-        $attributes['class'] .= ' '.$vue->id;
-
-        $context = [
+        $options = [
             'path' => $vue->path,
             'vueComId' => $vue->id,
             'vueComName' => $vue->name,
-            'attrs' => $attributes,
+            'props' => $props,
         ];
 
         $outputBody = '';
@@ -60,7 +57,7 @@ class VueService
                     $twig,
                     ComponentService::COMPONENT_NAME_VUE,
                     ComponentService::INIT_MODE_PARENT,
-                    $context
+                    $options
                 );
 
             $this->rootComponents[$vue->name] = $rootComponent;
@@ -110,7 +107,7 @@ class VueService
                 ],
                 $twig->render(
                     $pathTemplate,
-                    $twigContext + $context
+                    $twigContext + $options
                 )
             );
 

@@ -15,7 +15,7 @@
     <ul>
         <li><span class="adaptive-page-test-js">JS</span> adaptive test</li>
         <li><span class="adaptive-page-test-css">CSS</span> adaptive test</li>
-        <li>{{ component('components/test-component', {testOption:true}) }}</li>
-        <li>{{ vue('vue/test-vue', {testOption:true}) }}</li>
+        <li class="adaptive-page-test-component">{{ component('components/test-component', {testOption:true}) }}</li>
+        <li class="adaptive-page-test-vue">{{ vue('vue/test-vue', {testVuePropBool:true, testVuePropObject:{var:'val',var2:{varSub:'valSub'}}, testVuePropArray:['var','var2', true]}) }}</li>
     </ul>
 {%- endblock -%}
