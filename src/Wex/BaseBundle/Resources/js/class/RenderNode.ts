@@ -48,6 +48,8 @@ export default abstract class RenderNode extends AppChild {
   loadRenderData(renderData: RenderDataInterface) {
     this.renderData = renderData;
 
+    this.mergeRenderData(renderData);
+
     // Attach to caller node, or current active page, or null.
     let parentNode =
       (renderData.requestOptions &&
@@ -56,8 +58,6 @@ export default abstract class RenderNode extends AppChild {
     if (parentNode) {
       parentNode.appendChildRenderNode(this);
     }
-
-    this.mergeRenderData(renderData);
   }
 
   mergeRenderData(renderData: RenderDataInterface) {

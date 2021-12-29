@@ -85,11 +85,11 @@ export default class ComponentsService extends RenderNodeService {
 
   async createRenderDataComponents(
     renderData: RenderDataInterface,
-    renderNode: RenderNode
+    parentRenderNode: RenderNode
   ) {
     for (const renderDataComponent of renderData.components) {
       let el: HTMLElement;
-      let elPlaceholder = renderNode.el.querySelector(
+      let elPlaceholder = parentRenderNode.el.querySelector(
         `.${renderDataComponent.id}`
       ) as HTMLElement;
       let removePlaceHolder = true;
@@ -121,13 +121,17 @@ export default class ComponentsService extends RenderNodeService {
         elPlaceholder.remove();
       }
 
+      renderDataComponent.requestOptions = {
+        callerRenderNode: parentRenderNode
+      };
+
       let component = (await this.createRenderNode(
         renderDataComponent.name,
         el,
         renderDataComponent
       )) as Component;
 
-      renderNode.components.push(component);
+      parentRenderNode.components.push(component);
 
       this.services.events.trigger(ComponentsServiceEvents.CREATE_COMPONENT, {
         component: component,
