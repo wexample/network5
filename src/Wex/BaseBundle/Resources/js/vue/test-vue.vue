@@ -8,6 +8,7 @@ export default {
 
   data() {
     return {
+      hidePartOfDomContainingComponent: false,
       testData: 'TEST_DATA',
       testNumber: 0,
       translatedStringClientSide: this.trans('@vue::string.client_side')
@@ -15,8 +16,10 @@ export default {
   },
 
   mounted() {
-    document.addEventListener('test-vue-event', () => {
+    document.addEventListener('test-vue-event', (data) => {
       this.testNumber++;
+
+      this.hidePartOfDomContainingComponent = data.detail.hidePartOfDomContainingComponent;
     });
   }
 };

@@ -15,5 +15,7 @@
 <li>
   <span class="test-vue-string-translated-client">{{ 'translatedStringClientSide' | vue_key }}</span>
 </li>
-<li>{{ component('components/test-component') }}</li>
+<li v-if="!hidePartOfDomContainingComponent">
+  {{ component('components/test-component') }}
+</li>
 </ul>

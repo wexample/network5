@@ -1,6 +1,7 @@
 import UnitTest from '../../../../class/UnitTest';
 import ModalComponent from '../../../../components/modal';
 import LayoutInterface from '../../../../interfaces/RenderData/LayoutInterface';
+import { sleep } from "../../../../helpers/Time";
 
 export default class AdaptiveRenderingTest extends UnitTest {
   public getTestMethods() {
@@ -104,6 +105,18 @@ export default class AdaptiveRenderingTest extends UnitTest {
       let elComponent = pageFocused.el.querySelector('.adaptive-page-test-component');
       testComponent(elComponent);
       testComponent(elComponent,'-2');
+
+      // Event changes vue content.
+      this.app.services.events.trigger('test-vue-event', {
+        hidePartOfDomContainingComponent:true
+      });
+
+      // Need to wait for dom to break up.
+      await sleep(30);
+
+      this.app.services.events.trigger('test-vue-event', {
+        hidePartOfDomContainingComponent:false
+      });
 
       let elVue = pageFocused.el.querySelector('.adaptive-page-test-vue');
       testComponent(elVue);
