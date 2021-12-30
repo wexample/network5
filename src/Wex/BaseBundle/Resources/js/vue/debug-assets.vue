@@ -4,12 +4,12 @@ import { Attribute, AttributeValue, TagName } from '../helpers/Dom';
 import { shallowCopy as ArrayShallowCopy } from '../helpers/Arrays';
 import { AssetsServiceType } from '../services/AssetsService';
 import Explorer from './explorer';
-import { ComponentsServiceEvents } from '../services/ComponentsService';
 import ColorSchemeService, {
   ColorSchemeServiceEvents,
 } from '../services/ColorSchemeService';
 import { EventsServiceEvents } from '../services/EventsService';
 import { formatBytes } from '../helpers/Number';
+import { ComponentsServiceEvents } from "../services/RenderNodeService";
 
 export default {
   extends: Explorer,
@@ -32,7 +32,7 @@ export default {
       },
       onChangeResponsiveSizeProxy: this.onChangeResponsiveSize.bind(this),
       updateEvents: [
-        ComponentsServiceEvents.CREATE_COMPONENT,
+        ComponentsServiceEvents.CREATE_RENDER_NODE,
         ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
         ColorSchemeServiceEvents.COLOR_SCHEME_CHANGE,
       ],

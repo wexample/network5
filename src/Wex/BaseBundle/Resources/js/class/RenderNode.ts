@@ -3,6 +3,7 @@ import AppChild from './AppChild';
 import App from './App';
 import Component from './Component';
 import Page from "./Page";
+import { ComponentsServiceEvents } from "../services/RenderNodeService";
 
 export default abstract class RenderNode extends AppChild {
   public callerPage: Page;
@@ -27,6 +28,10 @@ export default abstract class RenderNode extends AppChild {
     this.parentRenderNode = parentRenderNode;
 
     this.app.mix(this, 'renderNode');
+
+    this.services.events.trigger(ComponentsServiceEvents.CREATE_RENDER_NODE, {
+      component: this,
+    });
   }
 
   public async init() {

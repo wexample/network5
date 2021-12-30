@@ -11,10 +11,6 @@ import { appendInnerHtml } from '../helpers/Dom';
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import AppService from '../class/AppService';
 
-export class ComponentsServiceEvents {
-  public static CREATE_COMPONENT: string = 'create-component';
-}
-
 export default class ComponentsService extends RenderNodeService {
   elLayoutComponents: HTMLElement;
   pageHandlerRegistry: { [key: string]: PageManagerComponent } = {};
@@ -96,10 +92,6 @@ export default class ComponentsService extends RenderNodeService {
       )) as Component;
 
       parentRenderNode.components.push(component);
-
-      this.services.events.trigger(ComponentsServiceEvents.CREATE_COMPONENT, {
-        component: component,
-      });
     }
   }
 }
