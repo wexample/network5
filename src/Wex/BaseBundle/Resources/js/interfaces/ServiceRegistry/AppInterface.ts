@@ -6,6 +6,7 @@ import ColorSchemeService from '../../services/ColorSchemeService';
 import EventsService from '../../services/EventsService';
 import LayoutsService from '../../services/LayoutsService';
 import RoutingService from '../../services/RoutingService';
+import PromptService from "../../services/PromptsService";
 
 export default interface AppInterface {
   assets?: AssetsService;
@@ -15,5 +16,6 @@ export default interface AppInterface {
   mixins?: MixinsService;
   pages?: PagesService;
   responsive?: ResponsiveService;
+  prompt?: PromptService;
   routing?: RoutingService;
 }

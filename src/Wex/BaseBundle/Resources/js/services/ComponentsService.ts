@@ -3,11 +3,11 @@ import Page from '../class/Page';
 import PromptService from './PromptsService';
 import App from '../class/App';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
-import PageHandlerComponent from '../class/PageHandlerComponent';
+import PageManagerComponent from '../class/PageManagerComponent';
 import Component from '../class/Component';
 import RenderNodeService from './RenderNodeService';
 import RenderNode from '../class/RenderNode';
-import { appendInnerHtml, findPreviousNode as DomFindPreviousNode } from '../helpers/Dom';
+import { appendInnerHtml } from '../helpers/Dom';
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import AppService from '../class/AppService';
 
@@ -17,7 +17,7 @@ export class ComponentsServiceEvents {
 
 export default class ComponentsService extends RenderNodeService {
   elLayoutComponents: HTMLElement;
-  pageHandlerRegistry: { [key: string]: PageHandlerComponent } = {};
+  pageHandlerRegistry: { [key: string]: PageManagerComponent } = {};
 
   public static dependencies: typeof AppService[] = [PromptService];
 
@@ -54,22 +54,20 @@ export default class ComponentsService extends RenderNodeService {
   }
 
   createRenderNodeInstance(
-    el: HTMLElement,
-    renderData: RenderDataInterface,
-    classDefinition: any
+    classDefinition: any,
+    parentRenderNode: RenderNode
   ): RenderNode | null {
     // Prevent multiple alerts for the same component.
     if (!classDefinition) {
       this.services.prompt.systemError(
         'page_message.error.com_missing',
         {},
-        renderData
+        classDefinition
       );
     } else {
       return super.createRenderNodeInstance(
-        el,
-        renderData,
-        classDefinition
+        classDefinition,
+        parentRenderNode
       ) as Component;
     }
   }
@@ -88,47 +86,13 @@ export default class ComponentsService extends RenderNodeService {
     parentRenderNode: RenderNode
   ) {
     for (const renderDataComponent of renderData.components) {
-      let el: HTMLElement;
-      let elPlaceholder = parentRenderNode.el.querySelector(
-        `.${renderDataComponent.id}`
-      ) as HTMLElement;
-      let removePlaceHolder = true;
-
-      if (!elPlaceholder) {
-        this.services.prompt.systemError(
-          'page_message.error.com_placeholder_missing',
-          {},
-          renderDataComponent
-        );
-      }
-
-      switch (renderDataComponent.initMode) {
-        case Component.INIT_MODE_CLASS:
-          el = elPlaceholder;
-          removePlaceHolder = false;
-          break;
-        case Component.INIT_MODE_PARENT:
-          el = elPlaceholder.parentElement;
-          break;
-        case Component.INIT_MODE_LAYOUT:
-        case Component.INIT_MODE_PREVIOUS:
-          el = DomFindPreviousNode(elPlaceholder);
-          break;
-      }
-
-      if (removePlaceHolder) {
-        // Remove placeholder tag as it may interact with CSS or JS selectors.
-        elPlaceholder.remove();
-      }
-
-      renderDataComponent.requestOptions = {
-        callerRenderNode: parentRenderNode
-      };
+      // Share request options.
+      renderDataComponent.requestOptions = renderData.requestOptions;
 
       let component = (await this.createRenderNode(
         renderDataComponent.name,
-        el,
-        renderDataComponent
+        renderDataComponent,
+        parentRenderNode
       )) as Component;
 
       parentRenderNode.components.push(component);

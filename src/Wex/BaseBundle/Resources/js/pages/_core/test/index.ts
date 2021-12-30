@@ -8,6 +8,8 @@ export default class extends TestManagerPage {
   tests: any;
 
   async mounted() {
+    await super.mounted();
+
     // TODO Test no js
     // TODO Test no aggregation
     // TODO Test icons

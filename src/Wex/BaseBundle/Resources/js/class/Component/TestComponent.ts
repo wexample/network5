@@ -6,8 +6,8 @@ export default class extends Component {
   protected elBlink: HTMLElement;
   protected suffix: string = '';
 
-  async init() {
-    await super.init();
+  async mounted() {
+    await super.mounted();
 
     this.app.layout.vars.testComponentLoaded = true;
 
@@ -20,6 +20,10 @@ export default class extends Component {
 
     let elTranslations = this.el.querySelector(`.test-component-string-translated-client${this.suffix}`) as HTMLElement;
     elTranslations.innerText = this.trans('@component::string.client_side');
+  }
+
+  async unmounted() {
+    clearInterval(this.interval);
   }
 
   async exit() {

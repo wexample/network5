@@ -2,10 +2,11 @@ import PageResponsiveDisplay from './PageResponsiveDisplay';
 import RenderDataPageInterface from '../interfaces/RenderData/PageInterface';
 import { PageInterface as ServiceRegistryPageInterface } from '../interfaces/ServiceRegistry/PageInterface';
 import RenderNode from './RenderNode';
-import PageHandlerComponent from './PageHandlerComponent';
+import PageManagerComponent from './PageManagerComponent';
 import AppService from './AppService';
 import { ColorSchemeServiceEvents } from '../services/ColorSchemeService';
 import { ResponsiveServiceEvents } from '../services/ResponsiveService';
+import Layout from "./Layout";
 
 export default class extends RenderNode {
   public elOverlay: HTMLElement;
@@ -13,8 +14,7 @@ export default class extends RenderNode {
   public name: string;
   protected onChangeResponsiveSizeProxy: Function;
   protected onChangeColorSchemeProxy: Function;
-  public pageHandler: PageHandlerComponent;
-  public parentRenderNode: PageHandlerComponent;
+  public parentRenderNode: Layout | PageManagerComponent;
   protected readonly responsiveDisplays: any = [];
   public renderData: RenderDataPageInterface;
   public responsiveDisplayCurrent: PageResponsiveDisplay;
@@ -28,14 +28,32 @@ export default class extends RenderNode {
     return [];
   }
 
+  attachHtmlElements() {
+    let el: HTMLElement;
+
+    if (this.renderData.isInitialPage) {
+      el = this.app.layout.el;
+    } else if (this.parentRenderNode instanceof PageManagerComponent) {
+      el = this.parentRenderNode.renderPageEl(this);
+    }
+
+    if (el) {
+      this.el = el;
+    } else {
+      this.services.prompt.systemError(
+        'page_message.error.page_missing_el'
+      );
+    }
+
+    this.elOverlay = this.el.querySelector('.page-overlay');
+  }
+
   loadRenderData(renderData: RenderDataPageInterface) {
     super.loadRenderData(renderData);
 
     if (this.isInitialPage) {
       this.app.layout.page = this;
     }
-
-    this.elOverlay = this.el.querySelector('.page-overlay');
   }
 
   mergeRenderData(renderData: RenderDataPageInterface) {
@@ -43,10 +61,11 @@ export default class extends RenderNode {
 
     this.isInitialPage = renderData.isInitialPage;
     this.name = renderData.name;
-    this.pageHandler = renderData.pageHandler;
   }
 
-  async init() {
+  public async init() {
+    await super.init();
+
     await this.app.loadAndInitServices(this.getPageLevelMixins());
 
     await this.services.mixins.invokeUntilComplete(
@@ -55,31 +74,35 @@ export default class extends RenderNode {
       [this]
     );
 
-    if (this.pageHandler) {
-      this.pageHandler.setPage(this);
+    if (this.parentRenderNode instanceof PageManagerComponent) {
+      this.parentRenderNode.setPage(this);
     }
 
     this.updateCurrentResponsiveDisplay();
 
     this.updateLayoutColorScheme(this.services.colorScheme.activeColorScheme);
+  }
 
+  public async mounted() {
     this.focus();
-
-    this.mounted();
-
-    await this.readyComplete(this);
   }
 
   public focus() {
     super.focus();
 
+    this.activateFocusListeners();
+
     this.app.layout.pageFocused && this.app.layout.pageFocused.blur();
     this.app.layout.pageFocused = this;
   }
 
-  protected activateListeners(): void {
-    super.activateListeners();
+  public blur() {
+    super.blur();
 
+    this.deactivateFocusListeners();
+  }
+
+  protected activateFocusListeners(): void {
     this.onChangeResponsiveSizeProxy = this.onChangeResponsiveSize.bind(this);
     this.onChangeColorSchemeProxy = this.onChangeColorScheme.bind(this);
 
@@ -94,9 +117,7 @@ export default class extends RenderNode {
     );
   }
 
-  protected deactivateListeners(): void {
-    super.deactivateListeners();
-
+  protected deactivateFocusListeners(): void {
     this.services.events.forget(
       ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
       this.onChangeResponsiveSizeProxy
@@ -106,10 +127,6 @@ export default class extends RenderNode {
       ColorSchemeServiceEvents.COLOR_SCHEME_CHANGE,
       this.onChangeResponsiveSizeProxy
     );
-  }
-
-  mounted() {
-    // To override with local page scripts.
   }
 
   updateCurrentResponsiveDisplay() {

@@ -1,13 +1,9 @@
 import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
-import PageInterface from '../interfaces/RenderData/PageInterface';
 import Component from './Component';
-import { ComponentInterface as ServiceRegistryComponentInterface } from '../interfaces/ServiceRegistry/ComponentInterface';
 import Page from './Page';
-import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 
-export default abstract class PageHandlerComponent extends Component {
-  services: ServiceRegistryComponentInterface;
-  page: Page;
+export default abstract class PageManagerComponent extends Component {
+  public page: Page;
 
   loadRenderData(renderData: ComponentInterface) {
     super.loadRenderData(renderData);
@@ -24,9 +20,8 @@ export default abstract class PageHandlerComponent extends Component {
 
   /**
    * Used by page handlers (modal / panels).
-   * @param renderData
    */
-  public abstract renderPageEl(renderData: PageInterface);
+  public abstract renderPageEl(page: Page): HTMLElement;
 
   public abstract getPageEl(): HTMLElement;
 

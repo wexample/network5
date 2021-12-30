@@ -28,6 +28,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
 
     await this.fetchTestPageAdaptiveJson(path).then(async () => {
       let pageFocused = this.app.layout.pageFocused;
+      let modal = pageFocused.parentRenderNode as ModalComponent;
 
       this.assertEquals(
         pageFocused.name,
@@ -39,6 +40,18 @@ export default class AdaptiveRenderingTest extends UnitTest {
         pageFocused.parentRenderNode.name,
         `components/modal`,
         'The focused page is a child of modal component'
+      );
+
+      this.assertEquals(
+        modal.parentRenderNode.name,
+        this.app.layout.name,
+        'The parent of modal is the initial layout'
+      );
+
+      this.assertEquals(
+        modal.callerPage.name,
+        'pages/_core/test/index',
+        'The caller page of modal is the initial layout page'
       );
 
       this.assertEquals(
@@ -76,7 +89,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
         'The adaptive JS has applied green'
       );
 
-      let testComponent = (el, suffix: string = '') => {
+      let assertTestComponentIntegrity = (el, suffix: string = '') => {
         this.assertEquals(
           getComputedStyle(pageFocused.el.querySelector(`.test-component-test-css${suffix}`)).backgroundColor,
           'rgb(0, 128, 0)',
@@ -103,8 +116,8 @@ export default class AdaptiveRenderingTest extends UnitTest {
       }
 
       let elComponent = pageFocused.el.querySelector('.adaptive-page-test-component');
-      testComponent(elComponent);
-      testComponent(elComponent,'-2');
+      assertTestComponentIntegrity(elComponent);
+      assertTestComponentIntegrity(elComponent,'-2');
 
       // Event changes vue content.
       this.app.services.events.trigger('test-vue-event', {
@@ -112,18 +125,44 @@ export default class AdaptiveRenderingTest extends UnitTest {
       });
 
       // Need to wait for dom to break up.
-      await sleep(30);
+      await sleep();
+
+      let testComponent = this.app.layout.pageFocused
+        .findChildRenderNodeByName('components/vue')
+        .findChildRenderNodeByName('components/test-component');
+
+      this.assertFalse(
+        testComponent.isMounted,
+        'The vue dom has been hidden, then component is unmounted'
+      );
+
+      this.assertTrue(
+        testComponent.el === undefined,
+        'The vue dom has been hidden, then component el is empty'
+      );
 
       this.app.services.events.trigger('test-vue-event', {
         hidePartOfDomContainingComponent:false
       });
 
+      // Wait for remounting dom.
+      await sleep();
+
+      this.assertTrue(
+        testComponent.isMounted,
+        'The vue dom has been hidden, then component is mounted back'
+      );
+
+      this.assertFalse(
+        testComponent.el === undefined,
+        'The vue dom has been hidden, then component el is not empty'
+      );
+
       let elVue = pageFocused.el.querySelector('.adaptive-page-test-vue');
-      testComponent(elVue);
-      testComponent(elVue,'-2');
+      assertTestComponentIntegrity(elVue);
+      assertTestComponentIntegrity(elVue,'-2');
 
       // Close modal.
-      let modal = pageFocused.parentRenderNode as ModalComponent;
       await modal.close();
 
       this.assertEquals(

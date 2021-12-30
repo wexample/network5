@@ -40,53 +40,35 @@ export default class PagesService extends RenderNodeService {
   }
 
   async createPage(renderData: RenderDataPageInterface) {
-    let el;
-
-    // Support missing request option when creating first page.
-    renderData.requestOptions = renderData.requestOptions || {};
+    let parentNode: RenderNode;
 
     if (renderData.isInitialPage) {
-      el = this.app.layout.el;
-      renderData.requestOptions.callerRenderNode = this.app.layout;
-    } else {
-      el = renderData.el;
+      parentNode = this.app.layout;
     }
 
     let pageHandler =
       this.services.components.pageHandlerRegistry[renderData.renderRequestId];
 
     if (pageHandler) {
-      renderData.pageHandler = pageHandler;
+      parentNode = pageHandler;
 
-      delete this.services.components.pageHandlerRegistry[
-        renderData.renderRequestId
-      ];
-
-      pageHandler.renderPageEl(renderData);
-      el = pageHandler.getPageEl();
-
-      renderData.requestOptions.callerRenderNode = pageHandler;
+      delete this.services.components.pageHandlerRegistry[renderData.renderRequestId];
     }
 
-    if (!el) {
-      let promptService = this.services.prompt;
-
-      promptService.systemError('page_message.error.page_missing_el');
-      return;
-    }
-
-    await this.createRenderNode(renderData.name, el, renderData);
+    await this.createRenderNode(
+      renderData.name,
+      renderData,
+      parentNode
+    );
   }
 
   createRenderNodeInstance(
-    el: HTMLElement,
-    renderData: RenderDataPageInterface,
-    classDefinition: any
+    classDefinition: any,
+    parentRenderNode: RenderNode
   ): RenderNode | null {
     return super.createRenderNodeInstance(
-      el,
-      renderData,
-      classDefinition || this.app.getClassPage()
+      classDefinition || this.app.getClassPage(),
+      parentRenderNode
     ) as Page;
   }
 

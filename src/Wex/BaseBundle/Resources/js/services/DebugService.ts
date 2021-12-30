@@ -47,10 +47,10 @@ export default class DebugService extends AppService {
 
   addTrackers() {
     this.addTrackersToRenderNodeService(
-      this.app.services[Variables.PLURAL_COMPONENT] as ComponentsService
+      this.app.services[Variables.PLURAL_COMPONENT]
     );
     this.addTrackersToRenderNodeService(
-      this.app.services[Variables.PLURAL_PAGE] as PagesService
+      this.app.services[Variables.PLURAL_PAGE]
     );
   }
 
@@ -58,11 +58,7 @@ export default class DebugService extends AppService {
     let debugService = this;
     let methodOriginal = renderNodeService.createRenderNodeInstance;
 
-    renderNodeService.createRenderNodeInstance = function (
-      el: HTMLElement,
-      renderData: RenderDataInterface,
-      complete?: Function
-    ): RenderNode | null {
+    renderNodeService.createRenderNodeInstance = function (): RenderNode | null {
       let instance = methodOriginal.apply(renderNodeService, arguments);
 
       debugService.initRenderNode(instance);

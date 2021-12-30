@@ -1,17 +1,13 @@
-import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
-import PageInterface from '../interfaces/RenderData/PageInterface';
 import Page from '../class/Page';
-import PageHandlerComponent from '../class/PageHandlerComponent';
+import PageManagerComponent from '../class/PageManagerComponent';
 import Keyboard from '../helpers/Keyboard';
 import Mouse from '../helpers/Mouse';
 import Variables from '../helpers/Variables';
 import Events from '../helpers/Events';
 import RenderNode from '../class/RenderNode';
-import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 
-export default class ModalComponent extends PageHandlerComponent {
+export default class ModalComponent extends PageManagerComponent {
   public closing: boolean;
-  public elContent: HTMLElement;
   public listenKeyboardKey: string[] = [Keyboard.KEY_ESCAPE];
   public mouseDownOverlayTarget: EventTarget | null;
   public mouseDownOverlayTimestamp: number | null;
@@ -20,10 +16,10 @@ export default class ModalComponent extends PageHandlerComponent {
   public onMouseUpOverlayProxy: EventListenerObject;
   public opened: boolean = false;
 
-  loadRenderData(renderData: ComponentInterface) {
-    super.loadRenderData(renderData);
+  attachHtmlElements() {
+    super.attachHtmlElements();
 
-    this.elContent = this.el.querySelector('.modal-content');
+    this.elements.content = this.el.querySelector('.modal-content');
   }
 
   appendChildRenderNode(renderNode: RenderNode) {
@@ -36,17 +32,23 @@ export default class ModalComponent extends PageHandlerComponent {
     }
   }
 
-  public renderPageEl(renderData: PageInterface) {
-    this.elContent.innerHTML = renderData.body;
+  public renderPageEl(page: Page): HTMLElement {
+    this.elements.content.innerHTML = page.renderData.body;
+
+    this.el
+      .querySelector('.modal-close a')
+      .addEventListener(Events.CLICK, this.onClickCloseProxy);
+
+    return this.getPageEl();
   }
 
   public getPageEl(): HTMLElement {
-    return this.elContent;
+    return this.elements.content;
   }
 
-  onListenedKeyUp(event: KeyboardEvent) {
+  async onListenedKeyUp(event: KeyboardEvent) {
     if (event.key === Keyboard.KEY_ESCAPE) {
-      this.close();
+      await this.close();
     }
   }
 
@@ -59,10 +61,6 @@ export default class ModalComponent extends PageHandlerComponent {
 
     this.el.addEventListener(Events.MOUSEDOWN, this.onMouseDownOverlayProxy);
     this.el.addEventListener(Events.MOUSEUP, this.onMouseUpOverlayProxy);
-
-    this.el
-      .querySelector('.modal-close a')
-      .addEventListener(Events.CLICK, this.onClickCloseProxy);
   }
 
   protected deactivateListeners(): void {
@@ -98,21 +96,21 @@ export default class ModalComponent extends PageHandlerComponent {
 
     return new Promise(async (resolve) => {
       // Sync with CSS animation.
-      await setTimeout(() => {
+      await setTimeout(async () => {
         this.el.classList.remove(Variables.CLOSED);
         this.opened = this.focused = this.closing = false;
 
-        this.exit();
+        await this.exit();
 
-        this.parentRenderNode.focus();
+        this.callerPage.focus();
 
         resolve(this);
       }, 400);
     });
   }
 
-  onClickClose() {
-    this.close();
+  async onClickClose() {
+    await this.close();
   }
 
   onMouseDownOverlay(event: MouseEvent) {
@@ -127,14 +125,14 @@ export default class ModalComponent extends PageHandlerComponent {
     }
   }
 
-  onMouseUpOverlay(event: MouseEvent) {
+  async onMouseUpOverlay(event: MouseEvent) {
     // Check that click has been on the same element.
     // Then prevent too long clicks.
     if (
       event.target === this.mouseDownOverlayTarget &&
       Date.now() - this.mouseDownOverlayTimestamp < Mouse.CLICK_DURATION
     ) {
-      this.close();
+      await this.close();
     }
   }
 }

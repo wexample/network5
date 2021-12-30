@@ -14,7 +14,7 @@ export default class extends Page {
     return [ModalsService];
   }
 
-  mounted() {
+  async mounted() {
     this.el
       .querySelector('.open-another-modal')
       .addEventListener('click', () => {

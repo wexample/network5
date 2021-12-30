@@ -1,6 +1,6 @@
-import RenderNode from '../../class/RenderNode';
+import Page from "../../class/Page";
 
 export default interface RequestOptionsInterface {
   headers?: any;
-  callerRenderNode?: RenderNode;
+  callerPage?: Page;
 }

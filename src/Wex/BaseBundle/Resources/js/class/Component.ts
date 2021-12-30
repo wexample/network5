@@ -2,8 +2,10 @@ import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 import Events from '../helpers/Events';
 import { ComponentInterface as ServiceRegistryComponentInterface } from '../interfaces/ServiceRegistry/ComponentInterface';
 import RenderNode from './RenderNode';
+import { findPreviousNode as DomFindPreviousNode } from "../helpers/Dom";
 
 export default abstract class Component extends RenderNode {
+  protected initMode: string;
   protected listenKeyboardKey: string[] = [];
   protected onKeyUpProxy: Function;
   public options: any = {};
@@ -18,7 +20,9 @@ export default abstract class Component extends RenderNode {
 
   public static INIT_MODE_PREVIOUS: string = 'previous';
 
-  async init() {
+  public async init() {
+    await super.init();
+
     await this.services.mixins.invokeUntilComplete(
       'initComponent',
       'component',
@@ -26,10 +30,71 @@ export default abstract class Component extends RenderNode {
     );
   }
 
+  attachHtmlElements() {
+    let el: HTMLElement;
+
+    let elPlaceholder = this.parentRenderNode.el.querySelector(
+      `.${this.id}`
+    ) as HTMLElement;
+    let removePlaceHolder = true;
+
+    if (!elPlaceholder) {
+      this.services.prompt.systemError(
+        'page_message.error.com_placeholder_missing',
+        {},
+        this
+      );
+    }
+
+    switch (this.initMode) {
+      case Component.INIT_MODE_CLASS:
+        el = elPlaceholder;
+        removePlaceHolder = false;
+        break;
+      case Component.INIT_MODE_PARENT:
+        el = elPlaceholder.parentElement;
+        break;
+      case Component.INIT_MODE_LAYOUT:
+      case Component.INIT_MODE_PREVIOUS:
+        el = DomFindPreviousNode(elPlaceholder);
+        break;
+    }
+
+    if (removePlaceHolder) {
+      // Remove placeholder tag as it may interact with CSS or JS selectors.
+      elPlaceholder.remove();
+    }
+
+    if (!el) {
+      this.services['prompt'].systemError(
+        'page_message.error.com_el_missing',
+        {},
+        this
+      );
+    }
+
+    this.el = el;
+  }
+
+  public async exit() {
+    await super.exit();
+
+    this.deactivateListeners();
+
+    this.el.remove();
+  }
+
+  loadRenderData(renderData: ComponentInterface) {
+    super.loadRenderData(renderData);
+
+    this.initMode = renderData.initMode;
+  }
+
   mergeRenderData(renderData: ComponentInterface) {
     super.mergeRenderData(renderData);
 
-    this.options = { ...this.options, ...renderData.options };
+    this.options = {...this.options, ...renderData.options};
+    this.callerPage = renderData.requestOptions.callerPage;
   }
 
   public getRenderNodeType(): string {
@@ -64,13 +129,5 @@ export default abstract class Component extends RenderNode {
 
   protected onListenedKeyUp(event: KeyboardEvent) {
     // To override...
-  }
-
-  public exit() {
-    super.exit();
-
-    this.deactivateListeners();
-
-    this.el.remove();
   }
 }

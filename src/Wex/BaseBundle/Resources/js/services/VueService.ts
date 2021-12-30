@@ -91,13 +91,12 @@ export default class VueService extends AppService {
     return vueComponent;
   }
 
-  createVueAppForComponent(component: Component, renderData: ComponentInterface) {
-    let vue = this.initComponent(renderData.options.path);
+  createVueAppForComponent(component: Component) {
+    let vue = this.initComponent(component.renderData.options.path);
 
     let app = this.createApp(vue, {
       ...component.options.props,
       ...{
-        renderData: renderData,
         rootComponent: component,
       }
     });

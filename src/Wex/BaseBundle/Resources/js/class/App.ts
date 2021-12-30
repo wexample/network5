@@ -57,7 +57,6 @@ export default class extends AsyncConstructor {
 
       this.layout = (await this.services.layouts.createRenderNode(
         registry.layoutRenderData.name,
-        doc.getElementById('layout'),
         registry.layoutRenderData
       )) as LayoutInitial;
 
@@ -99,10 +98,8 @@ export default class extends AsyncConstructor {
       [renderData]
     );
 
-    // Execute ready callbacks.
-    await this.readyComplete();
-    // Display page content.
-    this.layout.el.classList.remove('layout-loading');
+    // Pass through the whole tree to find unmounted nodes.
+    await this.layout.mountTree();
   }
 
   buildServiceName(serviceName: string): string {

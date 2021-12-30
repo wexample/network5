@@ -1,6 +1,12 @@
 <script>
+
+import DefaultBue from './default';
+
 export default {
+  extends: DefaultBue,
+
   props: {
+    rootComponent: Object,
     testVuePropBool: Boolean,
     testVuePropObject: Object,
     testVuePropArray: Array,

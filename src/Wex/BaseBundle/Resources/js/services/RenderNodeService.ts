@@ -10,9 +10,15 @@ export default abstract class RenderNodeService extends AppService {
   services: ServiceRegistryPageInterface;
 
   public async prepareRenderData(renderData: RenderDataInterface) {
-    await this.services.mixins.invokeUntilComplete('prepareRenderData', 'app', [
-      renderData,
-    ]);
+    renderData.requestOptions = renderData.requestOptions || {};
+    
+    await this.services.mixins.invokeUntilComplete(
+      'prepareRenderData',
+      'app',
+      [
+        renderData,
+      ]
+    );
 
     // Do not deep freeze as sub-parts might be prepared later.
     Object.freeze(renderData);
@@ -20,8 +26,8 @@ export default abstract class RenderNodeService extends AppService {
 
   async createRenderNode(
     definitionName: string,
-    el: HTMLElement,
-    renderData: RenderDataInterface
+    renderData: RenderDataInterface,
+    parentRenderNode?: RenderNode
   ): Promise<RenderNode> {
     await this.prepareRenderData(renderData);
 
@@ -31,9 +37,8 @@ export default abstract class RenderNodeService extends AppService {
     );
 
     let instance = this.createRenderNodeInstance(
-      el,
-      renderData,
-      classDefinition
+      classDefinition,
+      parentRenderNode
     );
 
     instance.loadRenderData(renderData);
@@ -44,11 +49,10 @@ export default abstract class RenderNodeService extends AppService {
   }
 
   createRenderNodeInstance(
-    el: HTMLElement,
-    renderData: RenderDataInterface,
-    classDefinition: any
+    classDefinition: any,
+    parentRenderNode: RenderNode
   ): RenderNode | null {
-    return new classDefinition(this.app, el);
+    return new classDefinition(this.app, parentRenderNode);
   }
 
   get(path: string, options: PageInterface): Promise<any> {

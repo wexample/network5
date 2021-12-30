@@ -47,7 +47,7 @@ export default class AssetsService extends AppService {
     // Wait for all render node tree to be properly set.
     this.app.ready(() => {
       // Mark all initially rendered assets in layout as loaded.
-      this.app.layout.forEachRenderNode((renderNode: RenderNode) =>
+      this.app.layout.forEachTreeRenderNode((renderNode: RenderNode) =>
         this.assetsInCollection(renderNode.renderData.assets).forEach(
           (asset) => {
             if (asset.initial) {
@@ -228,9 +228,9 @@ export default class AssetsService extends AppService {
     // For main node.
     await this.loadValidAssetsInCollection(renderNode.renderData.assets);
     // For child nodes.
-    renderNode.forEachChildRenderNode(
-      async (renderNode) => await this.updateRenderNodeAssets(renderNode)
-    );
+    for (const childRenderNode of renderNode.eachChildRenderNode()) {
+      await this.updateRenderNodeAssets(childRenderNode);
+    }
   }
 
   async updateLayoutAssets() {
