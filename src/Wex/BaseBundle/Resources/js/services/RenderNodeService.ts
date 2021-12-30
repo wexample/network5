@@ -1,8 +1,8 @@
 import AppService from '../class/AppService';
 import PageInterface from '../interfaces/RequestOptions/PageInterface';
-import { PageInterface as ServiceRegistryPageInterface } from '../interfaces/ServiceRegistry/PageInterface';
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import RenderNode from '../class/RenderNode';
+import AppInterface from "../interfaces/ServicesRegistryInterface";
 
 export class ComponentsServiceEvents {
   public static CREATE_RENDER_NODE: string = 'create-render-node';
@@ -10,7 +10,7 @@ export class ComponentsServiceEvents {
 
 export default abstract class RenderNodeService extends AppService {
   pages: {};
-  services: ServiceRegistryPageInterface;
+  services: AppInterface;
 
   public async prepareRenderData(renderData: RenderDataInterface) {
     renderData.requestOptions = renderData.requestOptions || {};

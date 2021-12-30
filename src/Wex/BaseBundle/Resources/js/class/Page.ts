@@ -1,12 +1,12 @@
 import PageResponsiveDisplay from './PageResponsiveDisplay';
 import RenderDataPageInterface from '../interfaces/RenderData/PageInterface';
-import { PageInterface as ServiceRegistryPageInterface } from '../interfaces/ServiceRegistry/PageInterface';
 import RenderNode from './RenderNode';
 import PageManagerComponent from './PageManagerComponent';
 import AppService from './AppService';
 import { ColorSchemeServiceEvents } from '../services/ColorSchemeService';
 import { ResponsiveServiceEvents } from '../services/ResponsiveService';
 import Layout from "./Layout";
+import AppInterface from "../interfaces/ServicesRegistryInterface";
 
 export default class extends RenderNode {
   public elOverlay: HTMLElement;
@@ -18,7 +18,7 @@ export default class extends RenderNode {
   protected readonly responsiveDisplays: any = [];
   public renderData: RenderDataPageInterface;
   public responsiveDisplayCurrent: PageResponsiveDisplay;
-  public services: ServiceRegistryPageInterface;
+  public services: AppInterface;
 
   public getRenderNodeType(): string {
     return 'page';

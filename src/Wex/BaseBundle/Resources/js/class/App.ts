@@ -1,7 +1,5 @@
 import Page from './Page';
 
-import AppInterface from '../interfaces/ServiceRegistry/AppInterface';
-
 import AssetsService from '../services/AssetsService';
 import EventsService from '../services/EventsService';
 import LayoutsService from '../services/LayoutsService';
@@ -16,9 +14,9 @@ import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import LayoutInitial from './LayoutInitial';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import AsyncConstructor from './AsyncConstructor';
-import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 import AppService from './AppService';
 import { toCamel } from '../helpers/String';
+import AppInterface from "../interfaces/ServicesRegistryInterface";
 
 export default class extends AsyncConstructor {
   public bundles: any;
