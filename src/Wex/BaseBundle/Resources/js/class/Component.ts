@@ -66,7 +66,7 @@ export default abstract class Component extends RenderNode {
     }
 
     if (!el) {
-      this.services['prompt'].systemError(
+      this.services.prompt.systemError(
         'page_message.error.com_el_missing',
         {},
         this

@@ -47,10 +47,10 @@ export default class DebugService extends AppService {
 
   addTrackers() {
     this.addTrackersToRenderNodeService(
-      this.app.services[Variables.PLURAL_COMPONENT]
+      this.app.services.components
     );
     this.addTrackersToRenderNodeService(
-      this.app.services[Variables.PLURAL_PAGE]
+      this.app.services.pages
     );
   }
 

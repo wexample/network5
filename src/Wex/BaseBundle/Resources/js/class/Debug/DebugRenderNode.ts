@@ -23,11 +23,11 @@ export default class DebugRenderNode extends AppChild {
     super(renderNode.app);
 
     this.renderNode = renderNode;
-    this.service = this.app.services['debug'] as DebugService;
+    this.service = this.app.services.debug as DebugService;
 
     this.createEl();
 
-    let vueService = this.services['vue'] as VueService;
+    let vueService = this.services.vue as VueService;
     this.vueInfo = vueService
       .createApp(DebugRenderNodeInfo, {
         app: this.app,

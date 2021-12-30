@@ -187,7 +187,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
   }
 
   async testAdaptiveErrorMissingView() {
-    await this.app.services['adaptive']
+    await this.app.services.adaptive
       .get(this.app.services.routing.path('_core_test_error-missing-view'))
       .then(async () => {
         let pageFocused = this.app.layout.pageFocused;
@@ -210,7 +210,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
 
   private fetchTestPageAdaptiveJson(path) {
     // Load in json.
-    return this.app.services['adaptive']
+    return this.app.services.adaptive
       .get(path)
       .then((renderData: LayoutInterface) => {
         this.assertTrue(
