@@ -10,18 +10,24 @@ import ResponsiveService from '../services/ResponsiveService';
 import PromptService from '../services/PromptsService';
 import RoutingService from '../services/RoutingService';
 import ComponentsService from '../services/ComponentsService';
+import VueService from "../services/VueService";
+import DebugService from "../services/DebugService";
+import LocaleService from "../services/LocaleService";
 
 export default interface AppInterface {
-  assets?: AssetsService;
   adaptive?: AdaptiveService;
+  assets?: AssetsService;
   colorScheme?: ColorSchemeService;
   components?: ComponentsService;
+  debug?: DebugService;
   events?: EventsService;
   layouts?: LayoutsService;
+  locale?: LocaleService;
   mixins?: MixinsService;
   modals?: ModalsService;
   pages?: PagesService;
-  responsive?: ResponsiveService;
   prompt?: PromptService;
+  responsive?: ResponsiveService;
   routing?: RoutingService;
+  vue?: VueService;
 }
