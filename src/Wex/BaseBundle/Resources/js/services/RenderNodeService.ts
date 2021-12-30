@@ -2,7 +2,7 @@ import AppService from '../class/AppService';
 import PageInterface from '../interfaces/RequestOptions/PageInterface';
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import RenderNode from '../class/RenderNode';
-import AppInterface from "../interfaces/ServicesRegistryInterface";
+import AppInterface from '../interfaces/ServicesRegistryInterface';
 
 export class ComponentsServiceEvents {
   public static CREATE_RENDER_NODE: string = 'create-render-node';
@@ -15,13 +15,9 @@ export default abstract class RenderNodeService extends AppService {
   public async prepareRenderData(renderData: RenderDataInterface) {
     renderData.requestOptions = renderData.requestOptions || {};
 
-    await this.services.mixins.invokeUntilComplete(
-      'prepareRenderData',
-      'app',
-      [
-        renderData,
-      ]
-    );
+    await this.services.mixins.invokeUntilComplete('prepareRenderData', 'app', [
+      renderData,
+    ]);
 
     // Do not deep freeze as sub-parts might be prepared later.
     Object.freeze(renderData);

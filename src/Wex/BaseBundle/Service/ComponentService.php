@@ -175,7 +175,8 @@ class ComponentService extends RenderNodeService
             }
 
             return null;
-        } catch (Exception $exception)
+        }
+        catch (Exception $exception)
         {
             throw new Exception('Error during rendering component '.$component->name.' : '.$exception->getMessage(), $exception->getCode(), $exception);
         }

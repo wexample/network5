@@ -40,7 +40,8 @@ export default class AdaptiveService extends AppService {
     path: string,
     requestOptions: RequestOptionsInterface = {}
   ): Promise<any> {
-    requestOptions.callerPage = requestOptions.callerPage || this.app.layout.pageFocused;
+    requestOptions.callerPage =
+      requestOptions.callerPage || this.app.layout.pageFocused;
 
     Object.freeze(requestOptions);
 

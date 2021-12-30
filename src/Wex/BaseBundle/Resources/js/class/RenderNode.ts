@@ -2,8 +2,8 @@ import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import AppChild from './AppChild';
 import App from './App';
 import Component from './Component';
-import Page from "./Page";
-import { ComponentsServiceEvents } from "../services/RenderNodeService";
+import Page from './Page';
+import { ComponentsServiceEvents } from '../services/RenderNodeService';
 
 export default abstract class RenderNode extends AppChild {
   public callerPage: Page;
@@ -68,7 +68,7 @@ export default abstract class RenderNode extends AppChild {
       ...renderData.translations,
     };
 
-    this.vars = {...this.vars, ...renderData.vars};
+    this.vars = { ...this.vars, ...renderData.vars };
   }
 
   appendChildRenderNode(renderNode: RenderNode) {
@@ -98,7 +98,7 @@ export default abstract class RenderNode extends AppChild {
 
   async mount() {
     if (this.isMounted) {
-      return
+      return;
     }
 
     this.isMounted = true;
@@ -111,7 +111,7 @@ export default abstract class RenderNode extends AppChild {
 
   async unmount() {
     if (!this.isMounted) {
-      return
+      return;
     }
 
     this.isMounted = false;
@@ -150,13 +150,10 @@ export default abstract class RenderNode extends AppChild {
   forEachTreeRenderNode(callback?: Function) {
     let renderNode: RenderNode;
 
-
     callback(this);
 
     for (renderNode of this.eachChildRenderNode()) {
-      renderNode.forEachTreeRenderNode(
-        callback
-      );
+      renderNode.forEachTreeRenderNode(callback);
     }
   }
 

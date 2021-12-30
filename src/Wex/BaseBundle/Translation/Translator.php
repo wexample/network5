@@ -466,16 +466,17 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         if ($info->dirname !== '.')
         {
             return str_replace(
-                    '/',
-                    self::KEYS_SEPARATOR,
-                    $info->dirname
-                )
+                '/',
+                self::KEYS_SEPARATOR,
+                $info->dirname
+            )
                 .self::KEYS_SEPARATOR
                 .current(
                     explode(self::KEYS_SEPARATOR, $info->basename)
                 );
         }
-        else {
+        else
+        {
             return $path;
         }
     }

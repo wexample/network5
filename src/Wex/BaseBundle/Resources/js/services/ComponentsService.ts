@@ -37,7 +37,10 @@ export default class ComponentsService extends RenderNodeService {
 
       component: {
         async initComponent(component: Component) {
-          await this.createRenderDataComponents(component.renderData, component);
+          await this.createRenderDataComponents(
+            component.renderData,
+            component
+          );
         },
       },
 

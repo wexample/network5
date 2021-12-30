@@ -7,9 +7,6 @@ use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Rendering\RenderNode\RenderNode;
-use Psr\Cache\InvalidArgumentException;
-use Symfony\Component\Cache\CacheItem;
-use Symfony\Contracts\Cache\CacheInterface;
 use function array_merge;
 use function array_reverse;
 use function basename;
@@ -19,9 +16,12 @@ use function file_get_contents;
 use function implode;
 use JetBrains\PhpStorm\Pure;
 use function json_decode;
+use Psr\Cache\InvalidArgumentException;
 use function realpath;
 use function str_replace;
+use Symfony\Component\Cache\CacheItem;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Contracts\Cache\CacheInterface;
 
 class AssetsService
 {

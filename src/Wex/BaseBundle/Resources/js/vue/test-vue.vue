@@ -1,5 +1,4 @@
 <script>
-
 import DefaultBue from './default';
 
 export default {
@@ -17,7 +16,7 @@ export default {
       hidePartOfDomContainingComponent: false,
       testData: 'TEST_DATA',
       testNumber: 0,
-      translatedStringClientSide: this.trans('@vue::string.client_side')
+      translatedStringClientSide: this.trans('@vue::string.client_side'),
     };
   },
 
@@ -25,8 +24,9 @@ export default {
     document.addEventListener('test-vue-event', (data) => {
       this.testNumber++;
 
-      this.hidePartOfDomContainingComponent = data.detail.hidePartOfDomContainingComponent;
+      this.hidePartOfDomContainingComponent =
+        data.detail.hidePartOfDomContainingComponent;
     });
-  }
+  },
 };
 </script>

@@ -4,8 +4,8 @@ import PagesService from './PagesService';
 import MixinsAppService from '../class/MixinsAppService';
 import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
-import { appendInnerHtml } from "../helpers/Dom";
-import Component from "../class/Component";
+import { appendInnerHtml } from '../helpers/Dom';
+import Component from '../class/Component';
 
 export default class VueService extends AppService {
   protected componentRegistered: any = {};
@@ -65,7 +65,7 @@ export default class VueService extends AppService {
 
   inherit(vueComponent) {
     let componentsFinal = vueComponent.components || {};
-    let extend = {components: {}};
+    let extend = { components: {} };
 
     if (vueComponent.extends) {
       extend = this.inherit(vueComponent.extends);
@@ -98,7 +98,7 @@ export default class VueService extends AppService {
       ...component.options.props,
       ...{
         rootComponent: component,
-      }
+      },
     });
 
     Object.entries(this.componentRegistered).forEach((data) => {

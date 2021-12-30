@@ -5,8 +5,8 @@ import PageManagerComponent from './PageManagerComponent';
 import AppService from './AppService';
 import { ColorSchemeServiceEvents } from '../services/ColorSchemeService';
 import { ResponsiveServiceEvents } from '../services/ResponsiveService';
-import Layout from "./Layout";
-import AppInterface from "../interfaces/ServicesRegistryInterface";
+import Layout from './Layout';
+import AppInterface from '../interfaces/ServicesRegistryInterface';
 
 export default class extends RenderNode {
   public elOverlay: HTMLElement;
@@ -40,9 +40,7 @@ export default class extends RenderNode {
     if (el) {
       this.el = el;
     } else {
-      this.services.prompt.systemError(
-        'page_message.error.page_missing_el'
-      );
+      this.services.prompt.systemError('page_message.error.page_missing_el');
     }
 
     this.elOverlay = this.el.querySelector('.page-overlay');
@@ -68,11 +66,7 @@ export default class extends RenderNode {
 
     await this.app.loadAndInitServices(this.getPageLevelMixins());
 
-    await this.services.mixins.invokeUntilComplete(
-      'initPage',
-      'page',
-      [this]
-    );
+    await this.services.mixins.invokeUntilComplete('initPage', 'page', [this]);
 
     if (this.parentRenderNode instanceof PageManagerComponent) {
       this.parentRenderNode.setPage(this);

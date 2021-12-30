@@ -1,7 +1,7 @@
 import UnitTest from '../../../../class/UnitTest';
 import ModalComponent from '../../../../components/modal';
 import LayoutInterface from '../../../../interfaces/RenderData/LayoutInterface';
-import { sleep } from "../../../../helpers/Time";
+import { sleep } from '../../../../helpers/Time';
 
 export default class AdaptiveRenderingTest extends UnitTest {
   public getTestMethods() {
@@ -78,50 +78,63 @@ export default class AdaptiveRenderingTest extends UnitTest {
       );
 
       this.assertEquals(
-        getComputedStyle(pageFocused.el.querySelector(`.adaptive-page-test-css`)).backgroundColor,
+        getComputedStyle(
+          pageFocused.el.querySelector(`.adaptive-page-test-css`)
+        ).backgroundColor,
         'rgb(0, 128, 0)',
         'The adaptive CSS has applied green'
       );
 
       this.assertEquals(
-        getComputedStyle(pageFocused.el.querySelector(`.adaptive-page-test-js`)).backgroundColor,
+        getComputedStyle(pageFocused.el.querySelector(`.adaptive-page-test-js`))
+          .backgroundColor,
         'rgb(0, 128, 0)',
         'The adaptive JS has applied green'
       );
 
       let assertTestComponentIntegrity = (el, suffix: string = '') => {
         this.assertEquals(
-          getComputedStyle(pageFocused.el.querySelector(`.test-component-test-css${suffix}`)).backgroundColor,
+          getComputedStyle(
+            pageFocused.el.querySelector(`.test-component-test-css${suffix}`)
+          ).backgroundColor,
           'rgb(0, 128, 0)',
           'The adaptive CSS has applied green'
         );
 
         this.assertEquals(
-          getComputedStyle(pageFocused.el.querySelector(`.test-component-test-js${suffix}`)).backgroundColor,
+          getComputedStyle(
+            pageFocused.el.querySelector(`.test-component-test-js${suffix}`)
+          ).backgroundColor,
           'rgb(0, 128, 0)',
           'The adaptive JS has applied green'
         );
 
         this.assertEquals(
-          pageFocused.el.querySelector(`.test-component-string-translated${suffix}`).innerHTML,
+          pageFocused.el.querySelector(
+            `.test-component-string-translated${suffix}`
+          ).innerHTML,
           `SERVER_SIDE_COMPONENT_TRANSLATION${suffix}`,
           `Test string equals "SERVER_SIDE_COMPONENT_TRANSLATION"`
         );
 
         this.assertEquals(
-          pageFocused.el.querySelector(`.test-component-string-translated-client${suffix}`).innerHTML,
+          pageFocused.el.querySelector(
+            `.test-component-string-translated-client${suffix}`
+          ).innerHTML,
           `CLIENT_SIDE_COMPONENT_TRANSLATION${suffix}`,
           `Test string equals "CLIENT_SIDE_COMPONENT_TRANSLATION"`
         );
-      }
+      };
 
-      let elComponent = pageFocused.el.querySelector('.adaptive-page-test-component');
+      let elComponent = pageFocused.el.querySelector(
+        '.adaptive-page-test-component'
+      );
       assertTestComponentIntegrity(elComponent);
-      assertTestComponentIntegrity(elComponent,'-2');
+      assertTestComponentIntegrity(elComponent, '-2');
 
       // Event changes vue content.
       this.app.services.events.trigger('test-vue-event', {
-        hidePartOfDomContainingComponent:true
+        hidePartOfDomContainingComponent: true,
       });
 
       // Need to wait for dom to break up.
@@ -142,7 +155,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
       );
 
       this.app.services.events.trigger('test-vue-event', {
-        hidePartOfDomContainingComponent:false
+        hidePartOfDomContainingComponent: false,
       });
 
       // Wait for remounting dom.
@@ -160,7 +173,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
 
       let elVue = pageFocused.el.querySelector('.adaptive-page-test-vue');
       assertTestComponentIntegrity(elVue);
-      assertTestComponentIntegrity(elVue,'-2');
+      assertTestComponentIntegrity(elVue, '-2');
 
       // Close modal.
       await modal.close();

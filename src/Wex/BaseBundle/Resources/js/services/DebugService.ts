@@ -58,13 +58,14 @@ export default class DebugService extends AppService {
     let debugService = this;
     let methodOriginal = renderNodeService.createRenderNodeInstance;
 
-    renderNodeService.createRenderNodeInstance = function (): RenderNode | null {
-      let instance = methodOriginal.apply(renderNodeService, arguments);
+    renderNodeService.createRenderNodeInstance =
+      function (): RenderNode | null {
+        let instance = methodOriginal.apply(renderNodeService, arguments);
 
-      debugService.initRenderNode(instance);
+        debugService.initRenderNode(instance);
 
-      return instance;
-    };
+        return instance;
+      };
   }
 
   initRenderNode(renderNode: RenderNode) {

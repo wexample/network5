@@ -20,8 +20,8 @@ export default class LocaleService extends AppService {
               arguments
             );
           },
-        }
-      }
+        },
+      },
     };
   }
 

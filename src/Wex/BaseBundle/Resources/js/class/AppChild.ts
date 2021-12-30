@@ -1,6 +1,6 @@
 import App from './App';
 import AsyncConstructor from './AsyncConstructor';
-import AppInterface from "../interfaces/ServicesRegistryInterface";
+import AppInterface from '../interfaces/ServicesRegistryInterface';
 
 export default class extends AsyncConstructor {
   protected readonly app: App;

@@ -51,14 +51,12 @@ export default class PagesService extends RenderNodeService {
     if (pageHandler) {
       parentNode = pageHandler;
 
-      delete this.services.components.pageHandlerRegistry[renderData.renderRequestId];
+      delete this.services.components.pageHandlerRegistry[
+        renderData.renderRequestId
+      ];
     }
 
-    await this.createRenderNode(
-      renderData.name,
-      renderData,
-      parentNode
-    );
+    await this.createRenderNode(renderData.name, renderData, parentNode);
   }
 
   createRenderNodeInstance(

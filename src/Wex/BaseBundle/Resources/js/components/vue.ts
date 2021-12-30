@@ -6,14 +6,12 @@ export default class extends Component {
 
     if (!this.app.services['vue']) {
       this.services['prompt'].systemError(
-        'page_message.error.vue_service_missing',
+        'page_message.error.vue_service_missing'
       );
 
       return;
     }
 
-    this.app.services['vue']
-      .createVueAppForComponent(this)
-      .mount(this.el);
+    this.app.services['vue'].createVueAppForComponent(this).mount(this.el);
   }
 }

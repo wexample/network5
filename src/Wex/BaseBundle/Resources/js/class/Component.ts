@@ -1,8 +1,8 @@
 import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 import Events from '../helpers/Events';
 import RenderNode from './RenderNode';
-import { findPreviousNode as DomFindPreviousNode } from "../helpers/Dom";
-import AppInterface from "../interfaces/ServicesRegistryInterface";
+import { findPreviousNode as DomFindPreviousNode } from '../helpers/Dom';
+import AppInterface from '../interfaces/ServicesRegistryInterface';
 
 export default abstract class Component extends RenderNode {
   protected initMode: string;
@@ -93,7 +93,7 @@ export default abstract class Component extends RenderNode {
   mergeRenderData(renderData: ComponentInterface) {
     super.mergeRenderData(renderData);
 
-    this.options = {...this.options, ...renderData.options};
+    this.options = { ...this.options, ...renderData.options };
     this.callerPage = renderData.requestOptions.callerPage;
   }
 
