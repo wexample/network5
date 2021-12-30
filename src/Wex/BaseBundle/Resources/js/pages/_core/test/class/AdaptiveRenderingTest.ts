@@ -132,44 +132,50 @@ export default class AdaptiveRenderingTest extends UnitTest {
       assertTestComponentIntegrity(elComponent);
       assertTestComponentIntegrity(elComponent, '-2');
 
-      // Event changes vue content.
-      this.app.services.events.trigger('test-vue-event', {
-        hidePartOfDomContainingComponent: true,
-      });
+      let assertVueUpdateSupportedByComponent = async () => {
+        // Event changes vue content.
+        this.app.services.events.trigger('test-vue-event', {
+          hidePartOfDomContainingComponent: true,
+        });
 
-      // Need to wait for dom to break up.
-      await sleep();
+        // Need to wait for dom to break up.
+        await sleep();
 
-      let testComponent = this.app.layout.pageFocused
-        .findChildRenderNodeByName('components/vue')
-        .findChildRenderNodeByName('components/test-component');
+        let testComponent = this.app.layout.pageFocused
+          .findChildRenderNodeByName('components/vue')
+          .findChildRenderNodeByName('components/test-component');
 
-      this.assertFalse(
-        testComponent.isMounted,
-        'The vue dom has been hidden, then component is unmounted'
-      );
+        this.assertFalse(
+          testComponent.isMounted,
+          'The vue dom has been hidden, then component is unmounted'
+        );
 
-      this.assertTrue(
-        testComponent.el === undefined,
-        'The vue dom has been hidden, then component el is empty'
-      );
+        this.assertTrue(
+          testComponent.el === undefined,
+          'The vue dom has been hidden, then component el is empty'
+        );
 
-      this.app.services.events.trigger('test-vue-event', {
-        hidePartOfDomContainingComponent: false,
-      });
+        this.app.services.events.trigger('test-vue-event', {
+          hidePartOfDomContainingComponent: false,
+        });
 
-      // Wait for remounting dom.
-      await sleep();
+        // Wait for remounting dom.
+        await sleep();
 
-      this.assertTrue(
-        testComponent.isMounted,
-        'The vue dom has been hidden, then component is mounted back'
-      );
+        this.assertTrue(
+          testComponent.isMounted,
+          'The vue dom has been hidden, then component is mounted back'
+        );
 
-      this.assertFalse(
-        testComponent.el === undefined,
-        'The vue dom has been hidden, then component el is not empty'
-      );
+        this.assertFalse(
+          testComponent.el === undefined,
+          'The vue dom has been hidden, then component el is not empty'
+        );
+      }
+
+      // Test twice to ensure stability.
+      await assertVueUpdateSupportedByComponent();
+      await assertVueUpdateSupportedByComponent();
 
       let elVue = pageFocused.el.querySelector('.adaptive-page-test-vue');
       assertTestComponentIntegrity(elVue);
