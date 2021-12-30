@@ -33,18 +33,23 @@ export default class ResponsiveService extends AppService {
             async () => await responsiveService.updateResponsive(true)
           );
 
-          await responsiveService.updateResponsive(false);
+          await responsiveService.updateResponsive(true);
         },
       },
     };
   }
 
   async updateResponsive(updateAssets: boolean) {
-    let current = this.detectSize();
+    await this.setResponsive(
+      this.detectSize(),
+      updateAssets
+    );
+  }
 
-    if (current !== this.responsiveSizeCurrent) {
+  async setResponsive(size: string, updateAssets: boolean) {
+    if (size !== this.responsiveSizeCurrent) {
       this.responsiveSizePrevious = this.responsiveSizeCurrent;
-      this.responsiveSizeCurrent = current;
+      this.responsiveSizeCurrent = size;
 
       if (updateAssets) {
         await this.services.assets.updateLayoutAssets();
@@ -54,7 +59,7 @@ export default class ResponsiveService extends AppService {
         this.services.events.trigger(
           ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
           {
-            current: current,
+            current: size,
             previous: this.responsiveSizePrevious,
           }
         );

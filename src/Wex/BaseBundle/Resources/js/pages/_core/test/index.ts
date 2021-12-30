@@ -3,6 +3,7 @@ import TestManagerPage from '../../../class/TestManagerPage';
 import PageTest from './class/PageTest';
 import TestTest from './class/TestTest';
 import AppTest from './class/AppTest';
+import ResponsiveTest from "./class/ResponsiveTest";
 
 export default class extends TestManagerPage {
   tests: any;
@@ -13,7 +14,6 @@ export default class extends TestManagerPage {
     // TODO Test no js
     // TODO Test no aggregation
     // TODO Test icons
-    // TODO Test vue
     // TODO Test responsive (and js responsive displays)
     // TODO Test color schemes
     // TODO Test modal in modal
@@ -25,6 +25,7 @@ export default class extends TestManagerPage {
     await this.runTests({
       AdaptiveRenderingTest,
       AppTest,
+      ResponsiveTest,
       TestTest,
       PageTest,
       // TODO VariablesTest
