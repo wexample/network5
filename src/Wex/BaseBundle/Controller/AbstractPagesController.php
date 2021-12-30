@@ -2,6 +2,7 @@
 
 namespace App\Wex\BaseBundle\Controller;
 
+use App\Wex\BaseBundle\Helper\BundleHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
@@ -49,7 +50,7 @@ abstract class AbstractPagesController extends AbstractController
         if (str_contains($view, self::BUNDLE_TEMPLATE_SEPARATOR))
         {
             $exp = explode(self::BUNDLE_TEMPLATE_SEPARATOR, $view);
-            $base = $exp[0].FileHelper::FOLDER_SEPARATOR.TemplateHelper::BUNDLE_PATH_TEMPLATES.$base;
+            $base = $exp[0].FileHelper::FOLDER_SEPARATOR.BundleHelper::BUNDLE_PATH_TEMPLATES.$base;
             $view = $exp[1];
         }
 

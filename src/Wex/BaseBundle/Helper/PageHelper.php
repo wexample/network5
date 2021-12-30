@@ -28,7 +28,7 @@ class PageHelper
 
     public static function trimPageTemplateLocationAlias(string $pagePath): string
     {
-        if (str_starts_with($pagePath, TemplateHelper::BUNDLE_PATH_ALIAS_PREFIX))
+        if (str_starts_with($pagePath, BundleHelper::ALIAS_PREFIX))
         {
             foreach (TemplateHelper::TEMPLATES_LOCATIONS as $location)
             {

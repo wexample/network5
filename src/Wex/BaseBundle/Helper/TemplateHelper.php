@@ -8,23 +8,11 @@ class TemplateHelper
 {
     public const TEMPLATE_FILE_EXTENSION = '.html.twig';
 
-    public const BUNDLE_PATH_ALIAS_PREFIX = '@';
-
-    public const BUNDLE_PATH_RESOURCES = 'Resources'.FileHelper::FOLDER_SEPARATOR;
-
-    public const BUNDLE_PATH_TEMPLATES = self::BUNDLE_PATH_RESOURCES.self::REL_BUNDLE_PATH_TEMPLATES;
-
-    public const REL_BUNDLE_PATH_PAGES = 'pages'.FileHelper::FOLDER_SEPARATOR;
-
-    public const REL_BUNDLE_PATH_TEMPLATES = 'templates'.FileHelper::FOLDER_SEPARATOR;
-
-    public const REL_BUNDLE_PATH_RESOURCE_FONTS = 'fonts'.FileHelper::FOLDER_SEPARATOR;
-
     public const TEMPLATES_LOCATIONS = [
         // Search in default local template folder.
         '',
         // Search in base bundle.
-        WexBaseBundle::WEX_BUNDLE_PATH_TEMPLATES,
+        BundleHelper::WEX_TEMPLATE_ALIAS_TEMPLATES,
     ];
 
     public static function buildTemplateInheritanceStack(

@@ -2,6 +2,7 @@
 
 namespace App\Wex\BaseBundle\Service;
 
+use App\Wex\BaseBundle\Helper\BundleHelper;
 use App\Wex\BaseBundle\Helper\ClassHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\TemplateHelper;
@@ -10,7 +11,6 @@ use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\ComponentRenderNodeManager;
 use App\Wex\BaseBundle\Rendering\RenderNode\ComponentRenderNode;
 use App\Wex\BaseBundle\Translation\Translator;
-use App\Wex\BaseBundle\WexBaseBundle;
 use Exception;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\Environment;
@@ -54,8 +54,8 @@ class ComponentService extends RenderNodeService
         $this->componentsClasses = [];
 
         $locations = [
-            WexBaseBundle::WEX_BUNDLE_PATH_BASE => WexBaseBundle::CLASS_PATH_PREFIX_WEX_BASE,
-            ClassHelper::PROJECT_PATH_SRC => WexBaseBundle::CLASS_PATH_PREFIX,
+            BundleHelper::WEX_DIR_BASE => BundleHelper::WEX_CLASS_PATH_BASE,
+            BundleHelper::DIR_SRC => BundleHelper::CLASS_PATH_PREFIX,
         ];
 
         foreach ($locations as $location => $classPrefix)

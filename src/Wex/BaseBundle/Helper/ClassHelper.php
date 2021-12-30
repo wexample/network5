@@ -19,10 +19,6 @@ class ClassHelper
 
     public const NAMESPACE_SEPARATOR = '\\';
 
-    public const PROJECT_PATH_SRC = 'src/';
-
-    public const PROJECT_PATH_TESTS = 'tests/';
-
     public static function getTableizedName(string $className): string
     {
         return TextHelper::toSnake(static::getShortName($className));

@@ -3,7 +3,7 @@
 namespace App\Wex\BaseBundle\Tests\Traits;
 
 use App\Wex\BaseBundle\Controller\AbstractEntityController;
-use App\Wex\BaseBundle\Helper\ClassHelper;
+use App\Wex\BaseBundle\Helper\BundleHelper;
 use function implode;
 use function is_subclass_of;
 use SplFileInfo;
@@ -79,10 +79,10 @@ trait SplFileTestCaseTrait
         string $srcFileSubDir,
         string $testFileSubDir
     ): string {
-        return $this->getProjectDir().ClassHelper::PROJECT_PATH_TESTS
+        return $this->getProjectDir().BundleHelper::DIR_TESTS
             .$testFileSubDir.substr(
                 $file->getRealPath(),
-                strlen($this->getProjectDir().ClassHelper::PROJECT_PATH_SRC.$srcFileSubDir)
+                strlen($this->getProjectDir().BundleHelper::DIR_SRC.$srcFileSubDir)
             );
     }
 }

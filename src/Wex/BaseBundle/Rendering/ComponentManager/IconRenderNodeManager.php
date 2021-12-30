@@ -2,13 +2,12 @@
 
 namespace App\Wex\BaseBundle\Rendering\ComponentManager;
 
+use App\Wex\BaseBundle\Helper\BundleHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
-use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\ComponentRenderNodeManager;
 use App\Wex\BaseBundle\Rendering\RenderNode\ComponentRenderNode;
 use App\Wex\BaseBundle\Service\AssetsService;
-use App\Wex\BaseBundle\WexBaseBundle;
 use Exception;
 use SimpleXMLElement;
 
@@ -21,9 +20,9 @@ class IconRenderNodeManager extends ComponentRenderNodeManager
     public const DIR_BUILD_ICONS = 'icons'.FileHelper::FOLDER_SEPARATOR;
 
     public const REL_PATH_LIB_FONTAWESOME_SVG = FileHelper::FOLDER_SEPARATOR
-    .WexBaseBundle::WEX_BUNDLE_PATH_BASE
-    .TemplateHelper::BUNDLE_PATH_RESOURCES
-    .TemplateHelper::REL_BUNDLE_PATH_RESOURCE_FONTS
+    .BundleHelper::WEX_DIR_BASE
+    .BundleHelper::BUNDLE_PATH_RESOURCES
+    .BundleHelper::DIR_RESOURCE_FONTS
     .self::DIR_FONTAWESOME_SVG;
 
     private int $iconHeight = 512;

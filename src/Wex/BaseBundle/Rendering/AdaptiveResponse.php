@@ -3,11 +3,11 @@
 namespace App\Wex\BaseBundle\Rendering;
 
 use App\Wex\BaseBundle\Controller\AbstractController;
+use App\Wex\BaseBundle\Helper\BundleHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
-use App\Wex\BaseBundle\WexBaseBundle;
 use Exception;
 use function in_array;
 use function is_null;
@@ -24,7 +24,7 @@ class AdaptiveResponse
 
     public const BASE_DEFAULT = VariableHelper::DEFAULT;
 
-    public const BASES_MAIN_DIR = WexBaseBundle::WEX_BUNDLE_PATH_TEMPLATES.'bases/';
+    public const BASES_MAIN_DIR = BundleHelper::WEX_TEMPLATE_ALIAS_TEMPLATES.'bases/';
 
     public const OUTPUT_TYPE_RESPONSE_HTML = VariableHelper::HTML;
 

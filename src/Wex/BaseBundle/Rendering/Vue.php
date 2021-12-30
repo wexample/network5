@@ -2,11 +2,11 @@
 
 namespace App\Wex\BaseBundle\Rendering;
 
+use App\Wex\BaseBundle\Helper\BundleHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Twig\VueExtension;
-use App\Wex\BaseBundle\WexBaseBundle;
 use function array_shift;
 use function array_slice;
 use function count;
@@ -73,7 +73,7 @@ class Vue
 
     public function buildName(string $path): string
     {
-        if (TemplateHelper::BUNDLE_PATH_ALIAS_PREFIX === $path[0])
+        if (BundleHelper::ALIAS_PREFIX === $path[0])
         {
             $exp = explode(FileHelper::FOLDER_SEPARATOR, $path);
             // Get relevant path.
@@ -83,7 +83,7 @@ class Vue
             $templatePath = count(
                 explode(
                     FileHelper::FOLDER_SEPARATOR,
-                    WexBaseBundle::WEX_BUNDLE_PATH_TEMPLATES
+                    BundleHelper::WEX_TEMPLATE_ALIAS_TEMPLATES
                 )
             ) - 1;
 
@@ -94,7 +94,7 @@ class Vue
         }
 
         return str_replace(
-            TemplateHelper::BUNDLE_PATH_ALIAS_PREFIX,
+            BundleHelper::ALIAS_PREFIX,
             '',
             strtolower(
                 implode(

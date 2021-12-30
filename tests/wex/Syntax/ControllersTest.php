@@ -3,7 +3,7 @@
 namespace App\Tests\Syntax;
 
 use App\Tests\NetworkTestCase;
-use App\Wex\BaseBundle\Helper\TemplateHelper;
+use App\Wex\BaseBundle\Helper\BundleHelper;
 use App\Wex\BaseBundle\Tests\Traits\ControllerTestCaseTrait;
 
 class ControllersTest extends NetworkTestCase
@@ -35,17 +35,17 @@ class ControllersTest extends NetworkTestCase
     public function testTemplates()
     {
         $this->scanControllerPagesTemplates(
-            TemplateHelper::REL_BUNDLE_PATH_PAGES,
+            BundleHelper::DIR_TEMPLATE_PAGES,
             $this->getProjectDir()
-            .TemplateHelper::REL_BUNDLE_PATH_TEMPLATES,
+            .BundleHelper::DIR_TEMPLATES,
             'src/Controllers'
         );
 
         $this->scanControllerPagesTemplates(
-            TemplateHelper::REL_BUNDLE_PATH_PAGES,
+            BundleHelper::DIR_TEMPLATE_PAGES,
             $this->getProjectDir()
-                .'src/Wex/BaseBundle/'.TemplateHelper::BUNDLE_PATH_RESOURCES
-            .TemplateHelper::REL_BUNDLE_PATH_TEMPLATES,
+                .'src/Wex/BaseBundle/'.BundleHelper::BUNDLE_PATH_RESOURCES
+            .BundleHelper::DIR_TEMPLATES,
             'src/Controllers'
         );
     }

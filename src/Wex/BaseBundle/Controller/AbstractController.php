@@ -4,9 +4,9 @@ namespace App\Wex\BaseBundle\Controller;
 
 use App\Wex\BaseBundle\Controller\Interfaces\AdaptiveResponseControllerInterface;
 use App\Wex\BaseBundle\Controller\Traits\AdaptiveResponseControllerTrait;
+use App\Wex\BaseBundle\Helper\BundleHelper;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use App\Wex\BaseBundle\Service\AssetsService;
-use App\Wex\BaseBundle\WexBaseBundle;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -89,7 +89,7 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         catch (\Exception $exception)
         {
             $rendered = parent::renderView(
-                WexBaseBundle::WEX_BUNDLE_PATH_TEMPLATES.'pages/_core/error/default.html.twig',
+                BundleHelper::WEX_TEMPLATE_ALIAS_TEMPLATES.'pages/_core/error/default.html.twig',
                 $parameters + [
                     'message' => $exception->getMessage(),
                 ]
