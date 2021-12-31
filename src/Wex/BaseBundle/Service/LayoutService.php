@@ -5,6 +5,7 @@ namespace App\Wex\BaseBundle\Service;
 use App\Wex\BaseBundle\Rendering\AdaptiveResponse;
 use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Rendering\RenderNode\LayoutRenderNode;
+use App\Wex\BaseBundle\Translation\Translator;
 use function array_merge;
 use Exception;
 use JetBrains\PhpStorm\Pure;
@@ -16,7 +17,8 @@ class LayoutService extends RenderNodeService
     public function __construct(
         protected AdaptiveResponseService $adaptiveResponseService,
         protected AssetsService $assetsService,
-        protected ComponentService $componentService
+        protected ComponentService $componentService,
+        protected Translator $translator
     ) {
         parent::__construct(
             $assetsService,
@@ -69,6 +71,11 @@ class LayoutService extends RenderNodeService
             $layoutRenderNode,
             $layoutName,
             $useJs
+        );
+
+        $this->translator->setDomainFromPath(
+            $layoutRenderNode->getContextType(),
+            $layoutName
         );
 
         // No main js found.

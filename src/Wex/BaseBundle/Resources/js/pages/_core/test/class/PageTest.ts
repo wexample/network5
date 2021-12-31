@@ -7,6 +7,12 @@ export default class PageTest extends UnitTest {
 
   public testDefault() {
     this.assertEquals(
+      document.querySelector('#test-layout-translation').innerHTML,
+      'TEST_LAYOUT_SERVER_TRANSLATION',
+      'Initial layout server translation works'
+    );
+
+    this.assertEquals(
       this.app.layout.page.vars.initialPageVar,
       true,
       'Initial page var is set'
