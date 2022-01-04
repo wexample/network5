@@ -1,11 +1,14 @@
 <script>
-import DefaultBue from './default';
+import DefaultVue from './default';
 
 export default {
-  extends: DefaultBue,
+  extends: DefaultVue,
+
+  components: {
+    'vue-test-vue-2': 'vue/test-vue-2',
+  },
 
   props: {
-    rootComponent: Object,
     testVuePropBool: Boolean,
     testVuePropObject: Object,
     testVuePropArray: Array,

@@ -23,6 +23,14 @@ class VueService
     ) {
     }
 
+    public function isRenderPassInVueContext(): bool
+    {
+        return $this
+                ->adaptiveResponseService
+                ->renderPass
+                ->getCurrentContextRenderNode()->name === ComponentService::COMPONENT_NAME_VUE;
+    }
+
     /**
      * @throws Exception
      */

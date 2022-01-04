@@ -2,6 +2,7 @@
 
 namespace App\Wex\BaseBundle\Twig;
 
+use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use App\Wex\BaseBundle\Service\VueService;
 use Exception;
 use function implode;
@@ -15,8 +16,6 @@ use Twig\TwigFunction;
 class VueExtension extends AbstractExtension
 {
     public const TEMPLATE_FILE_EXTENSION = '.vue.twig';
-
-    protected array $includedHtml = [];
 
     public function getFilters(): array
     {
@@ -32,6 +31,7 @@ class VueExtension extends AbstractExtension
     }
 
     public function __construct(
+        private AdaptiveResponseService $adaptiveResponseService,
         private VueService $vueService
     ) {
     }
@@ -80,13 +80,25 @@ class VueExtension extends AbstractExtension
         ?array $options = [],
         ?array $twigContext = []
     ): string {
-        return $this->vueService->vueRender(
-            $env,
-            $path,
-            $options,
-            $twigContext,
-            true
-        );
+        if ($this->vueService->isRenderPassInVueContext())
+        {
+            return $this->vueInclude(
+                $env,
+                $path,
+                $options,
+                $twigContext
+            );
+        }
+        else
+        {
+            return $this->vueService->vueRender(
+                $env,
+                $path,
+                $options,
+                $twigContext,
+                true
+            );
+        }
     }
 
     public function vueRenderTemplate(): string
@@ -122,21 +134,18 @@ class VueExtension extends AbstractExtension
         ?array $attributes = [],
         ?array $twigContext = []
     ): string {
-        // Register template.
-        $output =
-            $this->vueService->vueRender(
-                $env,
-                $path,
-                $attributes,
-                $twigContext
-            );
-
-        $this->includedHtml[] = $output;
-
-        return $output;
+        return $this->vueService->vueRender(
+            $env,
+            $path,
+            $attributes,
+            $twigContext
+        );
     }
 
-    public function vueKey(string $key, ?string $filters = null): string
+    public function vueKey(
+        string $key,
+        ?string $filters = null
+    ): string
     {
         return '{{ '.$key.($filters ? ' | '.$filters : '').' }}';
     }
