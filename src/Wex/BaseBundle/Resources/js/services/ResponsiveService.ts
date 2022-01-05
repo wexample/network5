@@ -52,7 +52,8 @@ export default class ResponsiveService extends AppService {
       this.responsiveSizeCurrent = size;
 
       if (updateAssets) {
-        await this.services.assets.updateLayoutAssets();
+        await this.app.layout.assetsUpdate();
+
         // Now change page class.
         this.updateResponsiveLayoutClass();
 

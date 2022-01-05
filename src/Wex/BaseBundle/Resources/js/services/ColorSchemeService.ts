@@ -108,7 +108,7 @@ export default class ColorSchemeService extends AppService {
     classList.add(`color-scheme-${this.activeColorScheme}`);
 
     if (updateAssets) {
-      await this.services.assets.updateLayoutAssets();
+      await this.app.layout.assetsUpdate();
     }
 
     this.services.events.trigger(ColorSchemeServiceEvents.COLOR_SCHEME_CHANGE, {

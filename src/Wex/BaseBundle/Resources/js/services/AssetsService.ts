@@ -23,6 +23,16 @@ export default class AssetsService extends AppService {
 
   public updateFilters: Function[] = [];
 
+  registerMethods() {
+    return {
+      renderNode: {
+        async assetsUpdate() {
+          await this.app.services.assets.updateRenderNodeAssets(this);
+        },
+      },
+    };
+  }
+
   registerHooks() {
     return {
       app: {
@@ -230,10 +240,6 @@ export default class AssetsService extends AppService {
     for (const childRenderNode of renderNode.eachChildRenderNode()) {
       await this.updateRenderNodeAssets(childRenderNode);
     }
-  }
-
-  async updateLayoutAssets() {
-    await this.updateRenderNodeAssets(this.app.layout);
   }
 
   public static createEmptyAssetsCollection(): AssetsCollectionInterface {

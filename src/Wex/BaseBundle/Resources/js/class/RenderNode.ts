@@ -21,6 +21,7 @@ export default abstract class RenderNode extends AppChild {
   public vars: any = {};
   // Mixed functions from services.
   public trans?: Function;
+  public assetsUpdate?: Function;
 
   constructor(app: App, parentRenderNode?: RenderNode) {
     super(app);
