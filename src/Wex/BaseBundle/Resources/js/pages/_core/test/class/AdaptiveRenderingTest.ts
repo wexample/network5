@@ -93,134 +93,39 @@ export default class AdaptiveRenderingTest extends UnitTest {
         'The adaptive JS has applied green'
       );
 
-      let assertTestComponentAssets = (
-        el: HTMLElement,
-        prefix: string = '',
-        suffix: string = ''
-      ) => {
-        this.assertEquals(
-          getComputedStyle(
-            pageFocused.el.querySelector(`.test-component-test-css${suffix}`)
-          ).backgroundColor,
-          'rgb(0, 128, 0)',
-          'The adaptive CSS has applied green'
-        );
-
-        this.assertEquals(
-          getComputedStyle(
-            pageFocused.el.querySelector(`.test-component-test-js${suffix}`)
-          ).backgroundColor,
-          'rgb(0, 128, 0)',
-          'The adaptive JS has applied green'
-        );
-      };
-
-      let assertTestComponentIntegrity = (
-        el: HTMLElement,
-        prefix: string = '',
-        suffix: string = ''
-      ) => {
-        this.assertEquals(
-          pageFocused.el.querySelector(
-            `.${prefix}-string-translated-server${suffix}`
-          ).innerHTML,
-          `SERVER_SIDE_${toScreamingSnake(prefix)}_TRANSLATION${suffix}`,
-          `Test server side translation`
-        );
-
-        this.assertEquals(
-          pageFocused.el.querySelector(
-            `.${prefix}-string-translated-client${suffix}`
-          ).innerHTML,
-          `CLIENT_SIDE_${toScreamingSnake(prefix)}_TRANSLATION${suffix}`,
-          `Test client side translation`
-        );
-      };
-
       let elComponent = pageFocused.el.querySelector(
         '.adaptive-page-test-component'
       ) as HTMLElement;
 
-      assertTestComponentIntegrity(
+      this.assertTestComponentIntegrity(
         elComponent,
         'test-component'
       );
 
-      assertTestComponentIntegrity(
+      this.assertTestComponentIntegrity(
         elComponent,
         'test-component',
         '-2'
       );
 
-      assertTestComponentAssets(
+      this.assertTestComponentAssets(
         elComponent,
         'test-component'
       );
 
-      assertTestComponentAssets(
+      this.assertTestComponentAssets(
         elComponent,
         'test-component',
         '-2'
       );
-
-      let assertVueUpdateSupportedByComponent = async () => {
-        // Event changes vue content.
-        this.app.services.events.trigger('test-vue-event', {
-          hidePartOfDomContainingComponent: true,
-        });
-
-        // Need to wait for dom to break up.
-        await sleep();
-
-        let testComponent = this.app.layout.pageFocused
-          .findChildRenderNodeByName('components/vue')
-          .findChildRenderNodeByName('components/test-component');
-
-        this.assertFalse(
-          testComponent.isMounted,
-          'The vue dom has been hidden, then component is unmounted'
-        );
-
-        this.assertTrue(
-          testComponent.el === undefined,
-          'The vue dom has been hidden, then component el is empty'
-        );
-
-        this.app.services.events.trigger('test-vue-event', {
-          hidePartOfDomContainingComponent: false,
-        });
-
-        // Wait for remounting dom.
-        await sleep();
-
-        this.assertTrue(
-          testComponent.isMounted,
-          'The vue dom has been hidden, then component is mounted back'
-        );
-
-        this.assertFalse(
-          testComponent.el === undefined,
-          'The vue dom has been hidden, then component el is not empty'
-        );
-      }
 
       // Test twice to ensure stability.
-      await assertVueUpdateSupportedByComponent();
-      await assertVueUpdateSupportedByComponent();
+      await this.assertVueUpdateSupportedByComponent();
+      await this.assertVueUpdateSupportedByComponent();
 
-      let assertTestVueIntegrity = (
-        suffix: string = ''
-      ) => {
-        assertTestComponentIntegrity(
-          pageFocused.el.querySelector('.adaptive-page-test-vue') as HTMLElement,
-          'test-vue',
-          suffix ? `-${suffix}` : ''
-        );
-      };
-
-      assertTestVueIntegrity();
-      assertTestVueIntegrity('2');
-      assertTestVueIntegrity('3');
+      this.assertTestVueIntegrity();
+      this.assertTestVueIntegrity('2');
+      this.assertTestVueIntegrity('3');
 
       // Close modal.
       await modal.close();
@@ -231,6 +136,105 @@ export default class AdaptiveRenderingTest extends UnitTest {
         'The focus has been thrown back to the main page'
       );
     });
+  }
+
+  assertTestComponentAssets (
+    el: HTMLElement,
+    prefix: string = '',
+    suffix: string = ''
+  ) {
+    this.assertEquals(
+      getComputedStyle(
+        this.app.layout.pageFocused.el.querySelector(`.test-component-test-css${suffix}`)
+      ).backgroundColor,
+      'rgb(0, 128, 0)',
+      'The adaptive CSS has applied green'
+    );
+
+    this.assertEquals(
+      getComputedStyle(
+        this.app.layout.pageFocused.el.querySelector(`.test-component-test-js${suffix}`)
+      ).backgroundColor,
+      'rgb(0, 128, 0)',
+      'The adaptive JS has applied green'
+    );
+  };
+
+  assertTestComponentIntegrity = (
+    el: HTMLElement,
+    prefix: string = '',
+    suffix: string = ''
+  ) => {
+    this.assertEquals(
+      this.app.layout.pageFocused.el.querySelector(
+        `.${prefix}-string-translated-server${suffix}`
+      ).innerHTML,
+      `SERVER_SIDE_${toScreamingSnake(prefix)}_TRANSLATION${suffix}`,
+      `Test server side translation`
+    );
+
+    this.assertEquals(
+      this.app.layout.pageFocused.el.querySelector(
+        `.${prefix}-string-translated-client${suffix}`
+      ).innerHTML,
+      `CLIENT_SIDE_${toScreamingSnake(prefix)}_TRANSLATION${suffix}`,
+      `Test client side translation`
+    );
+  };
+
+  assertTestVueIntegrity(
+    suffix: string = ''
+  ) {
+    this.assertTestComponentIntegrity(
+      this.app
+        .layout
+        .pageFocused
+        .el
+        .querySelector('.adaptive-page-test-vue') as HTMLElement,
+      'test-vue',
+      suffix ? `-${suffix}` : ''
+    );
+  }
+
+  async assertVueUpdateSupportedByComponent() {
+    // Event changes vue content.
+    this.app.services.events.trigger('test-vue-event', {
+      hidePartOfDomContainingComponent: true,
+    });
+
+    // Need to wait for dom to break up.
+    await sleep();
+
+    let testComponent = this.app.layout.pageFocused
+      .findChildRenderNodeByName('components/vue')
+      .findChildRenderNodeByName('components/test-component');
+
+    this.assertFalse(
+      testComponent.isMounted,
+      'The vue dom has been hidden, then component is unmounted'
+    );
+
+    this.assertTrue(
+      testComponent.el === undefined,
+      'The vue dom has been hidden, then component el is empty'
+    );
+
+    this.app.services.events.trigger('test-vue-event', {
+      hidePartOfDomContainingComponent: false,
+    });
+
+    // Wait for remounting dom.
+    await sleep();
+
+    this.assertTrue(
+      testComponent.isMounted,
+      'The vue dom has been hidden, then component is mounted back'
+    );
+
+    this.assertFalse(
+      testComponent.el === undefined,
+      'The vue dom has been hidden, then component el is not empty'
+    );
   }
 
   async testAdaptiveErrorMissingView() {
