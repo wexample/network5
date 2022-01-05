@@ -1,6 +1,6 @@
 import UnitTest from '../../../../class/UnitTest';
-import RenderNode from "../../../../class/RenderNode";
 import { sleep } from "../../../../helpers/Time";
+import { appendInnerHtml } from "../../../../helpers/Dom";
 
 export default class ResponsiveTest extends UnitTest {
   public getTestMethods() {
@@ -15,13 +15,32 @@ export default class ResponsiveTest extends UnitTest {
       'The default responsive size has been applied to layout body'
     )
 
-    this.generatePlayground();
+    let elPlayground = this.app.layout.pageFocused.el.querySelector('#test-playground') as HTMLElement;
+
+    await this.assertResponsiveWorks(
+      document.body,
+      elPlayground
+    );
+
+    elPlayground.innerHTML = '<div class="responsive-test-child"></div>';
+
+    await this.assertResponsiveWorks(
+      elPlayground,
+      elPlayground.querySelector('.responsive-test-child')
+    );
+  }
+
+  async assertResponsiveWorks(
+    elResponsive: HTMLElement,
+    elPlayground: HTMLElement
+  ) {
+    let elTester = this.generateResponsiveTester(elPlayground);
 
     await sleep();
 
     this.assertPlaygroundResponsiveEquals(
       this.app.services.responsive.responsiveSizeCurrent,
-      this.app.layout.page
+      elPlayground
     )
 
     let breakPoints = Object.keys(this.app.layout.vars.displayBreakpoints);
@@ -36,28 +55,34 @@ export default class ResponsiveTest extends UnitTest {
 
       this.assertPlaygroundResponsiveEquals(
         size,
-        this.app.layout.page
+        elPlayground
       );
     }
+
+    elTester.remove();
   }
 
-  assertPlaygroundResponsiveEquals(size: string, page: RenderNode) {
+  assertPlaygroundResponsiveEquals(size: string, elPlayground: HTMLElement) {
     this.assertEquals(getComputedStyle(
-        page.el.querySelector(`.test-responsive-${size}`)
+        elPlayground.querySelector(`.test-responsive-${size}`)
       ).backgroundColor,
       'rgb(0, 128, 0)',
       `The test zone ${size} is green`
     );
   }
 
-  generatePlayground() {
-    let html = '';
+  generateResponsiveTester(elPlayground: HTMLElement): HTMLElement {
+    let html = '<div class="responsive-tester">';
     let breakPoints = Object.keys(this.app.layout.vars.displayBreakpoints);
 
     for (let size of breakPoints) {
       html += `<div class="test-responsive test-responsive-${size}">${size}</div>`
     }
 
-    this.app.layout.pageFocused.el.querySelector('#test-playground').innerHTML = html;
+    html += '</div>';
+
+    appendInnerHtml(elPlayground, html);
+
+    return elPlayground.querySelector('.responsive-tester');
   }
 }
