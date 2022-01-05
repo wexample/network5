@@ -93,7 +93,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
         'The adaptive JS has applied green'
       );
 
-      let assertTestComponentIntegrity = (
+      let assertTestComponentAssets = (
         el: HTMLElement,
         prefix: string = '',
         suffix: string = ''
@@ -113,7 +113,13 @@ export default class AdaptiveRenderingTest extends UnitTest {
           'rgb(0, 128, 0)',
           'The adaptive JS has applied green'
         );
+      };
 
+      let assertTestComponentIntegrity = (
+        el: HTMLElement,
+        prefix: string = '',
+        suffix: string = ''
+      ) => {
         this.assertEquals(
           pageFocused.el.querySelector(
             `.${prefix}-string-translated-server${suffix}`
@@ -135,8 +141,27 @@ export default class AdaptiveRenderingTest extends UnitTest {
         '.adaptive-page-test-component'
       ) as HTMLElement;
 
-      assertTestComponentIntegrity(elComponent, 'test-component');
-      assertTestComponentIntegrity(elComponent, 'test-component', '-2');
+      assertTestComponentIntegrity(
+        elComponent,
+        'test-component'
+      );
+
+      assertTestComponentIntegrity(
+        elComponent,
+        'test-component',
+        '-2'
+      );
+
+      assertTestComponentAssets(
+        elComponent,
+        'test-component'
+      );
+
+      assertTestComponentAssets(
+        elComponent,
+        'test-component',
+        '-2'
+      );
 
       let assertVueUpdateSupportedByComponent = async () => {
         // Event changes vue content.
@@ -183,9 +208,19 @@ export default class AdaptiveRenderingTest extends UnitTest {
       await assertVueUpdateSupportedByComponent();
       await assertVueUpdateSupportedByComponent();
 
-      let elVue = pageFocused.el.querySelector('.adaptive-page-test-vue') as HTMLElement;
-      assertTestComponentIntegrity(elVue, 'test-vue');
-      assertTestComponentIntegrity(elVue, 'test-vue', '-2');
+      let assertTestVueIntegrity = (
+        suffix: string = ''
+      ) => {
+        assertTestComponentIntegrity(
+          pageFocused.el.querySelector('.adaptive-page-test-vue') as HTMLElement,
+          'test-vue',
+          suffix ? `-${suffix}` : ''
+        );
+      };
+
+      assertTestVueIntegrity();
+      assertTestVueIntegrity('2');
+      assertTestVueIntegrity('3');
 
       // Close modal.
       await modal.close();
