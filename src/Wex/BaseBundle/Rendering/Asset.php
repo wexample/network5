@@ -2,6 +2,7 @@
 
 namespace App\Wex\BaseBundle\Rendering;
 
+use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\PathHelper;
 use App\Wex\BaseBundle\Rendering\RenderNode\RenderNode;
 use App\Wex\BaseBundle\Service\AssetsService;
@@ -88,18 +89,18 @@ class Asset extends RenderDataGenerator
         $info = pathinfo($path);
         $this->type = $info['extension'];
 
-        $this->path = '/'.PathHelper::relativeTo(
-            $path,
-            $basePath
-        );
+        $this->path = FileHelper::FOLDER_SEPARATOR.PathHelper::relativeTo(
+                $path,
+                $basePath
+            );
 
         // Remove the base part before build/{type}/ folder.
-        $pathWithoutExt = dirname($this->path).'/'.$info['filename'];
+        $pathWithoutExt = dirname($this->path).FileHelper::FOLDER_SEPARATOR.$info['filename'];
 
         $this->id = PathHelper::relativeTo(
             $pathWithoutExt,
-            '/'.AssetsService::DIR_BUILD.
-            $this->type.'/'
+            FileHelper::FOLDER_SEPARATOR.AssetsService::DIR_BUILD.
+            $this->type.FileHelper::FOLDER_SEPARATOR
         );
     }
 
@@ -117,7 +118,9 @@ class Asset extends RenderDataGenerator
     }
 
     #[Pure]
-    public function getIsReadyForServerSideRendering(string $colorScheme, bool $useJs): bool
+    public function getIsReadyForServerSideRendering(
+        string $colorScheme,
+        bool $useJs): bool
     {
         if ($this->isServerSideRendered())
         {
