@@ -5,6 +5,7 @@ import MixinsAppService from '../class/MixinsAppService';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import { appendInnerHtml } from '../helpers/Dom';
 import Component from '../class/Component';
+import DefaultVue from '../vue/default.vue';
 
 export default class VueService extends AppService {
   protected componentRegistered: any = {};
@@ -46,28 +47,14 @@ export default class VueService extends AppService {
 
     return {
       vue: {
+        extends: DefaultVue,
+
         props: {
           app: {
             default: () => {
               return app;
             },
           },
-          rootComponent: {
-            type: Object,
-            default: null
-          },
-          translations: {
-            type: Object,
-            default: null
-          },
-        },
-
-        updated() {
-          this.rootComponent.forEachTreeRenderNode((renderNode) => {
-            if (this === this.$root) {
-              renderNode.updateMounting();
-            }
-          });
         },
       },
     };
@@ -110,11 +97,15 @@ export default class VueService extends AppService {
   }
 
   createVueAppForComponent(component: Component) {
-    let vue = this.initComponent(component.renderData.options.path, component);
+    let vue = this.initComponent(
+      component.renderData.options.path,
+      component
+    );
 
-    let app = this.createApp(vue, {
-      ...component.options.props
-    });
+    let app = this.createApp(
+      vue,
+      component.options.props
+    );
 
     Object.entries(this.componentRegistered).forEach((data) => {
       app.component(data[0], data[1]);
@@ -142,7 +133,7 @@ export default class VueService extends AppService {
         vueClassDefinition.template = document.getElementById(id);
 
         vueClassDefinition.props = {
-          ...vueClassDefinition.props || {},
+          ...vueClassDefinition.props,
           ...{
             rootComponent: {
               type: Object,

@@ -17,7 +17,7 @@ export default class AssetsService extends AppService {
 
   public static UPDATE_FILTER_REJECT = 'reject';
 
-  public assetsRegistry: any = { css: {}, js: {} };
+  public assetsRegistry: any = {css: {}, js: {}};
 
   public jsAssetsPending: { [key: string]: AssetInterface } = {};
 
@@ -59,17 +59,17 @@ export default class AssetsService extends AppService {
     });
   }
 
-  appendAsset(asset: AssetInterface) {
+  appendAsset(asset: AssetInterface): Promise<AssetsInterface> {
     return new Promise(async (resolve) => {
-      // Storing resolver allow javascript to be,
-      // marked as loaded asynchronously.
-      asset.resolver = resolve;
-
       // Avoid currently and already loaded.
       if (!asset.active) {
         // Active said that asset should be loaded,
         // event loading is not complete or queue is terminated.
         asset.active = true;
+
+        // Storing resolver allow javascript to be,
+        // marked as loaded asynchronously.
+        asset.resolver = resolve;
 
         if (asset.type === 'js') {
           // Browsers does not load twice the JS file content.
@@ -90,6 +90,8 @@ export default class AssetsService extends AppService {
       resolve(asset);
     }).then((asset: AssetInterface) => {
       this.setAssetLoaded(asset);
+
+      return asset;
     });
   }
 
@@ -112,7 +114,6 @@ export default class AssetsService extends AppService {
 
   async appendAssets(assetsCollection) {
     return new Promise(async (resolveAll) => {
-      let count: number = 0;
       let assets = this.assetsInCollection(assetsCollection);
 
       if (!assets.length) {
@@ -120,18 +121,16 @@ export default class AssetsService extends AppService {
         return;
       }
 
-      assets.forEach((asset) => {
+      let count: number = 0;
+      assets.forEach((asset: AssetsInterface) => {
         count++;
 
-        new Promise(async (resolve) => {
-          this.appendAsset(asset).then((asset) => {
-            count--;
-            resolve(asset);
+        this.appendAsset(asset).then(() => {
+          count--;
 
-            if (count === 0) {
-              resolveAll(assetsCollection);
-            }
-          });
+          if (count === 0) {
+            resolveAll(assetsCollection);
+          }
         });
       });
     });
