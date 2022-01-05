@@ -5,19 +5,27 @@ export default class LocaleService extends AppService {
   registerMethods() {
     return {
       renderNode: {
-        trans(string: string = '', args: {} = {}) {
-          return this.app.services.locale.trans(string, args, {
+        trans(string: string = '', args: {} = {}, catalog?: object) {
+          catalog = catalog || {
             ...this.app.layout.translations,
             ...this.translations,
-          });
+          };
+
+          return this.app.services.locale.trans(
+            string,
+            args,
+            catalog
+          );
         },
       },
       vue: {
         methods: {
-          trans() {
-            return this.rootComponent.trans.apply(
+          trans(string: string = '', args: {} = {}, catalog?: object) {
+            return this.rootComponent.trans.call(
               this.rootComponent,
-              arguments
+              string,
+              args,
+              catalog || this.translations
             );
           },
         },

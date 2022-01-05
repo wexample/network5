@@ -31,7 +31,6 @@ class VueExtension extends AbstractExtension
     }
 
     public function __construct(
-        private AdaptiveResponseService $adaptiveResponseService,
         private VueService $vueService
     ) {
     }
@@ -77,28 +76,16 @@ class VueExtension extends AbstractExtension
     public function vue(
         Environment $env,
         string $path,
-        ?array $options = [],
+        ?array $props = [],
         ?array $twigContext = []
     ): string {
-        if ($this->vueService->isRenderPassInVueContext())
-        {
-            return $this->vueInclude(
-                $env,
-                $path,
-                $options,
-                $twigContext
-            );
-        }
-        else
-        {
-            return $this->vueService->vueRender(
-                $env,
-                $path,
-                $options,
-                $twigContext,
-                true
-            );
-        }
+        return $this->vueService->vueRender(
+            $env,
+            $path,
+            $props,
+            $twigContext,
+            !$this->vueService->isRenderPassInVueContext()
+        );
     }
 
     public function vueRenderTemplate(): string
@@ -115,13 +102,13 @@ class VueExtension extends AbstractExtension
     public function vueRequire(
         Environment $env,
         string $path,
-        ?array $options = []
+        ?array $props = []
     ): void {
         // Same behavior but no output tag.
         $this->vueInclude(
             $env,
             $path,
-            $options
+            $props
         );
     }
 
@@ -131,13 +118,13 @@ class VueExtension extends AbstractExtension
     public function vueInclude(
         Environment $env,
         string $path,
-        ?array $attributes = [],
+        ?array $props = [],
         ?array $twigContext = []
     ): string {
         return $this->vueService->vueRender(
             $env,
             $path,
-            $attributes,
+            $props,
             $twigContext
         );
     }
@@ -145,8 +132,7 @@ class VueExtension extends AbstractExtension
     public function vueKey(
         string $key,
         ?string $filters = null
-    ): string
-    {
+    ): string {
         return '{{ '.$key.($filters ? ' | '.$filters : '').' }}';
     }
 }

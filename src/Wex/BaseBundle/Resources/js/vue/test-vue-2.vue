@@ -1,8 +1,9 @@
 <script>
-import DefaultVue from './default';
 
 export default {
-  extends: DefaultVue,
+  components: {
+    'vue-test-vue-3': 'vue/test-vue-3',
+  },
 
   data() {
     return {

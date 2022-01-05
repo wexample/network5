@@ -57,6 +57,8 @@ class VueService
         ];
 
         $outputBody = '';
+
+        // TODO DETECT
         if ($root)
         {
             $rootComponent = $this
@@ -104,7 +106,7 @@ class VueService
 
             $this->translator->setDomainFromPath(
                 Translator::DOMAIN_TYPE_VUE,
-                $rootComponent->options['path']
+                $vue->path
             );
 
             $template = DomHelper::buildTag(
@@ -118,6 +120,8 @@ class VueService
                     $twigContext + $options
                 )
             );
+
+            $rootComponent->translations['INCLUDE|' . $vue->name] = $this->translator->transFilter('@vue::*');
 
             $this->translator->revertDomain(
                 Translator::DOMAIN_TYPE_VUE

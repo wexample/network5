@@ -1,15 +1,15 @@
 import AppChild from './AppChild';
 
 export default abstract class extends AppChild {
-  assertEquals(value, equals, message?: string) {
+  assertEquals(value: any, expected: any, message?: string) {
     let styleDefault = 'border-radius:10rem;';
-    message = message || equals;
+    message = message || expected;
 
-    if (value !== equals) {
+    if (value !== expected) {
       console.log(
         '%c Fail ',
         `background: #FFCCCC; color: #880000; ${styleDefault}`,
-        `Assertion failed : ${value} is not equal to ${equals}. ${message}`
+        `Assertion failed, ${value} is not equal to expected value : ${expected}. ${message}`
       );
     } else {
       console.log(

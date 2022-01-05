@@ -1,9 +1,6 @@
 <script>
-import DefaultVue from './default';
 
 export default {
-  extends: DefaultVue,
-
   components: {
     'vue-test-vue-2': 'vue/test-vue-2',
   },
@@ -12,6 +9,7 @@ export default {
     testVuePropBool: Boolean,
     testVuePropObject: Object,
     testVuePropArray: Array,
+    translations: Object,
   },
 
   data() {

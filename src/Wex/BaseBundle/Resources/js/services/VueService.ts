@@ -11,7 +11,10 @@ export default class VueService extends AppService {
 
   public static dependencies: typeof AppService[] = [PagesService];
 
-  protected globalMixin: any;
+  protected globalMixin: object = {
+    props: {},
+    methods: {},
+  };
 
   protected renderedTemplates: { [key: string]: boolean } = {};
 
@@ -24,18 +27,6 @@ export default class VueService extends AppService {
             registry.assets === MixinsAppService.LOAD_STATUS_COMPLETE &&
             registry.pages === MixinsAppService.LOAD_STATUS_COMPLETE
           ) {
-            let app = this.app;
-
-            this.globalMixin = {
-              props: {
-                app: {
-                  default: () => {
-                    return app;
-                  },
-                },
-              },
-            };
-
             this.app.mix(this.globalMixin, 'vue');
 
             return;
@@ -45,6 +36,38 @@ export default class VueService extends AppService {
 
         loadLayoutRenderData(renderData: LayoutInterface) {
           this.services.vue.addTemplatesHtml(renderData.vueTemplates);
+        },
+      },
+    };
+  }
+
+  registerMethods() {
+    let app = this.app;
+
+    return {
+      vue: {
+        props: {
+          app: {
+            default: () => {
+              return app;
+            },
+          },
+          rootComponent: {
+            type: Object,
+            default: null
+          },
+          translations: {
+            type: Object,
+            default: null
+          },
+        },
+
+        updated() {
+          this.rootComponent.forEachTreeRenderNode((renderNode) => {
+            if (this === this.$root) {
+              renderNode.updateMounting();
+            }
+          });
         },
       },
     };
@@ -60,7 +83,7 @@ export default class VueService extends AppService {
 
   inherit(vueComponent, rootComponent: Component) {
     let componentsFinal = vueComponent.components || {};
-    let extend = { components: {} };
+    let extend = {components: {}};
 
     if (vueComponent.extends) {
       extend = this.inherit(vueComponent.extends, rootComponent);
@@ -118,12 +141,19 @@ export default class VueService extends AppService {
 
         vueClassDefinition.template = document.getElementById(id);
 
-        vueClassDefinition.props = vueClassDefinition.props || {};
-
-        vueClassDefinition.props.rootComponent = {
-          type:Object,
-          default:rootComponent
-        };
+        vueClassDefinition.props = {
+          ...vueClassDefinition.props || {},
+          ...{
+            rootComponent: {
+              type: Object,
+              default: rootComponent
+            },
+            translations: {
+              type: Object,
+              default: rootComponent.translations[`INCLUDE|${comName}`]
+            },
+          }
+        }
 
         vueClassDefinition.mixins = (vueClassDefinition.mixins || []).concat([
           this.globalMixin,
