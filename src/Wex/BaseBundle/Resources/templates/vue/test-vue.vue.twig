@@ -13,6 +13,9 @@
   {{ '@vue::string.server_side' | trans }}
 </li>
 <li>
+  <span class="test-vue-string-translated-server">{{ '@vue::string.server_side' | trans }}</span>
+</li>
+<li>
   <span class="test-vue-string-translated-client">{{ 'translatedStringClientSide' | vue_key }}</span>
 </li>
 <li v-if="!hidePartOfDomContainingComponent">

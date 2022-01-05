@@ -2,7 +2,6 @@ import { createApp } from 'vue/dist/vue.esm-bundler';
 import AppService from '../class/AppService';
 import PagesService from './PagesService';
 import MixinsAppService from '../class/MixinsAppService';
-import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import { appendInnerHtml } from '../helpers/Dom';
 import Component from '../class/Component';
@@ -26,13 +25,9 @@ export default class VueService extends AppService {
             registry.pages === MixinsAppService.LOAD_STATUS_COMPLETE
           ) {
             let app = this.app;
+
             this.globalMixin = {
               props: {
-                rootComponent: {
-                  default: () => {
-                    return this;
-                  },
-                },
                 app: {
                   default: () => {
                     return app;
@@ -63,12 +58,12 @@ export default class VueService extends AppService {
     return path.split('/').join('-').toLowerCase();
   }
 
-  inherit(vueComponent) {
+  inherit(vueComponent, rootComponent: Component) {
     let componentsFinal = vueComponent.components || {};
     let extend = { components: {} };
 
     if (vueComponent.extends) {
-      extend = this.inherit(vueComponent.extends);
+      extend = this.inherit(vueComponent.extends, rootComponent);
     }
 
     let componentsStrings = {
@@ -81,7 +76,7 @@ export default class VueService extends AppService {
       // Prevent to initialize already converted object.
       if (typeof data[1] === 'string') {
         if (!this.componentRegistered[data[1]]) {
-          vueComponent.components[data[0]] = this.initComponent(data[1]);
+          vueComponent.components[data[0]] = this.initComponent(data[1], rootComponent);
         } else {
           vueComponent.components[data[0]] = this.componentRegistered[data[1]];
         }
@@ -92,13 +87,10 @@ export default class VueService extends AppService {
   }
 
   createVueAppForComponent(component: Component) {
-    let vue = this.initComponent(component.renderData.options.path);
+    let vue = this.initComponent(component.renderData.options.path, component);
 
     let app = this.createApp(vue, {
-      ...component.options.props,
-      ...{
-        rootComponent: component,
-      },
+      ...component.options.props
     });
 
     Object.entries(this.componentRegistered).forEach((data) => {
@@ -108,7 +100,7 @@ export default class VueService extends AppService {
     return app;
   }
 
-  initComponent(className) {
+  initComponent(className, rootComponent: Component) {
     if (!this.componentRegistered[className]) {
       let vueClassDefinition = this.app.getBundleClassDefinition(className);
 
@@ -126,6 +118,13 @@ export default class VueService extends AppService {
 
         vueClassDefinition.template = document.getElementById(id);
 
+        vueClassDefinition.props = vueClassDefinition.props || {};
+
+        vueClassDefinition.props.rootComponent = {
+          type:Object,
+          default:rootComponent
+        };
+
         vueClassDefinition.mixins = (vueClassDefinition.mixins || []).concat([
           this.globalMixin,
         ]);
@@ -138,7 +137,7 @@ export default class VueService extends AppService {
 
         this.componentRegistered[className] = vueClassDefinition;
 
-        this.inherit(vueClassDefinition);
+        this.inherit(vueClassDefinition, rootComponent);
       }
 
       return this.componentRegistered[className];

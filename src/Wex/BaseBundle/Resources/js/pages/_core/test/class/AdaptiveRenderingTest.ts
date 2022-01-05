@@ -2,6 +2,7 @@ import UnitTest from '../../../../class/UnitTest';
 import ModalComponent from '../../../../components/modal';
 import LayoutInterface from '../../../../interfaces/RenderData/LayoutInterface';
 import { sleep } from '../../../../helpers/Time';
+import { toScreamingSnake } from "../../../../helpers/String";
 
 export default class AdaptiveRenderingTest extends UnitTest {
   public getTestMethods() {
@@ -92,7 +93,11 @@ export default class AdaptiveRenderingTest extends UnitTest {
         'The adaptive JS has applied green'
       );
 
-      let assertTestComponentIntegrity = (el, suffix: string = '') => {
+      let assertTestComponentIntegrity = (
+        el: HTMLElement,
+        prefix: string = '',
+        suffix: string = ''
+      ) => {
         this.assertEquals(
           getComputedStyle(
             pageFocused.el.querySelector(`.test-component-test-css${suffix}`)
@@ -111,26 +116,27 @@ export default class AdaptiveRenderingTest extends UnitTest {
 
         this.assertEquals(
           pageFocused.el.querySelector(
-            `.test-component-string-translated${suffix}`
+            `.${prefix}-string-translated-server${suffix}`
           ).innerHTML,
-          `SERVER_SIDE_COMPONENT_TRANSLATION${suffix}`,
-          `Test string equals "SERVER_SIDE_COMPONENT_TRANSLATION"`
+          `SERVER_SIDE_${toScreamingSnake(prefix)}_TRANSLATION${suffix}`,
+          `Test server side translation`
         );
 
         this.assertEquals(
           pageFocused.el.querySelector(
-            `.test-component-string-translated-client${suffix}`
+            `.${prefix}-string-translated-client${suffix}`
           ).innerHTML,
-          `CLIENT_SIDE_COMPONENT_TRANSLATION${suffix}`,
-          `Test string equals "CLIENT_SIDE_COMPONENT_TRANSLATION"`
+          `CLIENT_SIDE_${toScreamingSnake(prefix)}_TRANSLATION${suffix}`,
+          `Test client side translation`
         );
       };
 
       let elComponent = pageFocused.el.querySelector(
         '.adaptive-page-test-component'
-      );
-      assertTestComponentIntegrity(elComponent);
-      assertTestComponentIntegrity(elComponent, '-2');
+      ) as HTMLElement;
+
+      assertTestComponentIntegrity(elComponent, 'test-component');
+      assertTestComponentIntegrity(elComponent, 'test-component', '-2');
 
       let assertVueUpdateSupportedByComponent = async () => {
         // Event changes vue content.
@@ -177,9 +183,9 @@ export default class AdaptiveRenderingTest extends UnitTest {
       await assertVueUpdateSupportedByComponent();
       await assertVueUpdateSupportedByComponent();
 
-      let elVue = pageFocused.el.querySelector('.adaptive-page-test-vue');
-      assertTestComponentIntegrity(elVue);
-      assertTestComponentIntegrity(elVue, '-2');
+      let elVue = pageFocused.el.querySelector('.adaptive-page-test-vue') as HTMLElement;
+      assertTestComponentIntegrity(elVue, 'test-vue');
+      assertTestComponentIntegrity(elVue, 'test-vue', '-2');
 
       // Close modal.
       await modal.close();

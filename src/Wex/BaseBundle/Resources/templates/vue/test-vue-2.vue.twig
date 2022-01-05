@@ -3,4 +3,8 @@
 <li>
   {{ '@vue::string.server_side' | trans }}
 </li>
+<li>
+  <span class="test-vue-string-translated-server-2">{{ '@vue::string.server_side' | trans }}</span>
+  <span class="test-vue-string-translated-client-2">{{ 'translatedStringClientSide2' | vue_key }}</span>
+</li>
 </ul>
