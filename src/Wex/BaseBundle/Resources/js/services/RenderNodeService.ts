@@ -9,8 +9,8 @@ export class ComponentsServiceEvents {
 }
 
 export default abstract class RenderNodeService extends AppService {
-  pages: {};
-  services: AppInterface;
+  public pages: {};
+  public services: AppInterface;
 
   public async prepareRenderData(renderData: RenderDataInterface) {
     renderData.requestOptions = renderData.requestOptions || {};
