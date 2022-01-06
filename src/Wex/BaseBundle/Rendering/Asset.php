@@ -56,6 +56,24 @@ class Asset extends RenderDataGenerator
 
     public const PRELOAD_NONE = 'none';
 
+    public const USAGE_ANIMATION = 'animation';
+
+    public const USAGE_COLOR_SCHEME = 'color-scheme';
+
+    public const USAGE_INITIAL = 'initial';
+
+    public const USAGE_RESPONSIVE = 'responsive';
+
+    public const USAGE_SHAPE = 'shape';
+
+    public const USAGES = [
+        self::USAGE_ANIMATION,
+        self::USAGE_COLOR_SCHEME,
+        self::USAGE_INITIAL,
+        self::USAGE_RESPONSIVE,
+        self::USAGE_SHAPE,
+    ];
+
     public bool $active = false;
 
     public string $id;
@@ -77,6 +95,8 @@ class Asset extends RenderDataGenerator
     public string $type;
 
     public int $filesize;
+
+    public string $usage;
 
     #[NoReturn]
     public function __construct(
@@ -168,16 +188,17 @@ class Asset extends RenderDataGenerator
     {
         return $this->serializeVariables([
             'active',
+            'colorScheme',
             'filesize',
             'id',
             'initial',
             'media',
             'path',
             'preload',
-            'rendered',
             'responsive',
-            'colorScheme',
+            'rendered',
             'type',
+            'usage',
         ]);
     }
 }
