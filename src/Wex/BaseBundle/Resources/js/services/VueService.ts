@@ -5,7 +5,6 @@ import MixinsAppService from '../class/MixinsAppService';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import { appendInnerHtml } from '../helpers/Dom';
 import Component from '../class/Component';
-import DefaultVue from '../vue/default.vue';
 
 export default class VueService extends AppService {
   protected componentRegistered: any = {};
@@ -14,7 +13,16 @@ export default class VueService extends AppService {
 
   protected globalMixin: object = {
     props: {},
+
     methods: {},
+
+    updated() {
+      this.rootComponent.forEachTreeRenderNode((renderNode) => {
+        if (this === this.$root) {
+          renderNode.updateMounting();
+        }
+      });
+    },
   };
 
   protected renderedTemplates: { [key: string]: boolean } = {};
@@ -47,8 +55,6 @@ export default class VueService extends AppService {
 
     return {
       vue: {
-        extends: DefaultVue,
-
         props: {
           app: {
             default: () => {
