@@ -20,7 +20,7 @@ export default class DebugService extends AppService {
   registerHooks() {
     return {
       app: {
-        async loadLayoutRenderData() {
+        async hookLoadLayoutRenderData() {
           this.app.services.debug.init();
         },
       },

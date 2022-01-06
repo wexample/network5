@@ -91,7 +91,7 @@ export default class extends AsyncConstructor {
 
   async loadLayoutRenderData(renderData: RenderDataInterface): Promise<any> {
     await this.services.mixins.invokeUntilComplete(
-      'loadLayoutRenderData',
+      'hookLoadLayoutRenderData',
       'app',
       [renderData]
     );

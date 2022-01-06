@@ -26,7 +26,7 @@ export default class ComponentsService extends RenderNodeService {
   registerHooks() {
     return {
       app: {
-        async loadLayoutRenderData(renderData: LayoutInterface, registry: any) {
+        async hookLoadLayoutRenderData(renderData: LayoutInterface, registry: any) {
           if (registry.assets !== MixinsAppService.LOAD_STATUS_COMPLETE) {
             return MixinsAppService.LOAD_STATUS_WAIT;
           }

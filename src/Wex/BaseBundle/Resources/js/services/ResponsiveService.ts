@@ -25,7 +25,7 @@ export default class ResponsiveService extends AppService {
           );
         },
 
-        async loadLayoutRenderData() {
+        async hookLoadLayoutRenderData() {
           let responsiveService = this.services.responsive;
 
           window.addEventListener(

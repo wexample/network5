@@ -20,7 +20,7 @@ export default class PagesService extends RenderNodeService {
   registerHooks() {
     return {
       app: {
-        async loadLayoutRenderData(renderData: LayoutInterface, registry: any) {
+        async hookLoadLayoutRenderData(renderData: LayoutInterface, registry: any) {
           if (
             registry.components === MixinsAppService.LOAD_STATUS_COMPLETE &&
             registry.responsive === MixinsAppService.LOAD_STATUS_COMPLETE &&

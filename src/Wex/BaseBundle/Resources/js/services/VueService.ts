@@ -43,7 +43,7 @@ export default class VueService extends AppService {
           return MixinsAppService.LOAD_STATUS_WAIT;
         },
 
-        loadLayoutRenderData(renderData: LayoutInterface) {
+        hookLoadLayoutRenderData(renderData: LayoutInterface) {
           this.services.vue.addTemplatesHtml(renderData.vueTemplates);
         },
       },
