@@ -18,8 +18,7 @@ export default class extends Page {
   updateCurrentResponsiveDisplay() {
     super.updateCurrentResponsiveDisplay();
 
-    let responsiveMixin = this.services.responsive;
-    let current = responsiveMixin.responsiveSizeCurrent;
+    let current = this.app.layout.responsiveSizeCurrent;
 
     document
       .querySelectorAll('.display-breakpoint')

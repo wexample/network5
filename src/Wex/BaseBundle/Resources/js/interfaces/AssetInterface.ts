@@ -2,6 +2,8 @@ export default interface AssetsInterface {
   // Defines that assets should be rendered
   // even the loading process is not finished.
   active: boolean;
+  colorScheme?: string;
+  filesize: number;
   el: HTMLElement;
   id: string;
   initial: string;
@@ -17,6 +19,6 @@ export default interface AssetsInterface {
   // so browser will not load it again
   // if we append it again to document.
   rendered: boolean;
-  colorScheme?: string;
   type: string;
+  usage?: string;
 }
