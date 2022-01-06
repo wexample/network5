@@ -24,7 +24,7 @@ export default abstract class Component extends RenderNode {
     await super.init();
 
     await this.services.mixins.invokeUntilComplete(
-      'initComponent',
+      'hookInitComponent',
       'component',
       [this]
     );

@@ -17,7 +17,7 @@ export default class ResponsiveService extends AppService {
   registerHooks() {
     return {
       app: {
-        init() {
+        hookInit() {
           let responsiveService = this.services.responsive;
 
           this.services.assets.updateFilters.push(

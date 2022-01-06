@@ -144,7 +144,7 @@ export default class extends AsyncConstructor {
 
     // Init mixins.
     return this.services.mixins.invokeUntilComplete(
-      'init',
+      'hookInit',
       'app',
       [],
       undefined,

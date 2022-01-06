@@ -34,7 +34,7 @@ export default class ColorSchemeService extends AppService {
   registerHooks() {
     return {
       app: {
-        init(registry: any) {
+        hookInit(registry: any) {
           if (registry.assets === MixinsAppService.LOAD_STATUS_COMPLETE) {
             let colorSchemeService = this.services.colorScheme;
 

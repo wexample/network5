@@ -36,7 +36,7 @@ export default class AssetsService extends AppService {
   registerHooks() {
     return {
       app: {
-        init() {
+        hookInit() {
           this.app.services.assets.appInit();
         },
 

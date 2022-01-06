@@ -5,7 +5,7 @@ export default class RoutingService extends AppService {
   registerHooks() {
     return {
       app: {
-        init() {
+        hookInit() {
           Routing.setRoutingData(
             require('../../../../../../public/js/fos_js_routes.json')
           );

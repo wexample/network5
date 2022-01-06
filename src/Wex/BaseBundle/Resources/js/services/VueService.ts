@@ -30,7 +30,7 @@ export default class VueService extends AppService {
   registerHooks(): { app?: {}; page?: {} } {
     return {
       app: {
-        init(registry) {
+        hookInit(registry) {
           // Wait for vue to be loaded.
           if (
             registry.assets === MixinsAppService.LOAD_STATUS_COMPLETE &&
