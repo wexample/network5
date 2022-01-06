@@ -66,7 +66,11 @@ export default class extends RenderNode {
 
     await this.app.loadAndInitServices(this.getPageLevelMixins());
 
-    await this.services.mixins.invokeUntilComplete('initPage', 'page', [this]);
+    await this.services.mixins.invokeUntilComplete(
+      'hookInitPage',
+      'page',
+      [this]
+    );
 
     if (this.parentRenderNode instanceof PageManagerComponent) {
       this.parentRenderNode.setPage(this);

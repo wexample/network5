@@ -45,7 +45,7 @@ export default class ComponentsService extends RenderNodeService {
       },
 
       page: {
-        async initPage(page: Page) {
+        async hookInitPage(page: Page) {
           await this.createRenderDataComponents(page.renderData, page);
         },
       },

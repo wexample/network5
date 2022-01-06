@@ -15,9 +15,13 @@ export default abstract class RenderNodeService extends AppService {
   public async prepareRenderData(renderData: RenderDataInterface) {
     renderData.requestOptions = renderData.requestOptions || {};
 
-    await this.services.mixins.invokeUntilComplete('prepareRenderData', 'app', [
-      renderData,
-    ]);
+    await this.services.mixins.invokeUntilComplete(
+      'prepareRenderData',
+      'app',
+      [
+        renderData,
+      ]
+    );
 
     // Do not deep freeze as sub-parts might be prepared later.
     Object.freeze(renderData);
