@@ -16,7 +16,7 @@ export default abstract class RenderNodeService extends AppService {
     renderData.requestOptions = renderData.requestOptions || {};
 
     await this.services.mixins.invokeUntilComplete(
-      'prepareRenderData',
+      'hookPrepareRenderData',
       'app',
       [
         renderData,

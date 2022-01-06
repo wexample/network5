@@ -40,7 +40,7 @@ export default class AssetsService extends AppService {
           this.app.services.assets.appInit();
         },
 
-        async prepareRenderData(renderData: RenderDataInterface) {
+        async hookPrepareRenderData(renderData: RenderDataInterface) {
           renderData.assets = this.registerAssetsInCollection(
             renderData.assets
           );
