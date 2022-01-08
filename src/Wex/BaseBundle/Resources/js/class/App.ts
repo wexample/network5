@@ -167,20 +167,12 @@ export default class extends AsyncConstructor {
     return arrayUnique(services) as typeof AppService[];
   }
 
-  mix(parentDest, group, split = false) {
+  mix(dest: any, group: string) {
     Object.values(this.services).forEach((service: AppService) => {
       let methods = service.registerMethods();
 
       if (methods && methods[group]) {
-        let dest;
         let toMix = methods[group];
-
-        if (split) {
-          dest = {};
-          parentDest[service.name] = dest;
-        } else {
-          dest = parentDest;
-        }
 
         // Use a "one level deep merge" to allow mix groups of methods.
         for (let i in toMix) {
@@ -194,7 +186,7 @@ export default class extends AsyncConstructor {
           }
           // Methods, bind it to main object.
           else if (typeof value === 'function') {
-            dest[i] = toMix[i].bind(parentDest);
+            dest[i] = toMix[i].bind(dest);
           }
           // Override others.
           else {
