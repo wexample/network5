@@ -238,7 +238,8 @@ class AssetsService
 
         if ($asset = $this->addAsset(
             $assetPathFull,
-            $renderNode
+            $renderNode,
+            Asset::USAGE_INITIAL
         ))
         {
             $output[] = $asset;
@@ -261,7 +262,11 @@ class AssetsService
                 ]
             );
 
-            if ($asset = $this->addAsset($assetPathFull, $renderNode))
+            if ($asset = $this->addAsset(
+                $assetPathFull,
+                $renderNode,
+                Asset::USAGE_RESPONSIVE
+            ))
             {
                 $asset->responsive = $breakpointName;
                 $asset->media = 'screen and (min-width:'.$minWidth.'px)'.
@@ -319,7 +324,8 @@ class AssetsService
      */
     public function addAsset(
         string $pathRelative,
-        RenderNode $renderNode
+        RenderNode $renderNode,
+        string $usage
     ): ?Asset {
         $pathRelativeToPublic = self::DIR_BUILD.$pathRelative;
         if (!isset($this->registry[$pathRelativeToPublic]))
@@ -339,7 +345,8 @@ class AssetsService
             $asset = new Asset(
                 $pathReal,
                 $renderNode,
-                $this->pathPublic
+                $this->pathPublic,
+                $usage
             );
 
             $this->assetsLoaded[$pathRelative] = $asset;

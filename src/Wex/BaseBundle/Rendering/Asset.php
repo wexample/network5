@@ -96,13 +96,12 @@ class Asset extends RenderDataGenerator
 
     public int $filesize;
 
-    public string $usage;
-
     #[NoReturn]
     public function __construct(
         string $path,
         public RenderNode $renderData,
-        string $basePath
+        string $basePath,
+        public string $usage
     ) {
         $this->filesize = filesize($path);
 
