@@ -84,15 +84,10 @@ export default abstract class Component extends RenderNode {
     this.el.remove();
   }
 
-  loadRenderData(renderData: ComponentInterface) {
-    super.loadRenderData(renderData);
-
-    this.initMode = renderData.initMode;
-  }
-
   mergeRenderData(renderData: ComponentInterface) {
     super.mergeRenderData(renderData);
 
+    this.initMode = renderData.initMode;
     this.options = { ...this.options, ...renderData.options };
     this.callerPage = renderData.requestOptions.callerPage;
   }

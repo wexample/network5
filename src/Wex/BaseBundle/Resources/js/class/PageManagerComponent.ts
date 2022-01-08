@@ -5,8 +5,8 @@ import Page from './Page';
 export default abstract class PageManagerComponent extends Component {
   public page: Page;
 
-  loadRenderData(renderData: ComponentInterface) {
-    super.loadRenderData(renderData);
+  mergeRenderData(renderData: ComponentInterface) {
+    super.mergeRenderData(renderData);
 
     // This component is defined as the manager of
     // rendered page from the request.

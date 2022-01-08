@@ -46,19 +46,15 @@ export default class extends RenderNode {
     this.elOverlay = this.el.querySelector('.page-overlay');
   }
 
-  loadRenderData(renderData: RenderDataPageInterface) {
-    super.loadRenderData(renderData);
-
-    if (this.isInitialPage) {
-      this.app.layout.page = this;
-    }
-  }
-
   mergeRenderData(renderData: RenderDataPageInterface) {
     super.mergeRenderData(renderData);
 
     this.isInitialPage = renderData.isInitialPage;
     this.name = renderData.name;
+
+    if (this.isInitialPage) {
+      this.app.layout.page = this;
+    }
   }
 
   public async init() {

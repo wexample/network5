@@ -7,21 +7,6 @@ import ComponentsService from './ComponentsService';
 export default class AdaptiveService extends AppService {
   public static dependencies: typeof AppService[] = [ComponentsService];
 
-  registerHooks() {
-    return {
-      app: {
-        loadRenderData(renderData: RenderDataInterface, registry) {
-          // Expect all assets to be loaded before triggering events.
-          if (registry.components === MixinsAppService.LOAD_STATUS_COMPLETE) {
-            // TODO Events...
-            return;
-          }
-          return MixinsAppService.LOAD_STATUS_WAIT;
-        },
-      },
-    };
-  }
-
   fetch(
     path: string,
     requestOptions: RequestOptionsInterface = {}
