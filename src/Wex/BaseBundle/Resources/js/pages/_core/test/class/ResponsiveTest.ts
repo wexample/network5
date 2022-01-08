@@ -1,6 +1,7 @@
 import UnitTest from '../../../../class/UnitTest';
 import { sleep } from "../../../../helpers/Time";
 import { appendInnerHtml } from "../../../../helpers/Dom";
+import RenderNode from "../../../../class/RenderNode";
 
 export default class ResponsiveTest extends UnitTest {
   public getTestMethods() {
@@ -11,27 +12,24 @@ export default class ResponsiveTest extends UnitTest {
 
   async testDefault() {
     this.assertTrue(
-      document.body.classList.contains(`responsive-${this.app.services.responsive.responsiveSizeCurrent}`),
-      'The default responsive size has been applied to layout body'
+      document.getElementById('layout')
+        .classList
+        .contains(
+          `responsive-${this.app.layout.responsiveSizeCurrent}`
+        ),
+      `The default responsive size of "responsive-${this.app.layout.responsiveSizeCurrent}" has been applied to layout body`
     )
 
     let elPlayground = this.app.layout.pageFocused.el.querySelector('#test-playground') as HTMLElement;
 
     await this.assertResponsiveWorks(
-      document.body,
+      this.app.layout,
       elPlayground
-    );
-
-    elPlayground.innerHTML = '<div class="responsive-test-child"></div>';
-
-    await this.assertResponsiveWorks(
-      elPlayground,
-      elPlayground.querySelector('.responsive-test-child')
     );
   }
 
   async assertResponsiveWorks(
-    elResponsive: HTMLElement,
+    renderNodeResponsive: RenderNode,
     elPlayground: HTMLElement
   ) {
     let elTester = this.generateResponsiveTester(elPlayground);
@@ -39,14 +37,14 @@ export default class ResponsiveTest extends UnitTest {
     await sleep();
 
     this.assertPlaygroundResponsiveEquals(
-      this.app.services.responsive.responsiveSizeCurrent,
+      renderNodeResponsive.responsiveSizeCurrent,
       elPlayground
     )
 
     let breakPoints = Object.keys(this.app.layout.vars.displayBreakpoints);
 
     for (let size of breakPoints) {
-      await this.app.services.responsive.setResponsive(
+      await renderNodeResponsive.responsiveSet(
         size,
         true
       );

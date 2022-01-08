@@ -5,7 +5,6 @@ import PageManagerComponent from './PageManagerComponent';
 import AppService from './AppService';
 import { ColorSchemeServiceEvents } from '../services/ColorSchemeService';
 import { ResponsiveServiceEvents } from '../services/ResponsiveService';
-import Layout from './Layout';
 import AppInterface from '../interfaces/ServicesRegistryInterface';
 
 export default class extends RenderNode {
@@ -14,9 +13,10 @@ export default class extends RenderNode {
   public name: string;
   protected onChangeResponsiveSizeProxy: Function;
   protected onChangeColorSchemeProxy: Function;
-  public parentRenderNode: Layout | PageManagerComponent;
+  public parentRenderNode: PageManagerComponent;
   protected readonly responsiveDisplays: any = [];
   public renderData: RenderDataPageInterface;
+  public responsiveEnabled: boolean = true;
   public responsiveDisplayCurrent: PageResponsiveDisplay;
   public services: AppInterface;
 
@@ -62,23 +62,28 @@ export default class extends RenderNode {
 
     await this.app.loadAndInitServices(this.getPageLevelMixins());
 
+    // The initial layout is not a page manager component.
+    if (this.parentRenderNode instanceof PageManagerComponent) {
+      this.parentRenderNode.setPage(this);
+    }
+
     await this.services.mixins.invokeUntilComplete(
       'hookInitPage',
       'page',
       [this]
     );
 
-    if (this.parentRenderNode instanceof PageManagerComponent) {
-      this.parentRenderNode.setPage(this);
-    }
-
     this.updateCurrentResponsiveDisplay();
 
-    this.updateLayoutColorScheme(this.services.colorScheme.activeColorScheme);
+    this.updateLayoutColorScheme(this.activeColorScheme);
   }
 
   public async mounted() {
+    await super.mounted();
+
     this.focus();
+
+    this.pageReady();
   }
 
   public focus() {
@@ -124,8 +129,8 @@ export default class extends RenderNode {
   }
 
   updateCurrentResponsiveDisplay() {
-    let previous = this.services.responsive.responsiveSizePrevious;
-    let current = this.services.responsive.responsiveSizeCurrent;
+    let previous = this.responsiveSizePrevious;
+    let current = this.responsiveSizeCurrent;
     let displays = this.responsiveDisplays;
 
     if (previous !== current) {
@@ -154,6 +159,11 @@ export default class extends RenderNode {
     }
   }
 
+  getElWidth(): number {
+    // Initial page uses layout width for responsiveness calculation.
+    return this.isInitialPage ? this.app.layout.getElWidth() : super.getElWidth();
+  }
+
   onChangeResponsiveSize() {
     this.updateCurrentResponsiveDisplay();
   }
@@ -172,5 +182,9 @@ export default class extends RenderNode {
 
   loadingStop() {
     this.elOverlay.style.display = 'none';
+  }
+
+  pageReady() {
+    // To override.
   }
 }

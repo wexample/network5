@@ -18,7 +18,7 @@ export default class AppService extends AppChild {
     return {};
   }
 
-  registerMethods() {
+  registerMethods(object: any, group: string) {
     return {};
   }
 }

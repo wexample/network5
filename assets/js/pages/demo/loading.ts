@@ -10,7 +10,7 @@ export default class extends Page {
     return [ModalsService];
   }
 
-  async mounted() {
+  async pageReady() {
     this.el
       .querySelector('#page-overlay-show')
       .addEventListener('click', () => {

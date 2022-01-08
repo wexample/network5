@@ -1,7 +1,8 @@
 import AssetsService from './AssetsService';
 import AppService from '../class/AppService';
-import AssetsInterface from '../interfaces/AssetInterface';
 import Events from '../helpers/Events';
+import RenderNode from "../class/RenderNode";
+import RenderNodeUsage from "../class/RenderNodeUsage";
 
 export class ResponsiveServiceEvents {
   public static RESPONSIVE_CHANGE_SIZE: string = 'responsive-change-size';
@@ -10,106 +11,125 @@ export class ResponsiveServiceEvents {
 export default class ResponsiveService extends AppService {
   dependencies: [AssetsService];
 
-  public responsiveSizeCurrent: string;
-
-  public responsiveSizePrevious: string;
-
   registerHooks() {
     return {
       app: {
-        hookInit() {
-          let responsiveService = this.services.responsive;
-
-          this.services.assets.updateFilters.push(
-            responsiveService.assetUpdateFilter.bind(responsiveService)
-          );
-        },
-
         async hookLoadLayoutRenderData() {
-          let responsiveService = this.services.responsive;
-
           window.addEventListener(
             Events.RESIZE,
-            async () => await responsiveService.updateResponsive(true)
+            async () => await this.app.layout.responsiveUpdate(
+              true
+            ),
           );
+        },
+      },
 
-          await responsiveService.updateResponsive(true);
+      renderNode: {
+        async hookMounted(renderNode: RenderNode) {
+          if (renderNode.responsiveEnabled) {
+            await renderNode.responsiveUpdate(
+              // Do not propagate as children might not be created.
+              false
+            );
+          }
         },
       },
     };
   }
 
-  async updateResponsive(updateAssets: boolean) {
-    await this.setResponsive(
-      this.detectSize(),
-      updateAssets
-    );
-  }
+  registerMethods(object: any, group: string) {
+    if (!object.responsiveEnabled) {
+      return {};
+    }
 
-  async setResponsive(size: string, updateAssets: boolean) {
-    if (size !== this.responsiveSizeCurrent) {
-      this.responsiveSizePrevious = this.responsiveSizeCurrent;
-      this.responsiveSizeCurrent = size;
+    return {
+      renderNode: {
+        responsiveBreakpointIsSupported(letter: string): boolean {
+          return this.responsiveBreakpointSupported()
+            .hasOwnProperty(
+              letter
+            );
+        },
 
-      if (updateAssets) {
-        await this.app.layout.assetsUpdate();
-
-        // Now change page class.
-        this.updateResponsiveLayoutClass();
-
-        this.services.events.trigger(
-          ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
-          {
-            current: size,
-            previous: this.responsiveSizePrevious,
+        responsiveDetect() {
+          if (!Object.values(this.responsiveBreakpointSupported()).length) {
+            this.el.style.display = 'block';
           }
-        );
-      }
-    }
-  }
 
-  updateResponsiveLayoutClass() {
-    // Remove all responsive class names.
-    let classList = document.body.classList;
+          return Object.entries(this.responsiveBreakpointSupported()).reduce(
+            (prev, current) => {
+              // Return the greater one.
+              return current[1] > prev[1] ? current : prev;
+            }
+          )[0];
+        },
 
-    classList.remove(
-      `responsive-${this.services.responsive.responsiveSizePrevious}`
-    );
-    classList.add(
-      `responsive-${this.services.responsive.responsiveSizeCurrent}`
-    );
-  }
+        responsiveBreakpointSupported(): object {
+          let supported = {};
+          let width = this.getElWidth();
 
-  breakpointSupports(letter) {
-    return this.services.responsive.detectSupported().hasOwnProperty(letter);
-  }
+          Object.entries(this.app.layout.vars.displayBreakpoints)
+            .forEach((entry) => {
+              if (width > entry[1]) {
+                supported[entry[0]] = entry[1];
+              }
+            });
 
-  detectSupported() {
-    let supported = {};
-    Object.entries(this.app.layout.vars.displayBreakpoints).forEach((entry) => {
-      if (window.innerWidth > entry[1]) {
-        supported[entry[0]] = entry[1];
-      }
-    });
+          return supported;
+        },
 
-    return supported;
-  }
+        async responsiveSet(size: string, propagate: boolean) {
+          if (size !== this.responsiveSizeCurrent) {
+            this.responsiveSizePrevious = this.responsiveSizeCurrent;
+            this.responsiveSizeCurrent = size;
 
-  detectSize() {
-    return Object.entries(this.services.responsive.detectSupported()).reduce(
-      (prev, current) => {
-        // Return item that is the greater one.
-        return current[1] > prev[1] ? current : prev;
-      }
-    )[0];
-  }
+            await this.assetsUpdate(
+              RenderNodeUsage.USAGE_RESPONSIVE
+            );
 
-  assetUpdateFilter(asset: AssetsInterface) {
-    if (
-      asset.responsive !== null &&
-      asset.responsive !== this.responsiveSizeCurrent
-    ) {
-      return AssetsService.UPDATE_FILTER_REJECT;
-    }
+            // Now change page class.
+            this.responsiveUpdateClass();
+
+            this.services.events.trigger(
+              ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
+              {
+                current: size,
+                previous: this.responsiveSizePrevious,
+              }
+            );
+          }
+
+          if (propagate) {
+            await this.forEachTreeChildRenderNode(
+              async (renderNode: RenderNode) => {
+                await renderNode.responsiveSet(
+                  size,
+                  propagate
+                );
+              }
+            );
+          }
+        },
+
+        responsiveUpdateClass() {
+          // Remove all responsive class names.
+          let classList = this.el.classList;
+
+          classList.remove(
+            `responsive-${this.responsiveSizePrevious}`
+          );
+          classList.add(
+            `responsive-${this.responsiveSizeCurrent}`
+          );
+        },
+
+        async responsiveUpdate(propagate: boolean) {
+          await this.responsiveSet(
+            this.responsiveDetect(),
+            propagate
+          );
+        },
+      },
+    };
   }
 }

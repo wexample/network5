@@ -1,12 +1,8 @@
 import AppService from '../class/AppService';
-import ComponentsService from './ComponentsService';
 import RenderNode from '../class/RenderNode';
-import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
-import RenderNodeService from './RenderNodeService';
-import PagesService from './PagesService';
+import AbstractRenderNodeService from './AbstractRenderNodeService';
 import Variables from '../helpers/Variables';
 import DebugRenderNode from '../class/Debug/DebugRenderNode';
-import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
 import { TagName } from '../helpers/Dom';
 import Events from '../helpers/Events';
 
@@ -54,7 +50,7 @@ export default class DebugService extends AppService {
     );
   }
 
-  addTrackersToRenderNodeService(renderNodeService: RenderNodeService) {
+  addTrackersToRenderNodeService(renderNodeService: AbstractRenderNodeService) {
     let debugService = this;
     let methodOriginal = renderNodeService.createRenderNodeInstance;
 

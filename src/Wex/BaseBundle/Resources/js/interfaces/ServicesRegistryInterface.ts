@@ -13,6 +13,7 @@ import ComponentsService from '../services/ComponentsService';
 import VueService from "../services/VueService";
 import DebugService from "../services/DebugService";
 import LocaleService from "../services/LocaleService";
+import RenderNodeService from "../services/RenderNodeService";
 
 export default interface AppInterface {
   adaptive?: AdaptiveService;
@@ -28,6 +29,7 @@ export default interface AppInterface {
   pages?: PagesService;
   prompt?: PromptService;
   responsive?: ResponsiveService;
+  renderNode?: RenderNodeService;
   routing?: RoutingService;
   vue?: VueService;
 }

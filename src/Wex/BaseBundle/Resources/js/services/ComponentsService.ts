@@ -5,13 +5,13 @@ import App from '../class/App';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import PageManagerComponent from '../class/PageManagerComponent';
 import Component from '../class/Component';
-import RenderNodeService from './RenderNodeService';
+import AbstractRenderNodeService from './AbstractRenderNodeService';
 import RenderNode from '../class/RenderNode';
 import { appendInnerHtml } from '../helpers/Dom';
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import AppService from '../class/AppService';
 
-export default class ComponentsService extends RenderNodeService {
+export default class ComponentsService extends AbstractRenderNodeService {
   elLayoutComponents: HTMLElement;
   pageHandlerRegistry: { [key: string]: PageManagerComponent } = {};
 
@@ -88,11 +88,11 @@ export default class ComponentsService extends RenderNodeService {
       // Share request options.
       renderDataComponent.requestOptions = renderData.requestOptions;
 
-      let component = (await this.createRenderNode(
+      let component = await this.createRenderNode(
         renderDataComponent.name,
         renderDataComponent,
         parentRenderNode
-      )) as Component;
+      ) as Component;
 
       parentRenderNode.components.push(component);
     }

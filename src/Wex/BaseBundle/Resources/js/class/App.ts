@@ -167,9 +167,9 @@ export default class extends AsyncConstructor {
     return arrayUnique(services) as typeof AppService[];
   }
 
-  mix(dest: any, group: string) {
+  mix(dest: object, group: string) {
     Object.values(this.services).forEach((service: AppService) => {
-      let methods = service.registerMethods();
+      let methods = service.registerMethods(dest, group);
 
       if (methods && methods[group]) {
         let toMix = methods[group];

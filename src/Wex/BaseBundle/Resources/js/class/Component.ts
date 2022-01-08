@@ -88,8 +88,9 @@ export default abstract class Component extends RenderNode {
     super.mergeRenderData(renderData);
 
     this.initMode = renderData.initMode;
-    this.options = { ...this.options, ...renderData.options };
+    this.options = {...this.options, ...renderData.options};
     this.callerPage = renderData.requestOptions.callerPage;
+    this.initMode = renderData.initMode;
   }
 
   public getRenderNodeType(): string {
@@ -102,7 +103,7 @@ export default abstract class Component extends RenderNode {
     }
   }
 
-  protected activateListeners(): void {
+  protected async activateListeners(): Promise<void> {
     if (this.listenKeyboardKey.length) {
       this.onKeyUpProxy = this.onKeyUp.bind(this);
 
@@ -113,7 +114,7 @@ export default abstract class Component extends RenderNode {
     }
   }
 
-  protected deactivateListeners(): void {
+  protected async deactivateListeners(): Promise<void> {
     if (this.listenKeyboardKey.length) {
       document.removeEventListener(
         Events.KEYUP,

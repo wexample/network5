@@ -9,7 +9,7 @@ import ColorSchemeService, {
 } from '../services/ColorSchemeService';
 import { EventsServiceEvents } from '../services/EventsService';
 import { formatBytes } from '../helpers/Number';
-import { ComponentsServiceEvents } from '../services/RenderNodeService';
+import { ComponentsServiceEvents } from '../services/AbstractRenderNodeService';
 
 export default {
   extends: Explorer,

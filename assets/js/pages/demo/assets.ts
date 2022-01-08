@@ -2,12 +2,12 @@ import Page from '../../../../src/Wex/BaseBundle/Resources/js/class/Page';
 import Events from '../../../../src/Wex/BaseBundle/Resources/js/helpers/Events';
 
 export default class extends Page {
-  async mounted() {
+  async pageReady() {
     document
       .querySelectorAll('.demo-button-switch-color-scheme')
       .forEach((el) => {
         el.addEventListener(Events.CLICK, async () => {
-          await this.services.colorScheme.setColorScheme(
+          await this.app.layout.colorSchemeSet(
             el.getAttribute('data-color-scheme'),
             true
           );
@@ -18,7 +18,7 @@ export default class extends Page {
   updateCurrentResponsiveDisplay() {
     super.updateCurrentResponsiveDisplay();
 
-    let current = this.app.services.responsive.responsiveSizeCurrent;
+    let current = this.app.layout.responsiveSizeCurrent;
 
     document
       .querySelectorAll('.display-breakpoint')

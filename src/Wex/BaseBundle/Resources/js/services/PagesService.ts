@@ -4,12 +4,12 @@ import MixinsAppService from '../class/MixinsAppService';
 import RenderDataPageInterface from '../interfaces/RenderData/PageInterface';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import RequestOptionsPageInterface from '../interfaces/RequestOptions/PageInterface';
-import RenderNodeService from './RenderNodeService';
+import AbstractRenderNodeService from './AbstractRenderNodeService';
 import Page from '../class/Page';
 import RenderNode from '../class/RenderNode';
 import AppService from '../class/AppService';
 
-export default class PagesService extends RenderNodeService {
+export default class PagesService extends AbstractRenderNodeService {
   public pages: {};
 
   public static dependencies: typeof AppService[] = [

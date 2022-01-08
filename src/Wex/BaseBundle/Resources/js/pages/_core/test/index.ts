@@ -8,9 +8,7 @@ import ResponsiveTest from "./class/ResponsiveTest";
 export default class extends TestManagerPage {
   tests: any;
 
-  async mounted() {
-    await super.mounted();
-
+  async pageReady() {
     // TODO Test no js
     // TODO Test no aggregation
     // TODO Test icons

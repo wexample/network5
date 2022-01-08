@@ -3,7 +3,7 @@ import AppChild from './AppChild';
 import App from './App';
 import Component from './Component';
 import Page from './Page';
-import { ComponentsServiceEvents } from '../services/RenderNodeService';
+import { ComponentsServiceEvents } from '../services/AbstractRenderNodeService';
 
 export default abstract class RenderNode extends AppChild {
   public callerPage: Page;
@@ -11,35 +11,56 @@ export default abstract class RenderNode extends AppChild {
   public components: Component[] = [];
   public el: HTMLElement;
   public elements: { [key: string]: HTMLElement } = {};
+  public elHeight: number = 0;
+  public elWidth: number = 0;
   public focused: boolean = false;
   public id: string;
   public isMounted: boolean = false;
   public name: string;
   public parentRenderNode: RenderNode;
   public renderData: RenderDataInterface;
+  public responsiveEnabled: boolean = false;
   public translations: {} = {};
   public vars: any = {};
   // Mixed functions from services.
-  public trans?: Function;
   public assetsUpdate?: Function;
+  public activeColorScheme?: string;
+  public colorSchemeSet?: Function;
+  public colorSchemeUpdate?: Function;
+  public colorSchemeForced?: boolean;
+  public trans?: Function;
+  public responsiveBreakpointIsSupported?: Function;
+  public responsiveDetect?: Function;
+  public responsiveSet?: Function;
+  public responsiveSizeCurrent?: string;
+  public responsiveSizePrevious?: string;
+  public responsiveUpdate?: Function;
+  public responsiveUpdateTree?: Function;
+  public colorSchemeActivePrint: boolean = false;
 
   constructor(app: App, parentRenderNode?: RenderNode) {
     super(app);
 
     this.parentRenderNode = parentRenderNode;
+  }
 
+  public async init() {
     this.app.mix(this, 'renderNode');
 
     this.services.events.trigger(ComponentsServiceEvents.CREATE_RENDER_NODE, {
       component: this,
     });
-  }
 
-  public async init() {
     // Layout can have no parent node.
     if (this.parentRenderNode) {
       this.parentRenderNode.appendChildRenderNode(this);
     }
+
+    await this.services.mixins.invokeUntilComplete(
+      'hookInitRenderNode',
+      'renderNode',
+      [this]
+    );
   }
 
   public async exit() {
@@ -69,7 +90,7 @@ export default abstract class RenderNode extends AppChild {
       ...renderData.translations,
     };
 
-    this.vars = { ...this.vars, ...renderData.vars };
+    this.vars = {...this.vars, ...renderData.vars};
   }
 
   appendChildRenderNode(renderNode: RenderNode) {
@@ -105,7 +126,9 @@ export default abstract class RenderNode extends AppChild {
     this.isMounted = true;
 
     this.attachHtmlElements();
-    this.activateListeners();
+    this.updateElSize();
+
+    await this.activateListeners();
     await this.mounted();
     await this.readyComplete();
   }
@@ -118,13 +141,14 @@ export default abstract class RenderNode extends AppChild {
     this.isMounted = false;
 
     this.detachHtmlElements();
-    this.deactivateListeners();
+
+    await this.deactivateListeners();
     await this.unmounted();
   }
 
   async mountTree() {
-    this.forEachTreeRenderNode((renderNode: RenderNode) => {
-      renderNode.mount();
+    await this.forEachTreeRenderNode(async (renderNode: RenderNode) => {
+      await renderNode.mount();
     });
   }
 
@@ -148,14 +172,32 @@ export default abstract class RenderNode extends AppChild {
     }
   }
 
-  forEachTreeRenderNode(callback?: Function) {
+  async forEachTreeRenderNode(callback?: Function) {
+    await callback(this);
+
+    await this.forEachTreeChildRenderNode(callback);
+  }
+
+  async forEachTreeChildRenderNode(callback?: Function) {
     let renderNode: RenderNode;
-
-    callback(this);
-
     for (renderNode of this.eachChildRenderNode()) {
-      renderNode.forEachTreeRenderNode(callback);
+      await renderNode.forEachTreeRenderNode(callback);
     }
+  }
+
+  updateElSize() {
+    let rect = this.el.getBoundingClientRect();
+
+    this.elWidth = rect.width;
+    this.elHeight = rect.height;
+  }
+
+  getElWidth(): number {
+    return this.elWidth;
+  }
+
+  getElHeight(): number {
+    return this.elHeight;
   }
 
   public focus() {
@@ -166,20 +208,52 @@ export default abstract class RenderNode extends AppChild {
     this.focused = false;
   }
 
-  protected activateListeners(): void {
-    // To override...
+  protected async activateListeners(): Promise<void> {
+    await this.services.mixins.invokeUntilComplete(
+      'hookActivateListener',
+      'renderNode',
+      [this]
+    );
   }
 
-  protected deactivateListeners(): void {
-    // To override...
+  protected async deactivateListeners(): Promise<void> {
+    await this.services.mixins.invokeUntilComplete(
+      'hookDeactivateListener',
+      'renderNode',
+      [this]
+    );
   }
 
   protected async mounted(): Promise<void> {
-    // To override...
+    if (this.parentRenderNode) {
+      this.parentRenderNode.childMounted(this);
+    }
+
+    await this.services.mixins.invokeUntilComplete(
+      'hookMounted',
+      'renderNode',
+      [this]
+    );
   }
 
   protected async unmounted(): Promise<void> {
-    // To override...
+    if (this.parentRenderNode) {
+      this.parentRenderNode.childUnmounted(this);
+    }
+
+    await this.services.mixins.invokeUntilComplete(
+      'hookUnmounted',
+      'renderNode',
+      [this]
+    );
+  }
+
+  protected childMounted(renderNode: RenderNode) {
+    // To override.
+  }
+
+  protected childUnmounted(renderNode: RenderNode) {
+    // To override.
   }
 
   public abstract getRenderNodeType(): string;

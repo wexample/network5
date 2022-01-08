@@ -1,4 +1,6 @@
 import AppChild from "./AppChild";
+import AssetsInterface from "../interfaces/AssetInterface";
+import RenderNode from "./RenderNode";
 
 export default abstract class RenderNodeUsage extends AppChild {
   public static USAGE_ANIMATION: string = 'animation';
@@ -20,4 +22,11 @@ export default abstract class RenderNodeUsage extends AppChild {
   ];
 
   public abstract name: string;
+
+  public hookAssetShouldBeLoaded(
+    asset: AssetsInterface,
+    renderNode: RenderNode
+  ): boolean {
+    return asset.usage === this.name;
+  }
 }

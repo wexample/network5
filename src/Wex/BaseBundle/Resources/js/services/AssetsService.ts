@@ -5,6 +5,9 @@ import RenderNode from '../class/RenderNode';
 import { Attribute, AttributeValue, TagName } from '../helpers/Dom';
 import AssetsInterface from '../interfaces/AssetInterface';
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
+import RenderNodeService from "./RenderNodeService";
+import MixinsAppService from "../class/MixinsAppService";
+import RenderNodeUsage from "../class/RenderNodeUsage";
 
 export class AssetsServiceType {
   public static CSS: string = 'css';
@@ -13,21 +16,20 @@ export class AssetsServiceType {
 }
 
 export default class AssetsService extends AppService {
-  public static UPDATE_FILTER_ACCEPT = 'accept';
-
-  public static UPDATE_FILTER_REJECT = 'reject';
-
   public assetsRegistry: any = {css: {}, js: {}};
 
-  public jsAssetsPending: { [key: string]: AssetInterface } = {};
+  public static dependencies: typeof AppService[] = [RenderNodeService];
 
-  public updateFilters: Function[] = [];
+  public jsAssetsPending: { [key: string]: AssetInterface } = {};
 
   registerMethods() {
     return {
       renderNode: {
-        async assetsUpdate() {
-          await this.app.services.assets.updateRenderNodeAssets(this);
+        async assetsUpdate(usage: string) {
+          await this.app.services.assets.loadValidAssetsForRenderNode(
+            this,
+            usage
+          );
         },
       },
     };
@@ -44,20 +46,43 @@ export default class AssetsService extends AppService {
           renderData.assets = this.registerAssetsInCollection(
             renderData.assets
           );
-
-          await this.services.assets.loadValidAssetsInCollection(
-            renderData.assets
-          );
         },
       },
+
+      renderNode: {
+        async hookBeforeCreate(
+          definitionName: string,
+          renderData: RenderDataInterface
+        ) {
+          await this.services.assets.loadValidAssetsInCollection(
+            renderData.assets,
+            RenderNodeUsage.USAGE_INITIAL
+          );
+        },
+
+        async hookMounted(renderNode: RenderNode, registry: any) {
+          // Wait for responsive to be loaded before assets.
+          // The current responsive should be detected to allow
+          // selecting proper responsive assets.
+          if (registry.responsive !== MixinsAppService.LOAD_STATUS_COMPLETE) {
+            return MixinsAppService.LOAD_STATUS_WAIT;
+          }
+
+          await this.services.assets.loadValidAssetsForRenderNode(
+            renderNode,
+            // TODO Load all non initial assets.
+            RenderNodeUsage.USAGE_RESPONSIVE
+          );
+        }
+      }
     };
   }
 
   appInit() {
     // Wait for all render node tree to be properly set.
-    this.app.ready(() => {
+    this.app.ready(async () => {
       // Mark all initially rendered assets in layout as loaded.
-      this.app.layout.forEachTreeRenderNode((renderNode: RenderNode) =>
+      await this.app.layout.forEachTreeRenderNode(async (renderNode: RenderNode) =>
         this.assetsInCollection(renderNode.renderData.assets).forEach(
           (asset) => {
             if (asset.initial) {
@@ -218,30 +243,6 @@ export default class AssetsService extends AppService {
     return el;
   }
 
-  /**
-   * By default accept to load all given assets, except any filter rejects it.
-   */
-  protected askFilterIfAssetIsValid(asset: AssetInterface) {
-    let filter: Function;
-
-    for (filter of this.updateFilters) {
-      if (filter(asset) === AssetsService.UPDATE_FILTER_REJECT) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  async updateRenderNodeAssets(renderNode: RenderNode) {
-    // For main node.
-    await this.loadValidAssetsInCollection(renderNode.renderData.assets);
-    // For child nodes.
-    for (const childRenderNode of renderNode.eachChildRenderNode()) {
-      await this.updateRenderNodeAssets(childRenderNode);
-    }
-  }
-
   public static createEmptyAssetsCollection(): AssetsCollectionInterface {
     return {
       css: [],
@@ -250,17 +251,29 @@ export default class AssetsService extends AppService {
   }
 
   public async loadValidAssetsInCollection(
-    assetsCollection: AssetsCollectionInterface
+    collection: AssetsCollectionInterface,
+    usage: string,
+    renderNode?: RenderNode
   ) {
     let toLoad = AssetsService.createEmptyAssetsCollection();
     let toUnload = AssetsService.createEmptyAssetsCollection();
     let hasChange = false;
 
-    this.assetsInCollection(assetsCollection).forEach(
+    this.assetsInCollection(collection).forEach(
       (asset: AssetInterface) => {
+        if (asset.usage !== usage) {
+          return;
+        }
+
         let type = asset.type;
 
-        if (this.askFilterIfAssetIsValid(asset)) {
+        if (this.app.services.renderNode
+          .usages[asset.usage]
+          .hookAssetShouldBeLoaded(
+            asset,
+            renderNode
+          )
+        ) {
           if (!asset.active) {
             hasChange = true;
             toLoad[type].push(asset);
@@ -280,5 +293,16 @@ export default class AssetsService extends AppService {
       // Remove old ones.
       this.removeAssets(toUnload);
     }
+  }
+
+  public async loadValidAssetsForRenderNode(
+    renderNode: RenderNode,
+    usage: string
+  ) {
+    await this.loadValidAssetsInCollection(
+      renderNode.renderData.assets,
+      usage,
+      renderNode
+    );
   }
 }

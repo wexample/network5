@@ -1,7 +1,7 @@
-import RenderNodeService from './RenderNodeService';
+import AbstractRenderNodeService from './AbstractRenderNodeService';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 
-export default class LayoutsService extends RenderNodeService {
+export default class LayoutsService extends AbstractRenderNodeService {
   registerHooks() {
     return {
       app: {

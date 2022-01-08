@@ -22,6 +22,17 @@ export default class ModalComponent extends PageManagerComponent {
     this.elements.content = this.el.querySelector('.modal-content');
   }
 
+  childMounted(renderNode: RenderNode) {
+    // When mounting the el of the page,
+    // we are now able to define the base size of it,
+    // it will be used to chose proper responsive assets.
+    if (renderNode === this.page) {
+      this.showEl();
+      this.page.updateElSize();
+      this.hideEl();
+    }
+  }
+
   appendChildRenderNode(renderNode: RenderNode) {
     super.appendChildRenderNode(renderNode);
 
@@ -52,8 +63,8 @@ export default class ModalComponent extends PageManagerComponent {
     }
   }
 
-  protected activateListeners(): void {
-    super.activateListeners();
+  protected async activateListeners(): Promise<void> {
+    await super.activateListeners();
 
     this.onMouseDownOverlayProxy = this.onMouseDownOverlay.bind(this);
     this.onMouseUpOverlayProxy = this.onMouseUpOverlay.bind(this);
@@ -63,8 +74,8 @@ export default class ModalComponent extends PageManagerComponent {
     this.el.addEventListener(Events.MOUSEUP, this.onMouseUpOverlayProxy);
   }
 
-  protected deactivateListeners(): void {
-    super.deactivateListeners();
+  protected async deactivateListeners(): Promise<void> {
+    await super.deactivateListeners();
 
     this.el.removeEventListener(Events.MOUSEDOWN, this.onMouseDownOverlayProxy);
     this.el.removeEventListener(Events.MOUSEUP, this.onMouseUpOverlayProxy);
@@ -74,6 +85,16 @@ export default class ModalComponent extends PageManagerComponent {
       .removeEventListener(Events.CLICK, this.onClickCloseProxy);
   }
 
+  showEl() {
+    this.el.classList.remove(Variables.CLOSED);
+    this.el.classList.add(Variables.OPENED);
+  }
+
+  hideEl() {
+    this.el.classList.remove(Variables.OPENED);
+    this.el.classList.add(Variables.CLOSED);
+  }
+
   open() {
     if (this.opened) {
       return;
@@ -81,16 +102,15 @@ export default class ModalComponent extends PageManagerComponent {
 
     this.opened = true;
 
-    this.el.classList.remove(Variables.CLOSED);
-    this.el.classList.add(Variables.OPENED);
+    this.showEl();
 
     this.focus();
   }
 
   close() {
     this.closing = true;
-    this.el.classList.remove(Variables.OPENED);
-    this.el.classList.add(Variables.CLOSED);
+
+    this.hideEl();
 
     this.blur();
 

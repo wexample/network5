@@ -16,8 +16,8 @@ export default class VueService extends AppService {
 
     methods: {},
 
-    updated() {
-      this.rootComponent.forEachTreeRenderNode((renderNode) => {
+    async updated() {
+      await this.rootComponent.forEachTreeRenderNode((renderNode) => {
         if (this === this.$root) {
           renderNode.updateMounting();
         }
