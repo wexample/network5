@@ -17,9 +17,7 @@ export default abstract class AbstractRenderNodeService extends AppService {
     await this.services.mixins.invokeUntilComplete(
       'hookPrepareRenderData',
       'app',
-      [
-        renderData,
-      ]
+      [renderData]
     );
 
     // Do not deep freeze as sub-parts might be prepared later.
@@ -31,17 +29,12 @@ export default abstract class AbstractRenderNodeService extends AppService {
     renderData: RenderDataInterface,
     parentRenderNode?: RenderNode
   ): Promise<RenderNode> {
-
     await this.prepareRenderData(renderData);
 
     await this.services.mixins.invokeUntilComplete(
       'hookBeforeCreate',
       'renderNode',
-      [
-        definitionName,
-        renderData,
-        parentRenderNode,
-      ]
+      [definitionName, renderData, parentRenderNode]
     );
 
     let classDefinition = this.app.getBundleClassDefinition(

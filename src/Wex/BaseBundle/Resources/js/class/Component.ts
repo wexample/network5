@@ -88,7 +88,7 @@ export default abstract class Component extends RenderNode {
     super.mergeRenderData(renderData);
 
     this.initMode = renderData.initMode;
-    this.options = {...this.options, ...renderData.options};
+    this.options = { ...this.options, ...renderData.options };
     this.callerPage = renderData.requestOptions.callerPage;
     this.initMode = renderData.initMode;
   }

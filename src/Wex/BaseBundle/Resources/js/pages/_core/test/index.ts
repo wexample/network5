@@ -3,7 +3,7 @@ import TestManagerPage from '../../../class/TestManagerPage';
 import PageTest from './class/PageTest';
 import TestTest from './class/TestTest';
 import AppTest from './class/AppTest';
-import ResponsiveTest from "./class/ResponsiveTest";
+import ResponsiveTest from './class/ResponsiveTest';
 
 export default class extends TestManagerPage {
   tests: any;

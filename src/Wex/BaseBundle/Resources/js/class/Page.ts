@@ -67,11 +67,9 @@ export default class extends RenderNode {
       this.parentRenderNode.setPage(this);
     }
 
-    await this.services.mixins.invokeUntilComplete(
-      'hookInitPage',
-      'page',
-      [this]
-    );
+    await this.services.mixins.invokeUntilComplete('hookInitPage', 'page', [
+      this,
+    ]);
 
     this.updateCurrentResponsiveDisplay();
 
@@ -161,7 +159,9 @@ export default class extends RenderNode {
 
   getElWidth(): number {
     // Initial page uses layout width for responsiveness calculation.
-    return this.isInitialPage ? this.app.layout.getElWidth() : super.getElWidth();
+    return this.isInitialPage
+      ? this.app.layout.getElWidth()
+      : super.getElWidth();
   }
 
   onChangeResponsiveSize() {

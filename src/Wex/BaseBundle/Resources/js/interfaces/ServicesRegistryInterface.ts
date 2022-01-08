@@ -10,10 +10,10 @@ import ResponsiveService from '../services/ResponsiveService';
 import PromptService from '../services/PromptsService';
 import RoutingService from '../services/RoutingService';
 import ComponentsService from '../services/ComponentsService';
-import VueService from "../services/VueService";
-import DebugService from "../services/DebugService";
-import LocaleService from "../services/LocaleService";
-import RenderNodeService from "../services/RenderNodeService";
+import VueService from '../services/VueService';
+import DebugService from '../services/DebugService';
+import LocaleService from '../services/LocaleService';
+import RenderNodeService from '../services/RenderNodeService';
 
 export default interface AppInterface {
   adaptive?: AdaptiveService;

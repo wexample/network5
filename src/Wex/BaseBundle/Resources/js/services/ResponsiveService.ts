@@ -1,8 +1,8 @@
 import AssetsService from './AssetsService';
 import AppService from '../class/AppService';
 import Events from '../helpers/Events';
-import RenderNode from "../class/RenderNode";
-import RenderNodeUsage from "../class/RenderNodeUsage";
+import RenderNode from '../class/RenderNode';
+import RenderNodeUsage from '../class/RenderNodeUsage';
 
 export class ResponsiveServiceEvents {
   public static RESPONSIVE_CHANGE_SIZE: string = 'responsive-change-size';
@@ -17,9 +17,7 @@ export default class ResponsiveService extends AppService {
         async hookLoadLayoutRenderData() {
           window.addEventListener(
             Events.RESIZE,
-            async () => await this.app.layout.responsiveUpdate(
-              true
-            ),
+            async () => await this.app.layout.responsiveUpdate(true)
           );
         },
       },
@@ -45,10 +43,7 @@ export default class ResponsiveService extends AppService {
     return {
       renderNode: {
         responsiveBreakpointIsSupported(letter: string): boolean {
-          return this.responsiveBreakpointSupported()
-            .hasOwnProperty(
-              letter
-            );
+          return this.responsiveBreakpointSupported().hasOwnProperty(letter);
         },
 
         responsiveDetect() {
@@ -68,12 +63,13 @@ export default class ResponsiveService extends AppService {
           let supported = {};
           let width = this.getElWidth();
 
-          Object.entries(this.app.layout.vars.displayBreakpoints)
-            .forEach((entry) => {
+          Object.entries(this.app.layout.vars.displayBreakpoints).forEach(
+            (entry) => {
               if (width > entry[1]) {
                 supported[entry[0]] = entry[1];
               }
-            });
+            }
+          );
 
           return supported;
         },
@@ -83,9 +79,7 @@ export default class ResponsiveService extends AppService {
             this.responsiveSizePrevious = this.responsiveSizeCurrent;
             this.responsiveSizeCurrent = size;
 
-            await this.assetsUpdate(
-              RenderNodeUsage.USAGE_RESPONSIVE
-            );
+            await this.assetsUpdate(RenderNodeUsage.USAGE_RESPONSIVE);
 
             // Now change page class.
             this.responsiveUpdateClass();
@@ -102,10 +96,7 @@ export default class ResponsiveService extends AppService {
           if (propagate) {
             await this.forEachTreeChildRenderNode(
               async (renderNode: RenderNode) => {
-                await renderNode.responsiveSet(
-                  size,
-                  propagate
-                );
+                await renderNode.responsiveSet(size, propagate);
               }
             );
           }
@@ -115,19 +106,12 @@ export default class ResponsiveService extends AppService {
           // Remove all responsive class names.
           let classList = this.el.classList;
 
-          classList.remove(
-            `responsive-${this.responsiveSizePrevious}`
-          );
-          classList.add(
-            `responsive-${this.responsiveSizeCurrent}`
-          );
+          classList.remove(`responsive-${this.responsiveSizePrevious}`);
+          classList.add(`responsive-${this.responsiveSizeCurrent}`);
         },
 
         async responsiveUpdate(propagate: boolean) {
-          await this.responsiveSet(
-            this.responsiveDetect(),
-            propagate
-          );
+          await this.responsiveSet(this.responsiveDetect(), propagate);
         },
       },
     };

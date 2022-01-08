@@ -2,7 +2,7 @@ import UnitTest from '../../../../class/UnitTest';
 import ModalComponent from '../../../../components/modal';
 import LayoutInterface from '../../../../interfaces/RenderData/LayoutInterface';
 import { sleep } from '../../../../helpers/Time';
-import { toScreamingSnake } from "../../../../helpers/String";
+import { toScreamingSnake } from '../../../../helpers/String';
 
 export default class AdaptiveRenderingTest extends UnitTest {
   public getTestMethods() {
@@ -97,27 +97,13 @@ export default class AdaptiveRenderingTest extends UnitTest {
         '.adaptive-page-test-component'
       ) as HTMLElement;
 
-      this.assertTestComponentIntegrity(
-        elComponent,
-        'test-component'
-      );
+      this.assertTestComponentIntegrity(elComponent, 'test-component');
 
-      this.assertTestComponentIntegrity(
-        elComponent,
-        'test-component',
-        '-2'
-      );
+      this.assertTestComponentIntegrity(elComponent, 'test-component', '-2');
 
-      this.assertTestComponentAssets(
-        elComponent,
-        'test-component'
-      );
+      this.assertTestComponentAssets(elComponent, 'test-component');
 
-      this.assertTestComponentAssets(
-        elComponent,
-        'test-component',
-        '-2'
-      );
+      this.assertTestComponentAssets(elComponent, 'test-component', '-2');
 
       // Test twice to ensure stability.
       await this.assertVueUpdateSupportedByComponent();
@@ -138,14 +124,16 @@ export default class AdaptiveRenderingTest extends UnitTest {
     });
   }
 
-  assertTestComponentAssets (
+  assertTestComponentAssets(
     el: HTMLElement,
     prefix: string = '',
     suffix: string = ''
   ) {
     this.assertEquals(
       getComputedStyle(
-        this.app.layout.pageFocused.el.querySelector(`.test-component-test-css${suffix}`)
+        this.app.layout.pageFocused.el.querySelector(
+          `.test-component-test-css${suffix}`
+        )
       ).backgroundColor,
       'rgb(0, 128, 0)',
       'The adaptive CSS has applied green'
@@ -153,12 +141,14 @@ export default class AdaptiveRenderingTest extends UnitTest {
 
     this.assertEquals(
       getComputedStyle(
-        this.app.layout.pageFocused.el.querySelector(`.test-component-test-js${suffix}`)
+        this.app.layout.pageFocused.el.querySelector(
+          `.test-component-test-js${suffix}`
+        )
       ).backgroundColor,
       'rgb(0, 128, 0)',
       'The adaptive JS has applied green'
     );
-  };
+  }
 
   assertTestComponentIntegrity = (
     el: HTMLElement,
@@ -182,15 +172,11 @@ export default class AdaptiveRenderingTest extends UnitTest {
     );
   };
 
-  assertTestVueIntegrity(
-    suffix: string = ''
-  ) {
+  assertTestVueIntegrity(suffix: string = '') {
     this.assertTestComponentIntegrity(
-      this.app
-        .layout
-        .pageFocused
-        .el
-        .querySelector('.adaptive-page-test-vue') as HTMLElement,
+      this.app.layout.pageFocused.el.querySelector(
+        '.adaptive-page-test-vue'
+      ) as HTMLElement,
       'test-vue',
       suffix ? `-${suffix}` : ''
     );

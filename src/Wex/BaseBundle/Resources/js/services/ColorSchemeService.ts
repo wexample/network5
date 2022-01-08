@@ -45,7 +45,6 @@ export default class ColorSchemeService extends AppService {
   registerMethods() {
     return {
       renderNode: {
-
         colorSchemeDetect(): string {
           // Any specification of which color scheme to use,
           // Instead of having a "light" default color scheme,
@@ -59,7 +58,10 @@ export default class ColorSchemeService extends AppService {
           }
 
           for (let colorScheme of ColorSchemeService.COLOR_SCHEMES_PREFERENCES) {
-            if (window.matchMedia(`(prefers-color-scheme: ${colorScheme})`).matches) {
+            if (
+              window.matchMedia(`(prefers-color-scheme: ${colorScheme})`)
+                .matches
+            ) {
               return colorScheme;
             }
           }
@@ -84,9 +86,12 @@ export default class ColorSchemeService extends AppService {
             await this.app.layout.assetsUpdate();
           }
 
-          this.services.events.trigger(ColorSchemeServiceEvents.COLOR_SCHEME_CHANGE, {
-            colorScheme: name,
-          });
+          this.services.events.trigger(
+            ColorSchemeServiceEvents.COLOR_SCHEME_CHANGE,
+            {
+              colorScheme: name,
+            }
+          );
         },
 
         async colorSchemeUpdate(updateAssets: boolean) {
@@ -95,9 +100,9 @@ export default class ColorSchemeService extends AppService {
           if (this.activeColorScheme !== current) {
             await this.colorSchemeSet(current, updateAssets);
           }
-        }
-      }
-    }
+        },
+      },
+    };
   }
 
   activateListeners() {
@@ -108,7 +113,8 @@ export default class ColorSchemeService extends AppService {
           if (e.matches) {
             this.app.layout.activeColorScheme = name;
           } else {
-            this.app.layout.activeColorScheme = ColorSchemeService.COLOR_SCHEME_DEFAULT;
+            this.app.layout.activeColorScheme =
+              ColorSchemeService.COLOR_SCHEME_DEFAULT;
           }
           await this.app.layout.colorSchemeUpdate(true);
         });

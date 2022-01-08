@@ -90,7 +90,7 @@ export default abstract class RenderNode extends AppChild {
       ...renderData.translations,
     };
 
-    this.vars = {...this.vars, ...renderData.vars};
+    this.vars = { ...this.vars, ...renderData.vars };
   }
 
   appendChildRenderNode(renderNode: RenderNode) {

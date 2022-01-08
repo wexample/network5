@@ -11,11 +11,7 @@ export default class LocaleService extends AppService {
             ...this.translations,
           };
 
-          return this.app.services.locale.trans(
-            string,
-            args,
-            catalog
-          );
+          return this.app.services.locale.trans(string, args, catalog);
         },
       },
       vue: {

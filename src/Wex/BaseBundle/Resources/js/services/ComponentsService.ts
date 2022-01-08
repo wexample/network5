@@ -26,7 +26,10 @@ export default class ComponentsService extends AbstractRenderNodeService {
   registerHooks() {
     return {
       app: {
-        async hookLoadLayoutRenderData(renderData: LayoutInterface, registry: any) {
+        async hookLoadLayoutRenderData(
+          renderData: LayoutInterface,
+          registry: any
+        ) {
           if (registry.assets !== MixinsAppService.LOAD_STATUS_COMPLETE) {
             return MixinsAppService.LOAD_STATUS_WAIT;
           }
@@ -88,11 +91,11 @@ export default class ComponentsService extends AbstractRenderNodeService {
       // Share request options.
       renderDataComponent.requestOptions = renderData.requestOptions;
 
-      let component = await this.createRenderNode(
+      let component = (await this.createRenderNode(
         renderDataComponent.name,
         renderDataComponent,
         parentRenderNode
-      ) as Component;
+      )) as Component;
 
       parentRenderNode.components.push(component);
     }

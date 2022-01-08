@@ -76,7 +76,7 @@ export default class VueService extends AppService {
 
   inherit(vueComponent, rootComponent: Component) {
     let componentsFinal = vueComponent.components || {};
-    let extend = {components: {}};
+    let extend = { components: {} };
 
     if (vueComponent.extends) {
       extend = this.inherit(vueComponent.extends, rootComponent);
@@ -92,7 +92,10 @@ export default class VueService extends AppService {
       // Prevent to initialize already converted object.
       if (typeof data[1] === 'string') {
         if (!this.componentRegistered[data[1]]) {
-          vueComponent.components[data[0]] = this.initComponent(data[1], rootComponent);
+          vueComponent.components[data[0]] = this.initComponent(
+            data[1],
+            rootComponent
+          );
         } else {
           vueComponent.components[data[0]] = this.componentRegistered[data[1]];
         }
@@ -103,15 +106,9 @@ export default class VueService extends AppService {
   }
 
   createVueAppForComponent(component: Component) {
-    let vue = this.initComponent(
-      component.renderData.options.path,
-      component
-    );
+    let vue = this.initComponent(component.renderData.options.path, component);
 
-    let app = this.createApp(
-      vue,
-      component.options.props
-    );
+    let app = this.createApp(vue, component.options.props);
 
     Object.entries(this.componentRegistered).forEach((data) => {
       app.component(data[0], data[1]);
@@ -143,14 +140,14 @@ export default class VueService extends AppService {
           ...{
             rootComponent: {
               type: Object,
-              default: rootComponent
+              default: rootComponent,
             },
             translations: {
               type: Object,
-              default: rootComponent.translations[`INCLUDE|${comName}`]
+              default: rootComponent.translations[`INCLUDE|${comName}`],
             },
-          }
-        }
+          },
+        };
 
         vueClassDefinition.mixins = (vueClassDefinition.mixins || []).concat([
           this.globalMixin,

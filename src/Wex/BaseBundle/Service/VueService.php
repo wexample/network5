@@ -121,7 +121,7 @@ class VueService
                 )
             );
 
-            $rootComponent->translations['INCLUDE|' . $vue->name] = $this->translator->transFilter('@vue::*');
+            $rootComponent->translations['INCLUDE|'.$vue->name] = $this->translator->transFilter('@vue::*');
 
             $this->translator->revertDomain(
                 Translator::DOMAIN_TYPE_VUE

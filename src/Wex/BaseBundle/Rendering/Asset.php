@@ -109,9 +109,9 @@ class Asset extends RenderDataGenerator
         $this->type = $info['extension'];
 
         $this->path = FileHelper::FOLDER_SEPARATOR.PathHelper::relativeTo(
-                $path,
-                $basePath
-            );
+            $path,
+            $basePath
+        );
 
         // Remove the base part before build/{type}/ folder.
         $pathWithoutExt = dirname($this->path).FileHelper::FOLDER_SEPARATOR.$info['filename'];
@@ -139,7 +139,8 @@ class Asset extends RenderDataGenerator
     #[Pure]
     public function getIsReadyForServerSideRendering(
         string $colorScheme,
-        bool $useJs): bool
+        bool $useJs
+    ): bool
     {
         if ($this->isServerSideRendered())
         {

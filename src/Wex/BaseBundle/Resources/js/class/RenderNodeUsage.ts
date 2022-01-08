@@ -1,6 +1,6 @@
-import AppChild from "./AppChild";
-import AssetsInterface from "../interfaces/AssetInterface";
-import RenderNode from "./RenderNode";
+import AppChild from './AppChild';
+import AssetsInterface from '../interfaces/AssetInterface';
+import RenderNode from './RenderNode';
 
 export default abstract class RenderNodeUsage extends AppChild {
   public static USAGE_ANIMATION: string = 'animation';

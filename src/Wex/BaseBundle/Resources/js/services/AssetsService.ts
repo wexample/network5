@@ -5,9 +5,9 @@ import RenderNode from '../class/RenderNode';
 import { Attribute, AttributeValue, TagName } from '../helpers/Dom';
 import AssetsInterface from '../interfaces/AssetInterface';
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
-import RenderNodeService from "./RenderNodeService";
-import MixinsAppService from "../class/MixinsAppService";
-import RenderNodeUsage from "../class/RenderNodeUsage";
+import RenderNodeService from './RenderNodeService';
+import MixinsAppService from '../class/MixinsAppService';
+import RenderNodeUsage from '../class/RenderNodeUsage';
 
 export class AssetsServiceType {
   public static CSS: string = 'css';
@@ -16,7 +16,7 @@ export class AssetsServiceType {
 }
 
 export default class AssetsService extends AppService {
-  public assetsRegistry: any = {css: {}, js: {}};
+  public assetsRegistry: any = { css: {}, js: {} };
 
   public static dependencies: typeof AppService[] = [RenderNodeService];
 
@@ -73,8 +73,8 @@ export default class AssetsService extends AppService {
             // TODO Load all non initial assets.
             RenderNodeUsage.USAGE_RESPONSIVE
           );
-        }
-      }
+        },
+      },
     };
   }
 
@@ -82,14 +82,15 @@ export default class AssetsService extends AppService {
     // Wait for all render node tree to be properly set.
     this.app.ready(async () => {
       // Mark all initially rendered assets in layout as loaded.
-      await this.app.layout.forEachTreeRenderNode(async (renderNode: RenderNode) =>
-        this.assetsInCollection(renderNode.renderData.assets).forEach(
-          (asset) => {
-            if (asset.initial) {
-              this.setAssetLoaded(asset);
+      await this.app.layout.forEachTreeRenderNode(
+        async (renderNode: RenderNode) =>
+          this.assetsInCollection(renderNode.renderData.assets).forEach(
+            (asset) => {
+              if (asset.initial) {
+                this.setAssetLoaded(asset);
+              }
             }
-          }
-        )
+          )
       );
     });
   }
@@ -259,33 +260,29 @@ export default class AssetsService extends AppService {
     let toUnload = AssetsService.createEmptyAssetsCollection();
     let hasChange = false;
 
-    this.assetsInCollection(collection).forEach(
-      (asset: AssetInterface) => {
-        if (asset.usage !== usage) {
-          return;
+    this.assetsInCollection(collection).forEach((asset: AssetInterface) => {
+      if (asset.usage !== usage) {
+        return;
+      }
+
+      let type = asset.type;
+
+      if (
+        this.app.services.renderNode.usages[
+          asset.usage
+        ].hookAssetShouldBeLoaded(asset, renderNode)
+      ) {
+        if (!asset.active) {
+          hasChange = true;
+          toLoad[type].push(asset);
         }
-
-        let type = asset.type;
-
-        if (this.app.services.renderNode
-          .usages[asset.usage]
-          .hookAssetShouldBeLoaded(
-            asset,
-            renderNode
-          )
-        ) {
-          if (!asset.active) {
-            hasChange = true;
-            toLoad[type].push(asset);
-          }
-        } else {
-          if (asset.active) {
-            hasChange = true;
-            toUnload[type].push(asset);
-          }
+      } else {
+        if (asset.active) {
+          hasChange = true;
+          toUnload[type].push(asset);
         }
       }
-    );
+    });
 
     if (hasChange) {
       // Load new assets.

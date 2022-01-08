@@ -26,7 +26,5 @@ export function toKebab(string) {
 }
 
 export function toScreamingSnake(string) {
-  return toKebab(string)
-    .replace(/-/g, '_')
-    .toUpperCase();
+  return toKebab(string).replace(/-/g, '_').toUpperCase();
 }

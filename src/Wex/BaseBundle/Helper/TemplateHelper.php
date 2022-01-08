@@ -2,8 +2,6 @@
 
 namespace App\Wex\BaseBundle\Helper;
 
-use App\Wex\BaseBundle\WexBaseBundle;
-
 class TemplateHelper
 {
     public const TEMPLATE_FILE_EXTENSION = '.html.twig';

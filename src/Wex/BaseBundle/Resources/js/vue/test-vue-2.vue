@@ -1,5 +1,4 @@
 <script>
-
 export default {
   components: {
     'vue-test-vue-3': 'vue/test-vue-3',
