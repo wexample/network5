@@ -22,7 +22,10 @@ export default class ResponsiveTest extends UnitTest {
       '#test-playground'
     ) as HTMLElement;
 
-    await this.assertResponsiveWorks(this.app.layout, elPlayground);
+    await this.assertResponsiveWorks(
+      this.app.layout,
+      elPlayground
+    );
   }
 
   async assertResponsiveWorks(

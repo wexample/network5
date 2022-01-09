@@ -96,7 +96,9 @@ export default class ResponsiveService extends AppService {
           if (propagate) {
             await this.forEachTreeChildRenderNode(
               async (renderNode: RenderNode) => {
-                await renderNode.responsiveSet(size, propagate);
+                if (renderNode.responsiveEnabled) {
+                  await renderNode.responsiveSet(size, propagate);
+                }
               }
             );
           }
