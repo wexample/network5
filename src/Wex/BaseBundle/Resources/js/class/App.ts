@@ -72,6 +72,9 @@ export default class extends AsyncConstructor {
       // Display page content.
       this.layout.el.classList.remove('layout-loading');
 
+      // Activate every new render node.
+      await this.layout.setNewTreeRenderNodeReady();
+
       // Execute ready callbacks.
       await this.readyComplete();
 
@@ -98,8 +101,6 @@ export default class extends AsyncConstructor {
 
     // Pass through the whole tree to find unmounted nodes.
     await this.layout.mountTree();
-    // Activate every new render node.
-    await this.layout.setNewTreeRenderNodeReady();
   }
 
   buildServiceName(serviceName: string): string {

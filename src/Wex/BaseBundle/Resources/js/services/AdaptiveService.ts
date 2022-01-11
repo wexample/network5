@@ -46,7 +46,10 @@ export default class AdaptiveService extends AppService {
         await this.services.layouts.prepareRenderData(renderData);
 
         // Wait render data loading to continue.
-        return this.app.loadLayoutRenderData(renderData).then(() => {
+        return this.app.loadLayoutRenderData(renderData).then(async () => {
+          // Activate every new render node.
+          await this.app.layout.setNewTreeRenderNodeReady();
+
           return renderData;
         });
       });
