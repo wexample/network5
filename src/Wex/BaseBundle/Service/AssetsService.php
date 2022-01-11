@@ -228,12 +228,12 @@ class AssetsService
      * Return all assets for a given type, including suffixes like -s, -l, etc.
      */
     public function assetsDetectForType(
-        string $pageName,
+        string $renderNodeName,
         string $ext,
         RenderNode $renderNode,
         bool $searchColorScheme
     ): array {
-        $assetPathFull = $ext.'/'.$pageName.'.'.$ext;
+        $assetPathFull = $ext.'/'.$renderNodeName.'.'.$ext;
         $output = [];
 
         if ($asset = $this->addAsset(
@@ -258,7 +258,7 @@ class AssetsService
                 FileHelper::FOLDER_SEPARATOR,
                 [
                     $ext,
-                    $pageName.'-'.$breakpointName.'.'.$ext,
+                    $renderNodeName.'-'.$breakpointName.'.'.$ext,
                 ]
             );
 
@@ -282,8 +282,8 @@ class AssetsService
         if ($searchColorScheme)
         {
             // Add color scheme assets.
-            $basename = basename($pageName);
-            $dirname = dirname($pageName);
+            $basename = basename($renderNodeName);
+            $dirname = dirname($renderNodeName);
             foreach (ColorSchemeHelper::SCHEMES as $colorSchemeName)
             {
                 // Color scheme's version should be place in :
