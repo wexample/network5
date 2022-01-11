@@ -127,10 +127,13 @@ export default abstract class RenderNode extends AppChild {
 
     this.attachHtmlElements();
     this.updateElSize();
-
     await this.activateListeners();
+
+    if (this.parentRenderNode) {
+      this.parentRenderNode.childMounted(this);
+    }
+
     await this.mounted();
-    await this.readyComplete();
   }
 
   async unmount() {
@@ -149,6 +152,14 @@ export default abstract class RenderNode extends AppChild {
   async mountTree() {
     await this.forEachTreeRenderNode(async (renderNode: RenderNode) => {
       await renderNode.mount();
+    });
+  }
+
+  async setNewTreeRenderNodeReady() {
+    await this.forEachTreeRenderNode(async (renderNode: RenderNode) => {
+      if (!renderNode.isReady) {
+        await renderNode.renderNodeReady();
+      }
     });
   }
 
@@ -225,10 +236,6 @@ export default abstract class RenderNode extends AppChild {
   }
 
   protected async mounted(): Promise<void> {
-    if (this.parentRenderNode) {
-      this.parentRenderNode.childMounted(this);
-    }
-
     await this.services.mixins.invokeUntilComplete(
       'hookMounted',
       'renderNode',
@@ -248,8 +255,15 @@ export default abstract class RenderNode extends AppChild {
     );
   }
 
-  protected childMounted(renderNode: RenderNode) {
-    // To override.
+  public async renderNodeReady(): Promise<void> {
+    await this.readyComplete();
+  }
+
+  childMounted(renderNode: RenderNode) {
+    // When mounting child render node,
+    // it size may change or turn accessible,
+    // it will be used to chose proper responsive assets.
+    this.updateElSize();
   }
 
   protected childUnmounted(renderNode: RenderNode) {

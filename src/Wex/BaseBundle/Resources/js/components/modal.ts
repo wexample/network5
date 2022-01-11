@@ -22,17 +22,6 @@ export default class ModalComponent extends PageManagerComponent {
     this.elements.content = this.el.querySelector('.modal-content');
   }
 
-  childMounted(renderNode: RenderNode) {
-    // When mounting the el of the page,
-    // we are now able to define the base size of it,
-    // it will be used to chose proper responsive assets.
-    if (renderNode === this.page) {
-      this.showEl();
-      this.page.updateElSize();
-      this.hideEl();
-    }
-  }
-
   appendChildRenderNode(renderNode: RenderNode) {
     super.appendChildRenderNode(renderNode);
 

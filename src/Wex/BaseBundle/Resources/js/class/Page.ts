@@ -80,8 +80,12 @@ export default class extends RenderNode {
     await super.mounted();
 
     this.focus();
+  }
 
-    this.pageReady();
+  public async renderNodeReady(): Promise<void> {
+    await super.renderNodeReady();
+
+    await this.pageReady();
   }
 
   public focus() {

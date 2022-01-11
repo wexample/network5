@@ -12,12 +12,20 @@
 .modal {
   @include full-parent-size;
   align-items: center;
-  display: none;
   justify-content: center;
   position: fixed;
+  // By default, modal is neither opened or closed,
+  // it should have dimensions to be evaluated.
+  visibility: hidden;
 
   &.opened {
     display: flex;
+    visibility: initial;
+  }
+
+  &.closed {
+    display: none;
+    visibility: initial;
   }
 }
 

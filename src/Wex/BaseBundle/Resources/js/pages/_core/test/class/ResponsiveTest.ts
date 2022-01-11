@@ -29,7 +29,7 @@ export default class ResponsiveTest extends UnitTest {
     for (let layoutResponsiveSize of breakPoints) {
       this.app.layout.responsiveSet(layoutResponsiveSize, true);
 
-      await sleep(1000);
+      await sleep(100);
 
       this.assertLayoutResponsiveApplyStyle(layoutResponsiveSize, elTesterLayout);
 

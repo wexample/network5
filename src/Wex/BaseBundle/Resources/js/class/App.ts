@@ -98,6 +98,8 @@ export default class extends AsyncConstructor {
 
     // Pass through the whole tree to find unmounted nodes.
     await this.layout.mountTree();
+    // Activate every new render node.
+    await this.layout.setNewTreeRenderNodeReady();
   }
 
   buildServiceName(serviceName: string): string {
