@@ -49,9 +49,10 @@
               window.appRegistry = {bundles: new AppRegistryBundlesManager()};
 
             </script>
+            {# Don't use display none as we need to be able to calculate elements size before display #}
             <style>
                 .layout-loading {
-                    display: none;
+                    visibility: hidden;
                 }
             </style>
         {%- endif -%}

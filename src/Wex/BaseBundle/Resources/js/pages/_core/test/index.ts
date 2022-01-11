@@ -22,10 +22,10 @@ export default class extends TestManagerPage {
 
     await this.runTests({
       AdaptiveRenderingTest,
-      AppTest,
-      ResponsiveTest,
-      TestTest,
-      PageTest,
+      // AppTest,
+      // ResponsiveTest,
+      // TestTest,
+      // PageTest,
       // TODO VariablesTest
     });
   }
