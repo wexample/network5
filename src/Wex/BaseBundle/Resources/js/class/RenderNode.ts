@@ -75,7 +75,7 @@ export default abstract class RenderNode extends AppChild {
     await this.unmounted();
   }
 
-  loadRenderData(renderData: RenderDataInterface) {
+  loadFirstRenderData(renderData: RenderDataInterface) {
     this.renderData = renderData;
 
     this.mergeRenderData(renderData);

@@ -47,7 +47,7 @@ export default abstract class AbstractRenderNodeService extends AppService {
       parentRenderNode
     );
 
-    instance.loadRenderData(renderData);
+    instance.loadFirstRenderData(renderData);
 
     await instance.init();
 
