@@ -35,17 +35,59 @@ export default class ResponsiveTest extends UnitTest {
 
       // Test component responsive.
       for (let componentResponsiveSize of breakPoints) {
+        component.responsiveSet(componentResponsiveSize);
+
+        await sleep(100);
+
         this.assertLayoutResponsiveApplyStyle(
           componentResponsiveSize,
           elTesterComponent,
           // Only the
           componentResponsiveSize !== layoutResponsiveSize
         );
+
+        this.assertResponsiveTestZoneHaveStyle(
+          componentResponsiveSize,
+          elTesterComponent,
+          'color',
+          'rgb(0, 255, 0)',
+          'light green',
+        );
       }
     }
 
     elTesterLayout.remove();
     elTesterComponent.remove();
+  }
+
+  assertTestZoneHaveStyle(
+    elTestZoneName: string,
+    elTestZone: HTMLElement,
+    property: string,
+    expectedColorValue,
+    expectedColorName
+  ) {
+    this.assertEquals(
+      getComputedStyle(elTestZone)[property],
+      expectedColorValue,
+      `The test zone ${elTestZoneName} is ${expectedColorName}`
+    );
+  }
+
+  assertResponsiveTestZoneHaveStyle(
+    elTestZoneSize: string,
+    elPlayground: HTMLElement,
+    property: string,
+    expectedColorValue,
+    expectedColorName
+  ) {
+    this.assertTestZoneHaveStyle(
+      elTestZoneSize,
+      elPlayground.querySelector(`.test-responsive-${elTestZoneSize}`),
+      property,
+      expectedColorValue,
+      expectedColorName
+    );
   }
 
   assertLayoutResponsiveApplyStyle(
@@ -61,11 +103,12 @@ export default class ResponsiveTest extends UnitTest {
       expectedColorName = 'gray';
     }
 
-    this.assertEquals(
-      getComputedStyle(elPlayground.querySelector(`.test-responsive-${size}`))
-        .backgroundColor,
+    this.assertResponsiveTestZoneHaveStyle(
+      size,
+      elPlayground,
+      'backgroundColor',
       expectedColorValue,
-      `The test zone ${size} is ${expectedColorName}`
+      expectedColorName
     );
   }
 
