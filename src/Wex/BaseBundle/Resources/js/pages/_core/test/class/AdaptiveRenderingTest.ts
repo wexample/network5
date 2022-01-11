@@ -247,7 +247,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
 
   private fetchTestPageAdaptiveJson(path) {
     // Load in json.
-    return this.app.services.adaptive
+    return this.app.services.pages
       .get(path)
       .then((renderData: LayoutInterface) => {
         this.assertTrue(
