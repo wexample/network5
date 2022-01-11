@@ -1,7 +1,6 @@
 import UnitTest from '../../../../class/UnitTest';
 import { sleep } from '../../../../helpers/Time';
 import { appendInnerHtml } from '../../../../helpers/Dom';
-import RenderNode from '../../../../class/RenderNode';
 
 export default class ResponsiveTest extends UnitTest {
   public getTestMethods() {
@@ -13,8 +12,8 @@ export default class ResponsiveTest extends UnitTest {
       document
         .getElementById('layout')
         .classList.contains(
-          `responsive-${this.app.layout.responsiveSizeCurrent}`
-        ),
+        `responsive-${this.app.layout.responsiveSizeCurrent}`
+      ),
       `The default responsive size of "responsive-${this.app.layout.responsiveSizeCurrent}" has been applied to layout body`
     );
 
@@ -22,44 +21,51 @@ export default class ResponsiveTest extends UnitTest {
       '#test-playground'
     ) as HTMLElement;
 
-    await this.assertResponsiveWorks(
-      this.app.layout,
-      elPlayground
-    );
-  }
-
-  async assertResponsiveWorks(
-    renderNodeResponsive: RenderNode,
-    elPlayground: HTMLElement
-  ) {
-    let elTester = this.generateResponsiveTester(elPlayground);
-
-    await sleep();
-
-    this.assertPlaygroundResponsiveEquals(
-      renderNodeResponsive.responsiveSizeCurrent,
-      elPlayground
-    );
-
     let breakPoints = Object.keys(this.app.layout.vars.displayBreakpoints);
+    let elTesterLayout = this.generateResponsiveTester(elPlayground);
+    let component = this.app.layout.page.findChildRenderNodeByName('components/test-component');
+    let elTesterComponent = this.generateResponsiveTester(component.el);
 
-    for (let size of breakPoints) {
-      await renderNodeResponsive.responsiveSet(size, true);
+    for (let layoutResponsiveSize of breakPoints) {
+      this.app.layout.responsiveSet(layoutResponsiveSize, true);
 
-      await sleep(100);
+      await sleep(1000);
 
-      this.assertPlaygroundResponsiveEquals(size, elPlayground);
+      this.assertLayoutResponsiveApplyStyle(layoutResponsiveSize, elTesterLayout);
+
+      // Test component responsive.
+      for (let componentResponsiveSize of breakPoints) {
+        this.assertLayoutResponsiveApplyStyle(
+          componentResponsiveSize,
+          elTesterComponent,
+          // Only the
+          componentResponsiveSize !== layoutResponsiveSize
+        );
+      }
     }
 
-    elTester.remove();
+    elTesterLayout.remove();
+    elTesterComponent.remove();
   }
 
-  assertPlaygroundResponsiveEquals(size: string, elPlayground: HTMLElement) {
+  assertLayoutResponsiveApplyStyle(
+    size: string,
+    elPlayground: HTMLElement,
+    reverse: boolean = false
+  ) {
+    let expectedColorValue = 'rgb(0, 128, 0)';
+    let expectedColorName = 'green';
+
+    if (reverse) {
+      expectedColorValue = 'rgb(102, 102, 102)';
+      expectedColorName = 'gray';
+    }
+
     this.assertEquals(
       getComputedStyle(elPlayground.querySelector(`.test-responsive-${size}`))
         .backgroundColor,
-      'rgb(0, 128, 0)',
-      `The test zone ${size} is green`
+      expectedColorValue,
+      `The test zone ${size} is ${expectedColorName}`
     );
   }
 
