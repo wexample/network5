@@ -70,7 +70,7 @@ export default class PagesService extends AbstractRenderNodeService {
     ) as Page;
   }
 
-  get(path: string, options: RequestOptionsPageInterface): Promise<any> {
+  get(path: string, options: RequestOptionsPageInterface = {}): Promise<any> {
     return this.services.adaptive.get(path, options);
   }
 }
