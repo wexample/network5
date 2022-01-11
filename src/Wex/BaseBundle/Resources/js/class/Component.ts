@@ -42,7 +42,8 @@ export default abstract class Component extends RenderNode {
       this.services.prompt.systemError(
         'page_message.error.com_placeholder_missing',
         {},
-        this
+        this,
+        true
       );
     }
 
