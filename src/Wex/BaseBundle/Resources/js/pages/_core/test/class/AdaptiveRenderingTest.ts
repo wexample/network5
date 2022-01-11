@@ -136,7 +136,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
         )
       ).backgroundColor,
       'rgb(0, 128, 0)',
-      'The adaptive CSS has applied green'
+      'The adaptive CSS has applied green on component'
     );
 
     this.assertEquals(
@@ -146,7 +146,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
         )
       ).backgroundColor,
       'rgb(0, 128, 0)',
-      'The adaptive JS has applied green'
+      'The adaptive JS has applied green on component'
     );
   }
 
