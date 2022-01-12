@@ -23,22 +23,22 @@ export default class VariablesTest extends UnitTest {
 
     this.assertTrue(
       typeof this.app.layout.page.vars.demoVariableBoolean === 'boolean',
-      'Variable has proper boolean value'
+      'Variable has proper value type'
     );
 
     this.assertTrue(
       typeof this.app.layout.page.vars.demoVariableInteger === 'number',
-      'Variable int has proper number value'
+      'Variable int has proper value type'
     );
 
     this.assertTrue(
       typeof this.app.layout.page.vars.demoVariableFloat === 'number',
-      'Variable float has proper number value'
+      'Variable float has proper value type'
     );
 
     this.assertTrue(
       typeof this.app.layout.page.vars.demoVariableObject === 'object',
-      'Variable object has proper number value'
+      'Variable object has proper value type'
     );
 
     let component = this.app.layout.page.findChildRenderNodeByName(
