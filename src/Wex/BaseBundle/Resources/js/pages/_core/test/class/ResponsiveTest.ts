@@ -1,10 +1,14 @@
 import UnitTest from '../../../../class/UnitTest';
 import { sleep } from '../../../../helpers/Time';
 import { appendInnerHtml } from '../../../../helpers/Dom';
+import LayoutInterface from "../../../../interfaces/RenderData/LayoutInterface";
 
 export default class ResponsiveTest extends UnitTest {
   public getTestMethods() {
-    return [this.testDefault];
+    return [
+      this.testDefault,
+      this.testModale,
+    ];
   }
 
   async testDefault() {
@@ -58,6 +62,16 @@ export default class ResponsiveTest extends UnitTest {
 
     elTesterLayout.remove();
     elTesterComponent.remove();
+  }
+
+  async testModale() {
+    return this.app.services.pages
+      .get(
+        this.app.services.routing.path('_core_test_adaptive')
+      )
+      .then((renderData: LayoutInterface) => {
+        console.log(renderData);
+      });
   }
 
   assertTestZoneHaveStyle(
