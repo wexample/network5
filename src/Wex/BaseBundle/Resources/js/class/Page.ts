@@ -6,6 +6,7 @@ import AppService from './AppService';
 import { ColorSchemeServiceEvents } from '../services/ColorSchemeService';
 import { ResponsiveServiceEvents } from '../services/ResponsiveService';
 import AppInterface from '../interfaces/ServicesRegistryInterface';
+import { pathToTagName } from "../helpers/String";
 
 export default class extends RenderNode {
   public elOverlay: HTMLElement;
@@ -42,6 +43,8 @@ export default class extends RenderNode {
     } else {
       this.services.prompt.systemError('page_message.error.page_missing_el');
     }
+
+    this.el.classList.add(`page-${pathToTagName(this.name)}`);
 
     this.elOverlay = this.el.querySelector('.page-overlay');
   }

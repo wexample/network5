@@ -7,6 +7,7 @@ import { appendInnerHtml } from '../helpers/Dom';
 import Component from '../class/Component';
 import App from "../class/App";
 import ComponentInterface from "../interfaces/RenderData/ComponentInterface";
+import { pathToTagName } from "../helpers/String";
 
 export default class VueService extends AppService {
   protected componentRegistered: { [key: string]: object } = {};
@@ -85,10 +86,6 @@ export default class VueService extends AppService {
     return app;
   }
 
-  createComName(path) {
-    return path.split('/').join('-').toLowerCase();
-  }
-
   inherit(vueComponent, rootComponent: Component) {
     let componentsFinal = vueComponent.components || {};
     let extend = {components: {}};
@@ -140,7 +137,7 @@ export default class VueService extends AppService {
           }
         );
       } else {
-        let comName = this.createComName(className);
+        let comName = pathToTagName(className);
         let id = `vue-template-${comName}`;
 
         vueClassDefinition.template = document.getElementById(id);
