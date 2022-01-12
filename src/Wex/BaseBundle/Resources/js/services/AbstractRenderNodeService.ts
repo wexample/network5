@@ -21,7 +21,7 @@ export default abstract class AbstractRenderNodeService extends AppService {
     );
 
     // Do not deep freeze as sub-parts might be prepared later.
-    Object.freeze(renderData);
+    Object.seal(renderData);
   }
 
   async createRenderNode(
