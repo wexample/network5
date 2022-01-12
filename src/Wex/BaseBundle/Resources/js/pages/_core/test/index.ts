@@ -1,6 +1,6 @@
 import AdaptiveRenderingTest from './class/AdaptiveRenderingTest';
 import TestManagerPage from '../../../class/TestManagerPage';
-import PageTest from './class/PageTest';
+import TranslationTest from './class/TranslationTest';
 import TestTest from './class/TestTest';
 import AppTest from './class/AppTest';
 import ResponsiveTest from './class/ResponsiveTest';
@@ -14,15 +14,14 @@ export default class extends TestManagerPage {
     // TODO Test color schemes
     // TODO Test modal in modal
     // TODO Test js helpers
-    // TODO Test translations (layout / page / com / modal)
     // TODO Test overlays (multiple / inside a modal ?)
 
     await this.runTests({
       AdaptiveRenderingTest,
       AppTest,
-      PageTest,
       ResponsiveTest,
       TestTest,
+      TranslationTest,
       VariablesTest,
     });
   }

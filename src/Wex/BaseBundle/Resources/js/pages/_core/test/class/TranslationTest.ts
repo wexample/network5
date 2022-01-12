@@ -1,6 +1,6 @@
 import UnitTest from '../../../../class/UnitTest';
 
-export default class PageTest extends UnitTest {
+export default class TranslationTest extends UnitTest {
   public getTestMethods() {
     return [this.testDefault];
   }
@@ -10,6 +10,12 @@ export default class PageTest extends UnitTest {
       document.querySelector('#test-layout-translation').innerHTML,
       'TEST_LAYOUT_SERVER_TRANSLATION',
       'Initial layout server translation works'
+    );
+
+    this.assertEquals(
+      this.app.layout.page.trans('@layout::string.client_side'),
+      'CLIENT_SIDE_LAYOUT_TRANSLATION',
+      'Layout translation is loaded in js'
     );
 
     this.assertEquals(

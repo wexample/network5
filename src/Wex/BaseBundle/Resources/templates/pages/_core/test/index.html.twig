@@ -3,6 +3,7 @@
 {%- block layout_config -%}
     {{ parent() }}
     {{- var_js('initialLayoutVar', true) -}}
+    {{- trans_js('@layout::string.client_side') -}}
 {%- endblock -%}
 
 {%- block page_config -%}
