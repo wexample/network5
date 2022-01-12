@@ -11,6 +11,10 @@ export default class VueService extends AppService {
 
   public static dependencies: typeof AppService[] = [PagesService];
 
+  protected elTemplates: HTMLElement;
+
+  public vueRenderDataCache: {[key: string]: ComponentInterface } = {}
+
   protected globalMixin: object = {
     props: {},
 
@@ -25,7 +29,13 @@ export default class VueService extends AppService {
     },
   };
 
-  protected renderedTemplates: { [key: string]: boolean } = {};
+  public renderedTemplates: { [key: string]: boolean } = {};
+
+  constructor(app: App) {
+    super(app);
+
+    this.elTemplates = document.getElementById('vue-templates');
+  }
 
   registerHooks(): { app?: {}; page?: {} } {
     return {
@@ -169,7 +179,7 @@ export default class VueService extends AppService {
   }
 
   addTemplatesHtml(renderedTemplates: string[]) {
-    let elContainer = document.getElementById('vue-templates');
+    let elContainer = this.elTemplates;
 
     for (let name in renderedTemplates) {
       if (!this.renderedTemplates[name]) {
