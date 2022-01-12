@@ -6,12 +6,25 @@ import Component from "../../../../class/Component";
 
 export default class ResponsiveTest extends UnitTest {
   responsiveActivationWaitDuration: number = 20;
+  responsiveSizes: string[];
 
   public getTestMethods() {
     return [
       this.testDefault,
       this.testModale,
+      this.testDisplays,
     ];
+  }
+
+  public init() {
+    this.responsiveSizes = Object.keys(this.app.layout.vars.displayBreakpoints);
+  }
+
+  resetPageResponsiveSizesCounters() {
+    this.app.layout.page.vars.responsiveSizesCounters = {};
+    this.responsiveSizes.forEach((size: string) => {
+      this.app.layout.page.vars.responsiveSizesCounters[size] = 0;
+    });
   }
 
   async testDefault() {
@@ -41,7 +54,7 @@ export default class ResponsiveTest extends UnitTest {
     mainResponsiveColor: string,
   ) {
     let elPlayground = mainRenderNode.el.querySelector(mainPlaygroundSelector) as HTMLElement;
-    let breakPoints = Object.keys(this.app.layout.vars.displayBreakpoints);
+    let breakPoints = this.responsiveSizes;
     let elTesterLayout = this.generateResponsiveTester(elPlayground);
     let elTesterComponent = this.generateResponsiveTester(component.el);
 
@@ -93,7 +106,7 @@ export default class ResponsiveTest extends UnitTest {
       .then(async () => {
         let elPlayground = this.app.layout.el.querySelector('#test-playground') as HTMLElement;
         let elTesterLayout = this.generateResponsiveTester(elPlayground);
-        let breakPoints = Object.keys(this.app.layout.vars.displayBreakpoints);
+        let breakPoints = this.responsiveSizes;
 
         for (let responsiveSize of breakPoints) {
           this.app.layout.responsiveSet(responsiveSize, true);
@@ -118,6 +131,25 @@ export default class ResponsiveTest extends UnitTest {
 
         elTesterLayout.remove();
       });
+  }
+
+  async testDisplays() {
+    let breakPoints = this.responsiveSizes;
+
+    this.resetPageResponsiveSizesCounters();
+    this.app.layout.page.vars.responsiveSizesCounters[this.app.layout.page.responsiveSizeCurrent]++;
+
+    for (let responsiveSize of breakPoints) {
+      await this.app.layout.responsiveSet(responsiveSize, true);
+
+      this.assertEquals(
+        this.app.layout.page.vars.responsiveSizesCounters[responsiveSize],
+        1,
+        `Size ${responsiveSize} display set 1`
+      );
+
+      await sleep(this.responsiveActivationWaitDuration * 10);
+    }
   }
 
   assertTestZoneHaveStyle(
@@ -170,7 +202,7 @@ export default class ResponsiveTest extends UnitTest {
 
   generateResponsiveTester(elPlayground: HTMLElement): HTMLElement {
     let html = '<div class="responsive-tester">';
-    let breakPoints = Object.keys(this.app.layout.vars.displayBreakpoints);
+    let breakPoints = this.responsiveSizes;
 
     for (let size of breakPoints) {
       html += `<div class="test-responsive test-responsive-${size}">${size}</div>`;

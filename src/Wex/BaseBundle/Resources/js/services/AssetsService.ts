@@ -86,7 +86,7 @@ export default class AssetsService extends AppService {
         async (renderNode: RenderNode) =>
           this.assetsInCollection(renderNode.renderData.assets).forEach(
             (asset) => {
-              if (asset.initial) {
+              if (asset.initialLayout) {
                 this.setAssetLoaded(asset);
               }
             }

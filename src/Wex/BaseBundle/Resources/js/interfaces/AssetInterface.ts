@@ -6,7 +6,7 @@ export default interface AssetsInterface {
   filesize: number;
   el: HTMLElement;
   id: string;
-  initial: string;
+  initialLayout: string;
   media: string;
   loaded: boolean;
   name: string;

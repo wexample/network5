@@ -78,7 +78,7 @@ class Asset extends RenderDataGenerator
 
     public string $id;
 
-    public bool $initial = false;
+    public bool $initialLayout = false;
 
     public string $media = 'screen';
 
@@ -174,14 +174,14 @@ class Asset extends RenderDataGenerator
     {
         $this->active =
         $this->rendered =
-        $this->initial = $bool;
+        $this->initialLayout = $bool;
     }
 
     public function isServerSideRendered(): bool
     {
         return $this->active &&
             $this->rendered &&
-            $this->initial;
+            $this->initialLayout;
     }
 
     public function toRenderData(): array
@@ -191,7 +191,7 @@ class Asset extends RenderDataGenerator
             'colorScheme',
             'filesize',
             'id',
-            'initial',
+            'initialLayout',
             'media',
             'path',
             'preload',
