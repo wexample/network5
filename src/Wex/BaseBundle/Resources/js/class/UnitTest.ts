@@ -28,5 +28,9 @@ export default abstract class extends AppChild {
     this.assertEquals(value, false, message);
   }
 
+  public init() {
+    // To override.
+  }
+
   public abstract getTestMethods();
 }

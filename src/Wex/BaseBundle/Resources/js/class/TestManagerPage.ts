@@ -1,4 +1,5 @@
 import Page from './Page';
+import UnitTest from "./UnitTest";
 
 export default class TestManagerPage extends Page {
   async runTests(tests) {
@@ -6,7 +7,9 @@ export default class TestManagerPage extends Page {
     let method: Function;
 
     for (testDefinition of Object.values(tests)) {
-      let test = new testDefinition(this.app);
+      let test = new testDefinition(this.app) as UnitTest;
+
+      test.init();
 
       for (method of test.getTestMethods()) {
         await method.apply(test);

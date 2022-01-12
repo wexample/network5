@@ -75,7 +75,6 @@ export default class ResponsiveService extends AppService {
         },
 
         async responsiveSet(size: string, propagate: boolean) {
-          // TODO la page initiale doit suivre le layout
           if (size !== this.responsiveSizeCurrent) {
             this.responsiveSizePrevious = this.responsiveSizeCurrent;
             this.responsiveSizeCurrent = size;
