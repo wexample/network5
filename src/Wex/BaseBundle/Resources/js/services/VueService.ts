@@ -7,13 +7,10 @@ import { appendInnerHtml } from '../helpers/Dom';
 import Component from '../class/Component';
 
 export default class VueService extends AppService {
-  protected componentRegistered: any = {};
-
+  protected componentRegistered: { [key: string]: object } = {};
   public static dependencies: typeof AppService[] = [PagesService];
-
   protected elTemplates: HTMLElement;
-
-  public vueRenderDataCache: {[key: string]: ComponentInterface } = {}
+  public vueRenderDataCache: { [key: string]: ComponentInterface } = {}
 
   protected globalMixin: object = {
     props: {},
@@ -127,7 +124,7 @@ export default class VueService extends AppService {
     return app;
   }
 
-  initComponent(className, rootComponent: Component) {
+  initComponent(className, rootComponent: Component): object {
     if (!this.componentRegistered[className]) {
       let vueClassDefinition = this.app.getBundleClassDefinition(className);
 
