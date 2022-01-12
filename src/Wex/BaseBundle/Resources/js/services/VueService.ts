@@ -170,9 +170,9 @@ export default class VueService extends AppService {
 
         this.inherit(vueClassDefinition, rootComponent);
       }
-
-      return this.componentRegistered[className];
     }
+
+    return this.componentRegistered[className];
   }
 
   addTemplatesHtml(renderedTemplates: string[]) {
