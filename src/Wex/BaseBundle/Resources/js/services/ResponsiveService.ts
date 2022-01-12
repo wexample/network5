@@ -114,10 +114,7 @@ export default class ResponsiveService extends AppService {
         },
 
         async responsiveUpdate(propagate: boolean) {
-          await this.responsiveSet(
-            this.responsiveDetect(),
-            propagate
-          );
+          await this.responsiveSet(this.responsiveDetect(), propagate);
         },
       },
     };

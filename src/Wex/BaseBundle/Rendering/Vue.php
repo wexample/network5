@@ -4,7 +4,6 @@ namespace App\Wex\BaseBundle\Rendering;
 
 use App\Wex\BaseBundle\Helper\BundleHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
-use App\Wex\BaseBundle\Helper\RenderingHelper;
 use App\Wex\BaseBundle\Helper\TemplateHelper;
 use App\Wex\BaseBundle\Twig\VueExtension;
 use function array_shift;

@@ -140,8 +140,7 @@ class Asset extends RenderDataGenerator
     public function getIsReadyForServerSideRendering(
         string $colorScheme,
         bool $useJs
-    ): bool
-    {
+    ): bool {
         if ($this->isServerSideRendered())
         {
             return false;

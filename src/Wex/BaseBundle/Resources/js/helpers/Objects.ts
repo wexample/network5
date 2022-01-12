@@ -13,8 +13,7 @@ export function deepAssign(...args: any[]): any {
     symbols: true,
     descriptors: true,
     proto: true,
-  })
-    .apply(this, arguments);
+  }).apply(this, arguments);
 }
 
 /**
@@ -28,25 +27,15 @@ export function deepAssign(...args: any[]): any {
 export function deepAssignWithOptions(options) {
   return (target, ...sources) => {
     sources.forEach((source) => {
-      if (
-        !isDeepObject(source) ||
-        !isDeepObject(target)
-      )
-        return;
+      if (!isDeepObject(source) || !isDeepObject(target)) return;
 
       // Copy source's own properties into target's own properties
       let copyProperty = (property) => {
-        const descriptor = Object.getOwnPropertyDescriptor(
-          source,
-          property
-        );
+        const descriptor = Object.getOwnPropertyDescriptor(source, property);
         //default: omit non-enumerable properties
         if (descriptor.enumerable || options.nonEnum) {
           // Copy in-depth first
-          if (
-            isDeepObject(source[property]) &&
-            isDeepObject(target[property])
-          )
+          if (isDeepObject(source[property]) && isDeepObject(target[property]))
             descriptor.value = deepAssignWithOptions(options)(
               target[property],
               source[property]
@@ -69,9 +58,7 @@ export function deepAssignWithOptions(options) {
       //default: omit prototype's own properties
       if (options.proto)
         // Copy source prototype's own properties into target prototype's own properties
-        deepAssignWithOptions(
-          Object.assign({}, options, {proto: false})
-        )(
+        deepAssignWithOptions(Object.assign({}, options, { proto: false }))(
           // Prevent deeper copy of the prototype chain
           Object.getPrototypeOf(target),
           Object.getPrototypeOf(source)

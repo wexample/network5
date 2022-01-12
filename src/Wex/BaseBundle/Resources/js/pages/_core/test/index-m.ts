@@ -1,4 +1,4 @@
-import PageResponsiveDisplay from "../../../class/PageResponsiveDisplay";
+import PageResponsiveDisplay from '../../../class/PageResponsiveDisplay';
 
 export default class extends PageResponsiveDisplay {
   async onResponsiveEnter() {

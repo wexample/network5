@@ -260,10 +260,7 @@ export default class AdaptiveRenderingTest extends UnitTest {
           `Layout data contains any JS assets`
         );
 
-        this.assertTrue(
-          !!renderData.page,
-          'The response contains page data'
-        );
+        this.assertTrue(!!renderData.page, 'The response contains page data');
 
         this.assertTrue(
           !!renderData.templates,

@@ -1,5 +1,5 @@
 import Page from './Page';
-import UnitTest from "./UnitTest";
+import UnitTest from './UnitTest';
 
 export default class TestManagerPage extends Page {
   async runTests(tests) {

@@ -4,7 +4,7 @@ import PageTest from './class/PageTest';
 import TestTest from './class/TestTest';
 import AppTest from './class/AppTest';
 import ResponsiveTest from './class/ResponsiveTest';
-import VariablesTest from "./class/VariablesTest";
+import VariablesTest from './class/VariablesTest';
 
 export default class extends TestManagerPage {
   async pageReady() {
@@ -23,7 +23,7 @@ export default class extends TestManagerPage {
       PageTest,
       ResponsiveTest,
       TestTest,
-      VariablesTest
+      VariablesTest,
     });
   }
 }

@@ -1,5 +1,5 @@
 import Component from '../class/Component';
-import ComponentInterface from "../interfaces/RenderData/ComponentInterface";
+import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 
 export default class extends Component {
   loadFirstRenderData(renderData: ComponentInterface) {
@@ -9,10 +9,9 @@ export default class extends Component {
     let name = renderData.options.vueComName;
     let cache = this.app.services.vue.vueRenderDataCache;
 
-    if (cache[name]){
+    if (cache[name]) {
       renderData.components = cache[name].components;
-    }
-    else {
+    } else {
       cache[name] = renderData;
     }
 

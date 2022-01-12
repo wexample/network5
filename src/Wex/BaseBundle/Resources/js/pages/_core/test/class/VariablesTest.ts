@@ -1,13 +1,11 @@
 import UnitTest from '../../../../class/UnitTest';
-import Component from "../../../../class/Component";
-import LayoutInterface from "../../../../interfaces/RenderData/LayoutInterface";
-import ModalComponent from "../../../../components/modal";
+import Component from '../../../../class/Component';
+import LayoutInterface from '../../../../interfaces/RenderData/LayoutInterface';
+import ModalComponent from '../../../../components/modal';
 
 export default class VariablesTest extends UnitTest {
   public getTestMethods() {
-    return [
-      this.testVariables
-    ];
+    return [this.testVariables];
   }
 
   async testVariables() {
@@ -43,7 +41,9 @@ export default class VariablesTest extends UnitTest {
       'Variable object has proper number value'
     );
 
-    let component = this.app.layout.page.findChildRenderNodeByName('components/test-component') as Component;
+    let component = this.app.layout.page.findChildRenderNodeByName(
+      'components/test-component'
+    ) as Component;
 
     this.assertTrue(
       component.vars.testComponentVar,
@@ -65,7 +65,8 @@ export default class VariablesTest extends UnitTest {
           'Modal page level var is set'
         );
 
-        let modal = this.app.layout.pageFocused.parentRenderNode as ModalComponent;
+        let modal = this.app.layout.pageFocused
+          .parentRenderNode as ModalComponent;
         modal.close();
       });
   }

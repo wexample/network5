@@ -5,15 +5,15 @@ import MixinsAppService from '../class/MixinsAppService';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import { appendInnerHtml } from '../helpers/Dom';
 import Component from '../class/Component';
-import App from "../class/App";
-import ComponentInterface from "../interfaces/RenderData/ComponentInterface";
-import { pathToTagName } from "../helpers/String";
+import App from '../class/App';
+import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
+import { pathToTagName } from '../helpers/String';
 
 export default class VueService extends AppService {
   protected componentRegistered: { [key: string]: object } = {};
   public static dependencies: typeof AppService[] = [PagesService];
   protected elTemplates: HTMLElement;
-  public vueRenderDataCache: { [key: string]: ComponentInterface } = {}
+  public vueRenderDataCache: { [key: string]: ComponentInterface } = {};
 
   protected globalMixin: object = {
     props: {},
@@ -88,7 +88,7 @@ export default class VueService extends AppService {
 
   inherit(vueComponent, rootComponent: Component) {
     let componentsFinal = vueComponent.components || {};
-    let extend = {components: {}};
+    let extend = { components: {} };
 
     if (vueComponent.extends) {
       extend = this.inherit(vueComponent.extends, rootComponent);
