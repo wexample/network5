@@ -12,7 +12,6 @@ export default class extends TestManagerPage {
     // TODO Test no js
     // TODO Test no aggregation
     // TODO Test icons
-    // TODO Test responsive (and js responsive displays)
     // TODO Test color schemes
     // TODO Test modal in modal
     // TODO Test js helpers
