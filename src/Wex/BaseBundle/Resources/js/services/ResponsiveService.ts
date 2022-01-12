@@ -88,6 +88,7 @@ export default class ResponsiveService extends AppService {
             this.services.events.trigger(
               ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
               {
+                renderNode: this,
                 current: size,
                 previous: this.responsiveSizePrevious,
               }
@@ -114,7 +115,10 @@ export default class ResponsiveService extends AppService {
         },
 
         async responsiveUpdate(propagate: boolean) {
-          await this.responsiveSet(this.responsiveDetect(), propagate);
+          await this.responsiveSet(
+            this.responsiveDetect(),
+            propagate
+          );
         },
       },
     };

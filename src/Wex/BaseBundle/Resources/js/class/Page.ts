@@ -74,9 +74,7 @@ export default class extends RenderNode {
       this,
     ]);
 
-    this.updateCurrentResponsiveDisplay();
-
-    this.updateLayoutColorScheme(this.activeColorScheme);
+    await this.updateLayoutColorScheme(this.activeColorScheme);
   }
 
   public async mounted() {
@@ -133,7 +131,7 @@ export default class extends RenderNode {
     );
   }
 
-  updateCurrentResponsiveDisplay() {
+  async updateCurrentResponsiveDisplay() {
     let previous = this.responsiveSizePrevious;
     let current = this.responsiveSizeCurrent;
     let displays = this.responsiveDisplays;
@@ -153,11 +151,11 @@ export default class extends RenderNode {
       }
 
       if (displays[previous]) {
-        displays[previous].onResponsiveExit();
+        await displays[previous].onResponsiveExit();
       }
 
       if (displays[current]) {
-        displays[current].onResponsiveEnter();
+        await displays[current].onResponsiveEnter();
       }
 
       this.responsiveDisplayCurrent = displays[current];

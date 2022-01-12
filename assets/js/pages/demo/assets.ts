@@ -15,8 +15,8 @@ export default class extends Page {
       });
   }
 
-  updateCurrentResponsiveDisplay() {
-    super.updateCurrentResponsiveDisplay();
+  async updateCurrentResponsiveDisplay() {
+    await super.updateCurrentResponsiveDisplay();
 
     let current = this.app.layout.responsiveSizeCurrent;
 

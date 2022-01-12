@@ -89,6 +89,7 @@ export default class ColorSchemeService extends AppService {
           this.services.events.trigger(
             ColorSchemeServiceEvents.COLOR_SCHEME_CHANGE,
             {
+              renderNode: this,
               colorScheme: name,
             }
           );

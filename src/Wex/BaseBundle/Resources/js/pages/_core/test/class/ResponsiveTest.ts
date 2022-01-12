@@ -2,9 +2,10 @@ import UnitTest from '../../../../class/UnitTest';
 import { sleep } from '../../../../helpers/Time';
 import { appendInnerHtml } from '../../../../helpers/Dom';
 import RenderNode from "../../../../class/RenderNode";
+import Component from "../../../../class/Component";
 
 export default class ResponsiveTest extends UnitTest {
-  cssActivationWait: number = 20;
+  responsiveActivationWaitDuration: number = 20;
 
   public getTestMethods() {
     return [
@@ -26,7 +27,7 @@ export default class ResponsiveTest extends UnitTest {
     await this.assertResponsiveSwitchWorks(
       this.app.layout,
       '#test-playground',
-      this.app.layout.page.findChildRenderNodeByName('components/test-component'),
+      this.app.layout.page.findChildRenderNodeByName('components/test-component') as Component,
       'background-color',
       'rgb(0, 128, 0)',
     );
@@ -47,7 +48,7 @@ export default class ResponsiveTest extends UnitTest {
     for (let layoutResponsiveSize of breakPoints) {
       mainRenderNode.responsiveSet(layoutResponsiveSize, true);
 
-      await sleep(this.cssActivationWait);
+      await sleep(this.responsiveActivationWaitDuration);
 
       this.assertMainResponsiveApplyStyle(
         layoutResponsiveSize,
@@ -60,7 +61,7 @@ export default class ResponsiveTest extends UnitTest {
       for (let componentResponsiveSize of breakPoints) {
         component.responsiveSet(componentResponsiveSize);
 
-        await sleep(this.cssActivationWait);
+        await sleep(this.responsiveActivationWaitDuration);
 
         this.assertMainResponsiveApplyStyle(
           componentResponsiveSize,
@@ -90,16 +91,14 @@ export default class ResponsiveTest extends UnitTest {
         this.app.services.routing.path('_core_test_adaptive')
       )
       .then(async () => {
-        let elPlayground = this.app.layout.el.querySelector('#test-playground');
+        let elPlayground = this.app.layout.el.querySelector('#test-playground') as HTMLElement;
         let elTesterLayout = this.generateResponsiveTester(elPlayground);
         let breakPoints = Object.keys(this.app.layout.vars.displayBreakpoints);
 
         for (let responsiveSize of breakPoints) {
-          // TODO Merge
-          this.app.layout.responsiveSet(responsiveSize);
-          this.app.layout.page.responsiveSet(responsiveSize);
+          this.app.layout.responsiveSet(responsiveSize, true);
 
-          await sleep(this.cssActivationWait);
+          await sleep(this.responsiveActivationWaitDuration);
 
           this.assertMainResponsiveApplyStyle(
             responsiveSize,
@@ -111,7 +110,7 @@ export default class ResponsiveTest extends UnitTest {
           await this.assertResponsiveSwitchWorks(
             this.app.layout.pageFocused,
             '.adaptive-page-playground',
-            this.app.layout.pageFocused.findChildRenderNodeByName('components/test-component'),
+            this.app.layout.pageFocused.findChildRenderNodeByName('components/test-component') as Component,
             'border-color',
             'rgb(0, 255, 0)'
           );

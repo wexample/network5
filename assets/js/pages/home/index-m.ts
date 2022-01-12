@@ -1,11 +1,11 @@
 import PageResponsiveDisplay from '../../../../src/Wex/BaseBundle/Resources/js/class/PageResponsiveDisplay';
 
 export default class extends PageResponsiveDisplay {
-  onResponsiveEnter() {
+  async onResponsiveEnter() {
     console.log('index m init');
   }
 
-  onResponsiveExit() {
+  async onResponsiveExit() {
     console.log('index m exit');
   }
 }
