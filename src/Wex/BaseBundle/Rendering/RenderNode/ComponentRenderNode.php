@@ -27,7 +27,7 @@ class ComponentRenderNode extends RenderNode
         );
     }
 
-    public function init(string $name, )
+    public function init(string $name)
     {
         parent::init($name);
 

@@ -66,11 +66,6 @@ class Vue
         return $pathTemplate;
     }
 
-    public function getContextType(): string
-    {
-        return RenderingHelper::CONTEXT_VUE;
-    }
-
     public function buildName(string $path): string
     {
         if (BundleHelper::ALIAS_PREFIX === $path[0])

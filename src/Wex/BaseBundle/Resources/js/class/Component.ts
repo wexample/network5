@@ -80,7 +80,7 @@ export default abstract class Component extends RenderNode {
   public async exit() {
     await super.exit();
 
-    this.deactivateListeners();
+    await this.deactivateListeners();
 
     this.el.remove();
   }
