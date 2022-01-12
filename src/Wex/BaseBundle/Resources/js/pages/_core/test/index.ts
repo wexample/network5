@@ -6,8 +6,6 @@ import AppTest from './class/AppTest';
 import ResponsiveTest from './class/ResponsiveTest';
 
 export default class extends TestManagerPage {
-  tests: any;
-
   async pageReady() {
     // TODO Test no js
     // TODO Test no aggregation
