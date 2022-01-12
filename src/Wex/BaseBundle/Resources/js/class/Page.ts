@@ -78,7 +78,17 @@ export default class extends RenderNode {
   }
 
   public async mounted() {
+    this.activateMountedListeners();
+
     await super.mounted();
+
+    this.focus();
+  }
+
+  public async unmounted() {
+    this.deactivateMountedListeners();
+
+    await super.unmounted();
 
     this.focus();
   }
@@ -105,6 +115,14 @@ export default class extends RenderNode {
   }
 
   protected activateFocusListeners(): void {
+    // To override.
+  }
+
+  protected deactivateFocusListeners(): void {
+    // To override.
+  }
+
+  protected activateMountedListeners(): void {
     this.onChangeResponsiveSizeProxy = this.onChangeResponsiveSize.bind(this);
     this.onChangeColorSchemeProxy = this.onChangeColorScheme.bind(this);
 
@@ -119,7 +137,7 @@ export default class extends RenderNode {
     );
   }
 
-  protected deactivateFocusListeners(): void {
+  protected deactivateMountedListeners(): void {
     this.services.events.forget(
       ResponsiveServiceEvents.RESPONSIVE_CHANGE_SIZE,
       this.onChangeResponsiveSizeProxy
@@ -169,15 +187,19 @@ export default class extends RenderNode {
       : super.getElWidth();
   }
 
-  onChangeResponsiveSize() {
-    this.updateCurrentResponsiveDisplay();
+  async onChangeResponsiveSize(event) {
+    if (event.detail.renderNode === this) {
+      await this.updateCurrentResponsiveDisplay();
+    }
   }
 
-  onChangeColorScheme(event) {
-    this.updateLayoutColorScheme(event.theme);
+  async onChangeColorScheme(event) {
+    if (event.detail.renderNode === this) {
+      await this.updateLayoutColorScheme(event.theme);
+    }
   }
 
-  updateLayoutColorScheme(theme: string) {
+  async updateLayoutColorScheme(theme: string) {
     // To override.
   }
 
