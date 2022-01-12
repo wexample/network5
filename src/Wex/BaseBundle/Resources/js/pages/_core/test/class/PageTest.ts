@@ -13,18 +13,6 @@ export default class PageTest extends UnitTest {
     );
 
     this.assertEquals(
-      this.app.layout.page.vars.initialPageVar,
-      true,
-      'Initial page var is set'
-    );
-
-    this.assertEquals(
-      this.app.layout.vars.initialLayoutVar,
-      true,
-      'Initial layout var is set'
-    );
-
-    this.assertEquals(
       this.app.layout.page.trans('@page::secondGroup.first'),
       'First',
       'A simple translation is loaded in js'

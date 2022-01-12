@@ -1,21 +1,26 @@
 import UnitTest from '../../../../class/UnitTest';
+import Component from "../../../../class/Component";
+import LayoutInterface from "../../../../interfaces/RenderData/LayoutInterface";
+import ModalComponent from "../../../../components/modal";
 
 export default class VariablesTest extends UnitTest {
   public getTestMethods() {
-    return [];
+    return [
+      this.testVariables
+    ];
   }
 
-  public testVariables() {
+  async testVariables() {
     this.assertEquals(
-      this.app.layout.vars.demoVariableLayout,
-      'demoVariableLayoutValue',
+      this.app.layout.vars.initialLayoutVar,
+      true,
       'Variable has proper value'
     );
 
     this.assertEquals(
-      this.app.layout.page.vars.demoVariable,
-      'demoVariableValue',
-      'Variable has proper value'
+      this.app.layout.page.vars.initialPageVar,
+      true,
+      'Initial page var is set'
     );
 
     this.assertTrue(
@@ -37,5 +42,31 @@ export default class VariablesTest extends UnitTest {
       typeof this.app.layout.page.vars.demoVariableObject === 'object',
       'Variable object has proper number value'
     );
+
+    let component = this.app.layout.page.findChildRenderNodeByName('components/test-component') as Component;
+
+    this.assertTrue(
+      component.vars.testComponentVar,
+      'Component level var is set'
+    );
+
+    this.app.services.pages
+      .get('/_core/test/adaptive')
+      .then((renderData: LayoutInterface) => {
+        this.assertEquals(
+          renderData.page.vars.pageLevelTestVar,
+          'value',
+          'Modal renderData var is set'
+        );
+
+        this.assertEquals(
+          this.app.layout.pageFocused.vars.pageLevelTestVar,
+          'value',
+          'Modal page level var is set'
+        );
+
+        let modal = this.app.layout.pageFocused.parentRenderNode as ModalComponent;
+        modal.close();
+      });
   }
 }

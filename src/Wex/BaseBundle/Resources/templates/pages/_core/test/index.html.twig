@@ -8,6 +8,10 @@
 {%- block page_config -%}
     {{ parent() }}
     {{- var_js('initialPageVar', true) -}}
+    {{- var_js('demoVariableBoolean', true) -}}
+    {{- var_js('demoVariableInteger', 123) -}}
+    {{- var_js('demoVariableFloat', 12.3) -}}
+    {{- var_js('demoVariableObject', {testVar:'test'}) -}}
     {{- trans_js('@page::firstGroup.*') -}}
     {{- trans_js('@page::secondGroup.first') -}}
 {%- endblock -%}

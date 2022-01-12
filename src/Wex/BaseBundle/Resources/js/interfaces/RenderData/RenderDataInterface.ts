@@ -10,6 +10,6 @@ export default interface RenderDataInterface {
   renderRequestId: string;
   requestOptions?: RequestOptionsInterface;
   translations: {};
-  vars: object;
+  vars: any;
   templates: string;
 }
