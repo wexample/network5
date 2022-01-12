@@ -5,6 +5,8 @@ import MixinsAppService from '../class/MixinsAppService';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import { appendInnerHtml } from '../helpers/Dom';
 import Component from '../class/Component';
+import App from "../class/App";
+import ComponentInterface from "../interfaces/RenderData/ComponentInterface";
 
 export default class VueService extends AppService {
   protected componentRegistered: { [key: string]: object } = {};
@@ -74,7 +76,13 @@ export default class VueService extends AppService {
   }
 
   createApp(config, options: any = {}) {
-    return createApp(config, options);
+    let app = createApp(config, options);
+
+    Object.entries(this.componentRegistered).forEach((data) => {
+      app.component(data[0], data[1]);
+    });
+
+    return app;
   }
 
   createComName(path) {
@@ -83,7 +91,7 @@ export default class VueService extends AppService {
 
   inherit(vueComponent, rootComponent: Component) {
     let componentsFinal = vueComponent.components || {};
-    let extend = { components: {} };
+    let extend = {components: {}};
 
     if (vueComponent.extends) {
       extend = this.inherit(vueComponent.extends, rootComponent);
@@ -114,12 +122,7 @@ export default class VueService extends AppService {
 
   createVueAppForComponent(component: Component) {
     let vue = this.initComponent(component.renderData.options.path, component);
-
     let app = this.createApp(vue, component.options.props);
-
-    Object.entries(this.componentRegistered).forEach((data) => {
-      app.component(data[0], data[1]);
-    });
 
     return app;
   }
