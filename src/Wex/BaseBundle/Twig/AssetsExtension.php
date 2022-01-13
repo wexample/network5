@@ -16,10 +16,10 @@ class AssetsExtension extends AbstractExtension
     {
         return [
             new TwigFunction(
-                'assets_render_initial',
+                'assets_render_initial_aggregated',
                 [
                     $this,
-                    'assetsRenderInitial',
+                    'assetsRenderInitialAggregated',
                 ]
             ),
             new TwigFunction(
@@ -39,7 +39,7 @@ class AssetsExtension extends AbstractExtension
         ];
     }
 
-    public function assetsRenderInitial(string $pageName, string $type): string
+    public function assetsRenderInitialAggregated(string $pageName, string $type): string
     {
         return $this
             ->assetsService
