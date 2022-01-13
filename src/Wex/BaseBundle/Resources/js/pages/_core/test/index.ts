@@ -18,6 +18,7 @@ export default class extends TestManagerPage {
     // TODO Test overlays (multiple / inside a modal ?)
 
     await this.runTests({
+      AggregationTest,
       AdaptiveRenderingTest,
       AppTest,
       ResponsiveTest,

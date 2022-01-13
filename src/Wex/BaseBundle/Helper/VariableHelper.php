@@ -90,6 +90,8 @@ class VariableHelper
 
     public const PLURAL_TEMPLATE = self::TEMPLATE.'s';
 
+    public const PRELOAD = 'preload';
+
     public const PREVIOUS = 'previous';
 
     public const RESPONSIVE = 'responsive';

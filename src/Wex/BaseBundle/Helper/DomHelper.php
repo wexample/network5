@@ -7,6 +7,12 @@ use function is_null;
 
 class DomHelper
 {
+    const TAG_DIV = 'div';
+
+    const TAG_SPAN = 'span';
+
+    const TAG_LINK = 'link';
+
     public const TAG_ALLOWS_AUTO_CLOSING = [
         'div' => false,
         'span' => false,

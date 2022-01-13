@@ -3,8 +3,10 @@
 namespace App\Wex\BaseBundle\Service;
 
 use App\Wex\BaseBundle\Helper\ColorSchemeHelper;
+use App\Wex\BaseBundle\Helper\DomHelper;
 use App\Wex\BaseBundle\Helper\FileHelper;
 use App\Wex\BaseBundle\Helper\RenderingHelper;
+use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Rendering\Asset;
 use App\Wex\BaseBundle\Rendering\RenderNode\RenderNode;
 use function array_merge;
@@ -113,10 +115,20 @@ class AssetsService
     ): string {
         if (str_contains($rendered, RenderingHelper::PLACEHOLDER_PRELOAD_TAG))
         {
-            $pageName = $this->adaptiveResponseService->renderPass->pageName;
+            $renderPass = $this->adaptiveResponseService->renderPass;
 
-            $html = $this->renderPreloadLink($pageName, Asset::EXTENSION_CSS);
-            $html .= $this->renderPreloadLink($pageName, Asset::EXTENSION_JS);
+            if ($renderPass->getEnableAggregation())
+            {
+                $pageName = $this->adaptiveResponseService->renderPass->pageName;
+
+                $html = $this->buildAggregatedPreloadTag($pageName, Asset::EXTENSION_CSS);
+                $html .= $this->buildAggregatedPreloadTag($pageName, Asset::EXTENSION_JS);
+            }
+            else
+            {
+                // TODO render preloads in non aggregated version.
+                $html = '';
+            }
 
             return str_replace(
                 RenderingHelper::PLACEHOLDER_PRELOAD_TAG,
@@ -128,14 +140,18 @@ class AssetsService
         return $rendered;
     }
 
-    #[Pure]
-    protected function renderPreloadLink(
+    protected function buildAggregatedPreloadTag(
         string $pageName,
         string $type
     ): string {
-        return '<link rel="preload" href="'
-            .$this->buildAggregatedPublicPath($pageName, $type)
-            .'" as="'.Asset::PRELOAD_BY_ASSET_TYPE[$type].'">';
+        return DomHelper::buildTag(
+            DomHelper::TAG_LINK,
+            [
+                'rel' => VariableHelper::PRELOAD,
+                'href' => $this->buildAggregatedPublicPath($pageName, $type),
+                'as' => Asset::PRELOAD_BY_ASSET_TYPE[$type]
+            ]
+        );
     }
 
     protected function buildAggregatedPathFromPageName(
