@@ -38,8 +38,7 @@ class VueService
         Environment $twig,
         string $path,
         ?array $props = [],
-        ?array $twigContext = [],
-        ?bool $root = false
+        ?array $twigContext = []
     ): string {
         $vue = new Vue(
             $path,
@@ -58,8 +57,7 @@ class VueService
 
         $outputBody = '';
 
-        // TODO DETECT
-        if ($root)
+        if (!$this->isRenderPassInVueContext())
         {
             $rootComponent = $this
                 ->componentsService

@@ -82,8 +82,7 @@ class VueExtension extends AbstractExtension
             $env,
             $path,
             $props,
-            $twigContext,
-            !$this->vueService->isRenderPassInVueContext()
+            $twigContext
         );
     }
 
