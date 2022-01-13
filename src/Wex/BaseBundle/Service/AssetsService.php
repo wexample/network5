@@ -179,32 +179,29 @@ class AssetsService
         $aggregatePaths = [];
         $output = '';
 
-        if ($this->adaptiveResponseService->renderPass->getEnableAggregation())
+        // Per type specific assets.
+        if ($type === Asset::EXTENSION_JS)
         {
-            // Per type specific assets.
-            if ($type === Asset::EXTENSION_JS)
-            {
-                $aggregatePaths[] = $this->pathBuild.'runtime.js';
-            }
+            $aggregatePaths[] = $this->pathBuild.'runtime.js';
+        }
 
-            /** @var Asset $asset */
-            foreach ($this->assets[$type] as $asset)
+        /** @var Asset $asset */
+        foreach ($this->assets[$type] as $asset)
+        {
+            if ($asset->isServerSideRendered()
+                && $asset->type === $type)
             {
-                if ($asset->isServerSideRendered()
-                    && $asset->type === $type)
-                {
-                    $aggregatePaths[] = $this->pathPublic.$asset->path;
-                }
+                $aggregatePaths[] = $this->pathPublic.$asset->path;
             }
+        }
 
-            $aggregated = [];
-            foreach ($aggregatePaths as $path)
+        $aggregated = [];
+        foreach ($aggregatePaths as $path)
+        {
+            if (!isset($aggregated[$path]))
             {
-                if (!isset($aggregated[$path]))
-                {
-                    $aggregated[$path] = true;
-                    $output .= file_get_contents($path);
-                }
+                $aggregated[$path] = true;
+                $output .= file_get_contents($path);
             }
         }
 
