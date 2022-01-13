@@ -1,3 +1,4 @@
+import AggregationTest from './class/AggregationTest';
 import AdaptiveRenderingTest from './class/AdaptiveRenderingTest';
 import TestManagerPage from '../../../class/TestManagerPage';
 import TranslationTest from './class/TranslationTest';

@@ -3,6 +3,7 @@
 {%- block layout_config -%}
     {{ parent() }}
     {{- var_js('initialLayoutVar', true) -}}
+    {{- var_js('enableAggregation', render_pass.enableAggregation) -}}
     {{- trans_js('@layout::string.client_side') -}}
 {%- endblock -%}
 
