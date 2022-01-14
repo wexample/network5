@@ -1,5 +1,5 @@
 parameters:
-  responsite.enable_aggregation: false
+  responsite.enable_aggregation: true
 
 services:
   # default configuration for services in *this* file

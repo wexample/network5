@@ -116,18 +116,31 @@ class AssetsService
         if (str_contains($rendered, RenderingHelper::PLACEHOLDER_PRELOAD_TAG))
         {
             $renderPass = $this->adaptiveResponseService->renderPass;
+            $html = '';
 
             if ($renderPass->getEnableAggregation())
             {
                 $pageName = $this->adaptiveResponseService->renderPass->pageName;
 
-                $html = $this->buildAggregatedPreloadTag($pageName, Asset::EXTENSION_CSS);
-                $html .= $this->buildAggregatedPreloadTag($pageName, Asset::EXTENSION_JS);
+                $html .= $this->buildPreloadTag(
+                    $this->buildAggregatedPublicPath($pageName, Asset::EXTENSION_CSS),
+                    Asset::EXTENSION_CSS
+                );
+
+                $html .= $this->buildPreloadTag(
+                    $this->buildAggregatedPublicPath($pageName, Asset::EXTENSION_JS),
+                    Asset::EXTENSION_JS
+                );
             }
             else
             {
-                // TODO render preloads in non aggregated version.
-                $html = '';
+                $html .= $this->buildPreloadTagsForAssetsType(
+                    Asset::EXTENSION_CSS
+                );
+
+                $html .= $this->buildPreloadTagsForAssetsType(
+                    Asset::EXTENSION_JS
+                );
             }
 
             return str_replace(
@@ -140,15 +153,35 @@ class AssetsService
         return $rendered;
     }
 
-    protected function buildAggregatedPreloadTag(
-        string $pageName,
+    protected function buildPreloadTagsForAssetsType(string $type): string
+    {
+        $output = [];
+
+        $assets = $this->getServerSideRenderedAssets(
+            $type,
+            false
+        );
+
+        foreach ($assets as $path)
+        {
+            $output[] = $this->buildPreloadTag(
+                $path,
+                $type
+            );
+        }
+
+        return implode(PHP_EOL, $output);
+    }
+
+    protected function buildPreloadTag(
+        string $path,
         string $type
     ): string {
         return DomHelper::buildTag(
             DomHelper::TAG_LINK,
             [
                 'rel' => VariableHelper::PRELOAD,
-                'href' => $this->buildAggregatedPublicPath($pageName, $type),
+                'href' => $path,
                 'as' => Asset::PRELOAD_BY_ASSET_TYPE[$type]
             ]
         );
@@ -171,18 +204,26 @@ class AssetsService
             .'?'.$this->aggregationHash[$type.'-'.$pageName];
     }
 
-    public function aggregateInitialAssets(
-        string $pageName,
-        string $type
-    ): string {
-        $aggregatedFileName = $this->buildAggregatedPathFromPageName($pageName, $type);
+    #[Pure]
+    public function getServerSideRenderedAssets(
+        string $type,
+        bool $serverPath
+    ): array {
+        $basePath = '';
+        if ($serverPath)
+        {
+            $basePath = rtrim(
+                $this->pathPublic,
+                FileHelper::FOLDER_SEPARATOR
+            );
+        }
+
         $aggregatePaths = [];
-        $output = '';
 
         // Per type specific assets.
         if ($type === Asset::EXTENSION_JS)
         {
-            $aggregatePaths[] = $this->pathBuild.'runtime.js';
+            $aggregatePaths[] = $basePath.FileHelper::FOLDER_SEPARATOR.'build/runtime.js';
         }
 
         /** @var Asset $asset */
@@ -191,9 +232,25 @@ class AssetsService
             if ($asset->isServerSideRendered()
                 && $asset->type === $type)
             {
-                $aggregatePaths[] = $this->pathPublic.$asset->path;
+
+                $aggregatePaths[] = $basePath.$asset->path;
             }
         }
+
+        return $aggregatePaths;
+    }
+
+    public function aggregateInitialAssets(
+        string $pageName,
+        string $type
+    ): string {
+        $aggregatedFileName = $this->buildAggregatedPathFromPageName($pageName, $type);
+        $output = '';
+
+        $aggregatePaths = $this->getServerSideRenderedAssets(
+            $type,
+            true
+        );
 
         $aggregated = [];
         foreach ($aggregatePaths as $path)
@@ -201,7 +258,9 @@ class AssetsService
             if (!isset($aggregated[$path]))
             {
                 $aggregated[$path] = true;
-                $output .= file_get_contents($path);
+                $output .=
+                    PHP_EOL . '/* ' . $path . ' */ ' . PHP_EOL
+                    . file_get_contents($path);
             }
         }
 

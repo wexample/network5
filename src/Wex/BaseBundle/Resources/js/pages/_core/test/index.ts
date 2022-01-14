@@ -10,7 +10,6 @@ import VariablesTest from './class/VariablesTest';
 export default class extends TestManagerPage {
   async pageReady() {
     // TODO Test no js
-    // TODO Test no aggregation
     // TODO Test icons
     // TODO Test color schemes
     // TODO Test modal in modal
