@@ -25,5 +25,12 @@ export default class extends TestManagerPage {
       TranslationTest,
       VariablesTest,
     });
+
+    // Run test without aggregation.
+    if (this.app.layout.vars.enableAggregation) {
+      document.location.replace(
+        `${document.location.origin}${document.location.pathname}?no-aggregation=1`
+      );
+    }
   }
 }

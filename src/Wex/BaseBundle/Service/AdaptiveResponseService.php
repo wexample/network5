@@ -23,6 +23,8 @@ class AdaptiveResponseService
 
     public RenderPass $renderPass;
 
+    public bool $enableAggregation;
+
     public function __construct(
         private RequestStack $requestStack,
         private KernelInterface $kernel,
@@ -42,7 +44,7 @@ class AdaptiveResponseService
 
         $this->renderPass = new RenderPass(
             $this->getResponse(),
-            $this->kernel->getContainer()->getParameter('responsite.enable_aggregation'),
+            $this->controller->enableAggregation,
             $this->requestStack->getMainRequest(),
             is_null($this->requestStack->getMainRequest()->get('no_js')),
             $view,

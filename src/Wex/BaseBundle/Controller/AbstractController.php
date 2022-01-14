@@ -19,9 +19,11 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
 
     public const ROUTE_OPTIONS_ONLY_EXPOSE = [self::ROUTE_OPTION_KEY_EXPOSE => true];
 
-    public bool $templateUseJs;
+    public ?bool $enableAggregation = null;
 
     public string $requestUri;
+
+    public bool $templateUseJs;
 
     public function __construct(
         protected AdaptiveResponseService $adaptiveResponseService,
@@ -63,6 +65,12 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         array $parameters = [],
         Response $response = null
     ): Response {
+        // Allow controller to enable or not properties.
+        if (is_null($this->enableAggregation))
+        {
+            $this->enableAggregation = $this->getParameter('responsite.enable_aggregation');
+        }
+
         $this->adaptiveResponseService->renderPrepare(
             $view,
             $parameters
