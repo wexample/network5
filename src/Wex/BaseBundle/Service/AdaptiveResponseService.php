@@ -46,7 +46,7 @@ class AdaptiveResponseService
             $this->getResponse(),
             $this->controller->enableAggregation,
             $this->requestStack->getMainRequest(),
-            is_null($this->requestStack->getMainRequest()->get('no_js')),
+            $this->controller->enableJavascript,
             $view,
         );
 

@@ -6,10 +6,10 @@ import TestTest from './class/TestTest';
 import AppTest from './class/AppTest';
 import ResponsiveTest from './class/ResponsiveTest';
 import VariablesTest from './class/VariablesTest';
+import NoJsTest from "./class/NoJsTest";
 
 export default class extends TestManagerPage {
   async pageReady() {
-    // TODO Test no js
     // TODO Test icons
     // TODO Test color schemes
     // TODO Test modal in modal
@@ -20,6 +20,7 @@ export default class extends TestManagerPage {
       AggregationTest,
       AdaptiveRenderingTest,
       AppTest,
+      NoJsTest,
       ResponsiveTest,
       TestTest,
       TranslationTest,

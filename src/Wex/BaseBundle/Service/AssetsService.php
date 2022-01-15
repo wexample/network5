@@ -201,7 +201,11 @@ class AssetsService
     ): string {
         return FileHelper::FOLDER_SEPARATOR.
             $this->buildAggregatedPathFromPageName($pageName, $type)
-            .'?'.$this->aggregationHash[$type.'-'.$pageName];
+            .(
+            isset($this->aggregationHash[$type.'-'.$pageName])
+                ? '?'.$this->aggregationHash[$type.'-'.$pageName]
+                : ''
+            );
     }
 
     #[Pure]
@@ -259,8 +263,8 @@ class AssetsService
             {
                 $aggregated[$path] = true;
                 $output .=
-                    PHP_EOL . '/* ' . $path . ' */ ' . PHP_EOL
-                    . file_get_contents($path);
+                    PHP_EOL.'/* '.$path.' */ '.PHP_EOL
+                    .file_get_contents($path);
             }
         }
 

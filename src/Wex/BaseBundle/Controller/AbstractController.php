@@ -21,6 +21,8 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
 
     public ?bool $enableAggregation = null;
 
+    public bool $enableJavascript = true;
+
     public string $requestUri;
 
     public bool $templateUseJs;
@@ -69,6 +71,11 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         if (is_null($this->enableAggregation))
         {
             $this->enableAggregation = $this->getParameter('responsite.enable_aggregation');
+        }
+
+        if (!is_null($this->requestStack->getMainRequest()->get('no-js')))
+        {
+            $this->enableJavascript = false;
         }
 
         $this->adaptiveResponseService->renderPrepare(
