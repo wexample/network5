@@ -48,28 +48,34 @@ export function findPreviousNode(el) {
  * @returns {HTMLElement}
  */
 export function findScrollParent(element, includeHidden) {
-  let style = getComputedStyle(element);
-  let excludeStaticParent = style.position === 'absolute';
-  let overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
+    let style = getComputedStyle(element);
+    let excludeStaticParent = style.position === 'absolute';
+    let overflowRegex = includeHidden
+        ? /(auto|scroll|hidden)/
+        : /(auto|scroll)/;
 
-  if (style.position === 'fixed') return document.body;
-  for (let parent = element; (parent = parent.parentElement); ) {
-    style = getComputedStyle(parent);
-    if (excludeStaticParent && style.position === 'static') {
-      continue;
+    if (style.position === 'fixed') return document.body;
+    for (let parent = element; (parent = parent.parentElement);) {
+        style = getComputedStyle(parent);
+        if (excludeStaticParent && style.position === 'static') {
+            continue;
+        }
+        if (
+            overflowRegex.test(
+                style.overflow + style.overflowY + style.overflowX
+            )
+        )
+            return parent;
     }
-    if (overflowRegex.test(style.overflow + style.overflowY + style.overflowX))
-      return parent;
-  }
 
-  return document.body;
+    return document.body;
 }
 
 export function toggleMainOverlay(bool = null) {
-  let classList = document.getElementById('main-overlay').classList;
+    let classList = document.getElementById('main-overlay').classList;
 
-  // Detect toggle direction.
-  bool = bool !== null ? bool : !classList.contains('visible');
+    // Detect toggle direction.
+    bool = bool !== null ? bool : !classList.contains('visible');
 
-  classList[bool ? 'add' : 'remove']('visible');
+    classList[bool ? 'add' : 'remove']('visible');
 }

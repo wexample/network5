@@ -1,6 +1,6 @@
 import UnitTest from '../../../../class/UnitTest';
 import { sleep } from '../../../../helpers/Time';
-import { appendInnerHtml } from '../../../../helpers/Dom';
+import { appendInnerHtml } from '../../../../helpers/DomHelper';
 import RenderNode from '../../../../class/RenderNode';
 import Component from '../../../../class/Component';
 

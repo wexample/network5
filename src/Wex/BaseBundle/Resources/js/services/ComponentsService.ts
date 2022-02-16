@@ -7,7 +7,7 @@ import PageManagerComponent from '../class/PageManagerComponent';
 import Component from '../class/Component';
 import AbstractRenderNodeService from './AbstractRenderNodeService';
 import RenderNode from '../class/RenderNode';
-import { appendInnerHtml } from '../helpers/Dom';
+import { appendInnerHtml } from '../helpers/DomHelper';
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import AppService from '../class/AppService';
 

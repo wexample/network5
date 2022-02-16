@@ -1,7 +1,7 @@
 import ModalComponent from '../../../../components/modal';
 import LayoutInterface from '../../../../interfaces/RenderData/LayoutInterface';
 import { sleep } from '../../../../helpers/Time';
-import { toScreamingSnake } from '../../../../helpers/String';
+import { toScreamingSnake } from '../../../../helpers/StringHelper';
 import AbstractResponsiteTest from "./AbstractResponsiteTest";
 
 export default class AdaptiveRenderingTest extends AbstractResponsiteTest {

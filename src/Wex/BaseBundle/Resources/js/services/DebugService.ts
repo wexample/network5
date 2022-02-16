@@ -3,7 +3,7 @@ import RenderNode from '../class/RenderNode';
 import AbstractRenderNodeService from './AbstractRenderNodeService';
 import Variables from '../helpers/Variables';
 import DebugRenderNode from '../class/Debug/DebugRenderNode';
-import { TagName } from '../helpers/Dom';
+import { TagName } from '../helpers/DomHelper';
 import Events from '../helpers/Events';
 
 export default class DebugService extends AppService {

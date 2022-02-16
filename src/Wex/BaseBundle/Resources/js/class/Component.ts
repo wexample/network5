@@ -1,7 +1,7 @@
 import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 import Events from '../helpers/Events';
 import RenderNode from './RenderNode';
-import { findPreviousNode as DomFindPreviousNode } from '../helpers/Dom';
+import { findPreviousNode as DomFindPreviousNode } from '../helpers/DomHelper';
 import AppInterface from '../interfaces/ServicesRegistryInterface';
 
 export default abstract class Component extends RenderNode {

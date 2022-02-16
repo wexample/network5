@@ -1,7 +1,7 @@
 <script>
 import { ResponsiveServiceEvents } from '../services/ResponsiveService';
-import { Attribute, AttributeValue, TagName } from '../helpers/Dom';
-import { shallowCopy as ArrayShallowCopy } from '../helpers/Arrays';
+import { Attribute, AttributeValue, TagName } from '../helpers/DomHelper';
+import { shallowCopy as ArrayShallowCopy } from '../helpers/ArrayHelper';
 import { AssetsServiceType } from '../services/AssetsService';
 import Explorer from './explorer';
 import ColorSchemeService, {

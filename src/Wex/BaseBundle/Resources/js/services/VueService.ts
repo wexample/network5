@@ -3,11 +3,11 @@ import AppService from '../class/AppService';
 import PagesService from './PagesService';
 import MixinsAppService from '../class/MixinsAppService';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
-import { appendInnerHtml } from '../helpers/Dom';
+import { appendInnerHtml } from '../helpers/DomHelper';
 import Component from '../class/Component';
 import App from '../class/App';
 import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
-import { pathToTagName } from '../helpers/String';
+import { pathToTagName } from '../helpers/StringHelper';
 
 export default class VueService extends AppService {
   protected componentRegistered: { [key: string]: object } = {};

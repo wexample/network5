@@ -1,10 +1,10 @@
 import Component from '../class/Component';
-import { hashParamGet as locationHashParamGet } from '../helpers/Location';
-import { hashParamSet as locationHashParamSet } from '../helpers/Location';
-import { parseUrl as locationParseUrl } from '../helpers/Location';
+import { hashParamGet as locationHashParamGet } from '../helpers/LocationHelper';
+import { hashParamSet as locationHashParamSet } from '../helpers/LocationHelper';
+import { parseUrl as locationParseUrl } from '../helpers/LocationHelper';
 import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 import RequestOptionsInterface from '../interfaces/RequestOptions/RequestOptionsInterface';
-import { Attribute } from '../helpers/Dom';
+import { Attribute } from '../helpers/DomHelper';
 
 export default class extends Component {
   protected elTabCurrent?: HTMLElement;

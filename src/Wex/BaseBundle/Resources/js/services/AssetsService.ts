@@ -2,7 +2,7 @@ import AssetsCollectionInterface from '../interfaces/AssetsCollectionInterface';
 import AppService from '../class/AppService';
 import AssetInterface from '../interfaces/AssetInterface';
 import RenderNode from '../class/RenderNode';
-import { Attribute, AttributeValue, TagName } from '../helpers/Dom';
+import { Attribute, AttributeValue, TagName } from '../helpers/DomHelper';
 import AssetsInterface from '../interfaces/AssetInterface';
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import RenderNodeService from './RenderNodeService';

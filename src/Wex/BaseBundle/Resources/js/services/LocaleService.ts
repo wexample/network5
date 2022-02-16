@@ -1,5 +1,5 @@
 import AppService from '../class/AppService';
-import { format as StringFormat } from '../helpers/String';
+import { format as StringFormat } from '../helpers/StringHelper';
 
 export default class LocaleService extends AppService {
   registerMethods() {

@@ -9,13 +9,13 @@ import ResponsiveService from '../services/ResponsiveService';
 import RoutingService from '../services/RoutingService';
 
 import ColorSchemeService from '../services/ColorSchemeService';
-import { unique as arrayUnique } from '../helpers/Arrays';
+import { unique as arrayUnique } from '../helpers/ArrayHelper';
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import LayoutInitial from './LayoutInitial';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import AsyncConstructor from './AsyncConstructor';
 import AppService from './AppService';
-import { toCamel } from '../helpers/String';
+import { toCamel } from '../helpers/StringHelper';
 import AppInterface from '../interfaces/ServicesRegistryInterface';
 
 export default class extends AsyncConstructor {

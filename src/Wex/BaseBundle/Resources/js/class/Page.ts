@@ -6,7 +6,7 @@ import AppService from './AppService';
 import { ColorSchemeServiceEvents } from '../services/ColorSchemeService';
 import { ResponsiveServiceEvents } from '../services/ResponsiveService';
 import AppInterface from '../interfaces/ServicesRegistryInterface';
-import { pathToTagName } from '../helpers/String';
+import { pathToTagName } from '../helpers/StringHelper';
 
 export default class extends RenderNode {
   public elOverlay: HTMLElement;

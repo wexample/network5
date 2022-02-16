@@ -4,7 +4,7 @@ import DebugService from '../../services/DebugService';
 import VueService from '../../services/VueService';
 import DebugRenderNodeInfo from './DebugRenderNodeInfo';
 import DebugRenderNodeOverlay from './DebugRenderNodeOverlay';
-import { Attribute, TagName } from '../../helpers/Dom';
+import { Attribute, TagName } from '../../helpers/DomHelper';
 
 export default class DebugRenderNode extends AppChild {
   public borderColors: any = {

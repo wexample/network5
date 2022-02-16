@@ -3,7 +3,7 @@ import RenderNode from '../RenderNode';
 import { h } from 'vue';
 import Page from '../Page';
 import ColorSchemeService from '../../services/ColorSchemeService';
-import { TagName } from '../../helpers/Dom';
+import { TagName } from '../../helpers/DomHelper';
 import AssetsInterface from '../../interfaces/AssetInterface';
 
 export default {
