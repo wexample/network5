@@ -1,6 +1,8 @@
 import Page from './Page';
 
+import AppService from './AppService';
 import AssetsService from '../services/AssetsService';
+import ColorSchemeService from '../services/ColorSchemeService';
 import EventsService from '../services/EventsService';
 import LayoutsService from '../services/LayoutsService';
 import MixinsService from '../services/MixinsService';
@@ -8,13 +10,11 @@ import PagesService from '../services/PagesService';
 import ResponsiveService from '../services/ResponsiveService';
 import RoutingService from '../services/RoutingService';
 
-import ColorSchemeService from '../services/ColorSchemeService';
 import { unique as arrayUnique } from '../helpers/ArrayHelper';
 import RenderDataInterface from '../interfaces/RenderData/RenderDataInterface';
 import LayoutInitial from './LayoutInitial';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import AsyncConstructor from './AsyncConstructor';
-import AppService from './AppService';
 import { toCamel } from '../helpers/StringHelper';
 import AppInterface from '../interfaces/ServicesRegistryInterface';
 
@@ -23,7 +23,6 @@ export default class extends AsyncConstructor {
   public hasCoreLoaded: boolean = false;
   public layout: LayoutInitial = null;
   public mixins: typeof AppService[] = [];
-  public elLayout: HTMLElement;
   public lib: object = {};
   public services: AppInterface = {};
 
@@ -60,7 +59,8 @@ export default class extends AsyncConstructor {
 
       this.addLibraries(this.lib);
 
-      // The main functionalities are ready.
+      // The main functionalities are ready,
+      // but first data has not been loaded.
       this.hasCoreLoaded = true;
 
       // Every core properties has been set,
