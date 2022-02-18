@@ -2,7 +2,7 @@ import ComponentInterface from '../interfaces/RenderData/ComponentInterface';
 import Events from '../helpers/Events';
 import RenderNode from './RenderNode';
 import { findPreviousNode as DomFindPreviousNode } from '../helpers/DomHelper';
-import AppInterface from '../interfaces/ServicesRegistryInterface';
+import ServicesRegistryInterface from '../interfaces/ServicesRegistryInterface';
 
 export default abstract class Component extends RenderNode {
   protected initMode: string;
@@ -10,7 +10,7 @@ export default abstract class Component extends RenderNode {
   protected onKeyUpProxy: Function;
   public options: any = {};
   public renderData: ComponentInterface;
-  protected readonly services: AppInterface;
+  protected readonly services: ServicesRegistryInterface;
 
   public static INIT_MODE_CLASS: string = 'class';
 

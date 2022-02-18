@@ -5,7 +5,7 @@ import PageManagerComponent from './PageManagerComponent';
 import AppService from './AppService';
 import { ColorSchemeServiceEvents } from '../services/ColorSchemeService';
 import { ResponsiveServiceEvents } from '../services/ResponsiveService';
-import AppInterface from '../interfaces/ServicesRegistryInterface';
+import ServicesRegistryInterface from '../interfaces/ServicesRegistryInterface';
 import { pathToTagName } from '../helpers/StringHelper';
 
 export default class extends RenderNode {
@@ -19,7 +19,7 @@ export default class extends RenderNode {
   public renderData: RenderDataPageInterface;
   public responsiveEnabled: boolean = true;
   public responsiveDisplayCurrent: PageResponsiveDisplay;
-  public services: AppInterface;
+  public services: ServicesRegistryInterface;
 
   public getRenderNodeType(): string {
     return 'page';

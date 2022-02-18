@@ -15,7 +15,7 @@ import DebugService from '../services/DebugService';
 import LocaleService from '../services/LocaleService';
 import RenderNodeService from '../services/RenderNodeService';
 
-export default interface AppInterface {
+export default interface ServicesRegistryInterface {
   adaptive?: AdaptiveService;
   assets?: AssetsService;
   colorScheme?: ColorSchemeService;

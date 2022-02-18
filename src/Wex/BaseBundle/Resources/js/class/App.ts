@@ -16,7 +16,7 @@ import LayoutInitial from './LayoutInitial';
 import LayoutInterface from '../interfaces/RenderData/LayoutInterface';
 import AsyncConstructor from './AsyncConstructor';
 import { toCamel } from '../helpers/StringHelper';
-import AppInterface from '../interfaces/ServicesRegistryInterface';
+import ServicesRegistryInterface from '../interfaces/ServicesRegistryInterface';
 
 export default class extends AsyncConstructor {
   public bundles: any;
@@ -24,7 +24,7 @@ export default class extends AsyncConstructor {
   public layout: LayoutInitial = null;
   public mixins: typeof AppService[] = [];
   public lib: object = {};
-  public services: AppInterface = {};
+  public services: ServicesRegistryInterface = {};
 
   constructor(readyCallback?: any | Function, globalName = 'app') {
     super();
