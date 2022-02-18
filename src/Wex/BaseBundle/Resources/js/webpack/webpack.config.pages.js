@@ -1,11 +1,11 @@
 const tools = require('./webpack.tools');
 
-tools.title('Pages JS');
+tools.logTitle('JS : Pages');
 
 tools.forEachJsExtAndLocations((srcExt, location) => {
   tools.addAssetsJsWrapped(
     location,
-    'js/pages/',
+    'pages/',
     srcExt,
     'pages',
     (srcFile) => {

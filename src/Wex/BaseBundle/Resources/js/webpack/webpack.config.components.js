@@ -1,28 +1,40 @@
 const tools = require('./webpack.tools');
 
-tools.title('Components local');
+// Project level
 
-// Local
-['js', 'ts'].forEach((srcExt) => {
-  tools.addAssetsJsWrapped('./assets/', 'js/components/', srcExt, 'components');
+tools.logTitle('JS Project level components');
+
+tools.forEachJsExtAndLocations((srcExt, location) => {
+  tools.addAssetsJsWrapped(
+    location,
+    'components/',
+    srcExt,
+    'components'
+  );
 });
 
-tools.title('Components local (forms)');
+tools.logTitle('JS Project level components (forms)');
 
-// Local
-['js', 'ts'].forEach((srcExt) => {
-  tools.addAssetsJsWrapped('./assets/', 'js/forms/', srcExt, 'components');
+// Project level
+tools.forEachJsExtAndLocations((srcExt, location) => {
+  tools.addAssetsJsWrapped(
+    location,
+    'forms/',
+    srcExt,
+    'components'
+  );
 });
 
 // Local components css are built in common config.
 
-tools.title('Components global');
+// Core level
 
-// Global
-['js', 'ts'].forEach((srcExt) => {
+tools.logTitle('JS Core level components');
+
+tools.jsFilesExtensions.forEach((srcExt) => {
   tools.addAssetsJsWrapped(
-    './src/Wex/BaseBundle/Resources/',
-    'js/components/',
+    './src/Wex/BaseBundle/Resources/js/',
+    'components/',
     srcExt,
     'components'
   );
