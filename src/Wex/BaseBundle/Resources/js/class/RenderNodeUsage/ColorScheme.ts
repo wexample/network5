@@ -9,13 +9,9 @@ export default class extends RenderNodeUsage {
     asset: AssetsInterface,
     renderNode: RenderNode
   ): boolean {
-    if (
-      asset.colorScheme !== null &&
-      asset.colorScheme !== renderNode.activeColorScheme
-    ) {
-      return false;
-    }
-
-    return true;
+    return !(
+      asset.colorScheme !== null
+      && asset.colorScheme !== renderNode.activeColorScheme
+    );
   }
 }
