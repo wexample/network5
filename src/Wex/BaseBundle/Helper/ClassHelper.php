@@ -15,6 +15,8 @@ use function substr;
 
 class ClassHelper
 {
+    public const CLASS_ENTITY_BASE_PATH = 'App\\Entity\\';
+
     public const METHOD_SEPARATOR = '::';
 
     public const NAMESPACE_SEPARATOR = '\\';
@@ -31,8 +33,7 @@ class ClassHelper
             $reflexion = new ReflectionClass($className);
 
             return $reflexion->getShortName();
-        }
-        catch (ReflectionException)
+        } catch (ReflectionException)
         {
             return 'undefined';
         }
@@ -63,10 +64,16 @@ class ClassHelper
         return $cousinBasePath.$classBase.$cousinSuffix;
     }
 
-    public static function getPathParts($type, $offset = 2): array
+    public static function getPathParts(
+        $type,
+        $offset = 2): array
     {
+        $type = \Doctrine\Common\Util\ClassUtils::getRealClass(
+            is_string($type) ? $type : $type::class
+        );
+
         return array_slice(
-            explode('\\', is_string($type) ? $type : $type::class),
+            explode('\\', $type),
             $offset
         );
     }
@@ -98,9 +105,9 @@ class ClassHelper
         }
 
         return $classPathPrefix.implode(
-            ClassHelper::NAMESPACE_SEPARATOR,
-            $pathParts
-        )
+                ClassHelper::NAMESPACE_SEPARATOR,
+                $pathParts
+            )
             .$classPathSuffix;
     }
 }
