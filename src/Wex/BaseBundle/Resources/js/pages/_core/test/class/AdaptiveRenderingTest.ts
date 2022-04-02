@@ -21,8 +21,6 @@ export default class AdaptiveRenderingTest extends AbstractResponsiteTest {
   }
 
   async testAdaptivePage() {
-    let path = this.app.services.routing.path('_core_test_adaptive');
-
     // Load in html.
     await this.fetchTestPageAdaptiveHtml('ADAPTIVE');
 
