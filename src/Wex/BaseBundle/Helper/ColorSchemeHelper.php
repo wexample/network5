@@ -6,6 +6,7 @@ class ColorSchemeHelper
 {
     public const SCHEME_DARK = 'dark';
 
+    /** @var string Default theme can be a mix of light and dark. */
     public const SCHEME_DEFAULT = 'default';
 
     public const SCHEME_LIGHT = 'light';
