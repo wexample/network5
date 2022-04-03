@@ -3,10 +3,13 @@ import ColorSchemeService from "../../../../services/ColorSchemeService";
 
 export default class ColorSchemeTest extends UnitTest {
   public getTestMethods() {
-    return [this.testColorScheme];
+    return [
+      this.testAllColorScheme,
+      this.testDarkColorScheme,
+    ];
   }
 
-  public testColorScheme() {
+  public testAllColorScheme() {
     this.assertEquals(
       this.app.services.colorScheme.getColorScheme(),
       ColorSchemeService.COLOR_SCHEME_DEFAULT,
@@ -26,6 +29,24 @@ export default class ColorSchemeTest extends UnitTest {
         name
       );
     });
+  }
+
+  public testDarkColorScheme() {
+    this.app.layout.colorSchemeSet(ColorSchemeService.COLOR_SCHEME_DARK);
+
+    this.assertEquals(
+      getComputedStyle(this.app.layout.pageFocused.el).backgroundColor,
+      'rgb(0, 0, 0)',
+      'Dark mode background is black'
+    )
+
+    this.app.layout.colorSchemeSet(ColorSchemeService.COLOR_SCHEME_DEFAULT);
+
+    this.assertEquals(
+      getComputedStyle(this.app.layout.pageFocused.el).backgroundColor,
+      'rgba(0, 0, 0, 0)',
+      'Default color scheme mode background is transparent'
+    )
   }
 
   private checkColorScheme(name: string) {
