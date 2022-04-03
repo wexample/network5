@@ -1,7 +1,7 @@
 import AppChild from './AppChild';
 
 export default abstract class extends AppChild {
-  assertEquals(value: any, expected: any, message?: string) {
+  assertEquals(value: any, expected: any, message?: string, fatal: boolean = true) {
     let styleDefault = 'border-radius:10rem;';
     message = message || expected;
 
@@ -11,6 +11,10 @@ export default abstract class extends AppChild {
         `background: #FFCCCC; color: #880000; ${styleDefault}`,
         `Assertion failed, ${value} is not equal to expected value : ${expected}. ${message}`
       );
+
+      if (fatal) {
+        throw new Error('UNIT TEST ERROR');
+      }
     } else {
       console.log(
         '%c Success ',

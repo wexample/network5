@@ -9,9 +9,7 @@ export default class extends RenderNodeUsage {
     asset: AssetsInterface,
     renderNode: RenderNode
   ): boolean {
-    return !(
-      asset.colorScheme !== null
-      && asset.colorScheme !== renderNode.activeColorScheme
-    );
+    return asset.colorScheme === null
+      || asset.colorScheme === renderNode.colorSchemeGet();
   }
 }

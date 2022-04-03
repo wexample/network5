@@ -3,8 +3,8 @@ $global-color-scheme-name: 'dark' !default;
 @import '../mixins/_blocks';
 @import '../mixins/global';
 
-body.color-scheme-#{$global-color-scheme-name} .block,
-body.color-scheme-default .color-scheme-dark.block {
+.color-scheme-#{$global-color-scheme-name} .block,
+.color-scheme-default .color-scheme-dark.block {
   background: $color-block-background;
   color: $color-block-text;
 }

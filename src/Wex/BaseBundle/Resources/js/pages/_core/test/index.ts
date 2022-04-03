@@ -7,6 +7,8 @@ import AppTest from './class/AppTest';
 import ResponsiveTest from './class/ResponsiveTest';
 import VariablesTest from './class/VariablesTest';
 import NoJsTest from "./class/NoJsTest";
+import ColorSchemeTest from "./class/ColorSchemeTest";
+import ColorSchemeService from "../../../services/ColorSchemeService";
 
 export default class extends TestManagerPage {
   async pageReady() {
@@ -20,6 +22,7 @@ export default class extends TestManagerPage {
       AggregationTest,
       AdaptiveRenderingTest,
       AppTest,
+      ColorSchemeTest,
       NoJsTest,
       ResponsiveTest,
       TestTest,
@@ -27,11 +30,24 @@ export default class extends TestManagerPage {
       VariablesTest,
     });
 
+    let location = document.location;
+
     // Run test without aggregation.
     if (this.app.layout.vars.enableAggregation) {
-      document.location.replace(
-        `${document.location.origin}${document.location.pathname}?no-aggregation=1`
+      location.replace(
+        `${location.origin}${location.pathname}?no-aggregation=1`
       );
+
+      return;
+    }
+
+    // Enforce dark mode.
+    if (this.app.layout.vars.colorScheme === ColorSchemeService.COLOR_SCHEME_DEFAULT) {
+      location.replace(
+        `${location.origin}${location.pathname}?no-aggregation=1&color-scheme=${ColorSchemeService.COLOR_SCHEME_DARK}`
+      );
+
+      return;
     }
   }
 }

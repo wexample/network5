@@ -61,7 +61,7 @@
             <meta name="description" content="{{ (meta_description|default('@layout::meta.description')) | trans }}">
         {%- endblock -%}
     </head>
-    <body class="color-scheme-{{ layout_color_scheme }} {{ body_class|default('') }}">
+    <body class="{{ body_class|default('') }}">
     <div id="layout" class="layout-loading {{ layout_class|default('') }}">
         {%- if layout_use_js -%}
             {#- If javascript fails to complete, force removing loading state after 2 seconds. -#}

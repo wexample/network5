@@ -3,9 +3,9 @@
 namespace App\Wex\BaseBundle\Service;
 
 use App\Wex\BaseBundle\Controller\AbstractController;
+use App\Wex\BaseBundle\Helper\ColorSchemeHelper;
 use App\Wex\BaseBundle\Rendering\AdaptiveResponse;
 use App\Wex\BaseBundle\Rendering\RenderPass;
-use function is_null;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -14,6 +14,12 @@ class AdaptiveResponseService
     public const EVENT_METHODS_PREFIX = 'renderEvent';
 
     public const EVENT_NAME_POST_RENDER = 'PostRender';
+
+    public const RENDER_OPTION_COLOR_SCHEME = 'render_option_color_scheme';
+
+    public const RENDER_OPTION_ENABLE_AGGREGATION = 'render_option_enable_aggregation';
+
+    public const RENDER_OPTION_ENABLE_JAVASCRIPT = 'render_option_enable_javascript';
 
     private ?AbstractController $controller = null;
 
@@ -44,10 +50,11 @@ class AdaptiveResponseService
 
         $this->renderPass = new RenderPass(
             $this->getResponse(),
-            $this->controller->enableAggregation,
             $this->requestStack->getMainRequest(),
-            $this->controller->enableJavascript,
             $view,
+            $parameters[AdaptiveResponseService::RENDER_OPTION_ENABLE_AGGREGATION] ?? true,
+            $parameters[AdaptiveResponseService::RENDER_OPTION_ENABLE_JAVASCRIPT] ?? true,
+            $parameters[AdaptiveResponseService::RENDER_OPTION_COLOR_SCHEME] ?? ColorSchemeHelper::SCHEME_DEFAULT,
         );
 
         $this->renderPass->prepare(
@@ -90,7 +97,9 @@ class AdaptiveResponseService
         $this->renderEventListeners[] = $service;
     }
 
-    public function triggerRenderEvent(string $eventName, array &$options = []): array
+    public function triggerRenderEvent(
+        string $eventName,
+        array &$options = []): array
     {
         $eventName = AdaptiveResponseService::EVENT_METHODS_PREFIX.ucfirst($eventName);
 

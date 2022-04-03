@@ -36,10 +36,11 @@ class RenderPass
 
     public function __construct(
         public AdaptiveResponse $adaptiveResponse,
-        private bool $enableAggregation,
         private Request $request,
-        public bool $useJs,
         public string $view,
+        public bool $enableAggregation,
+        public bool $useJs,
+        public string $colorScheme
     ) {
         $this->pageName = PageHelper::pageNameFromPath($this->view);
 
@@ -71,6 +72,7 @@ class RenderPass
                 'document_head_title' => '@page::page_title',
                 'document_head_title_args' => [],
                 'layout_name' => null,
+                // TODO Customize
                 'layout_color_scheme' => ColorSchemeHelper::SCHEME_DEFAULT,
                 'layout_animation' => null,
                 'layout_shape' => null,

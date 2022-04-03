@@ -7,8 +7,8 @@ $global-color-scheme-name: 'dark' !default;
 
 @import '../../../../../../src/Wex/BaseBundle/Resources/css/color_schemes/dark/mixins/global';
 
-body.color-scheme-#{$global-color-scheme-name} .display-breakpoint,
-body.color-scheme-default .theme-dark.display-breakpoint {
+.color-scheme-#{$global-color-scheme-name} .display-breakpoint,
+.color-scheme-default .theme-dark.display-breakpoint {
   .size-name {
     background: $color-disabled-background;
     color: $color-disabled-text;

@@ -24,10 +24,9 @@ export default abstract class RenderNode extends AppChild {
   public vars: any = {};
   // Mixed functions from services.
   public assetsUpdate?: Function;
-  public activeColorScheme?: string;
   public colorSchemeSet?: Function;
-  public colorSchemeUpdate?: Function;
-  public colorSchemeForced?: boolean;
+  public colorSchemeGet?: Function;
+  public colorSchemeActive?: string;
   public trans?: Function;
   public responsiveBreakpointIsSupported?: Function;
   public responsiveDetect?: Function;
@@ -36,7 +35,6 @@ export default abstract class RenderNode extends AppChild {
   public responsiveSizePrevious?: string;
   public responsiveUpdate?: Function;
   public responsiveUpdateTree?: Function;
-  public colorSchemeActivePrint: boolean = false;
 
   constructor(app: App, parentRenderNode?: RenderNode) {
     super(app);

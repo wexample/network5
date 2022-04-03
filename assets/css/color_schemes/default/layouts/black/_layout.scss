@@ -10,7 +10,7 @@ $global-color-scheme-name: 'default';
 @use '../../../../../../src/Wex/BaseBundle/Resources/css/color_schemes/light/partials/blocks'
   as color-scheme-light-blocks;
 
-body.color-scheme-default {
+.color-scheme-default {
   // By default, the default color scheme is dark.
   // We need to adjust modals and panels
   // to use the light color scheme.

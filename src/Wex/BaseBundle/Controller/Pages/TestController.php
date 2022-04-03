@@ -4,6 +4,7 @@ namespace App\Wex\BaseBundle\Controller\Pages;
 
 use App\Wex\BaseBundle\Controller\AbstractPagesController;
 use App\Wex\BaseBundle\Helper\RequestHelper;
+use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,14 +15,18 @@ abstract class TestController extends AbstractPagesController
     #[Route(path: '_core/test', name: '_core_test_index')]
     public function index(RequestStack $requestStack): Response
     {
-        // Allow parameter to disable aggregation.
-        $this->enableAggregation = RequestHelper::getQueryBoolean(
-            $requestStack->getMainRequest(),
-            'no-aggregation'
-        ) ? false : $this->enableAggregation;
+        $request = $requestStack->getMainRequest();
 
         return $this->renderPage(
-            '@WexBaseBundle::_core/test/index'
+            '@WexBaseBundle::_core/test/index',
+            [
+                // Allow disabling aggregation from query string.
+                AdaptiveResponseService::RENDER_OPTION_ENABLE_AGGREGATION => !RequestHelper::getQueryBoolean(
+                    $request,
+                    'no-aggregation'
+                ),
+                AdaptiveResponseService::RENDER_OPTION_COLOR_SCHEME => $request->get('color-scheme')
+            ]
         );
     }
 

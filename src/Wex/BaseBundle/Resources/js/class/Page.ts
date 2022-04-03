@@ -74,7 +74,7 @@ export default class extends RenderNode {
       this,
     ]);
 
-    await this.updateLayoutColorScheme(this.activeColorScheme);
+    await this.updateLayoutColorScheme(this.colorSchemeActive);
   }
 
   public async mounted() {

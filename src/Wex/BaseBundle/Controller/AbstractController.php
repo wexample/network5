@@ -5,6 +5,7 @@ namespace App\Wex\BaseBundle\Controller;
 use App\Wex\BaseBundle\Controller\Interfaces\AdaptiveResponseControllerInterface;
 use App\Wex\BaseBundle\Controller\Traits\AdaptiveResponseControllerTrait;
 use App\Wex\BaseBundle\Helper\BundleHelper;
+use App\Wex\BaseBundle\Helper\ColorSchemeHelper;
 use App\Wex\BaseBundle\Service\AdaptiveResponseService;
 use App\Wex\BaseBundle\Service\AssetsService;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +23,8 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
     public ?bool $enableAggregation = null;
 
     public bool $enableJavascript = true;
+
+    public string $colorScheme = ColorSchemeHelper::SCHEME_DEFAULT;
 
     public string $requestUri;
 
@@ -67,12 +70,6 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         array $parameters = [],
         Response $response = null
     ): Response {
-        // Allow controller to enable or not properties.
-        if (is_null($this->enableAggregation))
-        {
-            $this->enableAggregation = $this->getParameter('responsite.enable_aggregation');
-        }
-
         if (!is_null($this->requestStack->getMainRequest()->get('no-js')))
         {
             $this->enableJavascript = false;

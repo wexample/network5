@@ -1,5 +1,7 @@
 import MixinsAppService from '../class/MixinsAppService';
 import AppService from '../class/AppService';
+import RenderNode from "../class/RenderNode";
+import LayoutInitial from "../class/LayoutInitial";
 
 export class ColorSchemeServiceEvents {
   public static COLOR_SCHEME_CHANGE: string = 'color-scheme-change';
@@ -21,10 +23,16 @@ export default class ColorSchemeService extends AppService {
     ColorSchemeService.COLOR_SCHEME_PRINT,
   ];
 
-  public static COLOR_SCHEMES_PREFERENCES: string[] = [
+  public static BROWSER_COLOR_SCHEME_DEFAULT = ColorSchemeService.COLOR_SCHEME_LIGHT;
+
+  public static BROWSER_COLOR_SCHEMES: string[] = [
     ColorSchemeService.COLOR_SCHEME_DARK,
     ColorSchemeService.COLOR_SCHEME_LIGHT,
   ];
+
+  private globalColorScheme: string;
+
+  private globalActivePrint: boolean = false;
 
   registerHooks() {
     return {
@@ -32,45 +40,45 @@ export default class ColorSchemeService extends AppService {
         hookInit(registry: any) {
           if (registry.assets === MixinsAppService.LOAD_STATUS_COMPLETE) {
             this.services.colorScheme.activateListeners();
-
             return;
           }
 
           return MixinsAppService.LOAD_STATUS_WAIT;
         },
       },
+      renderNode: {
+        hookInitRenderNode(renderNode: RenderNode) {
+          // Initialize main layout.
+          if (renderNode instanceof LayoutInitial) {
+            // Wait el to be mounted.
+            renderNode.ready(() => {
+              this.app.layout.colorSchemeSet();
+            });
+          }
+        }
+      }
     };
   }
 
   registerMethods() {
     return {
       renderNode: {
-        colorSchemeDetect(): string {
-          // Any specification of which color scheme to use,
-          // Instead of having a "light" default color scheme,
-          // we use the "default" default color scheme.
-          if (!this.colorSchemeForced) {
-            return ColorSchemeService.COLOR_SCHEME_DEFAULT;
+        async colorSchemeSet(
+          name?: string
+        ) {
+
+          if (!name) {
+            name = this.services.colorScheme.getColorScheme();
           }
 
-          if (this.colorSchemeActivePrint) {
-            return ColorSchemeService.COLOR_SCHEME_PRINT;
+          // No changes found.
+          if (name === this.colorSchemeActive) {
+            return;
           }
 
-          for (let colorScheme of ColorSchemeService.COLOR_SCHEMES_PREFERENCES) {
-            if (
-              window.matchMedia(`(prefers-color-scheme: ${colorScheme})`)
-                .matches
-            ) {
-              return colorScheme;
-            }
-          }
+          this.colorSchemeActive = name;
 
-          return ColorSchemeService.COLOR_SCHEME_DEFAULT;
-        },
-
-        async colorSchemeSet(name: string, updateAssets: boolean) {
-          let classList = document.body.classList;
+          let classList = this.el.classList;
 
           classList.forEach((className) => {
             if (className.startsWith('color-scheme-')) {
@@ -78,13 +86,9 @@ export default class ColorSchemeService extends AppService {
             }
           });
 
-          this.app.layout.activeColorScheme = name;
+          classList.add(`color-scheme-${this.colorSchemeActive}`);
 
-          classList.add(`color-scheme-${this.app.layout.activeColorScheme}`);
-
-          if (updateAssets) {
-            await this.app.layout.assetsUpdate();
-          }
+          await this.assetsUpdate();
 
           this.services.events.trigger(
             ColorSchemeServiceEvents.COLOR_SCHEME_CHANGE,
@@ -94,36 +98,74 @@ export default class ColorSchemeService extends AppService {
             }
           );
         },
-
-        async colorSchemeUpdate(updateAssets: boolean) {
-          let current = this.colorSchemeDetect();
-
-          if (this.activeColorScheme !== current) {
-            await this.colorSchemeSet(current, updateAssets);
-          }
-        },
       },
     };
   }
 
+  getColorScheme(): string {
+    // Any specification of which color scheme to use,
+    // Instead of having a "light" default color scheme,
+    // we use the "default" default color scheme.
+    if (this.globalColorScheme) {
+      if (this.globalActivePrint) {
+        return ColorSchemeService.COLOR_SCHEME_PRINT;
+      }
+
+      return this.globalColorScheme;
+    } else {
+      let browserDefault = this.getBrowserNativeColorScheme();
+
+      // User has asked for a non standard default theme (enabled dark mode in device parameter).
+      if (browserDefault !== ColorSchemeService.BROWSER_COLOR_SCHEME_DEFAULT) {
+        return browserDefault;
+      }
+    }
+
+    return ColorSchemeService.COLOR_SCHEME_DEFAULT;
+  }
+
+  getBrowserNativeColorScheme(): string {
+    for (let colorScheme of ColorSchemeService.BROWSER_COLOR_SCHEMES) {
+      if (
+        window.matchMedia(`(prefers-color-scheme: ${colorScheme})`)
+          .matches
+      ) {
+        return colorScheme;
+      }
+    }
+
+    return null;
+  }
+
   activateListeners() {
-    ColorSchemeService.COLOR_SCHEMES_PREFERENCES.forEach((name: string) => {
+    let assignIfMatch = (
+      name,
+      callback: Function,
+      mediaQuerySelector: string = undefined
+    ) => {
       window
-        .matchMedia(`(prefers-color-scheme: ${name})`)
+        .matchMedia(mediaQuerySelector || name)
         .addEventListener('change', async (e) => {
-          if (e.matches) {
-            this.app.layout.activeColorScheme = name;
-          } else {
-            this.app.layout.activeColorScheme =
-              ColorSchemeService.COLOR_SCHEME_DEFAULT;
-          }
-          await this.app.layout.colorSchemeUpdate(true);
+          callback(e);
+
+          this.app.layout.colorSchemeSet();
         });
+    };
+
+    ColorSchemeService.BROWSER_COLOR_SCHEMES.forEach((name: string) => {
+      assignIfMatch(name,
+        (e) => {
+          if (e.matches) {
+            this.globalColorScheme = name;
+          }
+        },
+        `(prefers-color-scheme: ${name})`)
     });
 
-    window.matchMedia('print').addEventListener('change', async (e) => {
-      this.app.layout.colorSchemeActivePrint = e.matches;
-      await this.app.layout.colorSchemeUpdate(true);
-    });
+    assignIfMatch(
+      ColorSchemeService.COLOR_SCHEME_PRINT,
+      (e) => {
+        this.globalActivePrint = e.matches;
+      });
   }
 }
