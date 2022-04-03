@@ -3,6 +3,7 @@
 namespace App\Wex\BaseBundle\Controller\Pages;
 
 use App\Wex\BaseBundle\Controller\AbstractPagesController;
+use App\Wex\BaseBundle\Helper\RequestHelper;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,9 +15,10 @@ abstract class TestController extends AbstractPagesController
     public function index(RequestStack $requestStack): Response
     {
         // Allow parameter to disable aggregation.
-        $noAggregation = $requestStack->getMainRequest()->get('no-aggregation');
-        $this->enableAggregation = $noAggregation === '1'
-            ? false : $this->enableAggregation;
+        $this->enableAggregation = RequestHelper::getQueryBoolean(
+            $requestStack->getMainRequest(),
+            'no-aggregation'
+        ) ? false : $this->enableAggregation;
 
         return $this->renderPage(
             '@WexBaseBundle::_core/test/index'

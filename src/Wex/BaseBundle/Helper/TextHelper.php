@@ -19,6 +19,11 @@ class TextHelper
         );
     }
 
+    public static function parseBoolean($bool): bool
+    {
+        return $bool == 'true' || $bool == 1;
+    }
+
     public static function toCamel(string $string): string
     {
         return lcfirst(
