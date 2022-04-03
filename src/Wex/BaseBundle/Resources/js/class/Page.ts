@@ -73,8 +73,6 @@ export default class extends RenderNode {
     await this.services.mixins.invokeUntilComplete('hookInitPage', 'page', [
       this,
     ]);
-
-    await this.updateLayoutColorScheme(this.colorSchemeActive);
   }
 
   public async mounted() {
@@ -194,13 +192,9 @@ export default class extends RenderNode {
   }
 
   async onChangeColorScheme(event) {
-    if (event.detail.renderNode === this) {
-      await this.updateLayoutColorScheme(event.theme);
+    if (event.detail.renderNode === this.parentRenderNode) {
+      await this.colorSchemeSet(event.detail.colorScheme);
     }
-  }
-
-  async updateLayoutColorScheme(theme: string) {
-    // To override.
   }
 
   loadingStart() {

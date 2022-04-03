@@ -307,7 +307,7 @@ class AssetsService
         string $renderNodeName,
         string $ext,
         RenderNode $renderNode,
-        bool $searchColorScheme
+        string $usage = Asset::USAGE_INITIAL
     ): array {
         $assetPathFull = $ext.'/'.$renderNodeName.'.'.$ext;
         $output = [];
@@ -315,7 +315,7 @@ class AssetsService
         if ($asset = $this->addAsset(
             $assetPathFull,
             $renderNode,
-            Asset::USAGE_INITIAL
+            $usage
         ))
         {
             $output[] = $asset;
@@ -355,7 +355,7 @@ class AssetsService
         }
 
         // Prevent infinite loops.
-        if ($searchColorScheme)
+        if ($usage !== Asset::USAGE_COLOR_SCHEME)
         {
             // Add color scheme assets.
             $basename = basename($renderNodeName);
@@ -378,7 +378,7 @@ class AssetsService
                     $colorSchemePageName,
                     $ext,
                     $renderNode,
-                    false
+                    Asset::USAGE_COLOR_SCHEME
                 );
 
                 /** @var Asset $asset */

@@ -1,5 +1,6 @@
 import UnitTest from '../../../../class/UnitTest';
 import ColorSchemeService from "../../../../services/ColorSchemeService";
+import { sleep } from "../../../../helpers/Time";
 
 export default class ColorSchemeTest extends UnitTest {
   public getTestMethods() {
@@ -9,7 +10,7 @@ export default class ColorSchemeTest extends UnitTest {
     ];
   }
 
-  public testAllColorScheme() {
+  public async testAllColorScheme() {
     this.assertEquals(
       this.app.services.colorScheme.getColorScheme(),
       ColorSchemeService.COLOR_SCHEME_DEFAULT,
@@ -20,19 +21,22 @@ export default class ColorSchemeTest extends UnitTest {
       ColorSchemeService.COLOR_SCHEME_DEFAULT
     );
 
-    ColorSchemeService.COLOR_SCHEMES.forEach((name: string) => {
-      this.app.layout.colorSchemeSet(
+    for (let name of ColorSchemeService.COLOR_SCHEMES) {
+      await this.app.layout.colorSchemeSet(
         name
       );
 
       this.checkColorScheme(
         name
       );
-    });
+    }
   }
 
-  public testDarkColorScheme() {
-    this.app.layout.colorSchemeSet(ColorSchemeService.COLOR_SCHEME_DARK);
+  public async testDarkColorScheme() {
+    await this.app.layout.colorSchemeSet(ColorSchemeService.COLOR_SCHEME_DARK);
+
+    // Wait for events to be triggered, and CSS loaded.
+    await sleep(100);
 
     this.assertEquals(
       getComputedStyle(this.app.layout.pageFocused.el).backgroundColor,
@@ -41,6 +45,8 @@ export default class ColorSchemeTest extends UnitTest {
     )
 
     this.app.layout.colorSchemeSet(ColorSchemeService.COLOR_SCHEME_DEFAULT);
+
+    // No need to sleep here.
 
     this.assertEquals(
       getComputedStyle(this.app.layout.pageFocused.el).backgroundColor,

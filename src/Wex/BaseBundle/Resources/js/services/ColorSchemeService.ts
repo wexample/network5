@@ -2,6 +2,7 @@ import MixinsAppService from '../class/MixinsAppService';
 import AppService from '../class/AppService';
 import RenderNode from "../class/RenderNode";
 import LayoutInitial from "../class/LayoutInitial";
+import RenderNodeUsage from "../class/RenderNodeUsage";
 
 export class ColorSchemeServiceEvents {
   public static COLOR_SCHEME_CHANGE: string = 'color-scheme-change';
@@ -51,8 +52,10 @@ export default class ColorSchemeService extends AppService {
           // Initialize main layout.
           if (renderNode instanceof LayoutInitial) {
             // Wait el to be mounted.
-            renderNode.ready(() => {
-              this.app.layout.colorSchemeSet();
+            renderNode.ready(async () => {
+              await this.app.layout.colorSchemeSet(
+                this.services.colorScheme.getColorScheme()
+              );
             });
           }
         }
@@ -64,13 +67,8 @@ export default class ColorSchemeService extends AppService {
     return {
       renderNode: {
         async colorSchemeSet(
-          name?: string
+          name: string
         ) {
-
-          if (!name) {
-            name = this.services.colorScheme.getColorScheme();
-          }
-
           // No changes found.
           if (name === this.colorSchemeActive) {
             return;
@@ -88,7 +86,7 @@ export default class ColorSchemeService extends AppService {
 
           classList.add(`color-scheme-${this.colorSchemeActive}`);
 
-          await this.assetsUpdate();
+          await this.assetsUpdate(RenderNodeUsage.USAGE_COLOR_SCHEME);
 
           this.services.events.trigger(
             ColorSchemeServiceEvents.COLOR_SCHEME_CHANGE,
@@ -148,7 +146,9 @@ export default class ColorSchemeService extends AppService {
         .addEventListener('change', async (e) => {
           callback(e);
 
-          this.app.layout.colorSchemeSet();
+          await this.app.layout.colorSchemeSet(
+            this.services.colorScheme.getColorScheme()
+          );
         });
     };
 

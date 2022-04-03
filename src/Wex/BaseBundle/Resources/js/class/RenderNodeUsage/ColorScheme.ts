@@ -10,6 +10,6 @@ export default class extends RenderNodeUsage {
     renderNode: RenderNode
   ): boolean {
     return asset.colorScheme === null
-      || asset.colorScheme === renderNode.colorSchemeGet();
+      || asset.colorScheme === renderNode.colorSchemeActive;
   }
 }

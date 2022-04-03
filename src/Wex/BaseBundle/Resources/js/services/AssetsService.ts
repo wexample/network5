@@ -70,8 +70,12 @@ export default class AssetsService extends AppService {
 
           await this.services.assets.loadValidAssetsForRenderNode(
             renderNode,
-            // TODO Load all non initial assets.
             RenderNodeUsage.USAGE_RESPONSIVE
+          );
+
+          await this.services.assets.loadValidAssetsForRenderNode(
+            renderNode,
+            RenderNodeUsage.USAGE_COLOR_SCHEME
           );
         },
       },
