@@ -1,7 +1,13 @@
 import AppChild from './AppChild';
+import { convertToHexRgba } from "../helpers/CssHelper";
 
 export default abstract class extends AppChild {
-  assertEquals(value: any, expected: any, message?: string, fatal: boolean = true) {
+  protected assertEquals(
+    value: any,
+    expected: any,
+    message?: string,
+    fatal: boolean = true
+  ) {
     let styleDefault = 'border-radius:10rem;';
     message = message || expected;
 
@@ -24,12 +30,37 @@ export default abstract class extends AppChild {
     }
   }
 
-  assertTrue(value, message?: string) {
+  protected assertTrue(value, message?: string) {
     this.assertEquals(value, true, message);
   }
 
-  assertFalse(value, message?: string) {
+  protected assertFalse(value, message?: string) {
     this.assertEquals(value, false, message);
+  }
+
+  protected assertCssStyleHasColor(
+    el: HTMLElement,
+    propertyName: string,
+    colorNameOrHex: string,
+    name: string
+  ) {
+    this.assertEquals(
+      this.getComputedProperty(
+        el,
+        propertyName
+      ),
+      convertToHexRgba(
+        colorNameOrHex
+      ),
+      name + ` has color of type ${colorNameOrHex}`
+    )
+  }
+
+  getComputedProperty(
+    el: HTMLElement,
+    propertyName: string
+  ): string {
+    return getComputedStyle(el)[propertyName];
   }
 
   public init() {
