@@ -1,0 +1,10 @@
+// Base extension.
+@use '../../layouts/default/layout';
+
+// Themes.
+@use '../../color_schemes/default/layouts/test/layout' as
+  color-scheme-default-layout;
+
+.test-color-scheme-zone {
+  padding: 1rem;
+}

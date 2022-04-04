@@ -1,0 +1,19 @@
+$global-color-scheme-name: 'default';
+
+// Use both base color schemes.
+@use '../../../dark/layouts/test/layout' as color-scheme-dark-layout;
+@use '../../../light/layouts/test/layout' as color-scheme-light-layout;
+
+// Allowed partials in all pages.
+@use '../../../dark/partials/blocks'
+  as color-scheme-dark-blocks;
+@use '../../../light/partials/blocks'
+  as color-scheme-light-blocks;
+
+.color-scheme-default {
+  // By default, the default color scheme is light.
+  // We need to adjust modals and panels
+  // to use the another color scheme.
+  @extend .color-scheme-light;
+}
+
