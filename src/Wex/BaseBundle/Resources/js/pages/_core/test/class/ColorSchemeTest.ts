@@ -86,11 +86,12 @@ export default class ColorSchemeTest extends UnitTest {
 
     // No need to sleep here.
 
-    this.assertEquals(
-      getComputedStyle(this.app.layout.pageFocused.el).backgroundColor,
-      'rgba(0, 0, 0, 0)',
-      'Default color scheme mode background is transparent'
-    )
+    this.assertCssStyleHasColor(
+      this.app.layout.pageFocused.el,
+      CssStyleValue.BACKGROUND_COLOR,
+      CssColorName.WHITE,
+      'Default color scheme mode background'
+    );
   }
 
   private checkColorScheme(name: string) {
