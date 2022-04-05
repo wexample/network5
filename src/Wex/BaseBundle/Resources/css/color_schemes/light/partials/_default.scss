@@ -1,11 +1,21 @@
 @import '../mixins/global';
 
-.color-scheme-light {
+#layout.color-scheme-light,
+#layout.color-scheme-light .color-scheme-light,
+#layout.color-scheme-default .color-scheme-light,
+#layout.color-scheme-light .color-scheme-default,
+#layout.color-scheme-light .color-scheme-dark,
+.extendable-color-scheme-light {
   background: $color-default-background;
 }
 
-.color-scheme-light,
-.color-scheme-default .color-scheme-light {
+#layout.color-scheme-light,
+#layout.color-scheme-default .color-scheme-light,
+  // If color scheme is forced on layout,
+  // it overrides every other schemes.
+#layout.color-scheme-light .color-scheme-default,
+#layout.color-scheme-light .color-scheme-dark,
+.extendable-color-scheme-light {
   color: $color-default-text;
 
   a {

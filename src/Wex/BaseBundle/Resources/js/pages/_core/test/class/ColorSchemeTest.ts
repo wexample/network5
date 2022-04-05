@@ -35,13 +35,42 @@ export default class ColorSchemeTest extends UnitTest {
   }
 
   public async testNestedColorSchemes() {
-    this.assertColorSchemesMapMatches({
+    const mapDefault = {
       'one': CssColorName.WHITE,
       'two': CssColorName.BLACK,
       'three': CssColorName.WHITE,
       'four': CssColorName.BLACK,
       'five': CssColorName.WHITE,
+    };
+
+    this.assertColorSchemesMapMatches(mapDefault);
+
+    // Switch black.
+
+    await this.app.layout.colorSchemeSet(ColorSchemeService.COLOR_SCHEME_DARK);
+    this.assertColorSchemesMapMatches({
+      'one': CssColorName.BLACK,
+      'two': CssColorName.BLACK,
+      'three': CssColorName.BLACK,
+      'four': CssColorName.BLACK,
+      'five': CssColorName.BLACK,
     });
+
+    // Switch white.
+
+    await this.app.layout.colorSchemeSet(ColorSchemeService.COLOR_SCHEME_LIGHT);
+    this.assertColorSchemesMapMatches({
+      'one': CssColorName.WHITE,
+      'two': CssColorName.WHITE,
+      'three': CssColorName.WHITE,
+      'four': CssColorName.WHITE,
+      'five': CssColorName.WHITE,
+    });
+
+    // Switch back default.
+
+    await this.app.layout.colorSchemeSet(ColorSchemeService.COLOR_SCHEME_DEFAULT);
+    this.assertColorSchemesMapMatches(mapDefault);
   }
 
   protected assertColorSchemesMapMatches(map) {

@@ -4,10 +4,11 @@ $global-color-scheme-name: 'default';
 @use '../../../dark/layouts/test/layout' as color-scheme-dark-layout;
 @use '../../../light/layouts/test/layout' as color-scheme-light-layout;
 
-.color-scheme-default {
+#layout.color-scheme-default,
+#layout.color-scheme-default .color-scheme-default {
   // By default, the default color scheme is light.
   // We need to adjust modals and panels
   // to use the another color scheme.
-  @extend .color-scheme-light;
+  @extend .extendable-color-scheme-light;
 }
 
