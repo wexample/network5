@@ -94,9 +94,16 @@ export default class ColorSchemeTest extends UnitTest {
     await sleep(100);
 
     this.assertCssStyleHasColor(
-      this.app.layout.pageFocused.el,
+      document.body,
       CssStyleValue.BACKGROUND_COLOR,
       CssColorName.BLACK,
+      'Dark mode background'
+    );
+
+    this.assertCssStyleHasColor(
+      this.app.layout.pageFocused.el,
+      CssStyleValue.BACKGROUND_COLOR,
+      CssColorName.TRANSPARENT,
       'Dark mode background'
     );
 
@@ -110,6 +117,8 @@ export default class ColorSchemeTest extends UnitTest {
       CssColorName.WHITE,
       'Default color scheme mode background'
     );
+
+    await sleep(100);
   }
 
   private checkColorScheme(name: string) {
