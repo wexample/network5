@@ -76,15 +76,10 @@ export default class ColorSchemeService extends AppService {
 
           this.colorSchemeActive = name;
 
-          let classList = this.el.classList;
-
-          classList.forEach((className) => {
-            if (className.startsWith('color-scheme-')) {
-              classList.remove(className);
-            }
-          });
-
-          classList.add(`color-scheme-${this.colorSchemeActive}`);
+          this.services.colorScheme.setColorSchemeClass(
+            this.el,
+            this.colorSchemeActive
+          );
 
           await this.assetsUpdate(RenderNodeUsage.USAGE_COLOR_SCHEME);
 
@@ -98,6 +93,18 @@ export default class ColorSchemeService extends AppService {
         },
       },
     };
+  }
+
+  setColorSchemeClass(el: HTMLElement, name: string) {
+    let classList = el.classList;
+
+    classList.forEach((className) => {
+      if (className.startsWith('color-scheme-')) {
+        classList.remove(className);
+      }
+    });
+
+    classList.add(`color-scheme-${name}`);
   }
 
   getColorScheme(): string {

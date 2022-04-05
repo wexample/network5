@@ -1,8 +1,28 @@
 @import '../mixins/global';
 
-$mixin-layout-background: $color-default-background;
-$mixin-layout-text: $color-default-text;
-$mixin-layout-title: $color-default-title;
-$mixin-layout-link: $color-default-link;
+body.color-scheme-light,
+body.color-scheme-light #layout .color-scheme-light,
+body.color-scheme-default #layout .color-scheme-light,
+body.color-scheme-light #layout .color-scheme-default,
+body.color-scheme-light #layout .color-scheme-dark,
+.extendable-color-scheme-light {
+  background: $color-default-background;
+}
 
-@import '../../../mixins/layout';
+body.color-scheme-light,
+body.color-scheme-default #layout .color-scheme-light,
+  // If color scheme is forced on layout,
+  // it overrides every other schemes.
+body.color-scheme-light #layout .color-scheme-default,
+body.color-scheme-light #layout .color-scheme-dark,
+.extendable-color-scheme-light {
+  color: $color-default-text;
+
+  a {
+    color: $color-default-link;
+  }
+
+  #{$selector-title-all} {
+    color: $color-default-title;
+  }
+}

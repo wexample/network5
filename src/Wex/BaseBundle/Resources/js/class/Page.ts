@@ -143,7 +143,7 @@ export default class extends RenderNode {
 
     this.services.events.forget(
       ColorSchemeServiceEvents.COLOR_SCHEME_CHANGE,
-      this.onChangeResponsiveSizeProxy
+      this.onChangeColorSchemeProxy
     );
   }
 
@@ -185,13 +185,13 @@ export default class extends RenderNode {
       : super.getElWidth();
   }
 
-  async onChangeResponsiveSize(event) {
+  async onChangeResponsiveSize(event: CustomEvent) {
     if (event.detail.renderNode === this) {
       await this.updateCurrentResponsiveDisplay();
     }
   }
 
-  async onChangeColorScheme(event) {
+  async onChangeColorScheme(event: CustomEvent) {
     if (event.detail.renderNode === this.parentRenderNode) {
       await this.colorSchemeSet(event.detail.colorScheme);
     }
