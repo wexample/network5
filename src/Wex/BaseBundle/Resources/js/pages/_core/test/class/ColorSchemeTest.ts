@@ -35,38 +35,27 @@ export default class ColorSchemeTest extends UnitTest {
   }
 
   public async testNestedColorSchemes() {
-    const elZoneOne = document.getElementById('test-color-scheme-zone-one');
-    const elZoneTwo = document.getElementById('test-color-scheme-zone-two');
-    const elZoneThree = document.getElementById('test-color-scheme-zone-three');
-    const elZoneFour = document.getElementById('test-color-scheme-zone-four');
+    this.assertColorSchemesMapMatches({
+      'one': CssColorName.WHITE,
+      'two': CssColorName.BLACK,
+      'three': CssColorName.WHITE,
+      'four': CssColorName.BLACK,
+      'five': CssColorName.WHITE,
+    });
+  }
 
-    this.assertCssStyleHasColor(
-      elZoneOne,
-      CssStyleValue.BACKGROUND_COLOR,
-      CssColorName.WHITE,
-      'The default color zone'
-    );
+  protected assertColorSchemesMapMatches(map) {
+    for (const name in map) {
+      const color = map[name];
+      const elZone = document.getElementById(`test-color-scheme-zone-${name}`);
 
-    this.assertCssStyleHasColor(
-      elZoneTwo,
-      CssStyleValue.BACKGROUND_COLOR,
-      CssColorName.BLACK,
-      'The second color scheme zone'
-    );
-
-    this.assertCssStyleHasColor(
-      elZoneThree,
-      CssStyleValue.BACKGROUND_COLOR,
-      CssColorName.WHITE,
-      'The third color scheme zone'
-    );
-
-    this.assertCssStyleHasColor(
-      elZoneFour,
-      CssStyleValue.BACKGROUND_COLOR,
-      CssColorName.BLACK,
-      'The fourth color scheme zone'
-    );
+      this.assertCssStyleHasColor(
+        elZone,
+        CssStyleValue.BACKGROUND_COLOR,
+        color,
+        `The default color zone number ${name}`
+      );
+    }
   }
 
   public async testDarkColorScheme() {
