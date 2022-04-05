@@ -1,3 +1,7 @@
+$color-schemes-screen: 'dark', 'light';
+$color-schemes-non-screen: 'default', 'print';
+$color-schemes: join($color-schemes-non-screen, $color-schemes-screen);
+
 $dark-gray: #2f2f36;
 $medium-gray: lighten($dark-gray, 50);
 $light-gray: lighten($medium-gray, 25);
@@ -8,7 +12,16 @@ $color-info: #0e5bce;
 $color-success: #158d28;
 $color-warn: #ecae0d;
 
+// Selectors.
+
+$selector-color-schemes: ();
+@each $color-scheme in $color-schemes {
+  $selector-color-schemes: append($selector-color-schemes, '.color-scheme-' + $color-scheme, $separator: 'comma');
+}
+
 $selector-title-all: 'h1, h2, h3, h4, h5, h6';
+
+// Mixins.
 
 @mixin full-parent-size {
   position: absolute;

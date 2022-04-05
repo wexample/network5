@@ -1,0 +1,29 @@
+@import 'global';
+
+$mixin-layout-background: blue !default;
+$mixin-layout-text: red !default;
+$mixin-layout-title: orange !default;
+$mixin-layout-link: green !default;
+
+#layout.color-scheme-dark,
+#layout.color-scheme-default .color-scheme-dark,
+  // Used for scss @extend usage.
+.extendable-color-scheme-dark {
+  background: $mixin-layout-background;
+  color: $mixin-layout-text;
+
+  a {
+    color: $mixin-layout-link;
+  }
+
+  #{$selector-title-all} {
+    color: $mixin-layout-title;
+  }
+}
+
+#layout.color-scheme-dark {
+  // Overrides any other schemes.
+  #{$selector-color-schemes} {
+    @extend .extendable-color-scheme-dark;
+  }
+}
