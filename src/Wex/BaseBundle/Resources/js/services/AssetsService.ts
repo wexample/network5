@@ -68,6 +68,8 @@ export default class AssetsService extends AppService {
             return MixinsAppService.LOAD_STATUS_WAIT;
           }
 
+          // TODO Test if needed
+
           await this.services.assets.loadValidAssetsForRenderNode(
             renderNode,
             RenderNodeUsage.USAGE_RESPONSIVE

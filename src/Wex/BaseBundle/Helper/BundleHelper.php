@@ -22,9 +22,11 @@ class BundleHelper
 
     public const DIR_TEMPLATE_PAGES = 'pages'.FileHelper::FOLDER_SEPARATOR;
 
+    public const WEX_BUNDLE_NAME = 'WexBaseBundle';
+
     public const WEX_CLASS_PATH_BASE = self::CLASS_PATH_PREFIX.'Wex'.ClassHelper::NAMESPACE_SEPARATOR.'BaseBundle'.ClassHelper::NAMESPACE_SEPARATOR;
 
-    public const WEX_TEMPLATE_ALIAS_BASE = self::ALIAS_PREFIX.'WexBaseBundle'.FileHelper::FOLDER_SEPARATOR;
+    public const WEX_TEMPLATE_ALIAS_BASE = self::ALIAS_PREFIX.self::WEX_BUNDLE_NAME.FileHelper::FOLDER_SEPARATOR;
 
     public const WEX_TEMPLATE_ALIAS_TEMPLATES = self::WEX_TEMPLATE_ALIAS_BASE.self::BUNDLE_PATH_RESOURCES.'templates'.FileHelper::FOLDER_SEPARATOR;
 
